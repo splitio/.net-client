@@ -51,11 +51,24 @@
     <Compile Include="CommonLibraries\HTTPResult.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
+    <Compile Include="Domain\BetweenData.cs" />
+    <Compile Include="Domain\CombinerEnum.cs" />
+    <Compile Include="Domain\ConditionDefinition.cs" />
+    <Compile Include="Domain\DataTypeEnum.cs" />
+    <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Domain\MatcherDefinition.cs" />
+    <Compile Include="Domain\MatcherGroupDefinition.cs" />
+    <Compile Include="Domain\MatcherTypeEnum.cs" />
+    <Compile Include="Domain\PartitionDefinition.cs" />
+    <Compile Include="Domain\Split.cs" />
+    <Compile Include="Domain\StatusEnum.cs" />
+    <Compile Include="Domain\UnaryNumericData.cs" />
+    <Compile Include="Domain\UserDefinedSegmentData.cs" />
+    <Compile Include="Domain\WhiteListData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SplitFetcher\SplitSdkApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\" />
     <Folder Include="Services\Client\" />
     <Folder Include="Services\EngineEvaluator\" />
     <Folder Include="Services\Impressions\" />
