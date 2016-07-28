@@ -57,7 +57,7 @@ namespace NetSDK.Tests
         }
 
         [TestMethod]
-        public void ExecuteGetShouldThrowExceptionOnInvalidAddress()
+        public void ExecuteGetShouldReturnNotFoundOnInvalidRequest()
         {
             //Arrange
             var baseUrl = "http://demo706abcd.mockable.io";
@@ -77,6 +77,27 @@ namespace NetSDK.Tests
 
             //Assert
             Assert.AreEqual(result.StatusCode, HttpStatusCode.NotFound);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(AggregateException))]
+        public void ExecuteGetShouldThrowExceptionOnInvalidURL()
+        {
+            //Arrange
+            var baseUrl = "http://demo70e.iio";
+            var httpHeader = new HTTPHeader()
+            {
+                AuthorizationApiKey = "ABCD",
+                Encoding = "gzip",
+                SplitSDKMachineIP = "1.0.0.0",
+                SplitSDKMachineName = "localhost",
+                SplitSDKVersion = "1",
+                SplitSDKSpecVersion = "2"
+            };
+            var SdkApiClient = new SdkApiClient(httpHeader, baseUrl, 10000, 10000);
+
+            //Act
+            var result = SdkApiClient.ExecuteGet("/messages?item=msg2");
         }
     }
 }
