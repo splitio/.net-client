@@ -23,11 +23,10 @@ namespace NetSDK.CommonLibraries
             _httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.SplitSDKMachineName);
             _httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.SplitSDKMachineIP);
             _httpClient.DefaultRequestHeaders.Add("Accept-Encoding", header.Encoding);
-
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             //TODO: find a way to store it in sepparated parameters
-            _httpClient.Timeout = new TimeSpan(connectionTimeOut + readTimeout); 
+            _httpClient.Timeout = new TimeSpan((connectionTimeOut + readTimeout)*1000); 
         }
 
         public HTTPResult ExecuteGet(string requestUri)
