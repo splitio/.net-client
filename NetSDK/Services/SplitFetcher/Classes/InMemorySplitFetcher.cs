@@ -10,21 +10,23 @@ namespace NetSDK.Services.SplitFetcher.Classes
 {
     public class InMemorySplitFetcher: ISplitFetcher
     {
-        protected List<Split> splits;
+        protected Dictionary<string, Split> splits;
 
-        public InMemorySplitFetcher(List<Split> splits = null)
+        public InMemorySplitFetcher(Dictionary<string, Split> splits = null)
         {
-            this.splits = splits ?? new List<Split>();
+            this.splits = splits ?? new Dictionary<string, Split>();
         }
 
         public Split Fetch(string feature)
         {
-            return splits.FirstOrDefault(x => x.name == feature);
+            Split value;
+            splits.TryGetValue(feature, out value);
+            return value;
         }
 
         public List<Split> FetchAll()
         {
-            return splits;
+            return splits.Values.ToList(); 
         }
     }
 }

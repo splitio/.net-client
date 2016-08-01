@@ -17,8 +17,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private long change_number;
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30, 
-                 long change_number = -1, List<Split> splits = null) : base(splits)
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30,
+                 long change_number = -1, Dictionary<string, Split> splits = null): base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
@@ -55,9 +55,9 @@ namespace NetSDK.Services.SplitFetcher.Classes
         }
 
 
-        private List<T> Clone<T>( List<T> listToClone) where T : ICloneable
+        private Dictionary<string, T> Clone<T>(Dictionary<string, T> dictionaryToClone) where T : ICloneable
         {
-            return listToClone.Select(item => (T)item.Clone()).ToList();
+            return dictionaryToClone.ToDictionary(e => e.Key, e => (T)e.Value.Clone());
         }
         
 
@@ -73,21 +73,21 @@ namespace NetSDK.Services.SplitFetcher.Classes
                 //If not active --> Remove Split
                 if (split.status != StatusEnum.ACTIVE)
                 {
-                    tempSplits.RemoveAll(x => x.name == split.name);
+                    tempSplits.Remove(split.name);
                     removedSplits.Add(split);
                 }
                 else
                 {
                     //Test if its a new Split, remove if existing
-                    int removedCount = tempSplits.RemoveAll(x => x.name == split.name);
+                    bool isRemoved = tempSplits.Remove(split.name);
 
-                    if (removedCount == 0)
+                    if (!isRemoved)
                     {
                         //If not existing in _splits, its a new split
                         addedSplits.Add(split);
                     }
 
-                    tempSplits.Add(split);
+                    tempSplits.Add(split.name, split);
                 }
             }
             splits = tempSplits;
