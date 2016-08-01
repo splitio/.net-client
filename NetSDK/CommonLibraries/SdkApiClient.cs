@@ -37,6 +37,7 @@ namespace NetSDK.CommonLibraries
             httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.splitSDKMachineName);
             httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.splitSDKMachineIP);
             httpClient.DefaultRequestHeaders.Add("Accept-Encoding", header.encoding);
+            httpClient.DefaultRequestHeaders.Add("Keep-Alive", "true");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //TODO: find a way to store it in sepparated parameters
