@@ -14,17 +14,15 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;
-        private bool greedy;
         private long change_number;
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30, bool greedy = true,
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30, 
                  long change_number = -1, List<Split> splits = null) : base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
             this.interval = interval;
-            this.greedy = greedy;
             this.change_number = change_number;
             this.stopped = true;   
         }
@@ -112,10 +110,6 @@ namespace NetSDK.Services.SplitFetcher.Classes
                 {
                     UpdateSplitsFromChangeFetcherResponse(result.splits);
                     change_number = result.till;
-                }
-                if (!greedy)
-                {
-                    return;
                 }
             }
             catch (Exception e)

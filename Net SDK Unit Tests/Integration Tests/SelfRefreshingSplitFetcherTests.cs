@@ -29,7 +29,7 @@ namespace NetSDK.Tests
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
             var splitParser = new SplitParser();
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, false, -1);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, -1);
             selfRefreshingSplitFetcher.Start();
 
             //Act
@@ -66,7 +66,7 @@ namespace NetSDK.Tests
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
             var splitParser = new SplitParser();
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, false, 1);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, 1);
             selfRefreshingSplitFetcher.Start();
 
             //Act
