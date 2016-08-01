@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonLibraries\HTTPResult.cs" />
+    <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
     <Compile Include="Domain\BetweenData.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Services\SplitFetcher\Classes\SplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Client\" />

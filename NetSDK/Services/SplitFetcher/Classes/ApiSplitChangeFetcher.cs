@@ -12,9 +12,9 @@ namespace NetSDK.Services.SplitFetcher.Classes
 {
     public class ApiSplitChangeFetcher: SplitChangeFetcher, ISplitChangeFetcher 
     {
-        private readonly SplitSdkApiClient apiClient;
+        private readonly ISplitSdkApiClient apiClient;
 
-        public ApiSplitChangeFetcher(SplitSdkApiClient apiClient)
+        public ApiSplitChangeFetcher(ISplitSdkApiClient apiClient)
         {
             this.apiClient = apiClient;
         }

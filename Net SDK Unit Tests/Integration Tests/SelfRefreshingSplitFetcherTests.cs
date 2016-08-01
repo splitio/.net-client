@@ -7,14 +7,13 @@ using NetSDK.Services.SplitFetcher;
 using System.Threading;
 using NetSDK.Domain;
 
-
 namespace NetSDK.Tests
 {
     [TestClass]
     public class SelfRefreshingSplitFetcherTests
     {
         [TestMethod]
-        public void ExecuteGetSuccessful()
+        public void ExecuteGetSuccessfulWithResults()
         {
             //Arrange
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
@@ -85,6 +84,8 @@ namespace NetSDK.Tests
             //Assert
             Assert.IsTrue(result == null);
         
-        }      
+        }
+
+
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NetSDK.CommonLibraries
 {
-    public class SdkApiClient
+    public class SdkApiClient : ISdkApiClient
     {
         private HttpClient httpClient;
 
@@ -45,7 +45,7 @@ namespace NetSDK.CommonLibraries
           
         }
 
-        public HTTPResult ExecuteGet(string requestUri)
+        public virtual HTTPResult ExecuteGet(string requestUri)
         {
             var task = httpClient.GetAsync(requestUri);
             task.Wait();

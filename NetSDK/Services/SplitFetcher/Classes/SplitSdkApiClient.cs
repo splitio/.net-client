@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using NetSDK.Services.SplitFetcher.Interfaces;
 
 namespace NetSDK.Services.SplitFetcher
 {
-    public class SplitSdkApiClient : SdkApiClient
+    public class SplitSdkApiClient : SdkApiClient, ISplitSdkApiClient
     {
         private static string SplitChangesUrlTemplate = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_TEMPLATE"];
         private static string SplitChangesUrlParameter_Since = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_PARAMETER_SINCE"];

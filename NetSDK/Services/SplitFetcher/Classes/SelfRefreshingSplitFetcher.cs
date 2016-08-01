@@ -35,6 +35,11 @@ namespace NetSDK.Services.SplitFetcher.Classes
             thread.Start();
         }
 
+        public void Stop()
+        {
+            stopped = true;
+        }
+
         private void StartRefreshing()
         {
             if (!stopped)
@@ -44,20 +49,13 @@ namespace NetSDK.Services.SplitFetcher.Classes
 
             stopped = false;
 
-            while(true)
+            while(!stopped)
             {
-                if (!stopped)
-                {
-                    RefreshSplits();
-                }
+                RefreshSplits();
                 Thread.Sleep(interval);
             }
         }
 
-        public void Stop()
-        {
-            stopped = true;
-        }
 
         private List<T> Clone<T>( List<T> listToClone) where T : ICloneable
         {
