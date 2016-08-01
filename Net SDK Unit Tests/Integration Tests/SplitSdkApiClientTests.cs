@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NetSDK.CommonLibraries;
 using System.Net;
 using NetSDK.Services.SplitFetcher;
+using System.IO;
 
 
 namespace NetSDK.Tests
@@ -14,23 +15,24 @@ namespace NetSDK.Tests
         public void ExecuteFetchSplitChangesSuccessful()
         {
             //Arrange
-            var baseUrl = "https://sdk.aws.staging.split.io/api";
+            var baseUrl = "http://sdk-aws-staging.split.io/api/";
             var httpHeader = new HTTPHeader()
             {
-                AuthorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4",
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "net-0.0.0",
-                SplitSDKSpecVersion = "1.2"
+                authorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "net-0.0.0",
+                splitSDKSpecVersion = "1.2",
+                encoding = "gzip"
             };
             var SplitSdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
 
             //Act
-            var result = SplitSdkApiClient.FetchSplitChanges("-1");
-
+            var result = SplitSdkApiClient.FetchSplitChanges(-1);
+  
             //Assert
             Assert.IsTrue(result.Contains("splits"));
+            
         }
 
 
@@ -41,16 +43,16 @@ namespace NetSDK.Tests
             var baseUrl = "https://sdk.aws.staging.split.io/api";
             var httpHeader = new HTTPHeader()
             {
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "net-0.0.0",
-                SplitSDKSpecVersion = "1.2"
+                encoding = "gzip",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "net-0.0.0",
+                splitSDKSpecVersion = "1.2"
             };
             var SplitSdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
 
             //Act
-            var result = SplitSdkApiClient.FetchSplitChanges("-1");
+            var result = SplitSdkApiClient.FetchSplitChanges(-1);
 
             //Assert
             Assert.IsTrue(result == String.Empty);

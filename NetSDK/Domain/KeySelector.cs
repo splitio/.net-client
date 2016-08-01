@@ -7,7 +7,7 @@ namespace NetSDK.Domain
 {
     public class KeySelector
     {
-        public string TrafficType { get; set; }
-        public string Attribute { get; set; }
+        public string trafficType { get; set; }
+        public string attribute { get; set; }
     }
 }

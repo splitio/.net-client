@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,42 +11,54 @@ using System.Threading.Tasks;
 
 namespace NetSDK.CommonLibraries
 {
-    public class SdkApiClient
+    public class SdkApiClient : ISdkApiClient
     {
-        private HttpClient _httpClient { get; set; }
+        private HttpClient httpClient;
 
         public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout)
         {
-            _httpClient = new HttpClient();
+            if (header.encoding == "gzip")
+            {
+                HttpClientHandler handler = new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                };
+                httpClient = new HttpClient(handler);
+            }
+            else
+            {
+                httpClient = new HttpClient();
+            }
 
-            _httpClient.BaseAddress = new Uri(baseUrl);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", header.AuthorizationApiKey);
-            _httpClient.DefaultRequestHeaders.Add("SplitSDKVersion", header.SplitSDKVersion);
-            _httpClient.DefaultRequestHeaders.Add("SplitSDKSpecVersion", header.SplitSDKSpecVersion);
-            _httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.SplitSDKMachineName);
-            _httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.SplitSDKMachineIP);
-            _httpClient.DefaultRequestHeaders.Add("Accept-Encoding", header.Encoding);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.BaseAddress = new Uri(baseUrl);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", header.authorizationApiKey);
+            httpClient.DefaultRequestHeaders.Add("SplitSDKVersion", header.splitSDKVersion);
+            httpClient.DefaultRequestHeaders.Add("SplitSDKSpecVersion", header.splitSDKSpecVersion);
+            httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.splitSDKMachineName);
+            httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.splitSDKMachineIP);
+            httpClient.DefaultRequestHeaders.Add("Accept-Encoding", header.encoding);
+            httpClient.DefaultRequestHeaders.Add("Keep-Alive", "true");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //TODO: find a way to store it in sepparated parameters
-            _httpClient.Timeout = new TimeSpan((connectionTimeOut + readTimeout)*1000); 
+            httpClient.Timeout = new TimeSpan((connectionTimeOut + readTimeout)*1000); 
+
+          
         }
 
-        public HTTPResult ExecuteGet(string requestUri)
+        public virtual HTTPResult ExecuteGet(string requestUri)
         {
-            var response = _httpClient.GetAsync(requestUri).Result;
+            var task = httpClient.GetAsync(requestUri);
+            task.Wait();
+
+            var response = task.Result;
 
             var result = new HTTPResult();
-
-            result.StatusCode = response.StatusCode;
-            result.Content = response.Content.ReadAsStringAsync().Result;
-
+            result.statusCode = response.StatusCode;
+            result.content = response.Content.ReadAsStringAsync().Result;
             return result;
         }
 
-        public async Task ExecutePost<T>(string requestUri, T data)
-        {
-            //TODO: pending implementation
-        }
+
     }
 }

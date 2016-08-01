@@ -7,6 +7,6 @@ namespace NetSDK.Domain
 {
     public class UserDefinedSegmentData
     {
-        public string SegmentName { get; set; }
+        public string segmentName { get; set; }
     }
 }

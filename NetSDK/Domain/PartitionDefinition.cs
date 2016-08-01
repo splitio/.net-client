@@ -7,7 +7,7 @@ namespace NetSDK.Domain
 {
     public class PartitionDefinition
     {
-        public string Treatment { get; set; }
-        public int Size { get; set; }
+        public string treatment { get; set; }
+        public int size { get; set; }
     }
 }

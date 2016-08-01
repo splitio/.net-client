@@ -7,8 +7,8 @@ namespace NetSDK.Domain
 {
     public class BetweenData
     {
-        public DataTypeEnum? DataType { get; set; }
-        public long Start { get; set; }
-        public long End { get; set; }
+        public DataTypeEnum? dataType { get; set; }
+        public long start { get; set; }
+        public long end { get; set; }
     }
 }

@@ -7,12 +7,12 @@ namespace NetSDK.Domain
 {
     public class MatcherDefinition
     {
-        public KeySelector KeySelector { get; set; }
-        public MatcherTypeEnum MatcherType { get; set; }
-        public bool Negate { get; set; }
-        public UserDefinedSegmentData UserDefinedSegmentMatcherData { get; set; }
-        public WhitelistData WhitelistMatcherData { get; set; }
-        public UnaryNumericData UnaryNumericMatcherData { get; set; }
-        public BetweenData BetweenMatcherData { get; set; }
+        public KeySelector keySelector { get; set; }
+        public MatcherTypeEnum matcher_type { get; set; }
+        public bool negate { get; set; }
+        public UserDefinedSegmentData userDefinedSegmentMatcherData { get; set; }
+        public WhitelistData whitelistMatcherData { get; set; }
+        public UnaryNumericData unaryNumericMatcherData { get; set; }
+        public BetweenData betweenMatcherData { get; set; }
     }
 }
