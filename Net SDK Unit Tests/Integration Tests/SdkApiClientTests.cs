@@ -16,12 +16,12 @@ namespace NetSDK.Tests
             var baseUrl = "http://demo7064886.mockable.io";
             var httpHeader = new HTTPHeader()
             {
-                AuthorizationApiKey = "ABCD",
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "1",
-                SplitSDKSpecVersion = "2"
+                authorizationApiKey = "ABCD",
+                encoding = "gzip",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "1",
+                splitSDKSpecVersion = "2"
             };
             var SdkApiClient = new SdkApiClient(httpHeader, baseUrl, 10000, 10000);
 
@@ -29,8 +29,8 @@ namespace NetSDK.Tests
             var result = SdkApiClient.ExecuteGet("/messages?item=msg1");
 
             //Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.OK);
-            Assert.IsTrue(result.Content.Contains("Hello World"));
+            Assert.AreEqual(result.statusCode, HttpStatusCode.OK);
+            Assert.IsTrue(result.content.Contains("Hello World"));
         }
 
 
@@ -41,11 +41,11 @@ namespace NetSDK.Tests
             var baseUrl = "http://demo7064886.mockable.io";
             var httpHeader = new HTTPHeader()
             {
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "1",
-                SplitSDKSpecVersion = "2"
+                encoding = "gzip",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "1",
+                splitSDKSpecVersion = "2"
             };
             var SdkApiClient = new SdkApiClient(httpHeader, baseUrl, 10000, 10000);
 
@@ -53,7 +53,7 @@ namespace NetSDK.Tests
             var result = SdkApiClient.ExecuteGet("/messages?item=msg2");
 
             //Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.Unauthorized);
+            Assert.AreEqual(result.statusCode, HttpStatusCode.Unauthorized);
         }
 
         [TestMethod]
@@ -63,12 +63,12 @@ namespace NetSDK.Tests
             var baseUrl = "http://demo706abcd.mockable.io";
             var httpHeader = new HTTPHeader()
             {
-                AuthorizationApiKey = "ABCD",
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "1",
-                SplitSDKSpecVersion = "2"
+                authorizationApiKey = "ABCD",
+                encoding = "gzip",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "1",
+                splitSDKSpecVersion = "2"
             };
             var SdkApiClient = new SdkApiClient(httpHeader, baseUrl, 10000, 10000);
 
@@ -76,7 +76,7 @@ namespace NetSDK.Tests
             var result = SdkApiClient.ExecuteGet("/messages?item=msg2");
 
             //Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.NotFound);
+            Assert.AreEqual(result.statusCode, HttpStatusCode.NotFound);
         }
 
         [TestMethod]
@@ -87,12 +87,12 @@ namespace NetSDK.Tests
             var baseUrl = "http://demo70e.iio";
             var httpHeader = new HTTPHeader()
             {
-                AuthorizationApiKey = "ABCD",
-                Encoding = "gzip",
-                SplitSDKMachineIP = "1.0.0.0",
-                SplitSDKMachineName = "localhost",
-                SplitSDKVersion = "1",
-                SplitSDKSpecVersion = "2"
+                authorizationApiKey = "ABCD",
+                encoding = "gzip",
+                splitSDKMachineIP = "1.0.0.0",
+                splitSDKMachineName = "localhost",
+                splitSDKVersion = "1",
+                splitSDKSpecVersion = "2"
             };
             var SdkApiClient = new SdkApiClient(httpHeader, baseUrl, 10000, 10000);
 

@@ -9,7 +9,7 @@ namespace NetSDK.CommonLibraries
 {
     public class HTTPResult
     {
-        public HttpStatusCode StatusCode { get; set; }
-        public string Content { get; set; }
+        public HttpStatusCode statusCode { get; set; }
+        public string content { get; set; }
     }
 }

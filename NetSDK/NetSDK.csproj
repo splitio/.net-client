@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetSDK</RootNamespace>
     <AssemblyName>NetSDK</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,17 +31,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.IO">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Net.Http.WebRequest, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,13 +69,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonLibraries\HTTPResult.cs" />
+    <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
+    <Compile Include="Domain\BetweenData.cs" />
+    <Compile Include="Domain\CombinerEnum.cs" />
+    <Compile Include="Domain\ConditionDefinition.cs" />
+    <Compile Include="Domain\DataTypeEnum.cs" />
+    <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Domain\MatcherDefinition.cs" />
+    <Compile Include="Domain\MatcherGroupDefinition.cs" />
+    <Compile Include="Domain\MatcherTypeEnum.cs" />
+    <Compile Include="Domain\PartitionDefinition.cs" />
+    <Compile Include="Domain\Split.cs" />
+    <Compile Include="Domain\StatusEnum.cs" />
+    <Compile Include="Domain\UnaryNumericData.cs" />
+    <Compile Include="Domain\UserDefinedSegmentData.cs" />
+    <Compile Include="Domain\WhitelistData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\SplitFetcher\SplitSdkApiClient.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
+    <Compile Include="Domain\SplitChange.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\SplitChangeFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\SplitParser.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\SplitSdkApiClient.cs" />
+    <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\" />
     <Folder Include="Services\Client\" />
     <Folder Include="Services\EngineEvaluator\" />
     <Folder Include="Services\Impressions\" />
@@ -65,7 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
