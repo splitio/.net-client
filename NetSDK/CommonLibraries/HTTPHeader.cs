@@ -8,11 +8,11 @@ namespace NetSDK.CommonLibraries
 {
     public class HTTPHeader
     {
-        public string AuthorizationApiKey { get; set; }
-        public string SplitSDKVersion { get; set; }
-        public string SplitSDKSpecVersion { get; set; }
-        public string SplitSDKMachineName { get; set; }
-        public string SplitSDKMachineIP { get; set; }
-        public string Encoding { get; set; } 
+        public string authorizationApiKey { get; set; }
+        public string splitSDKVersion { get; set; }
+        public string splitSDKSpecVersion { get; set; }
+        public string splitSDKMachineName { get; set; }
+        public string splitSDKMachineIP { get; set; }
+        public string encoding { get; set; } 
     }
 }

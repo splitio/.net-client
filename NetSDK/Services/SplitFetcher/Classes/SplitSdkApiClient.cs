@@ -5,26 +5,25 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
 using System.Net;
 
 namespace NetSDK.Services.SplitFetcher
 {
     public class SplitSdkApiClient : SdkApiClient
     {
-        private string _SplitChangesUrlTemplate = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_TEMPLATE"];
-        private string _SplitChangesUrlParameter_Since = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_PARAMETER_SINCE"];
+        private static string SplitChangesUrlTemplate = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_TEMPLATE"];
+        private static string SplitChangesUrlParameter_Since = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_PARAMETER_SINCE"];
         public SplitSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout) : base(header, baseUrl, connectionTimeOut, readTimeout) { }
 
-        public string FetchSplitChanges(string since)
+        public string FetchSplitChanges(long since)
         {
             try
             {
                 var requestUri = GetRequestUri(since);
                 var response = ExecuteGet(requestUri);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.statusCode == HttpStatusCode.OK)
                 {
-                    return response.Content;
+                    return response.content;
                 }
                 else
                 {
@@ -39,9 +38,9 @@ namespace NetSDK.Services.SplitFetcher
             }
         }
 
-        private string GetRequestUri(string since)
+        private string GetRequestUri(long since)
         {
-            return String.Concat(_SplitChangesUrlTemplate, _SplitChangesUrlParameter_Since, Uri.EscapeDataString(since));
+            return String.Concat(SplitChangesUrlTemplate, SplitChangesUrlParameter_Since, Uri.EscapeDataString(since.ToString()));
         }
     }
 }

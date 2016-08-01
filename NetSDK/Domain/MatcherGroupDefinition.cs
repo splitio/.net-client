@@ -7,7 +7,7 @@ namespace NetSDK.Domain
 {
     public class MatcherGroupDefinition
     {
-        public CombinerEnum Combiner { get; set; }
-        public MatcherDefinition Matchers {get; set;}
+        public CombinerEnum combiner { get; set; }
+        public List<MatcherDefinition> matchers {get; set;}
     }
 }

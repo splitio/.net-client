@@ -7,7 +7,7 @@ namespace NetSDK.Domain
 {
     public class UnaryNumericData
     {
-        public DataTypeEnum? DataType { get; set; }
-        public long Value { get; set; }
+        public DataTypeEnum? dataType { get; set; }
+        public long value { get; set; }
     }
 }

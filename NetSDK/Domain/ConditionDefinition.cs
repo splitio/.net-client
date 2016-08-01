@@ -7,8 +7,8 @@ namespace NetSDK.Domain
 {
     public class ConditionDefinition
     {
-        public MatcherGroupDefinition MatcherGroup { get; set; }
-        public List<PartitionDefinition> Partitions { get; set; }
-        public string Label { get; set; }
+        public MatcherGroupDefinition matcherGroup { get; set; }
+        public List<PartitionDefinition> partitions { get; set; }
+        public string label { get; set; }
     }
 }

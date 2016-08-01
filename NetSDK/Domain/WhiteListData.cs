@@ -7,6 +7,6 @@ namespace NetSDK.Domain
 {
     public class WhitelistData
     {
-        List<string> Whitelist { get; set; }
+        List<string> whitelist { get; set; }
     }
 }
