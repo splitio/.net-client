@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -14,6 +15,7 @@ namespace NetSDK.CommonLibraries
     public class SdkApiClient : ISdkApiClient
     {
         private HttpClient httpClient;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SdkApiClient));
 
         public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout)
         {
@@ -48,14 +50,19 @@ namespace NetSDK.CommonLibraries
 
         public virtual HTTPResult ExecuteGet(string requestUri)
         {
-            var task = httpClient.GetAsync(requestUri);
-            task.Wait();
-
-            var response = task.Result;
-
             var result = new HTTPResult();
-            result.statusCode = response.StatusCode;
-            result.content = response.Content.ReadAsStringAsync().Result;
+            try
+            {
+                var task = httpClient.GetAsync(requestUri);
+                task.Wait();
+                var response = task.Result;
+                result.statusCode = response.StatusCode;
+                result.content = response.Content.ReadAsStringAsync().Result;                
+            }
+            catch(Exception e)
+            {
+                Log.Error(String.Format("Exception caught executing GET {0}", requestUri), e);
+            }
             return result;
         }
 

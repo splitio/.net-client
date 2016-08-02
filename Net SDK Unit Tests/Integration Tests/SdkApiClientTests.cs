@@ -9,6 +9,12 @@ namespace NetSDK.Tests
     [TestClass]
     public class SdkApiClientTests
     {
+        [TestInitialize]
+        public void Initialization()
+        {
+            log4net.Config.XmlConfigurator.Configure();
+        }
+
         [TestMethod]
         public void ExecuteGetSuccessful()
         {
@@ -80,8 +86,7 @@ namespace NetSDK.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
-        public void ExecuteGetShouldThrowExceptionOnInvalidURL()
+        public void ExecuteGetShouldReturnEmptyResponseOnInvalidURL()
         {
             //Arrange
             var baseUrl = "http://demo70e.iio";
@@ -98,6 +103,10 @@ namespace NetSDK.Tests
 
             //Act
             var result = SdkApiClient.ExecuteGet("/messages?item=msg2");
+
+            //Assert
+            Assert.IsTrue(result.content == null);
+            Assert.IsTrue(result != null);
         }
     }
 }
