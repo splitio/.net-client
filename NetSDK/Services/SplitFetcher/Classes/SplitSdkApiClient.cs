@@ -14,7 +14,7 @@ namespace NetSDK.Services.SplitFetcher
     public class SplitSdkApiClient : SdkApiClient, ISplitSdkApiClient
     {
         private static string SplitChangesUrlTemplate = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_TEMPLATE"];
-        private static string SplitChangesUrlParameter_Since = ConfigurationManager.AppSettings["SPLIT_CHANGES_URL_PARAMETER_SINCE"];
+        private static string UrlParameter_Since = ConfigurationManager.AppSettings["URL_PARAMETER_SINCE"];
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitSdkApiClient));
 
         public SplitSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout) : base(header, baseUrl, connectionTimeOut, readTimeout) { }
@@ -44,7 +44,7 @@ namespace NetSDK.Services.SplitFetcher
 
         private string GetRequestUri(long since)
         {
-            return String.Concat(SplitChangesUrlTemplate, SplitChangesUrlParameter_Since, Uri.EscapeDataString(since.ToString()));
+            return String.Concat(SplitChangesUrlTemplate, UrlParameter_Since, Uri.EscapeDataString(since.ToString()));
         }
     }
 }

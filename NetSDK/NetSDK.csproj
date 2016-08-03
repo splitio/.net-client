@@ -84,12 +84,24 @@
     <Compile Include="Domain\MatcherGroupDefinition.cs" />
     <Compile Include="Domain\MatcherTypeEnum.cs" />
     <Compile Include="Domain\PartitionDefinition.cs" />
+    <Compile Include="Domain\Segment.cs" />
     <Compile Include="Domain\Split.cs" />
     <Compile Include="Domain\StatusEnum.cs" />
     <Compile Include="Domain\UnaryNumericData.cs" />
     <Compile Include="Domain\UserDefinedSegmentData.cs" />
     <Compile Include="Domain\WhitelistData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
+    <Compile Include="Domain\SegmentChange.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegment.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentSdkApiClient.cs" />
+    <Compile Include="Services\SegmentFetcher\Interfaces\ISegment.cs" />
+    <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Interfaces\ISplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
@@ -107,7 +119,6 @@
     <Folder Include="Services\Impressions\" />
     <Folder Include="Services\Metrics\" />
     <Folder Include="Services\Parsing\" />
-    <Folder Include="Services\SegmentFetcher\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
