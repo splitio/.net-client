@@ -1,4 +1,5 @@
-﻿using NetSDK.Domain;
+﻿using log4net;
+using NetSDK.Domain;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
 {
     public class SelfRefreshingSplitFetcher: InMemorySplitFetcher
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher));
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;
@@ -91,8 +93,17 @@ namespace NetSDK.Services.SplitFetcher.Classes
                 }
             }
             splits = tempSplits;
-            //TODO: log addedSplits if count > 0
-            //TODO: log removedSplits if count > 0
+
+            if(addedSplits.Count() > 0)
+            {
+               var addedFeatureNames = addedSplits.Select(x => x.name).ToList();
+               Log.Info(String.Format("Added features: {0}", String.Join(" - ", addedFeatureNames)));
+            }
+            if(removedSplits.Count() > 0)
+            {
+               var removedFeatureNames = removedSplits.Select(x => x.name).ToList();
+               Log.Info(String.Format("Deleted features: {0}", String.Join(" - ", removedFeatureNames)));
+            }
         }
 
         private void RefreshSplits()
@@ -114,12 +125,12 @@ namespace NetSDK.Services.SplitFetcher.Classes
             }
             catch (Exception e)
             {
-                //TODO: log exception Exception caught refreshing splits
+                Log.Error("Exception caught refreshing splits", e);
                 stopped = true;
             }
             finally
             {
-                //TODO: log split fetch before: %s, after: %s', change_number_before, self._change_number
+                Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumberBefore, change_number));
             }
         }
 

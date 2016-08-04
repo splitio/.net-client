@@ -1,4 +1,5 @@
-﻿using NetSDK.Domain;
+﻿using log4net;
+using NetSDK.Domain;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
     public abstract class SplitChangeFetcher : ISplitChangeFetcher
     {
         private SplitChangesResult splitChanges;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitChangeFetcher));
+
         //TODO: add logger in constructor
         protected abstract SplitChangesResult FetchFromBackend(long since);
 
@@ -35,9 +38,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
             }
             catch(Exception e)
             {
-                //TODO: log exception
-                splitChanges = BuildEmptyResponse(since);
-                
+                Log.Error(String.Format("Exception caught executing Fetch since={0}", since), e);
+                splitChanges = BuildEmptyResponse(since); 
             }                   
             return splitChanges;
         }

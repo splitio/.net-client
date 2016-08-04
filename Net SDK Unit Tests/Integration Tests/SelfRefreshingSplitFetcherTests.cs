@@ -12,6 +12,12 @@ namespace NetSDK.Tests
     [TestClass]
     public class SelfRefreshingSplitFetcherTests
     {
+        [TestInitialize]
+        public void Initialization()
+        {
+            log4net.Config.XmlConfigurator.Configure();
+        }
+
         [TestMethod]
         public void ExecuteGetSuccessfulWithResults()
         {
