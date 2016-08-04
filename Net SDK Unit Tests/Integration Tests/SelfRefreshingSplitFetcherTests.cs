@@ -40,14 +40,12 @@ namespace NetSDK.Tests
 
             //Act
             Split result = null;
-            int i = 0;
-            while (result == null && i < 10)
+            while (!selfRefreshingSplitFetcher.initialized)
             {
-                result = selfRefreshingSplitFetcher.Fetch("condition_and");
-                Thread.Sleep(100);
-                i++;
+                Thread.Sleep(10);
             }
             selfRefreshingSplitFetcher.Stop();
+            result = selfRefreshingSplitFetcher.Fetch("condition_and");
 
             //Assert
             Assert.IsTrue(result != null);
@@ -77,14 +75,12 @@ namespace NetSDK.Tests
 
             //Act
             Split result = null;
-            int i = 0;
-            while (result == null && i < 10)
+            while (!selfRefreshingSplitFetcher.initialized)
             {
-                result = selfRefreshingSplitFetcher.Fetch("condition_and");
-                Thread.Sleep(100);
-                i++;
+                Thread.Sleep(10);
             }
             selfRefreshingSplitFetcher.Stop();
+            result = selfRefreshingSplitFetcher.Fetch("condition_and");
 
 
             //Assert

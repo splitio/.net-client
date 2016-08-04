@@ -18,6 +18,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private int interval;
         private long change_number;
         public bool stopped { get; private set; }
+        public bool initialized { get; private set; }
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30,
                  long change_number = -1, Dictionary<string, Split> splits = null): base(splits)
@@ -26,7 +27,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
             this.splitParser = splitParser;
             this.interval = interval;
             this.change_number = change_number;
-            this.stopped = true;   
+            this.stopped = true;
+            this.initialized = false;
         }
 
         public void Start()
@@ -115,6 +117,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
                 if (change_number >= result.till)
                 {
                     //There are no new split changes
+                    initialized = true;
                     return;
                 }
                 if (result.splits != null && result.splits.Count > 0)
