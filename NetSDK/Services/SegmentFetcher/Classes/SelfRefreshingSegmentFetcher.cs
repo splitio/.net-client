@@ -12,13 +12,13 @@ namespace NetSDK.Services.SegmentFetcher.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
-        private HashSet<Segment> segments;
+        private HashSet<SelfRefreshingSegment> segments;
         private int interval;
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, HashSet<Segment> segments = null, int interval = 30)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, HashSet<SelfRefreshingSegment> segments = null, int interval = 30)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
-            this.segments = segments ?? new HashSet<Segment>();
+            this.segments = segments ?? new HashSet<SelfRefreshingSegment>();
             this.interval = interval;
         }
 
@@ -30,10 +30,9 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                 return segment;
             }
 
-            //TODO: finish this
-            //segment = new SelfRefreshingSegment(name, segmentChangeFetcher, interval);
+            segment = new SelfRefreshingSegment(name, segmentChangeFetcher, interval);
+            segment.Start();
             segments.Add(segment);
-            //segment.Start();
             return segment;
         }
 

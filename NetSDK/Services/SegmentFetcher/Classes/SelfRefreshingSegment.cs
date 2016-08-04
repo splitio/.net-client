@@ -22,6 +22,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.interval = interval;
             this.greedy = greedy;
+            this.stopped = true;
         }
 
         public void Start()
