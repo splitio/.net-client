@@ -15,6 +15,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         private ISegmentChangeFetcher segmentChangeFetcher;
         private int interval;
         private bool greedy;
+        public bool initialized { get; private set; }
         public bool stopped { get; private set; }
 
         public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1, bool greedy = true) : base(name, change_number)
@@ -23,6 +24,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             this.interval = interval;
             this.greedy = greedy;
             this.stopped = true;
+            this.initialized = false;
         }
 
         public void Start()
@@ -52,22 +54,33 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             }
         }
 
+        private HashSet<string> Clone(HashSet<string> hashSetToClone) 
+        {
+            return new HashSet<string>(hashSetToClone);
+        }
+
         private void RefreshSegment()
         {
+            
             while (true)
             {
                 try
-                {
+                {                   
                     var response = segmentChangeFetcher.Fetch(name, change_number);
-                    if (change_number > response.till)
+                    if (change_number >= response.till)
                     {
+                        initialized = true;
                         return;
                     }
 
                     if (response.added.Count() > 0 || response.removed.Count() > 0)
                     {
-                        keys.UnionWith(response.added);
-                        keys.ExceptWith(response.removed);
+                        var tempKeys = Clone(keys);
+
+                        tempKeys.UnionWith(response.added);
+                        tempKeys.ExceptWith(response.removed);
+
+                        keys = tempKeys;
 
                         if (response.added.Count() > 0)
                         {
@@ -77,13 +90,13 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                         {
                             Log.Info(String.Format("Removed : {0}", String.Join(" - ", response.removed)));
                         }
-
                     }
 
                     change_number = response.till;
-
+                    
                     if (!greedy)
                     {
+                        initialized = true;
                         return;
                     }
                 }
@@ -91,9 +104,8 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                 {
                     Log.Error("Exception caught refreshing segment", e);
                     stopped = true;
-                }
+                }               
             }
         }
-
     }
 }

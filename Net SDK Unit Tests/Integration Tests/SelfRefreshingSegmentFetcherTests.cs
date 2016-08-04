@@ -40,18 +40,16 @@ namespace NetSDK.Tests
 
             //Act
             SelfRefreshingSegment result = null;
-            int i = 0;
-            while (result == null && i < 10)
+            result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("adil_segment");
+            result.Start();
+            while (!result.initialized)
             {
-                result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("adil_segment");
-                Thread.Sleep(100);
-                i++;
+                Thread.Sleep(10);
             }
 
             //Assert
             Assert.IsTrue(result != null);
             Assert.IsTrue(result.name == "adil_segment");
-            Thread.Sleep(1000);
             Assert.IsTrue(result.Contains("eNXnLmFZfweB5i1Z5NF5"));
 
         }
