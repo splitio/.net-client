@@ -14,15 +14,13 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
         private ISegmentChangeFetcher segmentChangeFetcher;
         private int interval;
-        private bool greedy;
         public bool initialized { get; private set; }
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1, bool greedy = true) : base(name, change_number)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1) : base(name, change_number)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.interval = interval;
-            this.greedy = greedy;
             this.stopped = true;
             this.initialized = false;
         }
@@ -60,8 +58,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         }
 
         private void RefreshSegment()
-        {
-            
+        {        
             while (true)
             {
                 try
@@ -92,13 +89,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                         }
                     }
 
-                    change_number = response.till;
-                    
-                    if (!greedy)
-                    {
-                        initialized = true;
-                        return;
-                    }
+                    change_number = response.till;                  
                 }
                 catch (Exception e)
                 {
