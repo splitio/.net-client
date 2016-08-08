@@ -8,6 +8,7 @@ using System.Threading;
 using NetSDK.Domain;
 using NetSDK.Services.Parsing;
 using NetSDK.Services.SegmentFetcher.Classes;
+using System.Collections.Generic;
 
 namespace NetSDK.Tests
 {
@@ -36,22 +37,27 @@ namespace NetSDK.Tests
             };
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, null, 30, -1);
+            var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
+            var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, new HashSet<SelfRefreshingSegment>(), 30);
+
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, 1);
             selfRefreshingSplitFetcher.Start();
 
             //Act
-            Split result = null;
+            ParsedSplit result = null;
             while (!selfRefreshingSplitFetcher.initialized)
             {
                 Thread.Sleep(10);
             }
             selfRefreshingSplitFetcher.Stop();
-            result = selfRefreshingSplitFetcher.Fetch("condition_and");
+            result = selfRefreshingSplitFetcher.Fetch("recentlyViewedKeys_aurora");
 
             //Assert
             Assert.IsTrue(result != null);
-            Assert.IsTrue(result.name == "condition_and");
-
+            Assert.IsTrue(result.name == "recentlyViewedKeys_aurora");
+            Assert.IsTrue(result.conditions.Count > 0);
         }
 
         [TestMethod]
@@ -70,11 +76,16 @@ namespace NetSDK.Tests
             };
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, null, 30, 1);
+            var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
+            var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, new HashSet<SelfRefreshingSegment>(), 30);
+
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, 1);
             selfRefreshingSplitFetcher.Start();
 
             //Act
-            Split result = null;
+            ParsedSplit result = null;
             while (!selfRefreshingSplitFetcher.initialized)
             {
                 Thread.Sleep(10);

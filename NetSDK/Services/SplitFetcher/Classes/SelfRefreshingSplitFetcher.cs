@@ -22,7 +22,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
         public bool initialized { get; private set; }
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30,
-                 long change_number = -1, Dictionary<string, Split> splits = null): base(splits)
+                 long change_number = -1, Dictionary<string, ParsedSplit> splits = null)
+            : base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
@@ -71,7 +72,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
             List<Split> addedSplits = new List<Split>();
             List<Split> removedSplits = new List<Split>();
 
-            var tempSplits = Clone<Split>(splits);
+            var tempSplits = Clone<ParsedSplit>(splits);
 
             foreach (Split split in splitChanges)
             {
@@ -91,8 +92,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
                         //If not existing in _splits, its a new split
                         addedSplits.Add(split);
                     }
-
-                    tempSplits.Add(split.name, split);
+                    ParsedSplit parsedSplit = splitParser.Parse(split);
+                    tempSplits.Add(parsedSplit.name, parsedSplit);
                 }
             }
             splits = tempSplits;
