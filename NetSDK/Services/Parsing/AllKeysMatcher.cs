@@ -6,9 +6,9 @@ using System.Text;
 
 namespace NetSDK.Services.Parsing
 {
-    public class AllKeysMatcher : Matcher
+    public class AllKeysMatcher : IMatcher
     {
-        public override bool Match(string key)
+        public bool Match(string key)
         {
             return true;
         }

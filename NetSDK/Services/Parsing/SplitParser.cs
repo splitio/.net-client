@@ -49,17 +49,12 @@ namespace NetSDK.Services.Parsing
 
         private ParsedSplit ParseConditions(Split split, ParsedSplit parsedSplit)
         {
-            foreach (ConditionDefinition condition in split.conditions)
+            parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
             {
-                var parsedPartitions = condition.partitions;
-                var combiningMatcher = ParseMatcherGroup(parsedSplit, condition.matcherGroup);
-                var conditionWithLogic = new ConditionWithLogic()
-                {
-                    partitions = parsedPartitions,
-                    matcher = combiningMatcher
-                };
-                parsedSplit.conditions.Add(conditionWithLogic);
-            }
+                partitions = x.partitions,
+                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup)
+            }));
+
             return parsedSplit;
         }
 
@@ -70,18 +65,10 @@ namespace NetSDK.Services.Parsing
                 throw new Exception("Missing or empty matchers");
             }
 
-            List<AttributeMatcher> delegates = new List<AttributeMatcher>();
-            foreach (MatcherDefinition matcher in matcherGroupDefinition.matchers)
-            {
-                delegates.Add(ParseMatcher(parsedSplit, matcher));
-            }
-
-            var combiner = ParseCombiner(matcherGroupDefinition.combiner);
-
             return new CombiningMatcher()
             {
-                delegates = delegates,
-                combiner = combiner
+                delegates = matcherGroupDefinition.matchers.Select(x => ParseMatcher(parsedSplit, x)).ToList(),
+                combiner = ParseCombiner(matcherGroupDefinition.combiner)
             };
         }
 
@@ -92,8 +79,8 @@ namespace NetSDK.Services.Parsing
                 throw new Exception("Missing matcher type value");
             }
             var matcherType = matcherDefinition.matcherType;
-            
-            Matcher matcher = null;
+
+            IMatcher matcher = null;
             try
             {              
                 switch (matcherType)
@@ -122,7 +109,7 @@ namespace NetSDK.Services.Parsing
             {              
                 matcher = matcher,
                 negate = matcherDefinition.negate
-            }; ;
+            }; 
             
             if (matcherDefinition.keySelector != null && matcherDefinition.keySelector.attribute != null)
             {
@@ -132,44 +119,44 @@ namespace NetSDK.Services.Parsing
             return attributeMatcher;
         }
 
-        private Matcher GetBetweenMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetBetweenMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.betweenMatcherData;
             return new BetweenMatcher(matcherData.dataType, matcherData.start, matcherData.end);
         }
 
-        private Matcher GetLessThanOrEqualToMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetLessThanOrEqualToMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.unaryNumericMatcherData;
             return new LessOrEqualToMatcher(matcherData.dataType, matcherData.value);
         }
 
-        private Matcher GetGreaterThanOrEqualToMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetGreaterThanOrEqualToMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.unaryNumericMatcherData;
             return new GreaterOrEqualToMatcher(matcherData.dataType, matcherData.value);
         }
 
-        private Matcher GetEqualToMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetEqualToMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.unaryNumericMatcherData;
             return new EqualToMatcher(matcherData.dataType, matcherData.value);
         }
 
-        private Matcher GetWhitelistMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetWhitelistMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.whitelistMatcherData;
             return new WhitelistMatcher(matcherData.whitelist);
         }
 
-        private Matcher GetInSegmentMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
             var segment = segmentFetcher.Fetch(matcherData.segmentName);
             return new UserDefinedSegmentMatcher(segment);
         }
 
-        private Matcher GetAllKeysMatcher()
+        private IMatcher GetAllKeysMatcher()
         {
             return new AllKeysMatcher();
         }

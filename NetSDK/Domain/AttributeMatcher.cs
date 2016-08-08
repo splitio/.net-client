@@ -9,7 +9,7 @@ namespace NetSDK.Domain
     public class AttributeMatcher
     {
         public string attribute { get; set; }
-        public Matcher matcher { get; set; }
+        public IMatcher matcher { get; set; }
         public bool negate { get; set; }
     }
 }

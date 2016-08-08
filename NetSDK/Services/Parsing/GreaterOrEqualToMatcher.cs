@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetSDK.Services.Parsing
 {
-    public class GreaterOrEqualToMatcher: Matcher
+    public class GreaterOrEqualToMatcher: IMatcher
     {
         private DataTypeEnum? dataType;
         private long value;
@@ -18,7 +18,7 @@ namespace NetSDK.Services.Parsing
             this.value = value;
         }
 
-        public override bool Match(string key)
+        public bool Match(string key)
         {
             throw new NotImplementedException();
         }

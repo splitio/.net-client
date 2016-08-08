@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetSDK.Services.Parsing
 {
-    public class UserDefinedSegmentMatcher: Matcher
+    public class UserDefinedSegmentMatcher: IMatcher
     {
         private Segment segment;
 
@@ -15,7 +15,7 @@ namespace NetSDK.Services.Parsing
             // TODO: Complete member initialization
             this.segment = segment;
         }
-        public override bool Match(string key)
+        public bool Match(string key)
         {
             throw new NotImplementedException();
         }

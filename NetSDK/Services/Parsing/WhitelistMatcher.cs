@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetSDK.Services.Parsing
 {
-    public class WhitelistMatcher: Matcher
+    public class WhitelistMatcher: IMatcher
     {
         private List<string> list;
 
@@ -14,7 +14,7 @@ namespace NetSDK.Services.Parsing
             // TODO: Complete member initialization
             this.list = list;
         }
-        public override bool Match(string key)
+        public bool Match(string key)
         {
             throw new NotImplementedException();
         }

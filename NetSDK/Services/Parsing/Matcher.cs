@@ -4,9 +4,9 @@ using System.Text;
 
 namespace NetSDK.Services.Parsing
 {
-    public abstract class Matcher
+    public interface IMatcher
     {
         //TODO: derivated to be implemented 
-        public abstract bool Match(string key);
+        bool Match(string key);
     }
 }
