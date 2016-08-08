@@ -6,6 +6,8 @@ using NetSDK.Services.SplitFetcher.Classes;
 using NetSDK.Services.SplitFetcher;
 using System.Threading;
 using NetSDK.Domain;
+using NetSDK.Services.Parsing;
+using NetSDK.Services.SegmentFetcher.Classes;
 
 namespace NetSDK.Tests
 {
@@ -34,8 +36,8 @@ namespace NetSDK.Tests
             };
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
-            var splitParser = new SplitParser();
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, -1);
+            //var splitParser = new SplitParser(new SelfRefreshingSegmentFetcher(new ApiSegmentChangeFetcher()));
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, null, 30, -1);
             selfRefreshingSplitFetcher.Start();
 
             //Act
@@ -69,8 +71,8 @@ namespace NetSDK.Tests
             };
             var sdkApiClient = new SplitSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
-            var splitParser = new SplitParser();
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, 1);
+            //var splitParser = new SplitParser(new SelfRefreshingSegmentFetcher(new SegmentChangeFetcher()));
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, null, 30, 1);
             selfRefreshingSplitFetcher.Start();
 
             //Act

@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Parsing;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;

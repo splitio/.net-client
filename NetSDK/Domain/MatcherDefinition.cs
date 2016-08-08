@@ -8,7 +8,7 @@ namespace NetSDK.Domain
     public class MatcherDefinition
     {
         public KeySelector keySelector { get; set; }
-        public MatcherTypeEnum matcher_type { get; set; }
+        public MatcherTypeEnum? matcher_type { get; set; }
         public bool negate { get; set; }
         public UserDefinedSegmentData userDefinedSegmentMatcherData { get; set; }
         public WhitelistData whitelistMatcherData { get; set; }

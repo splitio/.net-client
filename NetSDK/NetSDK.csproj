@@ -75,14 +75,23 @@
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
+    <Compile Include="Domain\AttributeMatcher.cs" />
     <Compile Include="Domain\BetweenData.cs" />
     <Compile Include="Domain\CombinerEnum.cs" />
+    <Compile Include="Domain\CombiningMatcher.cs" />
     <Compile Include="Domain\ConditionDefinition.cs" />
+    <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Services\Parsing\BetweenMatcher.cs" />
+    <Compile Include="Services\Parsing\EqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\GreaterOrEqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\LessOrEqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\Matcher.cs" />
     <Compile Include="Domain\MatcherDefinition.cs" />
     <Compile Include="Domain\MatcherGroupDefinition.cs" />
     <Compile Include="Domain\MatcherTypeEnum.cs" />
+    <Compile Include="Domain\ParsedSplit.cs" />
     <Compile Include="Domain\PartitionDefinition.cs" />
     <Compile Include="Domain\Segment.cs" />
     <Compile Include="Domain\Split.cs" />
@@ -91,6 +100,10 @@
     <Compile Include="Domain\UserDefinedSegmentData.cs" />
     <Compile Include="Domain\WhitelistData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Parsing\AllKeysMatcher.cs" />
+    <Compile Include="Services\Parsing\SplitParser.cs" />
+    <Compile Include="Services\Parsing\UserDefinedSegmentMatcher.cs" />
+    <Compile Include="Services\Parsing\WhitelistMatcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
@@ -107,7 +120,6 @@
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
     <Compile Include="Domain\SplitChange.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitChangeFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Classes\SplitParser.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
@@ -118,7 +130,6 @@
     <Folder Include="Services\EngineEvaluator\" />
     <Folder Include="Services\Impressions\" />
     <Folder Include="Services\Metrics\" />
-    <Folder Include="Services\Parsing\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
