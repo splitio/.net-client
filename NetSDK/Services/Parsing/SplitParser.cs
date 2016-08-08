@@ -32,7 +32,8 @@ namespace NetSDK.Services.Parsing
                     name = split.name,
                     killed = split.killed,
                     defaultTreatment = split.defaultTreatment,
-                    seed = split.seed
+                    seed = split.seed,
+                    conditions = new List<ConditionWithLogic>()
                 };
 
                 parsedSplit = ParseConditions(split, parsedSplit);
@@ -86,11 +87,11 @@ namespace NetSDK.Services.Parsing
 
         private AttributeMatcher ParseMatcher(ParsedSplit parsedSplit, MatcherDefinition matcherDefinition)
         {
-            if (matcherDefinition.matcher_type == null)
+            if (matcherDefinition.matcherType == null)
             {
                 throw new Exception("Missing matcher type value");
             }
-            var matcherType = matcherDefinition.matcher_type;
+            var matcherType = matcherDefinition.matcherType;
             
             Matcher matcher = null;
             try
@@ -117,18 +118,17 @@ namespace NetSDK.Services.Parsing
                 throw new Exception(String.Format("Unable to create matcher for matcher type: {0}", matcherType));
             }
 
-            AttributeMatcher attributeMatcher = null;
+            AttributeMatcher attributeMatcher = new AttributeMatcher()
+            {              
+                matcher = matcher,
+                negate = matcherDefinition.negate
+            }; ;
             
             if (matcherDefinition.keySelector != null && matcherDefinition.keySelector.attribute != null)
             {
-                attributeMatcher = new AttributeMatcher()
-                {
-                    attribute = matcherDefinition.keySelector.attribute,
-                    matcher = matcher,
-                    negate = matcherDefinition.negate
-                };
+                attributeMatcher.attribute = matcherDefinition.keySelector.attribute;
             }
-
+            
             return attributeMatcher;
         }
 
