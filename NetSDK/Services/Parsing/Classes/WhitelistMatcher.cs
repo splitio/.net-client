@@ -11,12 +11,11 @@ namespace NetSDK.Services.Parsing
 
         public WhitelistMatcher(List<string> list)
         {
-            // TODO: Complete member initialization
             this.list = list;
         }
         public bool Match(string key)
         {
-            throw new NotImplementedException();
+            return list.Contains(key);
         }
     }
 }

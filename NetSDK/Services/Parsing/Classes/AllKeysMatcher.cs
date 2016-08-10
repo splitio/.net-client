@@ -10,7 +10,7 @@ namespace NetSDK.Services.Parsing
     {
         public bool Match(string key)
         {
-            return true;
+            return !String.IsNullOrEmpty(key);
         }
     }
 }
