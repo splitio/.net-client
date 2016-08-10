@@ -9,7 +9,7 @@ namespace NetSDK.Services.SplitFetcher.Interfaces
 {
     public interface ISplitFetcher
     {
-        Split Fetch(String feature);
-        List<Split> FetchAll();
+        ParsedSplit Fetch(String feature);
+        List<ParsedSplit> FetchAll();
     }
 }

@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Integration Tests\SelfRefreshingSegmentFetcherTests.cs" />
     <Compile Include="Integration Tests\SelfRefreshingSplitFetcherTests.cs" />
     <Compile Include="Integration Tests\SplitSdkApiClientTests.cs" />
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
