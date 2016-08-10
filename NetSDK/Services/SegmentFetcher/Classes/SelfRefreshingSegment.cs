@@ -52,10 +52,6 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             }
         }
 
-        private HashSet<string> Clone(HashSet<string> hashSetToClone) 
-        {
-            return new HashSet<string>(hashSetToClone);
-        }
 
         private void RefreshSegment()
         {        
@@ -64,15 +60,24 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                 try
                 {                   
                     var response = segmentChangeFetcher.Fetch(name, change_number);
+                    if (response == null)
+                    {
+                        return;
+                    }
                     if (change_number >= response.till)
                     {
-                        initialized = true;
+                        if (!initialized)
+                        {
+                            initialized = true;
+                            notificationFlag.Signal();
+                            Log.Debug(name + " segment initialized");
+                        }
                         return;
                     }
 
                     if (response.added.Count() > 0 || response.removed.Count() > 0)
                     {
-                        var tempKeys = Clone(keys);
+                        var tempKeys = new HashSet<string>(keys);
 
                         tempKeys.UnionWith(response.added);
                         tempKeys.ExceptWith(response.removed);

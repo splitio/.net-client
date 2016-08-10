@@ -33,11 +33,9 @@ namespace NetSDK.Services.Parsing
                     killed = split.killed,
                     defaultTreatment = split.defaultTreatment,
                     seed = split.seed,
-                    conditions = new List<ConditionWithLogic>()
+                    conditions = new List<ConditionWithLogic>()                   
                 };
-
                 parsedSplit = ParseConditions(split, parsedSplit);
-
                 return parsedSplit;
             }
             catch (Exception e)
@@ -49,6 +47,12 @@ namespace NetSDK.Services.Parsing
 
         private ParsedSplit ParseConditions(Split split, ParsedSplit parsedSplit)
         {
+            var segmentsCount = split.conditions.Select(x => x.matcherGroup.matchers.Where(y => y.matcherType == MatcherTypeEnum.IN_SEGMENT).Count()).Sum();
+            parsedSplit.segmentsNotInitialized = new System.Threading.CountdownEvent(segmentsCount);
+            
+            if (segmentsCount > 0)
+                Log.Debug(parsedSplit.name + " segments not ready: " + parsedSplit.segmentsNotInitialized.CurrentCount);////
+
             parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
             {
                 partitions = x.partitions,
@@ -90,7 +94,7 @@ namespace NetSDK.Services.Parsing
                     case MatcherTypeEnum.BETWEEN: matcher = GetBetweenMatcher(matcherDefinition); break;
                     case MatcherTypeEnum.EQUAL_TO: matcher = GetEqualToMatcher(matcherDefinition); break;
                     case MatcherTypeEnum.GREATER_THAN_OR_EQUAL_TO: matcher = GetGreaterThanOrEqualToMatcher(matcherDefinition); break;
-                    case MatcherTypeEnum.IN_SEGMENT: matcher =  GetInSegmentMatcher(matcherDefinition); break;
+                    case MatcherTypeEnum.IN_SEGMENT: matcher = GetInSegmentMatcher(matcherDefinition, parsedSplit); break;                    
                     case MatcherTypeEnum.LESS_THAN_OR_EQUAL_TO: matcher = GetLessThanOrEqualToMatcher(matcherDefinition); break;
                     case MatcherTypeEnum.WHITELIST: matcher = GetWhitelistMatcher(matcherDefinition); break;
                 }
@@ -149,10 +153,11 @@ namespace NetSDK.Services.Parsing
             return new WhitelistMatcher(matcherData.whitelist);
         }
 
-        private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition)
+        private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
             var segment = segmentFetcher.Fetch(matcherData.segmentName);
+            segment.notificationFlag = parsedSplit.segmentsNotInitialized;
             return new UserDefinedSegmentMatcher(segment);
         }
 
