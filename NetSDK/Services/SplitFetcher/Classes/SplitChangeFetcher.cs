@@ -16,30 +16,16 @@ namespace NetSDK.Services.SplitFetcher.Classes
         //TODO: add logger in constructor
         protected abstract SplitChangesResult FetchFromBackend(long since);
 
-        private SplitChangesResult BuildEmptyResponse(long since)
-        {
-            return new SplitChangesResult()
-            {
-                since = since,
-                till = since,
-                splits = new List<Split>()
-            };
-        }
-
         public SplitChangesResult Fetch(long since)
         {
             try
             {
                 splitChanges = FetchFromBackend(since);
-                if (splitChanges == null)
-                {
-                    splitChanges = BuildEmptyResponse(since);
-                }
             }
             catch(Exception e)
             {
                 Log.Error(String.Format("Exception caught executing Fetch since={0}", since), e);
-                splitChanges = BuildEmptyResponse(since); 
+                splitChanges = null; 
             }                   
             return splitChanges;
         }

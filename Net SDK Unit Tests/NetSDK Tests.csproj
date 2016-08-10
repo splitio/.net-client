@@ -62,7 +62,6 @@
     <Compile Include="Integration Tests\SelfRefreshingSplitFetcherTests.cs" />
     <Compile Include="Integration Tests\SplitSdkApiClientTests.cs" />
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
-    <Compile Include="Integration Tests\SplitParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\ApiSplitChangeFetcherTests.cs" />
   </ItemGroup>
