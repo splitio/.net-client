@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Parsing;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,25 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private int interval;
         private long change_number;
         public bool stopped { get; private set; }
-        public bool initialized { get; private set; }
+        private bool splitsInitialized;
+        public bool initialized
+        {
+            get
+            {
+                return splitsInitialized && splits.All(x => x.Value.initialized);
+            }
+        }
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30,
-                 long change_number = -1, Dictionary<string, Split> splits = null): base(splits)
+                 long change_number = -1, Dictionary<string, ParsedSplit> splits = null)
+            : base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
             this.interval = interval;
             this.change_number = change_number;
             this.stopped = true;
-            this.initialized = false;
+            this.splitsInitialized = false;
         }
 
         public void Start()
@@ -58,19 +67,12 @@ namespace NetSDK.Services.SplitFetcher.Classes
             }
         }
 
-
-        private Dictionary<string, T> Clone<T>(Dictionary<string, T> dictionaryToClone) where T : ICloneable
-        {
-            return dictionaryToClone.ToDictionary(e => e.Key, e => (T)e.Value.Clone());
-        }
-        
-
         private void UpdateSplitsFromChangeFetcherResponse(List<Split> splitChanges)
         {
             List<Split> addedSplits = new List<Split>();
             List<Split> removedSplits = new List<Split>();
 
-            var tempSplits = Clone<Split>(splits);
+            var tempSplits = new Dictionary<string, ParsedSplit>(splits);
 
             foreach (Split split in splitChanges)
             {
@@ -90,8 +92,8 @@ namespace NetSDK.Services.SplitFetcher.Classes
                         //If not existing in _splits, its a new split
                         addedSplits.Add(split);
                     }
-
-                    tempSplits.Add(split.name, split);
+                    ParsedSplit parsedSplit = splitParser.Parse(split);
+                    tempSplits.Add(parsedSplit.name, parsedSplit);
                 }
             }
             splits = tempSplits;
@@ -114,10 +116,17 @@ namespace NetSDK.Services.SplitFetcher.Classes
             try
             {
                 var result = splitChangeFetcher.Fetch(change_number);
+                if (result == null)
+                {
+                    return;
+                }
                 if (change_number >= result.till)
                 {
+                    if (!splitsInitialized)
+                    {
+                        splitsInitialized = true;
+                    }
                     //There are no new split changes
-                    initialized = true;
                     return;
                 }
                 if (result.splits != null && result.splits.Count > 0)
