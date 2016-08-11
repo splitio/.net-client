@@ -84,6 +84,8 @@
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Services\EngineEvaluator\Engine.cs" />
+    <Compile Include="Services\EngineEvaluator\Splitter.cs" />
     <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\CompareMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\EqualToMatcher.cs" />
@@ -129,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Client\" />
-    <Folder Include="Services\EngineEvaluator\" />
     <Folder Include="Services\Impressions\" />
     <Folder Include="Services\Metrics\" />
   </ItemGroup>

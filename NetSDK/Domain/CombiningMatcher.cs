@@ -20,18 +20,23 @@ namespace NetSDK.Domain
             switch (combiner)
             {
                 case CombinerEnum.AND:
+                default:
                     bool result = true;
                     
                     foreach(AttributeMatcher matcher in delegates)
                     {
-                        result &= matcher.Match(key, attributes);
+                        if (matcher.negate)
+                        {
+                            result &= !matcher.Match(key, attributes);
+                        }
+                        else
+                        {
+                            result &= matcher.Match(key, attributes);
+                        }
+                        
                     }
 
                     return result;
-                
-                default:
-                    //TODO: which excepcion should be thrown??
-                    throw new NotImplementedException();
             }
         }
     }
