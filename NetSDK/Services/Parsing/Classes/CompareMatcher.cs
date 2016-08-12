@@ -15,6 +15,7 @@ namespace NetSDK.Services.Parsing
 
         public bool Match(string key)
         {
+            //TODO: review 
             if (String.IsNullOrEmpty(key))
             {
                 return false;

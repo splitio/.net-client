@@ -58,7 +58,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             while (true)
             {
                 try
-                {                   
+                {            
                     var response = segmentChangeFetcher.Fetch(name, change_number);
                     if (response == null)
                     {

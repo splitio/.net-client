@@ -37,6 +37,7 @@ namespace NetSDK.Services.EngineEvaluator
             return Control;
         }
 
+        //TODO: Testsuite de java archivo para testear funcion de hash
         private long hash(string key, long seed)
         {
             long h = 0;

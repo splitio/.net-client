@@ -17,17 +17,17 @@ namespace NetSDK.Services.EngineEvaluator
 
         public string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
         {
-            if (split.killed)
-            {
-                return split.defaultTreatment;
-            }
+            //TODO: if not initialized--> return control
 
-            foreach(ConditionWithLogic condition in split.conditions)
+            if (!split.killed)
             {
-                var combiningMatcher = condition.matcher;
-                if(combiningMatcher.Match(key, attributes))
+                foreach (ConditionWithLogic condition in split.conditions)
                 {
-                    return splitter.GetTreatment(key, split.seed, condition.partitions);
+                    var combiningMatcher = condition.matcher;
+                    if (combiningMatcher.Match(key, attributes))
+                    {
+                        return splitter.GetTreatment(key, split.seed, condition.partitions);
+                    }
                 }
             }
 

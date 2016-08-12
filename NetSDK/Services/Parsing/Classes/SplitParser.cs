@@ -157,6 +157,7 @@ namespace NetSDK.Services.Parsing
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
             var segment = segmentFetcher.Fetch(matcherData.segmentName);
+            //TODO: move this to the logic when initializing segment
             segment.notificationFlag = parsedSplit.segmentsNotInitialized;
             return new UserDefinedSegmentMatcher(segment);
         }

@@ -12,6 +12,7 @@ namespace NetSDK.Services.Parsing
 
         public UserDefinedSegmentMatcher(Segment segment)
         {
+            //TODO: no permitir null
             this.segment = segment;
         }
         public bool Match(string key)

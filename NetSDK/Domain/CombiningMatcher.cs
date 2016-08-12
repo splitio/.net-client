@@ -25,6 +25,7 @@ namespace NetSDK.Domain
 
                     foreach (AttributeMatcher matcher in delegates)
                     {
+                        //TODO: if one is false, stop foreach
                         result &= matcher.Match(key, attributes);
                     }
 

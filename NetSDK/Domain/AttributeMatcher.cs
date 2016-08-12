@@ -12,10 +12,14 @@ namespace NetSDK.Domain
         public IMatcher matcher { get; set; }
         public bool negate { get; set; }
 
+        //TODO: PROS AND CONS --> getkey getattributes
+        //match using state (more properties) instead of passing parameters (to avoid changing match protocol if another comparison parameter is needed)
         public virtual bool Match(string key, Dictionary<string, object> attributes)
         {
             if (attribute == null)
             {
+                //TODO: improve if negate with and
+                //return (!negate LOGIC_OPERATOR matcher.Match(key));
                 if (negate)
                 {
                     return !matcher.Match(key);
@@ -35,6 +39,7 @@ namespace NetSDK.Domain
                 return false;
             }
 
+            //TODO: avoid toString and develop Match for each input type STRING, NUMBER, DATE
             if (negate)
             {
                 return !matcher.Match(value.ToString());
