@@ -11,7 +11,7 @@ namespace NetSDK.Services.Parsing
 
         public WhitelistMatcher(List<string> list)
         {
-            this.list = list;
+            this.list = list ?? new List<string>();
         }
         public bool Match(string key)
         {

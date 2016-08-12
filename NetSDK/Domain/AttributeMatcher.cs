@@ -12,10 +12,14 @@ namespace NetSDK.Domain
         public IMatcher matcher { get; set; }
         public bool negate { get; set; }
 
-        public bool Match(string key, Dictionary<string, object> attributes)
+        public virtual bool Match(string key, Dictionary<string, object> attributes)
         {
             if (attribute == null)
             {
+                if (negate)
+                {
+                    return !matcher.Match(key);
+                }
                 return matcher.Match(key);
             }
 
@@ -31,7 +35,10 @@ namespace NetSDK.Domain
                 return false;
             }
 
-            //TODO: object converted to string ???--> still not sure about it
+            if (negate)
+            {
+                return !matcher.Match(value.ToString());
+            }
             return matcher.Match(value.ToString());
         }
     }

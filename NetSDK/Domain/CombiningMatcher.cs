@@ -22,18 +22,10 @@ namespace NetSDK.Domain
                 case CombinerEnum.AND:
                 default:
                     bool result = true;
-                    
-                    foreach(AttributeMatcher matcher in delegates)
+
+                    foreach (AttributeMatcher matcher in delegates)
                     {
-                        if (matcher.negate)
-                        {
-                            result &= !matcher.Match(key, attributes);
-                        }
-                        else
-                        {
-                            result &= matcher.Match(key, attributes);
-                        }
-                        
+                        result &= matcher.Match(key, attributes);
                     }
 
                     return result;

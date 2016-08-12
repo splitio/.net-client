@@ -16,6 +16,11 @@ namespace NetSDK.Services.Parsing
         }
         public bool Match(string key)
         {
+            if (segment == null)
+            { 
+                return false;
+            }
+
             return segment.Contains(key);
         }
     }
