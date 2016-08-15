@@ -15,8 +15,10 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
     [TestClass]
     public class EngineModuleTests
     {
-        [TestMethod]
-        public void ExecuteGetTreatmentSuccessfulWithResults()
+        SelfRefreshingSplitFetcher selfRefreshingSplitFetcher;
+
+        [TestInitialize]
+        public void Initialize()
         {
             //Arrange
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
@@ -37,7 +39,7 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, new HashSet<SelfRefreshingSegment>(), 30);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, -1);
+            selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, -1);
             selfRefreshingSplitFetcher.Start();
 
             while (!selfRefreshingSplitFetcher.initialized)
@@ -45,17 +47,70 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
                 Thread.Sleep(10);
             }
             selfRefreshingSplitFetcher.Stop();
+        }
+        [TestMethod]
+        public void ExecuteGetTreatment_Test_jw_4SuccessfulWithResults()
+        {         
+            ParsedSplit split = selfRefreshingSplitFetcher.Fetch("test_jw4");
+
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            //Act
+            //get treatment for split test_jw4
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("date", 9);
+            dict.Add("test", "acdefx");
+            var result = engine.GetTreatment("xadcc", split, dict);
+
+            Dictionary<string, object> dict2 = new Dictionary<string, object>();
+            dict2.Add("date", 9);
+            dict2.Add("test", "azzdefx");
+            var result2 = engine.GetTreatment("xadcscdcc", split, dict2);
+
+            Dictionary<string, object> dict3 = new Dictionary<string, object>();
+            dict3.Add("date", 9);
+            dict3.Add("test", "azzdefx");
+            var result3 = engine.GetTreatment("abcdef", split, dict3);
+
+            //Assert
+            Assert.IsTrue(result == "on"); // in whitelist
+            Assert.IsTrue(result2 == "off"); // default
+            Assert.IsTrue(result3 == "on"); // included user abcdef (whitelist)
+        }
+
+        [TestMethod]
+        public void ExecuteGetTreatment_Test_jw3_SuccessfulWithResults()
+        {
+            ParsedSplit split = selfRefreshingSplitFetcher.Fetch("test_jw3");
+      
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("date", 9);
+
+            //Act
+            //get treatment for split test_jw3
+            var result = engine.GetTreatment("xadcc", split, dict);
+
+            //Assert
+            Assert.IsTrue(result == "off"); //<killed> default
+        }
+
+
+        [TestMethod]
+        public void ExecuteGetTreatment_Test_jw_SuccessfulWithResults()
+        {
+            //Arrange
             ParsedSplit split = selfRefreshingSplitFetcher.Fetch("test_jw");
-            ParsedSplit split2 = selfRefreshingSplitFetcher.Fetch("test_jw2");
-            ParsedSplit split3 = selfRefreshingSplitFetcher.Fetch("test_jw3");
-            ParsedSplit split4 = selfRefreshingSplitFetcher.Fetch("test_jw4");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
 
             //Act
             //get treatment for split test_jw
-            Dictionary<string, object> dict = new Dictionary<string,object>();
+            Dictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("date", 1470960000000);
             var result1 = engine.GetTreatment("1f84e5ddb06a3e66145ccfc1aac247", split, dict);
 
@@ -63,44 +118,34 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
             dict2.Add("date", 9);
             var result2 = engine.GetTreatment("axdzcccczzcce66145ccfc1aac247", split, dict2);
 
-            //get treatment for split test_jw2
-            Dictionary<string, object> dict3 = new Dictionary<string, object>();
-            dict3.Add("date", 9);
-            var result3 = engine.GetTreatment("abcdz", split2, dict3);
-
-            Dictionary<string, object> dict4 = new Dictionary<string, object>();
-            dict4.Add("date", 9);
-            var result4 = engine.GetTreatment("xadcc", split2, dict4);
-
-            //get treatment for split test_jw3
-            var result5 = engine.GetTreatment("xadcc", split3, dict4);
-
-
-            //get treatment for split test_jw4
-            Dictionary<string, object> dict5 = new Dictionary<string, object>();
-            dict5.Add("date", 9);
-            dict5.Add("test", "acdefx");
-            var result6 = engine.GetTreatment("xadcc", split4, dict5);
-
-            Dictionary<string, object> dict6 = new Dictionary<string, object>();
-            dict6.Add("date", 9);
-            dict6.Add("test", "azzdefx");
-            var result7 = engine.GetTreatment("xadcscdcc", split4, dict6);
-
-            Dictionary<string, object> dict7 = new Dictionary<string, object>();
-            dict7.Add("date", 9);
-            dict7.Add("test", "azzdefx");
-            var result8 = engine.GetTreatment("abcdef", split4, dict7);
-
             //Assert
             Assert.IsTrue(result1 == "on"); //date is equal
             Assert.IsTrue(result2 == "off"); //<else> in segment all
-            Assert.IsTrue(result3 == "on"); //is in segment payed
-            Assert.IsTrue(result4 == "off"); // default
-            Assert.IsTrue(result5 == "off"); //<killed> default
-            Assert.IsTrue(result6 == "on"); // in whitelist
-            Assert.IsTrue(result7 == "off"); // default
-            Assert.IsTrue(result8 == "on"); // included user abcdef (whitelist)
+        }
+
+
+        [TestMethod]
+        public void ExecuteGetTreatment_Test_jw2_SuccessfulWithResults()
+        {
+            //Arrange
+            ParsedSplit split = selfRefreshingSplitFetcher.Fetch("test_jw2");
+
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            //Act
+            //get treatment for split test_jw2
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("date", 9);
+            var result1 = engine.GetTreatment("abcdz", split, dict);
+
+            Dictionary<string, object> dict2 = new Dictionary<string, object>();
+            dict2.Add("date", 9);
+            var result2 = engine.GetTreatment("xadcc", split, dict2);
+
+            //Assert
+            Assert.IsTrue(result1 == "on"); //is in segment payed
+            Assert.IsTrue(result2 == "off"); // default
         }
     }
 }

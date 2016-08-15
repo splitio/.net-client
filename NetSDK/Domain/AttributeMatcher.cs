@@ -18,13 +18,7 @@ namespace NetSDK.Domain
         {
             if (attribute == null)
             {
-                //TODO: improve if negate with and
-                //return (!negate LOGIC_OPERATOR matcher.Match(key));
-                if (negate)
-                {
-                    return !matcher.Match(key);
-                }
-                return matcher.Match(key);
+                return (negate ^ matcher.Match(key));
             }
 
             if (attributes == null)
@@ -40,11 +34,8 @@ namespace NetSDK.Domain
             }
 
             //TODO: avoid toString and develop Match for each input type STRING, NUMBER, DATE
-            if (negate)
-            {
-                return !matcher.Match(value.ToString());
-            }
-            return matcher.Match(value.ToString());
+
+            return (negate ^ matcher.Match(value.ToString()));
         }
     }
 }

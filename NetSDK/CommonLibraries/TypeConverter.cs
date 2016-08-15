@@ -10,9 +10,8 @@ namespace NetSDK.CommonLibraries
         public static DateTime ToDateTime(this long timestamp)
         {
             DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            date = date.AddMilliseconds(timestamp);
-            date = date.Truncate(TimeSpan.FromSeconds(date.Second));
-            date = date.Truncate(TimeSpan.FromMilliseconds(date.Millisecond));
+            var timestampTruncatedToMinutes = timestamp - timestamp % 60000;
+            date = date.AddMilliseconds(timestampTruncatedToMinutes);
             return date;
         }
 

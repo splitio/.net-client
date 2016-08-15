@@ -56,18 +56,5 @@ namespace Net_SDK_Unit_Tests.Unit_Tests
             //Assert
             Assert.IsFalse(result);
         }
-
-        [TestMethod]
-        public void MatchShouldReturnFalseIfSegmentNotExistent()
-        {
-            //Arrange
-            var matcher = new UserDefinedSegmentMatcher(null);
-
-            //Act
-            var result = matcher.Match("test2");
-
-            //Assert
-            Assert.IsFalse(result);
-        }
     }
 }

@@ -89,7 +89,6 @@ namespace NetSDK.Services.Parsing
             {              
                 switch (matcherType)
                 {
-                    //TODO: pending implementation for concrete Matcher classes
                     case MatcherTypeEnum.ALL_KEYS: matcher = GetAllKeysMatcher(); break;
                     case MatcherTypeEnum.BETWEEN: matcher = GetBetweenMatcher(matcherDefinition); break;
                     case MatcherTypeEnum.EQUAL_TO: matcher = GetEqualToMatcher(matcherDefinition); break;
@@ -169,7 +168,6 @@ namespace NetSDK.Services.Parsing
 
         private CombinerEnum ParseCombiner(CombinerEnum combinerEnum)
         {
-            //TODO: this should return AndCombiner() instance
             return combinerEnum;
         }
     }

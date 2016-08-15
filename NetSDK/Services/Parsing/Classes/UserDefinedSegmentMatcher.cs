@@ -12,16 +12,15 @@ namespace NetSDK.Services.Parsing
 
         public UserDefinedSegmentMatcher(Segment segment)
         {
-            //TODO: no permitir null
+            if (segment == null)
+            {
+                throw new Exception("Segment cannot be null");
+            }
+
             this.segment = segment;
         }
         public bool Match(string key)
         {
-            if (segment == null)
-            { 
-                return false;
-            }
-
             return segment.Contains(key);
         }
     }

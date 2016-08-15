@@ -9,6 +9,7 @@ namespace NetSDK.Services.EngineEvaluator
     public class Engine
     {
         private Splitter splitter;
+        private const string Control = "CONTROL";
 
         public Engine(Splitter splitter)
         {
@@ -17,7 +18,10 @@ namespace NetSDK.Services.EngineEvaluator
 
         public string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
         {
-            //TODO: if not initialized--> return control
+            if (!split.initialized)
+            {
+                return Control;
+            }
 
             if (!split.killed)
             {
