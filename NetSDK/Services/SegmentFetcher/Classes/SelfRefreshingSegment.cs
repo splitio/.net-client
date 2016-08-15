@@ -69,7 +69,11 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                         if (!initialized)
                         {
                             initialized = true;
-                            notificationFlag.Signal();
+                            foreach (var notificationFlag in notificationFlags)
+                            {
+                                notificationFlag.Signal();
+                                notificationFlags.Remove(notificationFlag);
+                            }
                             Log.Debug(name + " segment initialized");
                         }
                         return;

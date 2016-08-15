@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.SegmentFetcher.Classes;
 using NetSDK.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -155,9 +156,15 @@ namespace NetSDK.Services.Parsing
         private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
-            var segment = segmentFetcher.Fetch(matcherData.segmentName);
-            //TODO: move this to the logic when initializing segment
-            segment.notificationFlag = parsedSplit.segmentsNotInitialized;
+            SelfRefreshingSegment segment = (SelfRefreshingSegment)segmentFetcher.Fetch(matcherData.segmentName);
+            if (!segment.initialized)
+            {
+                segment.notificationFlags.Add(parsedSplit.segmentsNotInitialized);
+            }
+            else
+            {
+                parsedSplit.segmentsNotInitialized.Signal();
+            }
             return new UserDefinedSegmentMatcher(segment);
         }
 
