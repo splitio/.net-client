@@ -157,13 +157,16 @@ namespace NetSDK.Services.Parsing
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
             SelfRefreshingSegment segment = (SelfRefreshingSegment)segmentFetcher.Fetch(matcherData.segmentName);
-            if (!segment.initialized)
+            lock (segment.initializedLock)
             {
-                segment.notificationFlags.Add(parsedSplit.segmentsNotInitialized);
-            }
-            else
-            {
-                parsedSplit.segmentsNotInitialized.Signal();
+                if (!segment.initialized)
+                {
+                    segment.notificationFlags.Add(parsedSplit.segmentsNotInitialized);
+                }
+                else
+                {
+                    parsedSplit.segmentsNotInitialized.Signal();
+                }
             }
             return new UserDefinedSegmentMatcher(segment);
         }
