@@ -15,7 +15,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         private ISegmentChangeFetcher segmentChangeFetcher;
         private int interval;
         public bool initialized { get; private set; }
-        public object initializedLock;
+        public object initializedLock = new object();
         public bool stopped { get; private set; }
 
         public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1) : base(name, change_number)
