@@ -42,7 +42,6 @@ namespace NetSDK.Services.EngineEvaluator
             return Math.Abs(Hash(key, seed) % 100) + 1;
         }
 
-        //TODO: Testsuite de java archivo para testear funcion de hash
         public int Hash(string key, int seed)
         {
             int h = 0;
