@@ -10,8 +10,7 @@ namespace NetSDK.Services.Parsing
     {
         public bool Match(string key)
         {
-            //TODO: review always true
-            return !String.IsNullOrEmpty(key);
+            return key != null;
         }
     }
 }
