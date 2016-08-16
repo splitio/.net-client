@@ -12,6 +12,8 @@ namespace NetSDK.Domain
         public string name { get; set; }
         protected long change_number;
         protected HashSet<string> keys;
+        public bool initialized { get; protected set; }
+        public object initializedLock = new object();
         public List<CountdownEvent> notificationFlags = new List<CountdownEvent>();
 
         public Segment(string name, long change_number = -1, HashSet<string> keys = null)

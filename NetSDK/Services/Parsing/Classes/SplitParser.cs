@@ -156,7 +156,7 @@ namespace NetSDK.Services.Parsing
         private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
-            SelfRefreshingSegment segment = (SelfRefreshingSegment)segmentFetcher.Fetch(matcherData.segmentName);
+            var segment = segmentFetcher.Fetch(matcherData.segmentName);
             lock (segment.initializedLock)
             {
                 if (!segment.initialized)
