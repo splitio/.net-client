@@ -11,7 +11,7 @@ namespace NetSDK.Domain
     public class ParsedSplit : ICloneable
     {
         public string name { get; set; }
-        public long seed { get; set; }
+        public int seed { get; set; }
         public bool killed { get; set; }
         public string defaultTreatment { get; set; }
         public List<ConditionWithLogic> conditions { get; set; }

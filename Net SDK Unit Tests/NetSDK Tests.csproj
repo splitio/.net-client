@@ -72,6 +72,7 @@
     <Compile Include="Unit Tests\BetweenMatcherTests.cs" />
     <Compile Include="Unit Tests\EqualToMatcherTests.cs" />
     <Compile Include="Unit Tests\CombiningMatcherTests.cs" />
+    <Compile Include="Unit Tests\SplitterTests.cs" />
     <Compile Include="Unit Tests\WhitelistMatcherTests.cs" />
     <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>
@@ -84,6 +85,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Unit Tests\resources\sample-data-non-alpha-numeric.csv" />
+    <None Include="Unit Tests\resources\sample-data.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Choose>

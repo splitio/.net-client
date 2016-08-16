@@ -10,7 +10,7 @@ namespace NetSDK.Services.EngineEvaluator
     {
         private const string Control = "CONTROL";
 
-        public string GetTreatment(string key, long seed, List<PartitionDefinition> partitions)
+        public string GetTreatment(string key, int seed, List<PartitionDefinition> partitions)
         {
             if(String.IsNullOrEmpty(key))
             {
@@ -22,9 +22,9 @@ namespace NetSDK.Services.EngineEvaluator
                 return partitions.First().treatment;
             }
 
-            long bucket = Math.Abs(hash(key, seed) % 100) + 1;
+            var bucket = Bucket(key, seed);
 
-            int covered = 0;
+            var covered = 0;
             foreach(PartitionDefinition partition in partitions)
             {
                 covered += partition.size;
@@ -37,10 +37,15 @@ namespace NetSDK.Services.EngineEvaluator
             return Control;
         }
 
-        //TODO: Testsuite de java archivo para testear funcion de hash
-        private long hash(string key, long seed)
+        public int Bucket(string key, int seed)
         {
-            long h = 0;
+            return Math.Abs(Hash(key, seed) % 100) + 1;
+        }
+
+        //TODO: Testsuite de java archivo para testear funcion de hash
+        public int Hash(string key, int seed)
+        {
+            int h = 0;
             for (int i = 0; i< key.Length; i++)
             {
                 h = 31 * h + key[i];
