@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
+using log4net;
 
 namespace NetSDK.Services.Client
 {
     public class SdkReadinessGates
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SdkReadinessGates));
         private CountdownEvent splitsAreReady = new CountdownEvent(1);
         private Dictionary<String, CountdownEvent> segmentsAreReady = new Dictionary<String, CountdownEvent>();
 
@@ -17,15 +19,13 @@ namespace NetSDK.Services.Client
         {
             Stopwatch clock = new Stopwatch();
             clock.Start();
-            int timeLeft = milliseconds;
 
-            bool splits = AreSplitsReady(timeLeft);
-            if (!splits)
+            if (!AreSplitsReady(milliseconds))
             {
                 return false;
             }
 
-            timeLeft = timeLeft - (int)clock.ElapsedMilliseconds;
+            int timeLeft = milliseconds - (int)clock.ElapsedMilliseconds;
 
             return AreSegmentsReady(timeLeft);
         }
@@ -33,10 +33,13 @@ namespace NetSDK.Services.Client
 
         public void SplitsAreReady()
         {
-            splitsAreReady.Signal();
-            if (splitsAreReady.IsSet)
+            if (!splitsAreReady.IsSet)
             {
-                //_log.info("splits are ready");
+                splitsAreReady.Signal();
+                if (splitsAreReady.IsSet)
+                {
+                    Log.Info("Splits are ready");
+                }
             }
         }
         
@@ -45,7 +48,7 @@ namespace NetSDK.Services.Client
             CountdownEvent countDown;
             segmentsAreReady.TryGetValue(segmentName, out countDown);
 
-            if (countDown == null)
+            if ((countDown == null) || (countDown.IsSet))
             {
                 return;
             }
@@ -54,7 +57,7 @@ namespace NetSDK.Services.Client
 
             if (countDown.IsSet)
             {
-               // _log.info(segmentName + " segment is ready");
+                Log.Info(segmentName + " segment is ready");
             }
         }
 
@@ -63,7 +66,7 @@ namespace NetSDK.Services.Client
             return splitsAreReady.Wait(milliseconds);
         }
 
-        public bool RegisterSegments(HashSet<String> segmentNames)
+        public bool RegisterSegments(List<String> segmentNames)
         {
             if (segmentNames == null || AreSplitsReady(0))
             {
@@ -72,10 +75,16 @@ namespace NetSDK.Services.Client
 
             foreach (var segmentName in segmentNames)
             {
-                segmentsAreReady.Add(segmentName, new CountdownEvent(1));
+                try
+                {
+                    segmentsAreReady.Add(segmentName, new CountdownEvent(1));
+                    Log.Info("Registered segment: " + segmentName);
+                }
+                catch(ArgumentException e)
+                {
+                    Log.Info("Already registered segment: " + segmentName, e);
+                }
             }
-
-            //_log.info("Registered segments: " + segments);
 
             return true;
         }
@@ -91,12 +100,22 @@ namespace NetSDK.Services.Client
                 var segmentName = entry.Key;
                 var countdown = entry.Value;
 
-                if (!countdown.Wait(timeLeft))
+                if (timeLeft >= 0)
                 {
-                    //_log.error(segmentName + " is not ready yet");
-                    return false;
+                    if (!countdown.Wait(timeLeft))
+                    {
+                        Log.Error(segmentName + " is not ready yet");
+                        return false;
+                    }
                 }
-
+                else
+                {
+                    if (!countdown.Wait(0))
+                    {
+                        Log.Error(segmentName + " is not ready yet");
+                        return false;
+                    }
+                }
                 timeLeft = timeLeft - (int)clock.ElapsedMilliseconds;
             }
 

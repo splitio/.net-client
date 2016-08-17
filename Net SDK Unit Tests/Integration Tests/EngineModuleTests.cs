@@ -44,8 +44,10 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
             selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, -1);
             selfRefreshingSplitFetcher.Start();
 
-            gates.IsSDKReady(1400);
-            selfRefreshingSplitFetcher.Stop();
+            while(!gates.IsSDKReady(1000))
+            {
+                Thread.Sleep(10);
+            }
         }
         [TestMethod]
         public void ExecuteGetTreatment_Test_jw_4SuccessfulWithResults()

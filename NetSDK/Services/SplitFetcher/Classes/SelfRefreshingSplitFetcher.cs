@@ -88,7 +88,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
                         addedSplits.Add(split);
                     }
                     ParsedSplit parsedSplit = splitParser.Parse(split);
-                    HashSet<String> segmentsInUse = CollectSegmentsInUse(split);
+                    List<String> segmentsInUse = CollectSegmentsInUse(split);
                     gates.RegisterSegments(segmentsInUse);
                     tempSplits.Add(parsedSplit.name, parsedSplit);
                 }
@@ -140,25 +140,17 @@ namespace NetSDK.Services.SplitFetcher.Classes
             }
         }
 
-        private HashSet<string> CollectSegmentsInUse(Split split)
+        private List<string> CollectSegmentsInUse(Split split)
         {
-            //return split.conditions.Select(x => x.matcherGroup.matchers.Where(y => y.matcherType == MatcherTypeEnum.IN_SEGMENT).Select(z => z.userDefinedSegmentMatcherData.segmentName)).To;
+            var result = split.conditions
+            .SelectMany(x => x.matcherGroup.matchers)
+            .Where(x => x.matcherType == MatcherTypeEnum.IN_SEGMENT)
+            .Where(x => x.userDefinedSegmentMatcherData != null)
+            .Where(x => x.userDefinedSegmentMatcherData.segmentName != null)
+            .Select(y => y.userDefinedSegmentMatcherData.segmentName)
+            .Distinct();
 
-            HashSet<string> result = new HashSet<string>();
-            foreach (var condition in split.conditions)
-            {
-                foreach (var matcher in condition.matcherGroup.matchers)
-                {
-                    if (matcher.matcherType == MatcherTypeEnum.IN_SEGMENT)
-                    {
-                        if (matcher.userDefinedSegmentMatcherData != null && matcher.userDefinedSegmentMatcherData.segmentName != null)
-                        {
-                            result.Add(matcher.userDefinedSegmentMatcherData.segmentName);
-                        }
-                    }
-                }
-            }
-            return result;
+            return result.ToList();
         }
     }
 }

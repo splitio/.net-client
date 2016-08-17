@@ -81,11 +81,11 @@ namespace NetSDK.Services.SegmentFetcher.Classes
 
                         if (response.added.Count() > 0)
                         {
-                            Log.Info(String.Format("Added : {0}", String.Join(" - ", response.added)));
+                            Log.Info(String.Format("Segment {0} - Added : {1}", name, String.Join(" - ", response.added)));
                         }
                         if (response.removed.Count() > 0)
                         {
-                            Log.Info(String.Format("Removed : {0}", String.Join(" - ", response.removed)));
+                            Log.Info(String.Format("Segment {0} - Removed : {1}", name, String.Join(" - ", response.removed)));
                         }
                     }
 

@@ -29,7 +29,7 @@ namespace NetSDK.Tests
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
             var httpHeader = new HTTPHeader()
             {
-                authorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4",
+                authorizationApiKey = "5p2c0r4so20ill66lm35i45h6pkvrd2skmib",
                 splitSDKMachineIP = "1.0.0.0",
                 splitSDKMachineName = "localhost",
                 splitSDKVersion = "net-0.0.0",
@@ -42,20 +42,23 @@ namespace NetSDK.Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, null, 30);
 
             //Act
-           
 
-            var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("adil_segment");
-            var segmentsToRegister = new HashSet<string>();
+
+            var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("payed");
+            var segmentsToRegister = new List<string>();
             segmentsToRegister.Add(result.name);
             gates.RegisterSegments(segmentsToRegister);
             result.Start();
 
-            gates.AreSegmentsReady(1000);
+            while(!gates.AreSegmentsReady(1000))
+            {
+                Thread.Sleep(10);
+            }
 
             //Assert
             Assert.IsTrue(result != null);
-            Assert.IsTrue(result.name == "adil_segment");
-            Assert.IsTrue(result.Contains("eNXnLmFZfweB5i1Z5NF5"));
+            Assert.IsTrue(result.name == "payed");
+            Assert.IsTrue(result.Contains("abcdz"));
 
         }
 
