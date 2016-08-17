@@ -8,6 +8,8 @@ using System.Threading;
 using NetSDK.Domain;
 using NetSDK.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
+using NetSDK.Services.Client;
+using NetSDK.Services.Parsing;
 
 namespace NetSDK.Tests
 {
@@ -36,16 +38,19 @@ namespace NetSDK.Tests
             };
             var sdkApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, new HashSet<SelfRefreshingSegment>(), 30);
+            var gates = new SdkReadinessGates();
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, null, 30);
 
             //Act
-            SelfRefreshingSegment result = null;
-            result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("adil_segment");
+           
+
+            var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("adil_segment");
+            var segmentsToRegister = new HashSet<string>();
+            segmentsToRegister.Add(result.name);
+            gates.RegisterSegments(segmentsToRegister);
             result.Start();
-            while (!result.initialized)
-            {
-                Thread.Sleep(10);
-            }
+
+            gates.AreSegmentsReady(1000);
 
             //Assert
             Assert.IsTrue(result != null);

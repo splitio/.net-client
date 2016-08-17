@@ -9,6 +9,7 @@ using System.Threading;
 using NetSDK.Domain;
 using NetSDK.Services.EngineEvaluator;
 using System.Collections.Generic;
+using NetSDK.Services.Client;
 
 namespace Net_SDK_Unit_Tests.Integration_Tests
 {
@@ -36,16 +37,14 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
             var apiSplitChangeFetcher = new ApiSplitChangeFetcher(sdkApiClient);
             var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, new HashSet<SelfRefreshingSegment>(), 30);
+            var gates = new SdkReadinessGates();
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, null, 30);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, 30, -1);
+            selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, -1);
             selfRefreshingSplitFetcher.Start();
 
-            while (!selfRefreshingSplitFetcher.initialized)
-            {
-                Thread.Sleep(10);
-            }
+            gates.IsSDKReady(1400);
             selfRefreshingSplitFetcher.Stop();
         }
         [TestMethod]

@@ -1,7 +1,9 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Client;
 using NetSDK.Services.SegmentFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,27 +14,30 @@ namespace NetSDK.Services.SegmentFetcher.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
-        private HashSet<SelfRefreshingSegment> segments;
+        private Dictionary<string, SelfRefreshingSegment> segments;
+        private SdkReadinessGates gates;
         private int interval;
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, HashSet<SelfRefreshingSegment> segments = null, int interval = 30)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, Dictionary<string, SelfRefreshingSegment> segments = null, int interval = 30)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
-            this.segments = segments ?? new HashSet<SelfRefreshingSegment>();
+            this.segments = segments ?? new Dictionary<string, SelfRefreshingSegment>();
             this.interval = interval;
+            this.gates = gates;
         }
 
         public Segment Fetch(string name)
         {
-            var segment = segments.FirstOrDefault(x => x.name == name);
+            SelfRefreshingSegment segment;
+            segments.TryGetValue(name, out segment);
             if (segment != null)
             {
                 return segment;
             }
 
-            segment = new SelfRefreshingSegment(name, segmentChangeFetcher, interval);
+            segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, interval);
             segment.Start();
-            segments.Add(segment);
+            segments.Add(name, segment);
             return segment;
         }
 

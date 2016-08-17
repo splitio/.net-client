@@ -48,12 +48,6 @@ namespace NetSDK.Services.Parsing
 
         private ParsedSplit ParseConditions(Split split, ParsedSplit parsedSplit)
         {
-            var segmentsCount = split.conditions.Select(x => x.matcherGroup.matchers.Where(y => y.matcherType == MatcherTypeEnum.IN_SEGMENT).Count()).Sum();
-            parsedSplit.segmentsNotInitialized = new System.Threading.CountdownEvent(segmentsCount);
-            
-            if (segmentsCount > 0)
-                Log.Debug(parsedSplit.name + " segments not ready: " + parsedSplit.segmentsNotInitialized.CurrentCount);////
-
             parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
             {
                 partitions = x.partitions,
@@ -157,17 +151,6 @@ namespace NetSDK.Services.Parsing
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
             var segment = segmentFetcher.Fetch(matcherData.segmentName);
-            lock (segment.initializedLock)
-            {
-                if (!segment.initialized)
-                {
-                    segment.notificationFlags.Add(parsedSplit.segmentsNotInitialized);
-                }
-                else
-                {
-                    parsedSplit.segmentsNotInitialized.Signal();
-                }
-            }
             return new UserDefinedSegmentMatcher(segment);
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetSDK.Domain
 {
-    public class Split: ICloneable
+    public class Split
     {
         public string name { get; set; }
         public int seed { get; set; }
@@ -15,10 +15,5 @@ namespace NetSDK.Domain
         public string defaultTreatment { get; set; }
         public List<ConditionDefinition> conditions { get; set; }
         public long changeNumber { get; set; }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
     }
 }

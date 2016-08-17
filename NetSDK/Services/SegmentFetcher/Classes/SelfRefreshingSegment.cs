@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Client;
 using NetSDK.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,12 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         private int interval;
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1) : base(name, change_number)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, long change_number = -1) : base(name, change_number)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.interval = interval;
             this.stopped = true;
-            this.initialized = false;
+            this.gates = gates;
         }
 
         public void Start()
@@ -65,19 +66,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                     }
                     if (change_number >= response.till)
                     {
-                        if (!initialized)
-                        {
-                            lock (initializedLock)
-                            {
-                                initialized = true;
-                            }
-                            foreach (var notificationFlag in notificationFlags)
-                            {
-                                notificationFlag.Signal();
-                                notificationFlags.Remove(notificationFlag);
-                            }
-                            Log.Debug(name + " segment initialized");
-                        }
+                        gates.SegmentIsReady(name);
                         return;
                     }
 

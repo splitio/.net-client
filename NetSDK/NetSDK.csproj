@@ -84,6 +84,7 @@
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
     <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
     <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\Client\" />
     <Folder Include="Services\Impressions\" />
     <Folder Include="Services\Metrics\" />
   </ItemGroup>

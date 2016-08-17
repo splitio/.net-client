@@ -18,11 +18,6 @@ namespace NetSDK.Services.EngineEvaluator
 
         public string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
         {
-            if (!split.initialized)
-            {
-                return Control;
-            }
-
             if (!split.killed)
             {
                 foreach (ConditionWithLogic condition in split.conditions)
