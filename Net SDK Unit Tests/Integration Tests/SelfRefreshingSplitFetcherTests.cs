@@ -55,7 +55,7 @@ namespace NetSDK.Tests
             ParsedSplit result  = selfRefreshingSplitFetcher.Fetch("Pato_Test_1");
             ParsedSplit result2 = selfRefreshingSplitFetcher.Fetch("Manu_Test_1");
             //Assert
-            Assert.IsTrue(result != null);
+            Assert.IsNull(result);
             Assert.IsTrue(result.name == "Pato_Test_1");
             Assert.IsTrue(result.conditions.Count > 0);
 
@@ -92,7 +92,7 @@ namespace NetSDK.Tests
             var result = selfRefreshingSplitFetcher.Fetch("condition_and");
 
             //Assert
-            Assert.IsTrue(result == null);
+            Assert.IsNull(result);
         
         }
 

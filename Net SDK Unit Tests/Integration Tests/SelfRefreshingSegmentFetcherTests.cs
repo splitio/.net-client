@@ -56,7 +56,7 @@ namespace NetSDK.Tests
             }
 
             //Assert
-            Assert.IsTrue(result != null);
+            Assert.IsNull(result);
             Assert.IsTrue(result.name == "payed");
             Assert.IsTrue(result.Contains("abcdz"));
 

@@ -105,8 +105,9 @@ namespace NetSDK.Tests
             var result = SdkApiClient.ExecuteGet("/messages?item=msg2");
 
             //Assert
-            Assert.IsTrue(result.content == null);
-            Assert.IsTrue(result != null);
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.content);
+            
         }
     }
 }
