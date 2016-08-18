@@ -9,7 +9,7 @@ using System.Threading;
 using NetSDK.Domain;
 using NetSDK.Services.EngineEvaluator;
 using System.Collections.Generic;
-using NetSDK.Services.Client;
+using NetSDK.Services.Client.Classes;
 
 namespace Net_SDK_Unit_Tests.Integration_Tests
 {
@@ -21,6 +21,7 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
         [TestInitialize]
         public void Initialize()
         {
+            log4net.Config.XmlConfigurator.Configure();
             //Arrange
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
             //var baseUrl = "http://localhost:3000/api/";

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Diagnostics;
 using log4net;
 
-namespace NetSDK.Services.Client
+namespace NetSDK.Services.Client.Classes
 {
     public class SdkReadinessGates
     {

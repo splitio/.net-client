@@ -1,6 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
-using NetSDK.Services.Client;
+using NetSDK.Services.Client.Classes;
 using NetSDK.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;

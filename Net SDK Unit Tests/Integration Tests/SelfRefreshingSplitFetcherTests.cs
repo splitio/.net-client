@@ -10,7 +10,7 @@ using NetSDK.Services.Parsing;
 using NetSDK.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
 using log4net;
-using NetSDK.Services.Client;
+using NetSDK.Services.Client.Classes;
 
 namespace NetSDK.Tests
 {
@@ -56,7 +56,7 @@ namespace NetSDK.Tests
             ParsedSplit result  = selfRefreshingSplitFetcher.Fetch("Pato_Test_1");
             ParsedSplit result2 = selfRefreshingSplitFetcher.Fetch("Manu_Test_1");
             //Assert
-            Assert.IsNull(result);
+            Assert.IsNotNull(result);
             Assert.IsTrue(result.name == "Pato_Test_1");
             Assert.IsTrue(result.conditions.Count > 0);
 

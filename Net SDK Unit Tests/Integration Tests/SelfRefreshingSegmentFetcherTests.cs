@@ -8,8 +8,8 @@ using System.Threading;
 using NetSDK.Domain;
 using NetSDK.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
-using NetSDK.Services.Client;
 using NetSDK.Services.Parsing;
+using NetSDK.Services.Client.Classes;
 
 namespace NetSDK.Tests
 {
@@ -57,7 +57,7 @@ namespace NetSDK.Tests
             }
 
             //Assert
-            Assert.IsNull(result);
+            Assert.IsNotNull(result);
             Assert.IsTrue(result.name == "payed");
             Assert.IsTrue(result.Contains("abcdz"));
 

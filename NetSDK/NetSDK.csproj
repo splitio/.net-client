@@ -85,6 +85,9 @@
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
+    <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
+    <Compile Include="Services\Client\Interfaces\IClient.cs" />
+    <Compile Include="Services\Client\Classes\Client.cs" />
     <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
     <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />

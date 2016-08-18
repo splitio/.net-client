@@ -1,6 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
-using NetSDK.Services.Client;
+using NetSDK.Services.Client.Classes;
 using NetSDK.Services.Parsing;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
@@ -19,7 +19,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private readonly SplitParser splitParser;
         private int interval;
         private long change_number;
-        public bool stopped { get; private set; }
+        private bool stopped;
         private SdkReadinessGates gates;
 
 

@@ -36,8 +36,14 @@ namespace NetSDK.CommonLibraries
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", header.authorizationApiKey);
             httpClient.DefaultRequestHeaders.Add("SplitSDKVersion", header.splitSDKVersion);
             httpClient.DefaultRequestHeaders.Add("SplitSDKSpecVersion", header.splitSDKSpecVersion);
-            httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.splitSDKMachineName);
-            httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.splitSDKMachineIP);
+            if (!String.IsNullOrEmpty(header.splitSDKMachineName))
+            {
+                httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.splitSDKMachineName);
+            }
+            if (!String.IsNullOrEmpty(header.splitSDKMachineIP))
+            {
+                httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.splitSDKMachineIP);
+            }
             httpClient.DefaultRequestHeaders.Add("Accept-Encoding", header.encoding);
             httpClient.DefaultRequestHeaders.Add("Keep-Alive", "true");
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
