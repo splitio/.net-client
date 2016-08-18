@@ -75,6 +75,7 @@
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
+    <Compile Include="CommonLibraries\TypeConverter.cs" />
     <Compile Include="Domain\AttributeMatcher.cs" />
     <Compile Include="Domain\BetweenData.cs" />
     <Compile Include="Domain\CombinerEnum.cs" />
@@ -83,11 +84,15 @@
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
-    <Compile Include="Services\Parsing\BetweenMatcher.cs" />
-    <Compile Include="Services\Parsing\EqualToMatcher.cs" />
-    <Compile Include="Services\Parsing\GreaterOrEqualToMatcher.cs" />
-    <Compile Include="Services\Parsing\LessOrEqualToMatcher.cs" />
-    <Compile Include="Services\Parsing\Matcher.cs" />
+    <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
+    <Compile Include="Services\EngineEvaluator\Engine.cs" />
+    <Compile Include="Services\EngineEvaluator\Splitter.cs" />
+    <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\CompareMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\EqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\GreaterOrEqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\LessOrEqualToMatcher.cs" />
+    <Compile Include="Services\Parsing\Interfaces\IMatcher.cs" />
     <Compile Include="Domain\MatcherDefinition.cs" />
     <Compile Include="Domain\MatcherGroupDefinition.cs" />
     <Compile Include="Domain\MatcherTypeEnum.cs" />
@@ -100,10 +105,10 @@
     <Compile Include="Domain\UserDefinedSegmentData.cs" />
     <Compile Include="Domain\WhitelistData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Parsing\AllKeysMatcher.cs" />
-    <Compile Include="Services\Parsing\SplitParser.cs" />
-    <Compile Include="Services\Parsing\UserDefinedSegmentMatcher.cs" />
-    <Compile Include="Services\Parsing\WhitelistMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\AllKeysMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\SplitParser.cs" />
+    <Compile Include="Services\Parsing\Classes\UserDefinedSegmentMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\WhitelistMatcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
@@ -126,8 +131,6 @@
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\Client\" />
-    <Folder Include="Services\EngineEvaluator\" />
     <Folder Include="Services\Impressions\" />
     <Folder Include="Services\Metrics\" />
   </ItemGroup>

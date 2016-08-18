@@ -62,8 +62,19 @@
     <Compile Include="Integration Tests\SelfRefreshingSplitFetcherTests.cs" />
     <Compile Include="Integration Tests\SplitSdkApiClientTests.cs" />
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
+    <Compile Include="Integration Tests\EngineModuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\ApiSplitChangeFetcherTests.cs" />
+    <Compile Include="Unit Tests\AllKeysMatcherTests.cs" />
+    <Compile Include="Unit Tests\AttributeMatcherTests.cs" />
+    <Compile Include="Unit Tests\LessOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\GreaterOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\BetweenMatcherTests.cs" />
+    <Compile Include="Unit Tests\EqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\CombiningMatcherTests.cs" />
+    <Compile Include="Unit Tests\SplitterTests.cs" />
+    <Compile Include="Unit Tests\WhitelistMatcherTests.cs" />
+    <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetSDK\NetSDK.csproj">
@@ -74,6 +85,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Unit Tests\resources\sample-data-non-alpha-numeric.csv" />
+    <None Include="Unit Tests\resources\sample-data.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Choose>

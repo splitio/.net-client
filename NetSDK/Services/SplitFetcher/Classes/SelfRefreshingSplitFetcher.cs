@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Client;
 using NetSDK.Services.Parsing;
 using NetSDK.Services.SplitFetcher.Interfaces;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace NetSDK.Services.SplitFetcher.Classes
 {
-    public class SelfRefreshingSplitFetcher: InMemorySplitFetcher
+    public class SelfRefreshingSplitFetcher : InMemorySplitFetcher
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher));
         private readonly ISplitChangeFetcher splitChangeFetcher;
@@ -19,25 +20,19 @@ namespace NetSDK.Services.SplitFetcher.Classes
         private int interval;
         private long change_number;
         public bool stopped { get; private set; }
-        private bool splitsInitialized;
-        public bool initialized
-        {
-            get
-            {
-                return splitsInitialized && splits.All(x => x.Value.initialized);
-            }
-        }
+        private SdkReadinessGates gates;
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, int interval = 30,
+
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval = 30,
                  long change_number = -1, Dictionary<string, ParsedSplit> splits = null)
             : base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
+            this.gates = gates;
             this.interval = interval;
             this.change_number = change_number;
             this.stopped = true;
-            this.splitsInitialized = false;
         }
 
         public void Start()
@@ -60,7 +55,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
 
             stopped = false;
 
-            while(!stopped)
+            while (!stopped)
             {
                 RefreshSplits();
                 Thread.Sleep(interval);
@@ -93,20 +88,22 @@ namespace NetSDK.Services.SplitFetcher.Classes
                         addedSplits.Add(split);
                     }
                     ParsedSplit parsedSplit = splitParser.Parse(split);
+                    List<String> segmentsInUse = CollectSegmentsInUse(split);
+                    gates.RegisterSegments(segmentsInUse);
                     tempSplits.Add(parsedSplit.name, parsedSplit);
                 }
             }
             splits = tempSplits;
 
-            if(addedSplits.Count() > 0)
+            if (addedSplits.Count() > 0)
             {
-               var addedFeatureNames = addedSplits.Select(x => x.name).ToList();
-               Log.Info(String.Format("Added features: {0}", String.Join(" - ", addedFeatureNames)));
+                var addedFeatureNames = addedSplits.Select(x => x.name).ToList();
+                Log.Info(String.Format("Added features: {0}", String.Join(" - ", addedFeatureNames)));
             }
-            if(removedSplits.Count() > 0)
+            if (removedSplits.Count() > 0)
             {
-               var removedFeatureNames = removedSplits.Select(x => x.name).ToList();
-               Log.Info(String.Format("Deleted features: {0}", String.Join(" - ", removedFeatureNames)));
+                var removedFeatureNames = removedSplits.Select(x => x.name).ToList();
+                Log.Info(String.Format("Deleted features: {0}", String.Join(" - ", removedFeatureNames)));
             }
         }
 
@@ -122,10 +119,7 @@ namespace NetSDK.Services.SplitFetcher.Classes
                 }
                 if (change_number >= result.till)
                 {
-                    if (!splitsInitialized)
-                    {
-                        splitsInitialized = true;
-                    }
+                    gates.SplitsAreReady();
                     //There are no new split changes
                     return;
                 }
@@ -146,5 +140,17 @@ namespace NetSDK.Services.SplitFetcher.Classes
             }
         }
 
+        private List<string> CollectSegmentsInUse(Split split)
+        {
+            var result = split.conditions
+            .SelectMany(x => x.matcherGroup.matchers)
+            .Where(x => x.matcherType == MatcherTypeEnum.IN_SEGMENT)
+            .Where(x => x.userDefinedSegmentMatcherData != null)
+            .Where(x => x.userDefinedSegmentMatcherData.segmentName != null)
+            .Select(y => y.userDefinedSegmentMatcherData.segmentName)
+            .Distinct();
+
+            return result.ToList();
+        }
     }
 }

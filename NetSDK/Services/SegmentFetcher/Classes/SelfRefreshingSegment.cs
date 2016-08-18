@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NetSDK.Domain;
+using NetSDK.Services.Client;
 using NetSDK.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,14 @@ namespace NetSDK.Services.SegmentFetcher.Classes
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
         private ISegmentChangeFetcher segmentChangeFetcher;
         private int interval;
-        public bool initialized { get; private set; }
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, int interval, long change_number = -1) : base(name, change_number)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, long change_number = -1) : base(name, change_number)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.interval = interval;
             this.stopped = true;
-            this.initialized = false;
+            this.gates = gates;
         }
 
         public void Start()
@@ -58,7 +58,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             while (true)
             {
                 try
-                {                   
+                {            
                     var response = segmentChangeFetcher.Fetch(name, change_number);
                     if (response == null)
                     {
@@ -66,12 +66,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
                     }
                     if (change_number >= response.till)
                     {
-                        if (!initialized)
-                        {
-                            initialized = true;
-                            notificationFlag.Signal();
-                            Log.Debug(name + " segment initialized");
-                        }
+                        gates.SegmentIsReady(name);
                         return;
                     }
 
@@ -86,11 +81,11 @@ namespace NetSDK.Services.SegmentFetcher.Classes
 
                         if (response.added.Count() > 0)
                         {
-                            Log.Info(String.Format("Added : {0}", String.Join(" - ", response.added)));
+                            Log.Info(String.Format("Segment {0} - Added : {1}", name, String.Join(" - ", response.added)));
                         }
                         if (response.removed.Count() > 0)
                         {
-                            Log.Info(String.Format("Removed : {0}", String.Join(" - ", response.removed)));
+                            Log.Info(String.Format("Segment {0} - Removed : {1}", name, String.Join(" - ", response.removed)));
                         }
                     }
 
