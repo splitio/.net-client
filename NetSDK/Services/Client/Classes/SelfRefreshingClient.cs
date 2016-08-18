@@ -17,28 +17,59 @@ namespace NetSDK.Services.Client.Classes
 {
     public class SelfRefreshingClient: Client
     {
-        private static string ApiKey = ConfigurationManager.AppSettings["API_KEY"];
-        private static string BaseUrl = ConfigurationManager.AppSettings["BASE_URL"];
-        private static string SplitsRefreshRate = ConfigurationManager.AppSettings["SPLITS_REFRESH_RATE"];
-        private static string SegmentRefreshRate = ConfigurationManager.AppSettings["SEGMENT_REFRESH_RATE"];
-        private static string HttpEncoding = ConfigurationManager.AppSettings["HTTP_ENCODING"];
-        private static string HttpConnectionTimeout = ConfigurationManager.AppSettings["HTTP_CONNECTION_TIMEOUT"];
-        private static string HttpReadTimeout = ConfigurationManager.AppSettings["HTTP_READ_TIMEOUT"];
-        private static string SdkVersion = ConfigurationManager.AppSettings["SPLIT_SDK_VERSION"];
-        private static string SdkSpecVersion = ConfigurationManager.AppSettings["SPLIT_SDK_SPEC_VERSION"];
-        private static string SdkMachineName = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_NAME"];
-        private static string SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
-        private static string RandomizeRefreshRates = ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"];
+        private static string ApiKey;
+        private static string BaseUrl;
+        private static int SplitsRefreshRate;
+        private static int SegmentRefreshRate;
+        private static string HttpEncoding;
+        private static string HttpConnectionTimeout;
+        private static string HttpReadTimeout;
+        private static string SdkVersion;
+        private static string SdkSpecVersion;
+        private static string SdkMachineName;
+        private static string SdkMachineIP;
+        private static bool RandomizeRefreshRates;
+        private static int BlockMilisecondsUntilReady;
 
         public SelfRefreshingClient()
         {
             InitializeLogger();
+            ReadConfig();
             BuildSdkReadinessGates();
             BuildSdkApiClients();
             BuildSplitFetcher();
             BuildSplitter();
             BuildEngine();
             Start();
+            BlockUntilReady(BlockMilisecondsUntilReady);
+        }
+
+        private void ReadConfig()
+        {
+            ApiKey = ConfigurationManager.AppSettings["API_KEY"];
+            BaseUrl = ConfigurationManager.AppSettings["BASE_URL"];
+            SplitsRefreshRate = int.Parse(ConfigurationManager.AppSettings["SPLITS_REFRESH_RATE"]);
+            SegmentRefreshRate = int.Parse(ConfigurationManager.AppSettings["SEGMENT_REFRESH_RATE"]);
+            HttpEncoding = ConfigurationManager.AppSettings["HTTP_ENCODING"];
+            HttpConnectionTimeout = ConfigurationManager.AppSettings["HTTP_CONNECTION_TIMEOUT"];
+            HttpReadTimeout = ConfigurationManager.AppSettings["HTTP_READ_TIMEOUT"];
+            SdkVersion = ConfigurationManager.AppSettings["SPLIT_SDK_VERSION"];
+            SdkSpecVersion = ConfigurationManager.AppSettings["SPLIT_SDK_SPEC_VERSION"];
+            SdkMachineName = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_NAME"];
+            SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
+            RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
+            BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
+        }
+
+        private void BlockUntilReady(int BlockMilisecondsUntilReady)
+        {
+            if (BlockMilisecondsUntilReady > 0)
+            {
+                if (!gates.IsSDKReady(BlockMilisecondsUntilReady))
+                {
+                    throw new TimeoutException(String.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
+                }
+            }
         }
 
         public void Start()
@@ -73,12 +104,8 @@ namespace NetSDK.Services.Client.Classes
 
         private void BuildSplitFetcher()
         {
-            var randomizeRefreshRates = bool.Parse(RandomizeRefreshRates);
-            var segmentRefreshRateValue = int.Parse(SegmentRefreshRate);
-            var segmentRefreshRate = randomizeRefreshRates ? Random(segmentRefreshRateValue) : segmentRefreshRateValue;
-            var splitsRefreshRateValue = int.Parse(SplitsRefreshRate);
-            var splitsRefreshRate = randomizeRefreshRates ? Random(splitsRefreshRateValue) : splitsRefreshRateValue;
-
+            var segmentRefreshRate = RandomizeRefreshRates ? Random(SegmentRefreshRate) : SegmentRefreshRate;
+            var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates,  interval: segmentRefreshRate);
