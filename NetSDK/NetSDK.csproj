@@ -84,6 +84,7 @@
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
     <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
     <Compile Include="Services\Client\Interfaces\IClient.cs" />

@@ -31,6 +31,10 @@ namespace NetSDK.Services.Client.Classes
         private static bool RandomizeRefreshRates;
         private static int BlockMilisecondsUntilReady;
 
+        private SdkReadinessGates gates;
+        private ISplitSdkApiClient splitSdkApiClient;
+        private ISegmentSdkApiClient segmentSdkApiClient;
+
         public SelfRefreshingClient()
         {
             InitializeLogger();

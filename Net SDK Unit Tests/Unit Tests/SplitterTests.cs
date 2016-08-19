@@ -9,7 +9,7 @@ namespace Net_SDK_Unit_Tests.Unit_Tests
     [TestClass]
     public class SplitterTests
     {
-        [DeploymentItem(@"Unit Tests\resources\sample-data.csv")]
+        [DeploymentItem(@"Resources\sample-data.csv")]
         [TestMethod]
         public void VerifyHashAndBucketSampleData()
         {
@@ -39,7 +39,7 @@ namespace Net_SDK_Unit_Tests.Unit_Tests
             }
         }
 
-        [DeploymentItem(@"Unit Tests\resources\sample-data-non-alpha-numeric.csv")]
+        [DeploymentItem(@"Resources\sample-data-non-alpha-numeric.csv")]
         [TestMethod]
         public void VerifyHashAndBucketSampleDataNonAlphanumeric()
         {

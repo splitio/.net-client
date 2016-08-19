@@ -17,9 +17,6 @@ namespace NetSDK.Services.Client.Classes
         protected Splitter splitter;
         protected ISplitFetcher splitFetcher;
         protected Engine engine;
-        protected SdkReadinessGates gates;
-        protected ISplitSdkApiClient splitSdkApiClient;
-        protected ISegmentSdkApiClient segmentSdkApiClient;
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
         {
