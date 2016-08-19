@@ -9,11 +9,12 @@ namespace Net_SDK_Unit_Tests.Unit_Tests
     [TestClass]
     public class SplitterTests
     {
+        [DeploymentItem(@"Unit Tests\resources\sample-data.csv")]
         [TestMethod]
         public void VerifyHashAndBucketSampleData()
         {
             //Arrange
-            var contents = File.ReadAllText(@"Unit Tests\resources\sample-data.csv").Split('\n');
+            var contents = File.ReadAllText("sample-data.csv").Split('\n');
             var csv = from line in contents
                       select line.Split(',').ToArray();
 
@@ -38,12 +39,12 @@ namespace Net_SDK_Unit_Tests.Unit_Tests
             }
         }
 
+        [DeploymentItem(@"Unit Tests\resources\sample-data-non-alpha-numeric.csv")]
         [TestMethod]
         public void VerifyHashAndBucketSampleDataNonAlphanumeric()
         {
             //Arrange
-            var contents = File.ReadAllText(@"Unit Tests\resources\sample-data-non-alpha-numeric.csv", System.Text.Encoding.BigEndianUnicode).Split('\n');
-            
+            var contents = File.ReadAllText("sample-data-non-alpha-numeric.csv", System.Text.Encoding.BigEndianUnicode).Split('\n');
             var csv = from line in contents
                       select line.Split(',').ToArray();
 
