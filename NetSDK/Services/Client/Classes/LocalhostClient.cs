@@ -27,16 +27,19 @@ namespace NetSDK.Services.Client.Classes
 
         private string LookupFilePath(string filePath)
         {
-            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            if (!String.IsNullOrEmpty(home))
+            if (File.Exists(filePath))
             {
-                var fullPath = Path.Combine(home, filePath);
-                if (File.Exists(fullPath))
-                {
-                    return fullPath;
-                }
+                return filePath;
             }
-            return filePath;
+            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            var fullPath = Path.Combine(home, filePath);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            throw new DirectoryNotFoundException("Splits file could not be found");
         }
 
         private void BuildSplitFetcher(Dictionary<string,ParsedSplit> splits)
