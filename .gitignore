@@ -5,3 +5,6 @@ Net SDK Unit Tests/bin/Debug/
 Net SDK Unit Tests/obj/Debug/
 NetSDK/bin/Debug/
 .sonar
+
+TestResults/**
+.vs
