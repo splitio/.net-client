@@ -86,7 +86,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Resources\sample-data-non-alpha-numeric.csv" />
+    <None Include="Resources\sample-data-non-alpha-numeric.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\sample-data.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

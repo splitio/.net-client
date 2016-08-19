@@ -7,11 +7,12 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
     [TestClass]
     public class LocalhostClientTests
     {
+        [DeploymentItem(@"Resources\test.splits")]
         [TestMethod]
         public void GetTreatmentSuccessfully()
         {
             //Arrange
-            var client = new LocalhostClient(@"Resources\test.splits");
+            var client = new LocalhostClient("test.splits");
 
             //Act
             var result1 = client.GetTreatment(null, "double_writes_to_cassandra", null);
