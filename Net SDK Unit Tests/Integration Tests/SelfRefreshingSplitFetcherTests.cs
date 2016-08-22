@@ -24,7 +24,26 @@ namespace NetSDK.Tests
         }
 
         [TestMethod]
-        [Ignore] // TODO: Fix this test and remove Ignore Attribute
+        [DeploymentItem(@"Resources\splits_staging.json")]
+        [DeploymentItem(@"Resources\segment_payed.json")]
+
+        public void ExecuteGetSuccessfulWithResultsFromJSONFile()
+        {
+            //Arrange
+            var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json"));
+            var splitFetcher = new JSONFileSplitFetcher("splits_staging.json", splitParser);
+
+            //Act           
+            ParsedSplit result = splitFetcher.Fetch("Pato_Test_1");
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.name == "Pato_Test_1");
+            Assert.IsTrue(result.conditions.Count > 0);
+        }
+
+        [TestMethod]
+        [Ignore] 
         public void ExecuteGetSuccessfulWithResults()
         {
             //Arrange
@@ -32,7 +51,7 @@ namespace NetSDK.Tests
             //var baseUrl = "http://localhost:3000/api/";
             var httpHeader = new HTTPHeader()
             {
-                authorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4",
+                authorizationApiKey = "///PUT API KEY HERE///",
                 splitSDKMachineIP = "1.0.0.0",
                 splitSDKMachineName = "localhost",
                 splitSDKVersion = "net-0.0.0",
@@ -69,7 +88,7 @@ namespace NetSDK.Tests
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
             var httpHeader = new HTTPHeader()
             {
-                authorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4x",
+                authorizationApiKey = "0",
                 splitSDKMachineIP = "1.0.0.0",
                 splitSDKMachineName = "localhost",
                 splitSDKVersion = "net-0.0.0",

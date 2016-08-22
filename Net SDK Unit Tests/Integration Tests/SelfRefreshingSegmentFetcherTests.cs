@@ -40,7 +40,7 @@ namespace NetSDK.Tests
 
 
         [TestMethod]
-        [Ignore] // TODO: Fix this test and remove Ignore Attribute
+        [Ignore] 
         public void ExecuteGetSuccessfulWithResults()
         {
             //Arrange

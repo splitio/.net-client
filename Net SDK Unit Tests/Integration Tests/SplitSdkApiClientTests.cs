@@ -18,13 +18,14 @@ namespace NetSDK.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void ExecuteFetchSplitChangesSuccessful()
         {
             //Arrange
             var baseUrl = "http://sdk-aws-staging.split.io/api/";
             var httpHeader = new HTTPHeader()
             {
-                authorizationApiKey = "43sdqmuqt5tvbjtl3e3t2i8ps4",
+                authorizationApiKey = "///PUT API KEY HERE///",
                 splitSDKMachineIP = "1.0.0.0",
                 splitSDKMachineName = "localhost",
                 splitSDKVersion = "net-0.0.0",

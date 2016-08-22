@@ -18,7 +18,7 @@ namespace NetSDK.Services.SegmentFetcher.Classes
             added = segmentChangesResult.added;
         }
 
-        public Segment Fetch(string name)
+        public override Segment Fetch(string name)
         {
             var segment = new Segment(name, keys : new HashSet<string>(added));
             return segment;

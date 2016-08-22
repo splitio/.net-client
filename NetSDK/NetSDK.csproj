@@ -7,8 +7,8 @@
     <ProjectGuid>{357902E2-D685-4C14-8CCE-BD6CE7B22D36}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetSDK</RootNamespace>
-    <AssemblyName>NetSDK</AssemblyName>
+    <RootNamespace>Splitio</RootNamespace>
+    <AssemblyName>Splitio</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
