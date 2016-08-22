@@ -35,9 +35,10 @@ namespace NetSDK.Services.Client.Classes
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
 
-        public SelfRefreshingClient()
+        public SelfRefreshingClient(string apiKey)
         {
             InitializeLogger();
+            ApiKey = apiKey;
             ReadConfig();
             BuildSdkReadinessGates();
             BuildSdkApiClients();
@@ -45,12 +46,14 @@ namespace NetSDK.Services.Client.Classes
             BuildSplitter();
             BuildEngine();
             Start();
-            BlockUntilReady(BlockMilisecondsUntilReady);
+            if (BlockMilisecondsUntilReady > 0)
+            {
+                BlockUntilReady(BlockMilisecondsUntilReady);
+            }
         }
 
         private void ReadConfig()
         {
-            ApiKey = ConfigurationManager.AppSettings["API_KEY"];
             BaseUrl = ConfigurationManager.AppSettings["BASE_URL"];
             SplitsRefreshRate = int.Parse(ConfigurationManager.AppSettings["SPLITS_REFRESH_RATE"]);
             SegmentRefreshRate = int.Parse(ConfigurationManager.AppSettings["SEGMENT_REFRESH_RATE"]);
@@ -67,12 +70,9 @@ namespace NetSDK.Services.Client.Classes
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
         {
-            if (BlockMilisecondsUntilReady > 0)
+            if (!gates.IsSDKReady(BlockMilisecondsUntilReady))
             {
-                if (!gates.IsSDKReady(BlockMilisecondsUntilReady))
-                {
-                    throw new TimeoutException(String.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
-                }
+                throw new TimeoutException(String.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
             }
         }
 
