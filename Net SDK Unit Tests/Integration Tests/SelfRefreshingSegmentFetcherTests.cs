@@ -23,6 +23,23 @@ namespace NetSDK.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"Resources\segment_payed.json")]
+        public void ExecuteGetSuccessfulWithResultsFromJSONFile()
+        {
+            //Arrange
+            var segmentFetcher = new JSONFileSegmentFetcher("segment_payed.json");
+
+            //Act
+            var result = segmentFetcher.Fetch("payed");
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.name == "payed");
+            Assert.IsTrue(result.Contains("abcdz"));
+        }
+
+
+        [TestMethod]
         [Ignore] // TODO: Fix this test and remove Ignore Attribute
         public void ExecuteGetSuccessfulWithResults()
         {
@@ -30,7 +47,7 @@ namespace NetSDK.Tests
             var baseUrl = "https://sdk-aws-staging.split.io/api/";
             var httpHeader = new HTTPHeader()
             {
-                authorizationApiKey = "5p2c0r4so20ill66lm35i45h6pkvrd2skmib",
+                authorizationApiKey = "///PUT API KEY HERE///",
                 splitSDKMachineIP = "1.0.0.0",
                 splitSDKMachineName = "localhost",
                 splitSDKVersion = "net-0.0.0",
@@ -43,8 +60,6 @@ namespace NetSDK.Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, null, 30);
 
             //Act
-
-
             var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("payed");
             var segmentsToRegister = new List<string>();
             segmentsToRegister.Add(result.name);

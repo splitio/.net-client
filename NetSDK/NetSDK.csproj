@@ -84,6 +84,7 @@
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\KeySelector.cs" />
+    <Compile Include="Services\Client\Classes\JSONFileClient.cs" />
     <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
     <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Services\Parsing\Classes\UserDefinedSegmentMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\WhitelistMatcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\JSONFileSegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
     <Compile Include="Domain\SegmentChange.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Services\SegmentFetcher\Interfaces\ISplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
     <Compile Include="Domain\SplitChange.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitChangeFetcher.cs" />
