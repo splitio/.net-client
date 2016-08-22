@@ -22,9 +22,10 @@ namespace Net_SDK_Unit_Tests.Integration_Tests
 
             //Asert
             Assert.IsTrue(result1 == "off"); //default treatment
-            Assert.IsTrue(result2 == "off"); //matched 
+            Assert.IsTrue(result2 == "off"); //default treatment
             Assert.IsTrue(result3 == "on"); //default treatment
-            Assert.IsTrue(result4 == "on"); //matched 
+            Assert.IsTrue(result4 == "on"); //default treatment
+
         }
     }
 }

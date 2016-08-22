@@ -87,38 +87,11 @@ namespace NetSDK.Services.Client.Classes
             {
                 name = name,
                 seed = 0,
-                killed = false,
+                killed = true,
                 defaultTreatment = treatment,
-                conditions = new List<ConditionWithLogic>()
+                conditions = null
             };
 
-            var combiningMatcher = new CombiningMatcher()
-            {
-                delegates = new List<AttributeMatcher>()
-            };
-
-            combiningMatcher.delegates.Add(new AttributeMatcher()
-            {
-                attribute = null,
-                negate = false,
-                matcher = new AllKeysMatcher()
-            }
-            );
-
-            var partitionDefinitions = new List<PartitionDefinition>();
-            partitionDefinitions.Add(new PartitionDefinition()
-            {
-                size = 100,
-                treatment = treatment
-            });
-
-            var conditionWithLogic = new ConditionWithLogic()
-            {
-                matcher = combiningMatcher,
-                partitions = partitionDefinitions
-            };
-
-            split.conditions.Add(conditionWithLogic);
             return split;
         }
 
