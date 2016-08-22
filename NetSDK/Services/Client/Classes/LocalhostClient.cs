@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NetSDK.Services.Client.Classes
 {
@@ -63,7 +64,7 @@ namespace NetSDK.Services.Client.Classes
                     continue;
                 }
 
-                String[] feature_treatment = line.Split(' ');
+                String[] feature_treatment = Regex.Split(line, @"\s+");
 
                 if (feature_treatment.Length != 2)
                 {
