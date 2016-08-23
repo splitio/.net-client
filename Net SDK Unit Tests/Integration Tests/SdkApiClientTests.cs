@@ -16,6 +16,7 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void ExecuteGetSuccessful()
         {
             //Arrange
@@ -41,6 +42,7 @@ namespace Splitio_Tests.Integration_Tests
 
 
         [TestMethod]
+        [Ignore]
         public void ExecuteGetShouldReturnErrorNotAuthorized()
         {
             //Arrange
