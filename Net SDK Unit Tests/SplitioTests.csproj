@@ -98,7 +98,7 @@
     <None Include="Resources\splits_staging.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\splits_staging_julian.json">
+    <None Include="Resources\splits_staging_2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\test.splits">

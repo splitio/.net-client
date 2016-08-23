@@ -25,10 +25,10 @@ namespace Splitio_Tests.Integration_Tests
             
             var segmentFetcher = new JSONFileSegmentFetcher(@"segment_payed.json");
             var splitParser = new SplitParser(segmentFetcher);
-            splitFetcher = new JSONFileSplitFetcher(@"splits_staging_julian.json", splitParser);
+            splitFetcher = new JSONFileSplitFetcher(@"splits_staging_2.json", splitParser);
         }
 
-        [DeploymentItem(@"Resources\splits_staging_julian.json")]
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
         [DeploymentItem(@"Resources\segment_payed.json")]
         [TestMethod]
         public void ExecuteGetTreatment_Test_jw_4SuccessfulWithResults()
@@ -62,7 +62,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsTrue(result3 == "on"); // included user abcdef (whitelist)
         }
 
-        [DeploymentItem(@"Resources\splits_staging_julian.json")]
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
         [DeploymentItem(@"Resources\segment_payed.json")]
         [TestMethod]
         public void ExecuteGetTreatment_Test_jw3_SuccessfulWithResults()
@@ -84,7 +84,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsTrue(result == "off"); //<killed> default
         }
 
-        [DeploymentItem(@"Resources\splits_staging_julian.json")]
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
         [DeploymentItem(@"Resources\segment_payed.json")]
         [TestMethod]
         public void ExecuteGetTreatment_Test_jw_SuccessfulWithResults()
@@ -110,7 +110,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsTrue(result2 == "off"); //<else> in segment all
         }
 
-        [DeploymentItem(@"Resources\splits_staging_julian.json")]
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
         [DeploymentItem(@"Resources\segment_payed.json")]
         [TestMethod]
         public void ExecuteGetTreatment_Test_jw2_SuccessfulWithResults()
