@@ -1,12 +1,12 @@
-﻿using NetSDK.Domain;
-using NetSDK.Services.SplitFetcher.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetSDK.Services.SplitFetcher.Classes
+namespace Splitio.Services.SplitFetcher.Classes
 {
     public class InMemorySplitFetcher: ISplitFetcher
     {

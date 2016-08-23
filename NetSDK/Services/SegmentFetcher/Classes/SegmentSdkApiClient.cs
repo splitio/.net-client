@@ -1,4 +1,4 @@
-﻿using NetSDK.CommonLibraries;
+﻿using Splitio.CommonLibraries;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
-using NetSDK.Services.SplitFetcher.Interfaces;
+using Splitio.Services.SplitFetcher.Interfaces;
 using log4net;
 
-namespace NetSDK.Services.SplitFetcher
+namespace Splitio.Services.SplitFetcher
 {
     public class SegmentSdkApiClient : SdkApiClient, ISegmentSdkApiClient
     {

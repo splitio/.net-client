@@ -1,13 +1,13 @@
 ﻿using log4net;
-using NetSDK.Services.Client.Interfaces;
-using NetSDK.Services.EngineEvaluator;
-using NetSDK.Services.SplitFetcher.Interfaces;
+using Splitio.Services.Client.Interfaces;
+using Splitio.Services.EngineEvaluator;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.Client.Classes
+namespace Splitio.Services.Client.Classes
 {
     public class Client: IClient
     {

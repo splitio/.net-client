@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.Domain;
-using NetSDK.Services.Parsing;
+using Splitio.Domain;
+using Splitio.Services.Parsing;
 using System.Collections.Generic;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class AttributeMatcherTests

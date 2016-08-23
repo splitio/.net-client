@@ -1,11 +1,11 @@
-﻿using NetSDK.Domain;
-using NetSDK.Services.SegmentFetcher.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.SegmentFetcher.Classes
+namespace Splitio.Services.SegmentFetcher.Classes
 {
     public class SegmentFetcher: ISegmentFetcher
     {

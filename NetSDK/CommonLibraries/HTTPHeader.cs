@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetSDK.CommonLibraries
+namespace Splitio.CommonLibraries
 {
     public class HTTPHeader
     {

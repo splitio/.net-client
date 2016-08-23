@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.CommonLibraries;
+using Splitio.CommonLibraries;
 using System.Net;
-using NetSDK.Services.SplitFetcher;
+using Splitio.Services.SplitFetcher;
 using System.IO;
 
 
-namespace NetSDK.Tests
+namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
     public class SplitSdkApiClientTests

@@ -1,11 +1,11 @@
-﻿using NetSDK.Services.EngineEvaluator;
-using NetSDK.Services.SplitFetcher.Interfaces;
+﻿using Splitio.Services.EngineEvaluator;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.Client.Interfaces
+namespace Splitio.Services.Client.Interfaces
 {
     public interface IClient
     {

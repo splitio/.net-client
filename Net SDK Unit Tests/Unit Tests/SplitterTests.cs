@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
-using NetSDK.Services.EngineEvaluator;
+using Splitio.Services.EngineEvaluator;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class SplitterTests

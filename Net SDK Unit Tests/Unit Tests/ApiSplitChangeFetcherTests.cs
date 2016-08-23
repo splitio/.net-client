@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NetSDK.Services.SplitFetcher.Interfaces;
-using NetSDK.Services.SplitFetcher.Classes;
+using Splitio.Services.SplitFetcher.Interfaces;
+using Splitio.Services.SplitFetcher.Classes;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class ApiSplitChangeFetcherTests

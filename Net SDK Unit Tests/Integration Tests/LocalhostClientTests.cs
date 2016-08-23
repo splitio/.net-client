@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.Services.Client.Classes;
+using Splitio.Services.Client.Classes;
 
-namespace Net_SDK_Unit_Tests.Integration_Tests
+namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
     public class LocalhostClientTests

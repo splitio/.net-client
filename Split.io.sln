@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSDK", "NetSDK\NetSDK.csproj", "{357902E2-D685-4C14-8CCE-BD6CE7B22D36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio", "NetSDK\Splitio.csproj", "{357902E2-D685-4C14-8CCE-BD6CE7B22D36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSDK Tests", "Net SDK Unit Tests\NetSDK Tests.csproj", "{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitioTests", "Net SDK Unit Tests\SplitioTests.csproj", "{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

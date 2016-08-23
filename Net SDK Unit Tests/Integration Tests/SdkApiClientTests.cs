@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.CommonLibraries;
+using Splitio.CommonLibraries;
 using System.Net;
 
 
-namespace NetSDK.Tests
+namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
     public class SdkApiClientTests

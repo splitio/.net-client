@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.Domain;
+using Splitio.Domain;
 using System.Collections.Generic;
 using Moq;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class CombiningMatcherTests

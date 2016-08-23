@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.Services.Parsing;
+using Splitio.Services.Parsing;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class AllKeysMatcherTests

@@ -1,11 +1,11 @@
-﻿using NetSDK.Domain;
+﻿using Splitio.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetSDK.Services.SplitFetcher.Interfaces
+namespace Splitio.Services.SplitFetcher.Interfaces
 {
     public interface ISplitFetcher
     {

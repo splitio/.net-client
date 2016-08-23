@@ -1,5 +1,5 @@
-﻿using NetSDK.Services.Client.Classes;
-using NetSDK.Services.Client.Interfaces;
+﻿using Splitio.Services.Client.Classes;
+using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

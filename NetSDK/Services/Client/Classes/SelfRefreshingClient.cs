@@ -1,11 +1,11 @@
-﻿using NetSDK.CommonLibraries;
-using NetSDK.Services.Client.Interfaces;
-using NetSDK.Services.EngineEvaluator;
-using NetSDK.Services.Parsing;
-using NetSDK.Services.SegmentFetcher.Classes;
-using NetSDK.Services.SplitFetcher;
-using NetSDK.Services.SplitFetcher.Classes;
-using NetSDK.Services.SplitFetcher.Interfaces;
+﻿using Splitio.CommonLibraries;
+using Splitio.Services.Client.Interfaces;
+using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Parsing;
+using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.SplitFetcher;
+using Splitio.Services.SplitFetcher.Classes;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace NetSDK.Services.Client.Classes
+namespace Splitio.Services.Client.Classes
 {
     public class SelfRefreshingClient: Client
     {

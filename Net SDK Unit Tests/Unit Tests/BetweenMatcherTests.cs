@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.Services.Parsing;
-using NetSDK.Domain;
+using Splitio.Services.Parsing;
+using Splitio.Domain;
 
-namespace Net_SDK_Unit_Tests.Unit_Tests
+namespace Splitio_Tests.Unit_Tests
 {
     [TestClass]
     public class BetweenMatcherTests

@@ -1,10 +1,10 @@
-﻿using NetSDK.Domain;
+﻿using Splitio.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.Parsing
+namespace Splitio.Services.Parsing
 {
     public abstract class CompareMatcher: IMatcher
     {

@@ -1,5 +1,5 @@
-﻿using NetSDK.Domain;
-using NetSDK.Services.Parsing;
+﻿using Splitio.Domain;
+using Splitio.Services.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.SplitFetcher.Classes
+namespace Splitio.Services.SplitFetcher.Classes
 {
     public class JSONFileSplitFetcher: InMemorySplitFetcher
     {

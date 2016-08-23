@@ -1,4 +1,4 @@
-﻿using NetSDK.Domain;
+﻿using Splitio.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.SegmentFetcher.Classes
+namespace Splitio.Services.SegmentFetcher.Classes
 {
     public class JSONFileSegmentFetcher:SegmentFetcher
     {

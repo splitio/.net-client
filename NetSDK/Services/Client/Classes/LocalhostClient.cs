@@ -1,8 +1,8 @@
 ﻿using log4net;
-using NetSDK.Domain;
-using NetSDK.Services.EngineEvaluator;
-using NetSDK.Services.Parsing;
-using NetSDK.Services.SplitFetcher.Classes;
+using Splitio.Domain;
+using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Parsing;
+using Splitio.Services.SplitFetcher.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NetSDK.Services.Client.Classes
+namespace Splitio.Services.Client.Classes
 {
     public class LocalhostClient : Client
     {

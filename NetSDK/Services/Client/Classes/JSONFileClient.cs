@@ -1,14 +1,14 @@
 ﻿using log4net;
-using NetSDK.Services.EngineEvaluator;
-using NetSDK.Services.Parsing;
-using NetSDK.Services.SegmentFetcher.Classes;
-using NetSDK.Services.SplitFetcher.Classes;
+using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Parsing;
+using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.SplitFetcher.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.Client.Classes
+namespace Splitio.Services.Client.Classes
 {
     public class JSONFileClient:Client
     {

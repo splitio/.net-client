@@ -1,8 +1,8 @@
 ﻿using log4net;
-using NetSDK.Domain;
-using NetSDK.Services.Client.Classes;
-using NetSDK.Services.Parsing;
-using NetSDK.Services.SplitFetcher.Interfaces;
+using Splitio.Domain;
+using Splitio.Services.Client.Classes;
+using Splitio.Services.Parsing;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NetSDK.Services.SplitFetcher.Classes
+namespace Splitio.Services.SplitFetcher.Classes
 {
     public class SelfRefreshingSplitFetcher : InMemorySplitFetcher
     {

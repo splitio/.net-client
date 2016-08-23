@@ -1,13 +1,13 @@
 ﻿using log4net;
-using NetSDK.Domain;
-using NetSDK.Services.SegmentFetcher.Classes;
-using NetSDK.Services.SegmentFetcher.Interfaces;
+using Splitio.Domain;
+using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.Parsing
+namespace Splitio.Services.Parsing
 {
     public class SplitParser
     {

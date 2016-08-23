@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetSDK.CommonLibraries
+namespace Splitio.CommonLibraries
 {
     public class HTTPResult
     {

@@ -6,8 +6,8 @@
     <ProjectGuid>{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Net_SDK_Unit_Tests</RootNamespace>
-    <AssemblyName>Net SDK Unit Tests</AssemblyName>
+    <RootNamespace>Splitio_Tests</RootNamespace>
+    <AssemblyName>Splitio_Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -78,9 +78,9 @@
     <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetSDK\NetSDK.csproj">
+    <ProjectReference Include="..\NetSDK\Splitio.csproj">
       <Project>{357902e2-d685-4c14-8cce-bd6ce7b22d36}</Project>
-      <Name>NetSDK</Name>
+      <Name>Splitio</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

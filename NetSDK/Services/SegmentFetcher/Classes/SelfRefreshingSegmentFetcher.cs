@@ -1,14 +1,14 @@
 ﻿using log4net;
-using NetSDK.Domain;
-using NetSDK.Services.Client.Classes;
-using NetSDK.Services.SegmentFetcher.Interfaces;
+using Splitio.Domain;
+using Splitio.Services.Client.Classes;
+using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetSDK.Services.SegmentFetcher.Classes
+namespace Splitio.Services.SegmentFetcher.Classes
 {
     public class SelfRefreshingSegmentFetcher : ISegmentFetcher
     {

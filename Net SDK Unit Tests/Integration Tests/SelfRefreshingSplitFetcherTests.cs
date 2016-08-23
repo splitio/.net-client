@@ -1,18 +1,18 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NetSDK.CommonLibraries;
+using Splitio.CommonLibraries;
 using System.Net;
-using NetSDK.Services.SplitFetcher.Classes;
-using NetSDK.Services.SplitFetcher;
+using Splitio.Services.SplitFetcher.Classes;
+using Splitio.Services.SplitFetcher;
 using System.Threading;
-using NetSDK.Domain;
-using NetSDK.Services.Parsing;
-using NetSDK.Services.SegmentFetcher.Classes;
+using Splitio.Domain;
+using Splitio.Services.Parsing;
+using Splitio.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
 using log4net;
-using NetSDK.Services.Client.Classes;
+using Splitio.Services.Client.Classes;
 
-namespace NetSDK.Tests
+namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
     public class SelfRefreshingSplitFetcherTests

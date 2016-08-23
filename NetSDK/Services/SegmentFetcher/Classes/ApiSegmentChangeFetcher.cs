@@ -1,5 +1,5 @@
-﻿using NetSDK.Domain;
-using NetSDK.Services.SplitFetcher.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using NetSDK.Services.SegmentFetcher.Interfaces;
+using Splitio.Services.SegmentFetcher.Interfaces;
 
-namespace NetSDK.Services.SegmentFetcher.Classes
+namespace Splitio.Services.SegmentFetcher.Classes
 {
     public class ApiSegmentChangeFetcher: SegmentChangeFetcher, ISegmentChangeFetcher
     {
