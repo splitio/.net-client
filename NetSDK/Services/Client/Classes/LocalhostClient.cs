@@ -83,8 +83,10 @@ namespace Splitio.Services.Client.Classes
         }
 
         /// <summary>
-        /// Creates a ParsedSplit instance that allways returns 
-        /// treatment specified in input file
+        /// Creates a ParsedSplit instance that always returns 
+        /// treatment specified in input file. It is implemented this way
+        /// for simplification. When a split is killed, the engine 
+        /// returns default treatment for that feature.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="treatment"></param>
