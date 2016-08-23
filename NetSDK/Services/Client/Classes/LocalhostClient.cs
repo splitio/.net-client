@@ -82,6 +82,13 @@ namespace Splitio.Services.Client.Classes
             return splits;
         }
 
+        /// <summary>
+        /// Creates a ParsedSplit instance that allways returns 
+        /// treatment specified in input file
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="treatment"></param>
+        /// <returns></returns>
         private ParsedSplit CreateParsedSplit(string name, string treatment)
         {
             var split = new ParsedSplit()
