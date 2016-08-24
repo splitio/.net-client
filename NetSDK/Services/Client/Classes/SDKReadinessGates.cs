@@ -77,8 +77,11 @@ namespace Splitio.Services.Client.Classes
             {
                 try
                 {
-                    segmentsAreReady.Add(segmentName, new CountdownEvent(1));
-                    Log.Info("Registered segment: " + segmentName);
+                    if (!segmentsAreReady.ContainsKey(segmentName))
+                    {
+                        segmentsAreReady.Add(segmentName, new CountdownEvent(1));
+                        Log.Info("Registered segment: " + segmentName);
+                    }
                 }
                 catch(ArgumentException e)
                 {

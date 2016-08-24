@@ -9,7 +9,7 @@ namespace Splitio.Services.Client.Classes
 {
     public class ClientFactory
     {
-        public IClient BuildApiClient(string apiKey, ConfigurationOptions options)
+        public IClient BuildApiClient(string apiKey, ConfigurationOptions options = null)
         {
             if (apiKey == "localhost")
             {
