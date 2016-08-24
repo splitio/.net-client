@@ -88,8 +88,6 @@ namespace Splitio.Services.SplitFetcher.Classes
                         addedSplits.Add(split);
                     }
                     ParsedSplit parsedSplit = splitParser.Parse(split);
-                    List<String> segmentsInUse = CollectSegmentsInUse(split);
-                    gates.RegisterSegments(segmentsInUse);
                     tempSplits.Add(parsedSplit.name, parsedSplit);
                 }
             }
@@ -138,19 +136,6 @@ namespace Splitio.Services.SplitFetcher.Classes
             {
                 Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumberBefore, change_number));
             }
-        }
-
-        private List<string> CollectSegmentsInUse(Split split)
-        {
-            var result = split.conditions
-            .SelectMany(x => x.matcherGroup.matchers)
-            .Where(x => x.matcherType == MatcherTypeEnum.IN_SEGMENT)
-            .Where(x => x.userDefinedSegmentMatcherData != null)
-            .Where(x => x.userDefinedSegmentMatcherData.segmentName != null)
-            .Select(y => y.userDefinedSegmentMatcherData.segmentName)
-            .Distinct();
-
-            return result.ToList();
         }
     }
 }

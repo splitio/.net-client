@@ -61,9 +61,7 @@ namespace Splitio_Tests.Integration_Tests
 
             //Act
             var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("payed");
-            var segmentsToRegister = new List<string>();
-            segmentsToRegister.Add(result.name);
-            gates.RegisterSegments(segmentsToRegister);
+            gates.RegisterSegment(result.name);
             result.Start();
 
             while(!gates.AreSegmentsReady(1000))

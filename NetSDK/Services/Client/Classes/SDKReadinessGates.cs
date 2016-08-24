@@ -66,27 +66,21 @@ namespace Splitio.Services.Client.Classes
             return splitsAreReady.Wait(milliseconds);
         }
 
-        public bool RegisterSegments(List<String> segmentNames)
+        public bool RegisterSegment(string segmentName)
         {
-            if (segmentNames == null || AreSplitsReady(0))
+            if (String.IsNullOrEmpty(segmentName) || AreSplitsReady(0))
             {
                 return false;
             }
 
-            foreach (var segmentName in segmentNames)
+            try
             {
-                try
-                {
-                    if (!segmentsAreReady.ContainsKey(segmentName))
-                    {
-                        segmentsAreReady.Add(segmentName, new CountdownEvent(1));
-                        Log.Info("Registered segment: " + segmentName);
-                    }
-                }
-                catch(ArgumentException e)
-                {
-                    Log.Info("Already registered segment: " + segmentName, e);
-                }
+                segmentsAreReady.Add(segmentName, new CountdownEvent(1));
+                Log.Info("Registered segment: " + segmentName);
+            }
+            catch (ArgumentException e)
+            {
+                Log.Warn("Already registered segment: " + segmentName, e);
             }
 
             return true;

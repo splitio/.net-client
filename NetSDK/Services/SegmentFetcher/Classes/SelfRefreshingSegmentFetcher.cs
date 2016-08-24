@@ -36,6 +36,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             }
 
             segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, interval);
+            gates.RegisterSegment(name);
             segment.Start();
             segments.Add(name, segment);
             return segment;
