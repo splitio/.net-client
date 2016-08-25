@@ -49,9 +49,7 @@ namespace Splitio.CommonLibraries
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //TODO: find a way to store it in sepparated parameters
-            httpClient.Timeout = new TimeSpan((connectionTimeOut + readTimeout)*1000); 
-
-          
+            httpClient.Timeout = TimeSpan.FromMilliseconds((connectionTimeOut + readTimeout));         
         }
 
         public virtual HTTPResult ExecuteGet(string requestUri)
