@@ -7,6 +7,7 @@ using Splitio.Services.SplitFetcher;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace Splitio.Services.Client.Classes
         private static string SdkMachineIP;
         private static bool RandomizeRefreshRates;
         private static int BlockMilisecondsUntilReady;
+        private static int ConcurrencyLevel;
 
         private SdkReadinessGates gates;
         private ISplitSdkApiClient splitSdkApiClient;
@@ -66,6 +68,7 @@ namespace Splitio.Services.Client.Classes
             SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
             RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
             BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
+            ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["CONCURRENCY_LEVEL"]);
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -112,10 +115,10 @@ namespace Splitio.Services.Client.Classes
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates,  interval: segmentRefreshRate);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, new ConcurrentDictionary<string,SelfRefreshingSegment>(ConcurrencyLevel, 31),  segmentRefreshRate);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate);
+            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string,Domain.ParsedSplit>(ConcurrencyLevel, 31));
         }
 
         private int Random(int refreshRate)

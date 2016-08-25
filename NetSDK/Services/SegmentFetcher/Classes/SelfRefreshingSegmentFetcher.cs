@@ -14,14 +14,14 @@ namespace Splitio.Services.SegmentFetcher.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
-        private Dictionary<string, SelfRefreshingSegment> segments;
+        private ConcurrentDictionary<string, SelfRefreshingSegment> segments;
         private SdkReadinessGates gates;
         private int interval;
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, Dictionary<string, SelfRefreshingSegment> segments = null, int interval = 30)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, ConcurrentDictionary<string, SelfRefreshingSegment> segments = null, int interval = 30)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
-            this.segments = segments ?? new Dictionary<string, SelfRefreshingSegment>();
+            this.segments = segments ?? new ConcurrentDictionary<string, SelfRefreshingSegment>();
             this.interval = interval;
             this.gates = gates;
         }
@@ -38,7 +38,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, interval);
             gates.RegisterSegment(name);
             segment.Start();
-            segments.Add(name, segment);
+            segments.TryAdd(name, segment);
             return segment;
         }
 

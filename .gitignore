@@ -8,3 +8,7 @@ NetSDK/bin/Debug/
 NetSDK/Splitio.csproj.orig
 TestResults/**
 .vs
+NetSDK/nuget.exe
+NetSDK/Splitio.0.0.1.nupkg
+NetSDK/Splitio.nuspec
+NetSDK/Splitio.0.0.2.nupkg

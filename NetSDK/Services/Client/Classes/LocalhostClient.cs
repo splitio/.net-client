@@ -4,6 +4,7 @@ using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Classes;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,14 +44,14 @@ namespace Splitio.Services.Client.Classes
             throw new DirectoryNotFoundException("Splits file could not be found");
         }
 
-        private void BuildSplitFetcher(Dictionary<string,ParsedSplit> splits)
+        private void BuildSplitFetcher(ConcurrentDictionary<string,ParsedSplit> splits)
         {
             splitFetcher = new InMemorySplitFetcher(splits);
         }
 
-        private Dictionary<string, ParsedSplit> ParseSplitFile(string filePath)
+        private ConcurrentDictionary<string, ParsedSplit> ParseSplitFile(string filePath)
         {
-            Dictionary<string, ParsedSplit> splits = new Dictionary<string, ParsedSplit>();
+            ConcurrentDictionary<string, ParsedSplit> splits = new ConcurrentDictionary<string, ParsedSplit>();
 
             string line;
 
@@ -72,7 +73,7 @@ namespace Splitio.Services.Client.Classes
                     continue;
                 }
 
-                splits.Add(feature_treatment[0], CreateParsedSplit(feature_treatment[0], feature_treatment[1]));
+                splits.TryAdd(feature_treatment[0], CreateParsedSplit(feature_treatment[0], feature_treatment[1]));
                 Log.Info("100% of keys will see " + feature_treatment[1] + " for " + feature_treatment[0]);
 
             }

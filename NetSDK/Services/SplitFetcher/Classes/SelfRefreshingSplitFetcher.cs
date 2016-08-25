@@ -4,6 +4,7 @@ using Splitio.Services.Client.Classes;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace Splitio.Services.SplitFetcher.Classes
 
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval = 30,
-                 long change_number = -1, Dictionary<string, ParsedSplit> splits = null)
+                 long change_number = -1, ConcurrentDictionary<string, ParsedSplit> splits = null)
             : base(splits)
         {
             this.splitChangeFetcher = splitChangeFetcher;
@@ -67,28 +68,29 @@ namespace Splitio.Services.SplitFetcher.Classes
             List<Split> addedSplits = new List<Split>();
             List<Split> removedSplits = new List<Split>();
 
-            var tempSplits = new Dictionary<string, ParsedSplit>(splits);
+            var tempSplits = new ConcurrentDictionary<string, ParsedSplit>(splits);
 
             foreach (Split split in splitChanges)
             {
+                ParsedSplit parsedSplit;
                 //If not active --> Remove Split
                 if (split.status != StatusEnum.ACTIVE)
-                {
-                    tempSplits.Remove(split.name);
+                {                    
+                    tempSplits.TryRemove(split.name, out parsedSplit);
                     removedSplits.Add(split);
                 }
                 else
                 {
                     //Test if its a new Split, remove if existing
-                    bool isRemoved = tempSplits.Remove(split.name);
+                    bool isRemoved = tempSplits.TryRemove(split.name, out parsedSplit);
 
                     if (!isRemoved)
                     {
                         //If not existing in _splits, its a new split
                         addedSplits.Add(split);
                     }
-                    ParsedSplit parsedSplit = splitParser.Parse(split);
-                    tempSplits.Add(parsedSplit.name, parsedSplit);
+                    parsedSplit = splitParser.Parse(split);
+                    tempSplits.TryAdd(parsedSplit.name, parsedSplit);
                 }
             }
             splits = tempSplits;

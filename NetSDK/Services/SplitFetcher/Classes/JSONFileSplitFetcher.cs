@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Collections.Concurrent;
 
 namespace Splitio.Services.SplitFetcher.Classes
 {
@@ -17,9 +18,9 @@ namespace Splitio.Services.SplitFetcher.Classes
             this.splitParser = splitParser;
             var json = File.ReadAllText(filePath);
             var splitChangesResult = JsonConvert.DeserializeObject<SplitChangesResult>(json);
-            splits = splitChangesResult.splits
+            splits = new ConcurrentDictionary<string,ParsedSplit>(splitChangesResult.splits
                             .Select(x => new { Key = x.name, Value = splitParser.Parse(x)})
-                            .ToDictionary(x => x.Key, x => x.Value);
+                            .ToDictionary(x => x.Key, x => x.Value));
         }
     }
 }
