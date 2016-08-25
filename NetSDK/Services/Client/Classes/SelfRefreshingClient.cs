@@ -63,7 +63,7 @@ namespace Splitio.Services.Client.Classes
             HttpConnectionTimeout = ConfigurationManager.AppSettings["HTTP_CONNECTION_TIMEOUT"];
             HttpReadTimeout = ConfigurationManager.AppSettings["HTTP_READ_TIMEOUT"];
             SdkVersion = ConfigurationManager.AppSettings["SPLIT_SDK_VERSION"];
-            SdkSpecVersion = ConfigurationManager.AppSettings["SPLIT_SDK_SPEC_VERSION"];
+            SdkSpecVersion = "net-" + ConfigurationManager.AppSettings["SPLIT_SDK_SPEC_VERSION"];
             SdkMachineName = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_NAME"];
             SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
             RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
