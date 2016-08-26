@@ -68,7 +68,7 @@ namespace Splitio.Services.Client.Classes
             SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
             RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
             BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
-            ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["CONCURRENCY_LEVEL"]);
+            ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["SPLITS_STORAGE_CONCURRENCY_LEVEL"]);
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
