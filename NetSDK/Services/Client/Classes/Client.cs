@@ -12,7 +12,7 @@ namespace Splitio.Services.Client.Classes
     public class Client: IClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Client));
-        private const string Control = "CONTROL";
+        private const string Control = "control";
 
         protected Splitter splitter;
         protected ISplitFetcher splitFetcher;

@@ -9,7 +9,6 @@ namespace Splitio.Services.EngineEvaluator
     public class Engine
     {
         private Splitter splitter;
-        private const string Control = "CONTROL";
 
         public Engine(Splitter splitter)
         {

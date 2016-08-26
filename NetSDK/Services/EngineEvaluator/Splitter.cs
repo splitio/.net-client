@@ -8,7 +8,7 @@ namespace Splitio.Services.EngineEvaluator
 {
     public class Splitter
     {
-        private const string Control = "CONTROL";
+        private const string Control = "control";
 
         public string GetTreatment(string key, int seed, List<PartitionDefinition> partitions)
         {
