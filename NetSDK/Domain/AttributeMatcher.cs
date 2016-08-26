@@ -24,7 +24,8 @@ namespace Splitio.Domain
                 return false;
             }
 
-            var value = attributes[attribute];
+            object value;
+            attributes.TryGetValue(attribute, out value);
 
             if (value == null)
             {
