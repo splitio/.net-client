@@ -10,4 +10,3 @@ TestResults/**
 .vs
 NetSDK/nuget.exe
 *.nupkg
-NetSDK/Splitio.nuspec
