@@ -33,6 +33,15 @@ namespace Splitio.Services.Client.Classes
         private static int BlockMilisecondsUntilReady;
         private static int ConcurrencyLevel;
 
+        /// <summary>
+        /// Represents the initial number of buckets for a ConcurrentDictionary. 
+        /// Should not be divisible by a small prime number. 
+        /// The default capacity is 31. 
+        /// More details : https://msdn.microsoft.com/en-us/library/dd287171(v=vs.110).aspx
+        /// </summary>
+        private const int InitialCapacity = 31;
+
+
         private SdkReadinessGates gates;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
@@ -115,10 +124,10 @@ namespace Splitio.Services.Client.Classes
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, new ConcurrentDictionary<string,SelfRefreshingSegment>(ConcurrencyLevel, 31),  segmentRefreshRate);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, new ConcurrentDictionary<string, SelfRefreshingSegment>(ConcurrencyLevel, InitialCapacity), segmentRefreshRate);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string,Domain.ParsedSplit>(ConcurrencyLevel, 31));
+            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string, Domain.ParsedSplit>(ConcurrencyLevel, InitialCapacity));
         }
 
         private int Random(int refreshRate)
