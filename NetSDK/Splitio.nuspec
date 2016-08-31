@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>splitio</id>
+    <version>0.0.1.8</version>
+    <title>Splitio</title>
+    <authors>Split.io</authors>
+    <owners>Split.io</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Split.io .NET SDK</description>
+    <copyright>Copyright 2016</copyright>
+  </metadata>
+</package>

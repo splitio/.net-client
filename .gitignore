@@ -1,0 +1,12 @@
+NetSDK/obj/Debug/
+Split.io.v12.suo
+packages/
+Net SDK Unit Tests/bin/Debug/
+Net SDK Unit Tests/obj/Debug/
+NetSDK/bin/Debug/
+.sonar
+NetSDK/Splitio.csproj.orig
+TestResults/**
+.vs
+NetSDK/nuget.exe
+*.nupkg

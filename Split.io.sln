@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio", "NetSDK\Splitio.csproj", "{357902E2-D685-4C14-8CCE-BD6CE7B22D36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitioTests", "Net SDK Unit Tests\SplitioTests.csproj", "{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{357902E2-D685-4C14-8CCE-BD6CE7B22D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{357902E2-D685-4C14-8CCE-BD6CE7B22D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{357902E2-D685-4C14-8CCE-BD6CE7B22D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{357902E2-D685-4C14-8CCE-BD6CE7B22D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
