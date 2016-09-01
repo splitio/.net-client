@@ -10,3 +10,8 @@ TestResults/**
 .vs
 NetSDK/nuget.exe
 *.nupkg
+Net SDK Unit Tests/bin/
+Net SDK Unit Tests/obj/
+NetSDK/bin/
+NetSDK/obj/
+NetSDK/Splitio.0.0.4.2.nuspec
