@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>splitio</id>
-    <version>0.0.3</version>
+    <version>0.0.4.5</version>
     <title>Splitio</title>
     <authors>Split.io</authors>
     <owners>Split.io</owners>
@@ -19,4 +19,7 @@
         </group>
     </dependencies>
   </metadata>
+  <files>
+      <file src="lib\Splitio.dll" target="lib\Splitio.dll" />
+  </files>
 </package>
