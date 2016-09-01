@@ -55,7 +55,10 @@ namespace Splitio.Services.Client.Classes
 
         private void RecordStats(string key, string feature, long time, string treatment)
         {
-            treatmentLog.Log(key, feature, treatment, time);
+            if (treatmentLog != null)
+            {
+                treatmentLog.Log(key, feature, treatment, time);
+            }
         }
     }
 }
