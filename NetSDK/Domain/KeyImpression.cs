@@ -7,7 +7,6 @@ namespace Splitio.Domain
 {
     public class KeyImpression
     {
-        public string feature { get; set; }
         public string keyName { get; set; }
         public string treatment { get; set; }
         public long time { get; set; }
