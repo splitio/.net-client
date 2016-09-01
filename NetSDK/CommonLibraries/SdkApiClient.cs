@@ -75,14 +75,7 @@ namespace Splitio.CommonLibraries
             var result = new HTTPResult();
             try
             {
-                var pair = new List<KeyValuePair<string, string>>
-                {
-                    new KeyValuePair<string, string>("post", data)
-                };
-
-                var content = new FormUrlEncodedContent(pair);
-
-                var task = httpClient.PostAsync(requestUri, content);
+                var task = httpClient.PostAsync(requestUri, new StringContent(data));
                 task.Wait();
                 var response = task.Result;
                 result.statusCode = response.StatusCode;
