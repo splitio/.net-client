@@ -70,6 +70,31 @@ namespace Splitio.CommonLibraries
             return result;
         }
 
+        public virtual HTTPResult ExecutePost(string requestUri, string data)
+        {
+            var result = new HTTPResult();
+            try
+            {
+                var pair = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("post", data)
+                };
+
+                var content = new FormUrlEncodedContent(pair);
+
+                var task = httpClient.PostAsync(requestUri, content);
+                task.Wait();
+                var response = task.Result;
+                result.statusCode = response.StatusCode;
+                result.content = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Exception caught executing POST {0}", requestUri), e);
+            }
+            return result;
+        }
+
 
     }
 }
