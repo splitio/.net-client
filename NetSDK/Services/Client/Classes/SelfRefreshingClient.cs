@@ -35,7 +35,7 @@ namespace Splitio.Services.Client.Classes
         private static int BlockMilisecondsUntilReady;
         private static int ConcurrencyLevel;
         private static int TreatmentLogRefreshRate;
-        private static int TreatmentLogCacheSizePerTest;
+        private static int TreatmentLogSize;
         private static string EventsBaseUrl;
 
 
@@ -88,7 +88,7 @@ namespace Splitio.Services.Client.Classes
             BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
             ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["SPLITS_STORAGE_CONCURRENCY_LEVEL"]);
             TreatmentLogRefreshRate = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_REFRESH_RATE"]);
-            TreatmentLogCacheSizePerTest = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_CACHE_SIZE_PER_TEST"]);
+            TreatmentLogSize = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_QUEUE_SIZE"]);
             EventsBaseUrl = ConfigurationManager.AppSettings["EVENTS_BASE_URL"];
         }
 
@@ -146,7 +146,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildTreatmentLog()
         {
-            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new ConcurrentDictionary<string,ConcurrentQueue<Domain.KeyImpression>>(), TreatmentLogCacheSizePerTest);
+            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, null, TreatmentLogSize);
         }
 
         private int Random(int refreshRate)

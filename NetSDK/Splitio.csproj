@@ -96,7 +96,9 @@
     <Compile Include="Services\Client\Classes\Client.cs" />
     <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
-    <Compile Include="Services\Impressions\Classes\InMemoryTreatmentLog.cs" />
+    <Compile Include="Services\Impressions\Classes\BlockingQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Services\Impressions\Classes\SelfUpdatingTreatmentLog.cs" />
     <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentLog.cs" />
