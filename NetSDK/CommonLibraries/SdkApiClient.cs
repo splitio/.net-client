@@ -75,7 +75,7 @@ namespace Splitio.CommonLibraries
             var result = new HTTPResult();
             try
             {
-                var task = httpClient.PostAsync(requestUri, new StringContent(data));
+                var task = httpClient.PostAsync(requestUri, new StringContent(data, Encoding.UTF8, "application/json"));
                 task.Wait();
                 var response = task.Result;
                 result.statusCode = response.StatusCode;

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using Splitio.Domain;
 using Splitio.Services.Impressions.Interfaces;
 using System;
@@ -7,18 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace Splitio.Services.Impressions.Classes
 {
-    public class SelfUpdatingTreatmentLog: InMemoryTreatmentLog, ITreatmentLog
+    public class SelfUpdatingTreatmentLog: ITreatmentLog
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
         private bool stopped;
+        private BlockingQueue<KeyImpression> queue;
 
-        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval = 180, ConcurrentDictionary<string, ConcurrentQueue<KeyImpression>> cache = null, int maximumNumberOfKeysToCachePerTest = -1)
-        :base(cache, maximumNumberOfKeysToCachePerTest)
+        protected static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
+
+        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval = 180, BlockingQueue<KeyImpression> queue = null, int maximumNumberOfKeysToCache = -1)
         {
+            this.queue = queue ?? new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache);
             this.apiClient = apiClient;
             this.interval = interval;
             this.stopped = true;
@@ -53,13 +59,18 @@ namespace Splitio.Services.Impressions.Classes
 
         private void SendBulkImpressions()
         {
-            var impressionsByFeature = FetchAllAndClear();
+            if(queue.HasReachedMaxSize())
+            {
+                Logger.Warn("Split SDK impressions queue is full. Impressions may have been dropped. Consider increasing capacity.");
+            }
 
-            if (impressionsByFeature.Count > 0)
+            var impressions = queue.FetchAllAndClear();
+
+            if (impressions.Count > 0)
             {
                 try
                 {
-                    var impressionsJson = ConvertToJson(impressionsByFeature);
+                    var impressionsJson = ConvertToJson(impressions);
                     apiClient.SendBulkImpressions(impressionsJson);
                 }
                 catch (Exception e)
@@ -69,33 +80,21 @@ namespace Splitio.Services.Impressions.Classes
             }
         }
 
-        protected override void NotifyEviction(string feature, ConcurrentQueue<KeyImpression> impressions) 
-        { 
-            if (String.IsNullOrEmpty(feature) || impressions == null || impressions.Count == 0)
-            {
-                return;
-            }
-
-            try
-            {
-                var impressionsJson = ConvertToJson(feature, impressions);
-                apiClient.SendBulkImpressions(impressionsJson);
-            }
-            catch(Exception e)
-            {
-                Logger.Error("Exception caught updating impressions.", e);
-            }
-        }
-
-        private string ConvertToJson(string feature, ConcurrentQueue<KeyImpression> impressions)
+        private string ConvertToJson(ConcurrentQueue<KeyImpression> impressions)
         {
-            return JsonConvert.SerializeObject(impressions.Select(x => new { testName = feature, keyImpressions = x }));
+            var impressionsPerFeature = 
+                impressions
+                .GroupBy(item => item.feature)
+                .Select(group => new { testName = group.Key, keyImpressions = group.Select(x => new { keyName = x.keyName, treatment = x.treatment, time = x.time }) });
+            return JsonConvert.SerializeObject(impressionsPerFeature);
         }
 
-        private string ConvertToJson(ConcurrentDictionary<string, ConcurrentQueue<KeyImpression>> impressionsByFeature)
+
+        public void Log(string id, string feature, string treatment, long time)
         {
-            return JsonConvert.SerializeObject(impressionsByFeature.Select(x => new { testName = x.Key, keyImpressions = x.Value }));
+            KeyImpression impression = new KeyImpression() { feature = feature, keyName = id, treatment = treatment, time = time };
+            var enqueueTask = new Task(() => queue.Enqueue(impression));
+            enqueueTask.Start();
         }
-
     }
 }
