@@ -10,6 +10,8 @@ namespace Splitio.Services.Impressions.Classes
     public class BlockingQueue<T>
     {
         private ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
+        private object lockingObject = new object();
+
         private readonly int maxSize;
 
         public BlockingQueue(int maxSize)
@@ -24,7 +26,7 @@ namespace Splitio.Services.Impressions.Classes
 
         public ConcurrentQueue<T> FetchAllAndClear()
         {
-            lock (queue)
+            lock (lockingObject)
             {
                 var existingItems = new ConcurrentQueue<T>(queue);
                 queue = new ConcurrentQueue<T>();
@@ -34,7 +36,7 @@ namespace Splitio.Services.Impressions.Classes
 
         public void Enqueue(T item)
         {
-            lock (queue)
+            lock (lockingObject)
             {
                 if (!HasReachedMaxSize())
                 {
@@ -44,7 +46,7 @@ namespace Splitio.Services.Impressions.Classes
         }
         public T Dequeue()
         {
-            lock (queue)
+            lock (lockingObject)
             {
                 T item;
                 queue.TryDequeue(out item);
