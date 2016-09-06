@@ -60,7 +60,7 @@ namespace Splitio.Services.Metrics.Classes
             return latencies[FindIndex(latency)];
         }
 
-        private int FindIndex(long micros)
+        public int FindIndex(long micros)
         {
             if (micros > MAX_LATENCY)
             {
@@ -71,7 +71,7 @@ namespace Splitio.Services.Metrics.Classes
 
             if (index < 0)
             {
-                index = ~index - 1; //TODO: review this with a unit test
+                index = ~index; 
             }
             return index;
         }
