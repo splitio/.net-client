@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -24,6 +25,7 @@ namespace Splitio.Services.Metrics.Classes
         private object timeMetricsLockObject = new Object();
         private object gaugeMetricsLockObject = new Object();
 
+        protected static readonly ILog Logger = LogManager.GetLogger(typeof(InMemoryMetricsLog));
 
         public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCall = -1, int maxTimeBetweenCalls = -1)
         {
@@ -137,9 +139,16 @@ namespace Splitio.Services.Metrics.Classes
 
         private void SendCountMetrics()
         {
-            var countMetrics = FetchCountMetricsAndClear();
-            var counterMetricsJson = ConvertCountMetricsToJson(countMetrics);
-            apiClient.SendCountMetrics(counterMetricsJson);
+            try
+            {
+                var countMetrics = FetchCountMetricsAndClear();
+                var counterMetricsJson = ConvertCountMetricsToJson(countMetrics);
+                apiClient.SendCountMetrics(counterMetricsJson);
+            }
+            catch(Exception e)
+            {
+                Logger.Error("Exception ocurred sending count metrics", e);
+            }
         }
 
         private string ConvertCountMetricsToJson(ConcurrentDictionary<string, Counter> countMetrics)
@@ -148,9 +157,16 @@ namespace Splitio.Services.Metrics.Classes
         }
         private void SendTimeMetrics()
         {
-            var timeMetrics = FetchTimeMetricsAndClear();
-            var counterMetricsJson = ConvertTimeMetricsToJson(timeMetrics);
-            apiClient.SendTimeMetrics(counterMetricsJson);
+            try
+            {
+                var timeMetrics = FetchTimeMetricsAndClear();
+                var counterMetricsJson = ConvertTimeMetricsToJson(timeMetrics);
+                apiClient.SendTimeMetrics(counterMetricsJson);
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Exception ocurred sending time metrics", e);
+            }
         }
 
         private string ConvertTimeMetricsToJson(ConcurrentDictionary<string, ILatencyTracker> timeMetrics)
