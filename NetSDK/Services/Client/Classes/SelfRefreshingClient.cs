@@ -69,7 +69,6 @@ namespace Splitio.Services.Client.Classes
             BuildSdkApiClients();
             BuildSplitFetcher();
             BuildTreatmentLog();
-            BuildMetricsLog();
             BuildSplitter();
             BuildEngine();
             Start();
@@ -181,10 +180,11 @@ namespace Splitio.Services.Client.Classes
             header.splitSDKMachineIP = SdkMachineIP;
             var connectionTimeout = long.Parse(HttpConnectionTimeout);
             var readTimeout = long.Parse(HttpReadTimeout);
-            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
-            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
-            treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
             metricsSdkApiClient = new MetricsSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
+            BuildMetricsLog();
+            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
+            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
+            treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
         }
     }
 }

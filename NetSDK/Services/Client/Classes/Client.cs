@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
@@ -6,6 +7,7 @@ using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -35,11 +37,13 @@ namespace Splitio.Services.Client.Classes
                     return Control;
                 }
 
-                long start = CurrentTimeMillis();
+                long start = CurrentTimeHelper.CurrentTimeMillis();
+                var clock = new Stopwatch();
+                clock.Start();
 
                 var treatment = engine.GetTreatment(key, split, attributes);
 
-                RecordStats(key, feature, start, treatment, SdkGetTreatment);
+                RecordStats(key, feature, start, treatment, SdkGetTreatment, clock);
 
                 return treatment;
             }
@@ -50,19 +54,12 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
-        private long CurrentTimeMillis()
-        {
-            var Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return (long)(DateTime.UtcNow - Jan1st1970).TotalMilliseconds;
-        }
 
-        private void RecordStats(string key, string feature, long start, string treatment, string operation)
+        private void RecordStats(string key, string feature, long start, string treatment, string operation, Stopwatch clock)
         {
-            var end = CurrentTimeMillis();
-
             if (metricsLog != null)
             {
-                metricsLog.Time(SdkGetTreatment, end - start);
+                metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
             }
 
             if (treatmentLog != null)
