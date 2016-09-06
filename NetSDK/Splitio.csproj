@@ -101,6 +101,7 @@
     <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentLog.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentSdkApiClient.cs" />
+    <Compile Include="Services\Metrics\Classes\AsyncMetricsLog.cs" />
     <Compile Include="Services\Metrics\Classes\BinarySearchLatencyTracker.cs" />
     <Compile Include="Services\Metrics\Classes\Counter.cs" />
     <Compile Include="Services\Metrics\Classes\InMemoryMetricsLog.cs" />
