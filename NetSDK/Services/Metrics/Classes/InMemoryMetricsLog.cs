@@ -15,7 +15,7 @@ namespace Splitio.Services.Metrics.Classes
         private ConcurrentDictionary<string, Counter> countMetrics;
         private ConcurrentDictionary<string, ILatencyTracker> timeMetrics;
         private ConcurrentDictionary<string, long> gaugeMetrics;
-        private int maxCountCall;
+        private int maxCountCalls;
         private int maxTimeBetweenCalls;
         private DateTime utcNowTimestamp = DateTime.UtcNow;
         private DateTime countLastCall;
@@ -27,13 +27,13 @@ namespace Splitio.Services.Metrics.Classes
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(InMemoryMetricsLog));
 
-        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCall = -1, int maxTimeBetweenCalls = -1)
+        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCalls = -1, int maxTimeBetweenCalls = -1)
         {
             this.apiClient = apiClient;
             this.countMetrics = countMetrics ?? new ConcurrentDictionary<string, Counter>();
             this.timeMetrics = timeMetrics ?? new ConcurrentDictionary<string, ILatencyTracker>();
             this.gaugeMetrics = gaugeMetrics ?? new ConcurrentDictionary<string, long>();
-            this.maxCountCall = maxCountCall;
+            this.maxCountCalls = maxCountCalls;
             this.maxTimeBetweenCalls = maxTimeBetweenCalls;
             this.countLastCall = utcNowTimestamp;
             this.timeLastCall = utcNowTimestamp;
@@ -96,7 +96,7 @@ namespace Splitio.Services.Metrics.Classes
 
                 var oldLastCall = countLastCall;
                 countLastCall = DateTime.UtcNow;
-                if (counter.GetCount() > maxCountCall || ((countLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls))
+                if (counter.GetCount() > maxCountCalls || ((countLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls))
                 {
                     SendCountMetrics();
                     counter.Clear();

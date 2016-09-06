@@ -2,6 +2,7 @@
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Client));
         private const string Control = "control";
+        private const string SdkGetTreatment = "sdk.getTreatment";
 
         protected Splitter splitter;
         protected ISplitFetcher splitFetcher;
         protected ITreatmentLog treatmentLog;
+        protected IMetricsLog metricsLog;
         protected Engine engine;
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
@@ -32,11 +35,11 @@ namespace Splitio.Services.Client.Classes
                     return Control;
                 }
 
-                long time = CurrentTimeMillis();
+                long start = CurrentTimeMillis();
 
                 var treatment = engine.GetTreatment(key, split, attributes);
 
-                RecordStats(key, feature, time, treatment);
+                RecordStats(key, feature, start, treatment, SdkGetTreatment);
 
                 return treatment;
             }
@@ -53,11 +56,18 @@ namespace Splitio.Services.Client.Classes
             return (long)(DateTime.UtcNow - Jan1st1970).TotalMilliseconds;
         }
 
-        private void RecordStats(string key, string feature, long time, string treatment)
+        private void RecordStats(string key, string feature, long start, string treatment, string operation)
         {
+            var end = CurrentTimeMillis();
+
+            if (metricsLog != null)
+            {
+                metricsLog.Time(SdkGetTreatment, end - start);
+            }
+
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key, feature, treatment, time);
+                treatmentLog.Log(key, feature, treatment, start);
             }
         }
     }
