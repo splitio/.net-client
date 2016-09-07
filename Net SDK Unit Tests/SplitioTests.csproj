@@ -74,6 +74,7 @@
     <Compile Include="Unit Tests\EqualToMatcherTests.cs" />
     <Compile Include="Unit Tests\CombiningMatcherTests.cs" />
     <Compile Include="Unit Tests\SplitterTests.cs" />
+    <Compile Include="Unit Tests\BinarySearchLatencyTrackerTests.cs" />
     <Compile Include="Unit Tests\WhitelistMatcherTests.cs" />
     <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>

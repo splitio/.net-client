@@ -4,6 +4,8 @@ using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Metrics.Classes;
+using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher;
@@ -38,6 +40,9 @@ namespace Splitio.Services.Client.Classes
         private static int TreatmentLogRefreshRate;
         private static int TreatmentLogSize;
         private static string EventsBaseUrl;
+        private static int MaxCountCalls;
+        private static int MaxTimeBetweenCalls;
+
 
 
         /// <summary>
@@ -53,6 +58,7 @@ namespace Splitio.Services.Client.Classes
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
         private ITreatmentSdkApiClient treatmentSdkApiClient;
+        private IMetricsSdkApiClient metricsSdkApiClient;
 
         public SelfRefreshingClient(string apiKey)
         {
@@ -72,7 +78,6 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
-
         private void ReadConfig()
         {
             BaseUrl = ConfigurationManager.AppSettings["BASE_URL"];
@@ -91,6 +96,8 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogRefreshRate = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_REFRESH_RATE"]);
             TreatmentLogSize = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_QUEUE_SIZE"]);
             EventsBaseUrl = ConfigurationManager.AppSettings["EVENTS_BASE_URL"];
+            MaxCountCalls = int.Parse(ConfigurationManager.AppSettings["METRICS_MAX_COUNT_CALLS"]);
+            MaxTimeBetweenCalls = int.Parse(ConfigurationManager.AppSettings["METRICS_MAX_TIME_BETWEEN_CALLS"]);
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -150,6 +157,12 @@ namespace Splitio.Services.Client.Classes
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new BlockingQueue<KeyImpression>(TreatmentLogSize));
         }
 
+
+        private void BuildMetricsLog()
+        {
+            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>(), MaxCountCalls, MaxTimeBetweenCalls);
+        }
+
         private int Random(int refreshRate)
         {
             Random random = new Random();
@@ -167,8 +180,10 @@ namespace Splitio.Services.Client.Classes
             header.splitSDKMachineIP = SdkMachineIP;
             var connectionTimeout = long.Parse(HttpConnectionTimeout);
             var readTimeout = long.Parse(HttpReadTimeout);
-            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
-            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
+            metricsSdkApiClient = new MetricsSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
+            BuildMetricsLog();
+            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
+            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
             treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
         }
     }

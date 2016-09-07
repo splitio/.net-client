@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonLibraries\CurrentTimeHelper.cs" />
     <Compile Include="CommonLibraries\HTTPResult.cs" />
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
@@ -101,6 +102,14 @@
     <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentLog.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentSdkApiClient.cs" />
+    <Compile Include="Services\Metrics\Classes\AsyncMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Classes\BinarySearchLatencyTracker.cs" />
+    <Compile Include="Services\Metrics\Classes\Counter.cs" />
+    <Compile Include="Services\Metrics\Classes\InMemoryMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Classes\MetricsSdkApiClient.cs" />
+    <Compile Include="Services\Metrics\Interfaces\ILatencyTracker.cs" />
+    <Compile Include="Services\Metrics\Interfaces\IMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Interfaces\IMetricsSdkApiClient.cs" />
     <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\CompareMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\EqualToMatcher.cs" />
@@ -146,9 +155,7 @@
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Metrics\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config">
