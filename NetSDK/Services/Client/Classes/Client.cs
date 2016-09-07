@@ -1,10 +1,13 @@
 ﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -14,10 +17,12 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Client));
         private const string Control = "control";
+        private const string SdkGetTreatment = "sdk.getTreatment";
 
         protected Splitter splitter;
         protected ISplitFetcher splitFetcher;
         protected ITreatmentLog treatmentLog;
+        protected IMetricsLog metricsLog;
         protected Engine engine;
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
@@ -32,11 +37,13 @@ namespace Splitio.Services.Client.Classes
                     return Control;
                 }
 
-                long time = CurrentTimeMillis();
+                long start = CurrentTimeHelper.CurrentTimeMillis();
+                var clock = new Stopwatch();
+                clock.Start();
 
                 var treatment = engine.GetTreatment(key, split, attributes);
 
-                RecordStats(key, feature, time, treatment);
+                RecordStats(key, feature, start, treatment, SdkGetTreatment, clock);
 
                 return treatment;
             }
@@ -47,17 +54,17 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
-        private long CurrentTimeMillis()
-        {
-            var Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return (long)(DateTime.UtcNow - Jan1st1970).TotalMilliseconds;
-        }
 
-        private void RecordStats(string key, string feature, long time, string treatment)
+        private void RecordStats(string key, string feature, long start, string treatment, string operation, Stopwatch clock)
         {
+            if (metricsLog != null)
+            {
+                metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
+            }
+
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key, feature, treatment, time);
+                treatmentLog.Log(key, feature, treatment, start);
             }
         }
     }
