@@ -25,11 +25,5 @@ namespace Splitio.Services.Metrics.Classes
             count++;
             sum += delta;
         }
-
-        public void Clear()
-        {
-            count = 0;
-            sum = 0;
-        }
     }
 }

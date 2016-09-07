@@ -24,6 +24,11 @@ namespace Splitio.Services.Metrics.Classes
         private object countMetricsLockObject = new Object();
         private object timeMetricsLockObject = new Object();
         private object gaugeMetricsLockObject = new Object();
+        private Boolean sendingCountMetrics = false;
+        private Boolean sendingTimeMetrics = false;
+        private Boolean sendingGaugeMetrics = false;
+        private int gaugeCallCount = 0;
+
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(InMemoryMetricsLog));
 
@@ -40,36 +45,6 @@ namespace Splitio.Services.Metrics.Classes
             this.gaugeLastCall = utcNowTimestamp;
         }
 
-        public ConcurrentDictionary<string, Counter> FetchCountMetricsAndClear()
-        {
-            lock (countMetricsLockObject)
-            {
-                var existingCountMetrics = new ConcurrentDictionary<string, Counter>(countMetrics);
-                countMetrics = new ConcurrentDictionary<string, Counter>();
-                return existingCountMetrics;
-            }
-        }
-
-        public ConcurrentDictionary<string, ILatencyTracker> FetchTimeMetricsAndClear()
-        {
-            lock (timeMetricsLockObject)
-            {
-                var existingTimeMetrics = new ConcurrentDictionary<string, ILatencyTracker>(timeMetrics);
-                timeMetrics = new ConcurrentDictionary<string, ILatencyTracker>();
-                return existingTimeMetrics;
-            }
-        }
-
-        public ConcurrentDictionary<string, long> FetchGaugeMetricsAndClear()
-        {
-            lock (gaugeMetricsLockObject)
-            {
-                var existingGaugeMetrics = new ConcurrentDictionary<string, long>(gaugeMetrics);
-                gaugeMetrics = new ConcurrentDictionary<string, long>();
-                return existingGaugeMetrics;
-            }
-        }
-
         public void Count(string counterName, long delta)
         {
             if (delta <= 0)
@@ -82,26 +57,23 @@ namespace Splitio.Services.Metrics.Classes
                 return;
             }
 
-            lock (countMetricsLockObject)
+            Counter counter;
+
+            if (!countMetrics.TryGetValue(counterName, out counter))
             {
-                Counter counter;
-
-                if (!countMetrics.TryGetValue(counterName, out counter))
-                {
-                    counter = new Counter();
-                    countMetrics.TryAdd(counterName, counter);
-                }
-
-                counter.AddDelta(delta);
-
-                var oldLastCall = countLastCall;
-                countLastCall = DateTime.UtcNow;
-                if (counter.GetCount() > maxCountCalls || ((countLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls))
-                {
-                    SendCountMetrics();
-                    counter.Clear();
-                }
+                counter = new Counter();
+                countMetrics.TryAdd(counterName, counter);
             }
+
+            counter.AddDelta(delta);
+
+            var oldLastCall = countLastCall;
+            countLastCall = DateTime.UtcNow;
+            if (counter.GetCount() >= maxCountCalls || ((countLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls))
+            {
+                SendCountMetrics();
+            }
+
         }
 
         public void Time(string operation, long miliseconds)
@@ -110,68 +82,148 @@ namespace Splitio.Services.Metrics.Classes
             {
                 return;
             }
-            lock (timeMetricsLockObject)
+
+            ILatencyTracker tracker;
+
+            if (!timeMetrics.TryGetValue(operation, out tracker))
             {
-                ILatencyTracker tracker;
+                tracker = new BinarySearchLatencyTracker();
+                timeMetrics.TryAdd(operation, tracker);
+            }
 
-                if (!timeMetrics.TryGetValue(operation, out tracker))
-                {
-                    tracker = new BinarySearchLatencyTracker();
-                    timeMetrics.TryAdd(operation, tracker);
-                }
+            tracker.AddLatencyMillis((int)miliseconds);
 
-                tracker.AddLatencyMillis((int)miliseconds);
-
-                var oldLastCall = timeLastCall;
-                timeLastCall = DateTime.UtcNow;
-                if ((timeLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls)
-                {
-                    SendTimeMetrics();
-                    tracker.Clear();
-                }
+            var oldLastCall = timeLastCall;
+            timeLastCall = DateTime.UtcNow;
+            if ((timeLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls)
+            {
+                SendTimeMetrics();
             }
         }
 
         public void Gauge(string gauge, long value)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(gauge) || value < 0)
+            {
+                return;
+            }
+
+            if (!gaugeMetrics.ContainsKey(gauge))
+            {
+                gaugeMetrics.TryAdd(gauge, 0);
+            }
+
+            gaugeMetrics[gauge] = value;
+            gaugeCallCount++;
+
+            var oldLastCall = gaugeLastCall;
+            gaugeLastCall = DateTime.UtcNow;
+            if (gaugeCallCount >= maxCountCalls || (gaugeLastCall - oldLastCall).TotalMilliseconds > maxTimeBetweenCalls)
+            {
+                SendGaugeMetrics();
+            }
         }
+
 
         private void SendCountMetrics()
         {
-            try
+            lock (countMetricsLockObject)
             {
-                var countMetrics = FetchCountMetricsAndClear();
-                var counterMetricsJson = ConvertCountMetricsToJson(countMetrics);
-                apiClient.SendCountMetrics(counterMetricsJson);
+                if (sendingCountMetrics)
+                {
+                    return;
+                }
+                sendingCountMetrics = true;
             }
-            catch(Exception e)
+
+            var countMetricsJson = ConvertCountMetricsToJson(countMetrics);
+            countMetrics.Clear();
+            if (countMetricsJson != String.Empty)
             {
-                Logger.Error("Exception ocurred sending count metrics", e);
+                apiClient.SendCountMetrics(countMetricsJson);
             }
+            sendingCountMetrics = false;
         }
 
         private string ConvertCountMetricsToJson(ConcurrentDictionary<string, Counter> countMetrics)
         {
-            return JsonConvert.SerializeObject(countMetrics.Select(x => new { name = x.Key, delta = x.Value.GetDelta() }));
+            try
+            {
+                return JsonConvert.SerializeObject(countMetrics.Select(x => new { name = x.Key, delta = x.Value.GetDelta() }));
+            }
+            catch(Exception e)
+            {
+                Logger.Error("Exception ocurred serializing count metrics", e);
+
+                return String.Empty;
+            }
         }
         private void SendTimeMetrics()
         {
-            try
+            lock (timeMetricsLockObject)
             {
-                var timeMetrics = FetchTimeMetricsAndClear();
-                var counterMetricsJson = ConvertTimeMetricsToJson(timeMetrics);
-                apiClient.SendTimeMetrics(counterMetricsJson);
+                if (sendingTimeMetrics)
+                {
+                    return;
+                }
+                sendingTimeMetrics = true;
             }
-            catch (Exception e)
+            var timeMetricsJson = ConvertTimeMetricsToJson(timeMetrics);
+            timeMetrics.Clear();
+            if (timeMetricsJson != String.Empty)
             {
-                Logger.Error("Exception ocurred sending time metrics", e);
+                apiClient.SendTimeMetrics(timeMetricsJson);
             }
+            sendingTimeMetrics = false;
         }
 
         private string ConvertTimeMetricsToJson(ConcurrentDictionary<string, ILatencyTracker> timeMetrics)
         {
+            try
+            {
             return JsonConvert.SerializeObject(timeMetrics.Select(x => new { name = x.Key, latencies = x.Value.GetLatencies()}));
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Exception ocurred serializing time metrics", e);
+
+                return String.Empty;
+            }
+        }
+
+        private void SendGaugeMetrics()
+        {
+            lock (gaugeMetricsLockObject)
+            {
+                if (sendingGaugeMetrics)
+                {
+                    return;
+                }
+                sendingGaugeMetrics = true;
+            }
+
+            var gaugeMetricsJson = ConvertGaugeMetricsToJson(gaugeMetrics);
+            gaugeMetrics.Clear();
+            gaugeCallCount = 0;
+            if (gaugeMetricsJson != String.Empty)
+            {
+                apiClient.SendGaugeMetrics(gaugeMetricsJson);
+            }
+            sendingGaugeMetrics = false;
+        }
+
+        private string ConvertGaugeMetricsToJson(ConcurrentDictionary<string, long> gaugeMetrics)
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(gaugeMetrics.Select(x => new { name = x.Key, value = x.Value }));
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Exception ocurred serializing gauge metrics", e);
+
+                return String.Empty;
+            }
         }
     }
 }

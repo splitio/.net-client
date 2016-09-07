@@ -16,8 +16,6 @@ namespace Splitio.Services.Metrics.Interfaces
 
         long GetLatency(int index);
 
-        void Clear();
-
         long GetBucketForLatencyMillis(long latency);
 
         long GetBucketForLatencyMicros(long latency);

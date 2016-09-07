@@ -45,11 +45,6 @@ namespace Splitio.Services.Metrics.Classes
             return latencies[index];
         }
 
-        public void Clear()
-        {
-            latencies = new long[BUCKETS.Length];
-        }
-
         public long GetBucketForLatencyMillis(long latency)
         {
             return latencies[FindIndex(latency * 1000)];
