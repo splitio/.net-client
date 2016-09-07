@@ -21,7 +21,7 @@ using System.Threading;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SelfRefreshingClient: Client
+    public class SelfRefreshingClient: SplitClient
     {
         private static string ApiKey;
         private static string BaseUrl;
@@ -42,7 +42,6 @@ namespace Splitio.Services.Client.Classes
         private static string EventsBaseUrl;
         private static int MaxCountCalls;
         private static int MaxTimeBetweenCalls;
-
 
 
         /// <summary>
@@ -71,6 +70,7 @@ namespace Splitio.Services.Client.Classes
             BuildTreatmentLog();
             BuildSplitter();
             BuildEngine();
+            BuildManager();
             Start();
             if (BlockMilisecondsUntilReady > 0)
             {
@@ -185,6 +185,11 @@ namespace Splitio.Services.Client.Classes
             splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
             segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout, metricsLog);
             treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
+        }
+
+        private void BuildManager()
+        {
+            manager = new SplitManager(splitFetcher);
         }
     }
 }
