@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Splitio.Services.Client.Classes
 
         protected Splitter splitter;
         protected ISplitFetcher splitFetcher;
+        protected ITreatmentLog treatmentLog;
         protected Engine engine;
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
@@ -30,7 +32,11 @@ namespace Splitio.Services.Client.Classes
                     return Control;
                 }
 
+                long time = CurrentTimeMillis();
+
                 var treatment = engine.GetTreatment(key, split, attributes);
+
+                RecordStats(key, feature, time, treatment);
 
                 return treatment;
             }
@@ -38,6 +44,20 @@ namespace Splitio.Services.Client.Classes
             {
                 Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
                 return Control;
+            }
+        }
+
+        private long CurrentTimeMillis()
+        {
+            var Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return (long)(DateTime.UtcNow - Jan1st1970).TotalMilliseconds;
+        }
+
+        private void RecordStats(string key, string feature, long time, string treatment)
+        {
+            if (treatmentLog != null)
+            {
+                treatmentLog.Log(key, feature, treatment, time);
             }
         }
     }

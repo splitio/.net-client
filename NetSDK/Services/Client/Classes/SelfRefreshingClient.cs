@@ -1,6 +1,9 @@
 ﻿using Splitio.CommonLibraries;
+using Splitio.Domain;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Impressions.Classes;
+using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher;
@@ -32,6 +35,10 @@ namespace Splitio.Services.Client.Classes
         private static bool RandomizeRefreshRates;
         private static int BlockMilisecondsUntilReady;
         private static int ConcurrencyLevel;
+        private static int TreatmentLogRefreshRate;
+        private static int TreatmentLogSize;
+        private static string EventsBaseUrl;
+
 
         /// <summary>
         /// Represents the initial number of buckets for a ConcurrentDictionary. 
@@ -45,6 +52,7 @@ namespace Splitio.Services.Client.Classes
         private SdkReadinessGates gates;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
+        private ITreatmentSdkApiClient treatmentSdkApiClient;
 
         public SelfRefreshingClient(string apiKey)
         {
@@ -54,6 +62,7 @@ namespace Splitio.Services.Client.Classes
             BuildSdkReadinessGates();
             BuildSdkApiClients();
             BuildSplitFetcher();
+            BuildTreatmentLog();
             BuildSplitter();
             BuildEngine();
             Start();
@@ -62,6 +71,7 @@ namespace Splitio.Services.Client.Classes
                 BlockUntilReady(BlockMilisecondsUntilReady);
             }
         }
+
 
         private void ReadConfig()
         {
@@ -78,6 +88,9 @@ namespace Splitio.Services.Client.Classes
             RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
             BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
             ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["SPLITS_STORAGE_CONCURRENCY_LEVEL"]);
+            TreatmentLogRefreshRate = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_REFRESH_RATE"]);
+            TreatmentLogSize = int.Parse(ConfigurationManager.AppSettings["TEST_IMPRESSIONS_QUEUE_SIZE"]);
+            EventsBaseUrl = ConfigurationManager.AppSettings["EVENTS_BASE_URL"];
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -90,12 +103,14 @@ namespace Splitio.Services.Client.Classes
 
         public void Start()
         {
+            ((SelfUpdatingTreatmentLog)treatmentLog).Start();
             ((SelfRefreshingSplitFetcher)splitFetcher).Start();
         }
 
         public void Stop()
         {
             ((SelfRefreshingSplitFetcher)splitFetcher).Stop();
+            ((SelfUpdatingTreatmentLog)treatmentLog).Stop();
         }
 
         private void InitializeLogger()
@@ -130,6 +145,11 @@ namespace Splitio.Services.Client.Classes
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string, Domain.ParsedSplit>(ConcurrencyLevel, InitialCapacity));
         }
 
+        private void BuildTreatmentLog()
+        {
+            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new BlockingQueue<KeyImpression>(TreatmentLogSize));
+        }
+
         private int Random(int refreshRate)
         {
             Random random = new Random();
@@ -149,6 +169,7 @@ namespace Splitio.Services.Client.Classes
             var readTimeout = long.Parse(HttpReadTimeout);
             splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
             segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
+            treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, connectionTimeout, readTimeout);
         }
     }
 }
