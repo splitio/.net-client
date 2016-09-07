@@ -15,5 +15,8 @@ namespace Splitio.Domain
         public bool killed { get; set; }
         public string defaultTreatment { get; set; }
         public List<ConditionWithLogic> conditions { get; set; }
+        public long changeNumber { get; set; }
+        public string trafficTypeName { get; set; }
+
     }
 }

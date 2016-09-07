@@ -15,5 +15,7 @@ namespace Splitio.Domain
         public string defaultTreatment { get; set; }
         public List<ConditionDefinition> conditions { get; set; }
         public long changeNumber { get; set; }
+        public string trafficTypeName { get; set; }
+
     }
 }
