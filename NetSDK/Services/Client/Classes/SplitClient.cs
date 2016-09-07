@@ -13,9 +13,9 @@ using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class Client: IClient
+    public class SplitClient: ISplitClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Client));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
         private const string Control = "control";
         private const string SdkGetTreatment = "sdk.getTreatment";
 
@@ -24,6 +24,12 @@ namespace Splitio.Services.Client.Classes
         protected ITreatmentLog treatmentLog;
         protected IMetricsLog metricsLog;
         protected Engine engine;
+        protected ISplitManager manager;
+
+        public ISplitManager GetSplitManager()
+        {
+            return manager;
+        }
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
         {

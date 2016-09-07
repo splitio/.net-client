@@ -66,6 +66,7 @@ namespace Splitio.Services.Metrics.Classes
 
             if (index < 0)
             {
+                //When index is negative, do bitwise negation
                 index = ~index; 
             }
             return index;
