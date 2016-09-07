@@ -34,7 +34,9 @@ namespace Splitio.Services.Parsing
                     killed = split.killed,
                     defaultTreatment = split.defaultTreatment,
                     seed = split.seed,
-                    conditions = new List<ConditionWithLogic>()                   
+                    conditions = new List<ConditionWithLogic>(),
+                    changeNumber = split.changeNumber,
+                    trafficTypeName = split.trafficTypeName
                 };
                 parsedSplit = ParseConditions(split, parsedSplit);
                 return parsedSplit;
