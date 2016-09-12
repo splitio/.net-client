@@ -1,7 +1,6 @@
 ﻿using Splitio.CommonLibraries;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +14,13 @@ namespace Splitio.Services.SplitFetcher
 {
     public class SegmentSdkApiClient : SdkApiClient, ISegmentSdkApiClient
     {
-        private static string SegmentChangesUrlTemplate = ConfigurationManager.AppSettings["SEGMENT_CHANGES_URL_TEMPLATE"];
-        private static string UrlParameter_Since = ConfigurationManager.AppSettings["URL_PARAMETER_SINCE"];
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SegmentSdkApiClient));
+        private const string SegmentChangesUrlTemplate = "segmentChanges/{segment_name}";
+        private const string UrlParameterSince = "?since=";
         private const string SegmentFetcherTime = "segmentChangeFetcher.time";
         private const string SegmentFetcherStatus = "segmentChangeFetcher.status.{0}";
         private const string SegmentFetcherException = "segmentChangeFetcher.exception";
 
-
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SegmentSdkApiClient));
 
         public SegmentSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null) : base(header, baseUrl, connectionTimeOut, readTimeout, metricsLog) { }
 
@@ -72,7 +70,7 @@ namespace Splitio.Services.SplitFetcher
         private string GetRequestUri(string name, long since)
         {
             var segmentChangesUrl = SegmentChangesUrlTemplate.Replace("{segment_name}", name);
-            return String.Concat(segmentChangesUrl, UrlParameter_Since, Uri.EscapeDataString(since.ToString()));
+            return String.Concat(segmentChangesUrl, UrlParameterSince, Uri.EscapeDataString(since.ToString()));
         }
     }
 }

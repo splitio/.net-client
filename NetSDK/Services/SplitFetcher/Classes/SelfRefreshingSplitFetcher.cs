@@ -24,7 +24,7 @@ namespace Splitio.Services.SplitFetcher.Classes
         private SdkReadinessGates gates;
 
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval = 30,
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval,
                  long change_number = -1, ConcurrentDictionary<string, ParsedSplit> splits = null)
             : base(splits)
         {
@@ -59,7 +59,7 @@ namespace Splitio.Services.SplitFetcher.Classes
             while (!stopped)
             {
                 RefreshSplits();
-                Thread.Sleep(interval);
+                Thread.Sleep(interval * 1000);
             }
         }
 

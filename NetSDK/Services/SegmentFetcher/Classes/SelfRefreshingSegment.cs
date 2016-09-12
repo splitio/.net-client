@@ -48,7 +48,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             while (!stopped)
             {
                 RefreshSegment();
-                Thread.Sleep(interval);
+                Thread.Sleep(interval * 1000);
             }
         }
 
