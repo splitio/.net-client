@@ -14,7 +14,7 @@ namespace Splitio.Services.SplitFetcher
 {
     public class SplitSdkApiClient : SdkApiClient, ISplitSdkApiClient
     {
-        private const string SplitChangesUrlTemplate = "splitChanges";
+        private const string SplitChangesUrlTemplate = "/api/splitChanges";
         private const string UrlParameterSince = "?since=";
         private const string SplitFetcherTime = "splitChangeFetcher.time";
         private const string SplitFetcherStatus = "splitChangeFetcher.status.{0}";

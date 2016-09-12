@@ -83,13 +83,13 @@ namespace Splitio.Services.Client.Classes
 
         private void ReadConfig(ConfigurationOptions config)
         {
-            BaseUrl = "https://sdk-aws-staging.split.io/api/";
-            EventsBaseUrl = "https://events-aws-staging.split.io/api/";
-            SplitsRefreshRate = config.FeaturesRefreshRate ?? 30;
-            SegmentRefreshRate = config.SegmentsRefreshRate ?? 30;
+            BaseUrl = String.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
+            EventsBaseUrl = String.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
+            SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
+            SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
             HttpEncoding = "gzip";
-            HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
-            HttpReadTimeout = config.ReadTimeout ?? 15000;
+            HttpConnectionTimeout = config.ConnectionTimeOutInMs ?? 15000;
+            HttpReadTimeout = config.ReadTimeoutInMs ?? 15000;
             SdkVersion = Version.SplitSdkVersion;
             SdkSpecVersion = "net-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName;
@@ -97,10 +97,10 @@ namespace Splitio.Services.Client.Classes
             RandomizeRefreshRates = config.RandomizeRefreshRates;
             BlockMilisecondsUntilReady = config.Ready ?? 0;
             ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
-            TreatmentLogRefreshRate = config.ImpressionsRefreshRate ?? 60;
-            TreatmentLogSize = config.MaxImpressionsLogSize ?? -1;
+            TreatmentLogRefreshRate = config.ImpressionsRefreshRate ?? 30;
+            TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
-            MaxTimeBetweenCalls = config.MaxMetricsTimeBetweenCallsBeforeFlush ?? 60;
+            MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
