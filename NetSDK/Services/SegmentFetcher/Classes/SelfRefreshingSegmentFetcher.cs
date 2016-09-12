@@ -18,7 +18,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private SdkReadinessGates gates;
         private int interval;
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, ConcurrentDictionary<string, SelfRefreshingSegment> segments = null, int interval = 30)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ConcurrentDictionary<string, SelfRefreshingSegment> segments = null)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segments = segments ?? new ConcurrentDictionary<string, SelfRefreshingSegment>();

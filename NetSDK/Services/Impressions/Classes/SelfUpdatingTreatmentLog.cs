@@ -22,7 +22,7 @@ namespace Splitio.Services.Impressions.Classes
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
 
-        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval = 60, BlockingQueue<KeyImpression> queue = null, int maximumNumberOfKeysToCache = -1)
+        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, BlockingQueue<KeyImpression> queue = null, int maximumNumberOfKeysToCache = -1)
         {
             this.queue = queue ?? new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache);
             this.apiClient = apiClient;
