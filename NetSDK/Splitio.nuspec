@@ -18,6 +18,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="bin\Debug\Splitio.dll" target="Splitio.dll" />
+        <file src="bin\Debug\Splitio.dll" target="lib\Splitio.dll" />
     </files>
 </package>
