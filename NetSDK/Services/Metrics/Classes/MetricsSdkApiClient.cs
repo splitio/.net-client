@@ -11,7 +11,7 @@ namespace Splitio.Services.Metrics.Classes
 {
     public class MetricsSdkApiClient : SdkApiClient, IMetricsSdkApiClient
     {
-        private const string MetricsUrlTemplate = "metrics/{endpoint}";
+        private const string MetricsUrlTemplate = "/api/metrics/{endpoint}";
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(MetricsSdkApiClient));
 

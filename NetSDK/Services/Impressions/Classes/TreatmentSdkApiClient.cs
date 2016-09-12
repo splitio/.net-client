@@ -11,7 +11,7 @@ namespace Splitio.Services.Impressions.Classes
 {
     public class TreatmentSdkApiClient : SdkApiClient, ITreatmentSdkApiClient
     {
-        private const string TestImpressionsUrlTemplate = "testImpressions/bulk";
+        private const string TestImpressionsUrlTemplate = "/api/testImpressions/bulk";
         
         private static readonly ILog Log = LogManager.GetLogger(typeof(TreatmentSdkApiClient));
 
