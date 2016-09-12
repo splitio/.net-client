@@ -32,14 +32,14 @@ namespace Splitio.Services.Metrics.Classes
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(InMemoryMetricsLog));
 
-        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCalls = -1, int maxTimeBetweenCalls = -1)
+        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCalls = 1000, int maxTimeBetweenCalls = 60)
         {
             this.apiClient = apiClient;
             this.countMetrics = countMetrics ?? new ConcurrentDictionary<string, Counter>();
             this.timeMetrics = timeMetrics ?? new ConcurrentDictionary<string, ILatencyTracker>();
             this.gaugeMetrics = gaugeMetrics ?? new ConcurrentDictionary<string, long>();
             this.maxCountCalls = maxCountCalls;
-            this.maxTimeBetweenCalls = maxTimeBetweenCalls;
+            this.maxTimeBetweenCalls = maxTimeBetweenCalls * 1000;
             this.countLastCall = utcNowTimestamp;
             this.timeLastCall = utcNowTimestamp;
             this.gaugeLastCall = utcNowTimestamp;

@@ -3,7 +3,6 @@ using Splitio.CommonLibraries;
 using Splitio.Services.Impressions.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,7 +11,8 @@ namespace Splitio.Services.Impressions.Classes
 {
     public class TreatmentSdkApiClient : SdkApiClient, ITreatmentSdkApiClient
     {
-        private static string TestImpressionsUrlTemplate = ConfigurationManager.AppSettings["TEST_IMPRESSIONS_URL_TEMPLATE"];
+        private const string TestImpressionsUrlTemplate = "/api/testImpressions/bulk";
+        
         private static readonly ILog Log = LogManager.GetLogger(typeof(TreatmentSdkApiClient));
 
         public TreatmentSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout) : base(header, baseUrl, connectionTimeOut, readTimeout) { }
