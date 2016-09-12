@@ -57,7 +57,7 @@ namespace Splitio_Tests.Integration_Tests
             var sdkApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkApiClient);
             var gates = new SdkReadinessGates();
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, null, 30);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
 
             //Act
             var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("payed");
