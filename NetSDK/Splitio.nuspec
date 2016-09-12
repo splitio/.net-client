@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Splitio</id>
-        <version>0.0.5.66</version>
+        <version>0.0.5.78</version>
         <title>Splitio</title>
         <authors>Splitio</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
