@@ -18,7 +18,4 @@
         </dependencies>
     </dependencies>
     </metadata>
-    <files>
-        <file src="bin\Release\Splitio.dll" target="lib\Splitio.dll" />
-    </files>
 </package>
