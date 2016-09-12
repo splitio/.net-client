@@ -39,7 +39,6 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
@@ -100,7 +99,7 @@
     <Compile Include="Services\Client\Interfaces\ISplitManager.cs" />
     <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
-    <Compile Include="Services\Impressions\Classes\BlockingQueue.cs"/>
+    <Compile Include="Services\Impressions\Classes\BlockingQueue.cs" />
     <Compile Include="Services\Impressions\Classes\SelfUpdatingTreatmentLog.cs" />
     <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\ITreatmentLog.cs" />
@@ -157,10 +156,10 @@
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
+    <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

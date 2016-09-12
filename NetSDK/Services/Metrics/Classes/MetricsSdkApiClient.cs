@@ -3,7 +3,6 @@ using Splitio.CommonLibraries;
 using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -12,7 +11,8 @@ namespace Splitio.Services.Metrics.Classes
 {
     public class MetricsSdkApiClient : SdkApiClient, IMetricsSdkApiClient
     {
-        private static string MetricsUrlTemplate = ConfigurationManager.AppSettings["METRICS_URL_TEMPLATE"];
+        private const string MetricsUrlTemplate = "metrics/{endpoint}";
+
         private static readonly ILog Log = LogManager.GetLogger(typeof(MetricsSdkApiClient));
 
         public MetricsSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout) : base(header, baseUrl, connectionTimeOut, readTimeout) { }

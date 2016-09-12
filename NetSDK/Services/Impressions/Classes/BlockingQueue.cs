@@ -21,6 +21,10 @@ namespace Splitio.Services.Impressions.Classes
 
         public bool HasReachedMaxSize()
         {
+            if (maxSize == -1)
+            {
+                return false;
+            }
             return queue.Count >= maxSize;
         }
 
