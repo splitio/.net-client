@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class LocalhostClient : Client
+    public class LocalhostClient : SplitClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
 

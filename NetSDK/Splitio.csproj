@@ -39,7 +39,6 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
@@ -72,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonLibraries\CurrentTimeHelper.cs" />
     <Compile Include="CommonLibraries\HTTPResult.cs" />
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
@@ -84,17 +84,34 @@
     <Compile Include="Domain\ConditionDefinition.cs" />
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
+    <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
-    <Compile Include="Services\Client\Classes\ClientFactory.cs" />
+    <Compile Include="Domain\LightSplit.cs" />
+    <Compile Include="Services\Client\Classes\SplitFactory.cs" />
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\JSONFileClient.cs" />
     <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
+    <Compile Include="Services\Client\Classes\SplitManager.cs" />
     <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
-    <Compile Include="Services\Client\Interfaces\IClient.cs" />
-    <Compile Include="Services\Client\Classes\Client.cs" />
+    <Compile Include="Services\Client\Interfaces\ISplitClient.cs" />
+    <Compile Include="Services\Client\Classes\SplitClient.cs" />
+    <Compile Include="Services\Client\Interfaces\ISplitManager.cs" />
     <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
+    <Compile Include="Services\Impressions\Classes\BlockingQueue.cs" />
+    <Compile Include="Services\Impressions\Classes\SelfUpdatingTreatmentLog.cs" />
+    <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
+    <Compile Include="Services\Impressions\Interfaces\ITreatmentLog.cs" />
+    <Compile Include="Services\Impressions\Interfaces\ITreatmentSdkApiClient.cs" />
+    <Compile Include="Services\Metrics\Classes\AsyncMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Classes\BinarySearchLatencyTracker.cs" />
+    <Compile Include="Services\Metrics\Classes\Counter.cs" />
+    <Compile Include="Services\Metrics\Classes\InMemoryMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Classes\MetricsSdkApiClient.cs" />
+    <Compile Include="Services\Metrics\Interfaces\ILatencyTracker.cs" />
+    <Compile Include="Services\Metrics\Interfaces\IMetricsLog.cs" />
+    <Compile Include="Services\Metrics\Interfaces\IMetricsSdkApiClient.cs" />
     <Compile Include="Services\Parsing\Classes\BetweenMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\CompareMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\EqualToMatcher.cs" />
@@ -128,7 +145,7 @@
     <Compile Include="Services\SegmentFetcher\Classes\SegmentSdkApiClient.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegment.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentFetcher.cs" />
-    <Compile Include="Services\SegmentFetcher\Interfaces\ISplitSdkApiClient.cs" />
+    <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitFetcher.cs" />
@@ -139,13 +156,10 @@
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
+    <Compile Include="Version.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Services\Impressions\" />
-    <Folder Include="Services\Metrics\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

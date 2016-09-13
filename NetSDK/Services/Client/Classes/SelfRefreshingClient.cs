@@ -1,6 +1,15 @@
-﻿using Splitio.CommonLibraries;
+﻿using log4net;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
+using Splitio.CommonLibraries;
+using Splitio.Domain;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Impressions.Classes;
+using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Metrics.Classes;
+using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher;
@@ -9,22 +18,21 @@ using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SelfRefreshingClient: Client
+    public class SelfRefreshingClient: SplitClient
     {
         private static string ApiKey;
         private static string BaseUrl;
         private static int SplitsRefreshRate;
         private static int SegmentRefreshRate;
         private static string HttpEncoding;
-        private static string HttpConnectionTimeout;
-        private static string HttpReadTimeout;
+        private static long HttpConnectionTimeout;
+        private static long HttpReadTimeout;
         private static string SdkVersion;
         private static string SdkSpecVersion;
         private static string SdkMachineName;
@@ -32,6 +40,12 @@ namespace Splitio.Services.Client.Classes
         private static bool RandomizeRefreshRates;
         private static int BlockMilisecondsUntilReady;
         private static int ConcurrencyLevel;
+        private static int TreatmentLogRefreshRate;
+        private static int TreatmentLogSize;
+        private static string EventsBaseUrl;
+        private static int MaxCountCalls;
+        private static int MaxTimeBetweenCalls;
+
 
         /// <summary>
         /// Represents the initial number of buckets for a ConcurrentDictionary. 
@@ -45,17 +59,21 @@ namespace Splitio.Services.Client.Classes
         private SdkReadinessGates gates;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
+        private ITreatmentSdkApiClient treatmentSdkApiClient;
+        private IMetricsSdkApiClient metricsSdkApiClient;
 
-        public SelfRefreshingClient(string apiKey)
+        public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
             InitializeLogger();
             ApiKey = apiKey;
-            ReadConfig();
+            ReadConfig(config);
             BuildSdkReadinessGates();
             BuildSdkApiClients();
             BuildSplitFetcher();
+            BuildTreatmentLog();
             BuildSplitter();
             BuildEngine();
+            BuildManager();
             Start();
             if (BlockMilisecondsUntilReady > 0)
             {
@@ -63,21 +81,26 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
-        private void ReadConfig()
+        private void ReadConfig(ConfigurationOptions config)
         {
-            BaseUrl = ConfigurationManager.AppSettings["BASE_URL"];
-            SplitsRefreshRate = int.Parse(ConfigurationManager.AppSettings["SPLITS_REFRESH_RATE"]);
-            SegmentRefreshRate = int.Parse(ConfigurationManager.AppSettings["SEGMENT_REFRESH_RATE"]);
-            HttpEncoding = ConfigurationManager.AppSettings["HTTP_ENCODING"];
-            HttpConnectionTimeout = ConfigurationManager.AppSettings["HTTP_CONNECTION_TIMEOUT"];
-            HttpReadTimeout = ConfigurationManager.AppSettings["HTTP_READ_TIMEOUT"];
-            SdkVersion = ConfigurationManager.AppSettings["SPLIT_SDK_VERSION"];
-            SdkSpecVersion = "net-" + ConfigurationManager.AppSettings["SPLIT_SDK_SPEC_VERSION"];
-            SdkMachineName = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_NAME"];
-            SdkMachineIP = ConfigurationManager.AppSettings["SPLIT_SDK_MACHINE_IP"];
-            RandomizeRefreshRates = bool.Parse(ConfigurationManager.AppSettings["RANDOMIZE_REFRESH_RATE"]);
-            BlockMilisecondsUntilReady = int.Parse(ConfigurationManager.AppSettings["BLOCK_MILISECONDS_UNTIL_READY"]);
-            ConcurrencyLevel = int.Parse(ConfigurationManager.AppSettings["SPLITS_STORAGE_CONCURRENCY_LEVEL"]);
+            BaseUrl = String.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
+            EventsBaseUrl = String.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
+            SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
+            SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
+            HttpEncoding = "gzip";
+            HttpConnectionTimeout = config.ConnectionTimeOutInMs ?? 15000;
+            HttpReadTimeout = config.ReadTimeoutInMs ?? 15000;
+            SdkVersion = Version.SplitSdkVersion;
+            SdkSpecVersion = "net-" + Version.SplitSpecVersion;
+            SdkMachineName = config.SdkMachineName;
+            SdkMachineIP = config.SdkMachineIP;
+            RandomizeRefreshRates = config.RandomizeRefreshRates;
+            BlockMilisecondsUntilReady = config.Ready ?? 0;
+            ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
+            TreatmentLogRefreshRate = config.ImpressionsRefreshRate ?? 30;
+            TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
+            MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
+            MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -90,17 +113,32 @@ namespace Splitio.Services.Client.Classes
 
         public void Start()
         {
+            ((SelfUpdatingTreatmentLog)treatmentLog).Start();
             ((SelfRefreshingSplitFetcher)splitFetcher).Start();
         }
 
         public void Stop()
         {
             ((SelfRefreshingSplitFetcher)splitFetcher).Stop();
+            ((SelfUpdatingTreatmentLog)treatmentLog).Stop();
         }
 
         private void InitializeLogger()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            hierarchy.Root.RemoveAllAppenders(); /*Remove any other appenders*/
+
+            FileAppender fileAppender = new FileAppender();
+            fileAppender.AppendToFile = true;
+            fileAppender.LockingModel = new FileAppender.MinimalLock();
+            fileAppender.File = @"Logs\split-sdk.log";
+            PatternLayout pl = new PatternLayout();
+            pl.ConversionPattern = "%date %level %logger - %message%newline";
+            pl.ActivateOptions();
+            fileAppender.Layout = pl;
+            fileAppender.ActivateOptions();
+
+            log4net.Config.BasicConfigurator.Configure(fileAppender);
         }
 
         private void BuildSplitter()
@@ -124,10 +162,21 @@ namespace Splitio.Services.Client.Classes
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, new ConcurrentDictionary<string, SelfRefreshingSegment>(ConcurrencyLevel, InitialCapacity), segmentRefreshRate);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, new ConcurrentDictionary<string, SelfRefreshingSegment>(ConcurrencyLevel, InitialCapacity));
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string, Domain.ParsedSplit>(ConcurrencyLevel, InitialCapacity));
+        }
+
+        private void BuildTreatmentLog()
+        {
+            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new BlockingQueue<KeyImpression>(TreatmentLogSize));
+        }
+
+
+        private void BuildMetricsLog()
+        {
+            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>(), MaxCountCalls, MaxTimeBetweenCalls);
         }
 
         private int Random(int refreshRate)
@@ -145,10 +194,16 @@ namespace Splitio.Services.Client.Classes
             header.splitSDKSpecVersion = SdkSpecVersion;
             header.splitSDKMachineName = SdkMachineName;
             header.splitSDKMachineIP = SdkMachineIP;
-            var connectionTimeout = long.Parse(HttpConnectionTimeout);
-            var readTimeout = long.Parse(HttpReadTimeout);
-            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
-            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, connectionTimeout, readTimeout);
+            metricsSdkApiClient = new MetricsSdkApiClient(header, EventsBaseUrl, HttpConnectionTimeout, HttpReadTimeout);
+            BuildMetricsLog();
+            splitSdkApiClient = new SplitSdkApiClient(header, BaseUrl, HttpConnectionTimeout, HttpReadTimeout, metricsLog);
+            segmentSdkApiClient = new SegmentSdkApiClient(header, BaseUrl, HttpConnectionTimeout, HttpReadTimeout, metricsLog);
+            treatmentSdkApiClient = new TreatmentSdkApiClient(header, EventsBaseUrl, HttpConnectionTimeout, HttpReadTimeout);
+        }
+
+        private void BuildManager()
+        {
+            manager = new SplitManager(splitFetcher);
         }
     }
 }

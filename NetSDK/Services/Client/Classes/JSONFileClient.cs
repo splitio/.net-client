@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class JSONFileClient:Client
+    public class JSONFileClient:SplitClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
 

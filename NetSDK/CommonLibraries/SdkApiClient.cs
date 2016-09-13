@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,8 +17,9 @@ namespace Splitio.CommonLibraries
     {
         private HttpClient httpClient;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SdkApiClient));
+        protected IMetricsLog metricsLog;
 
-        public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout)
+        public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null)
         {
             if (header.encoding == "gzip")
             {
@@ -49,7 +51,9 @@ namespace Splitio.CommonLibraries
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //TODO: find a way to store it in sepparated parameters
-            httpClient.Timeout = TimeSpan.FromMilliseconds((connectionTimeOut + readTimeout));         
+            httpClient.Timeout = TimeSpan.FromMilliseconds((connectionTimeOut + readTimeout));
+
+            this.metricsLog = metricsLog;
         }
 
         public virtual HTTPResult ExecuteGet(string requestUri)
@@ -66,6 +70,24 @@ namespace Splitio.CommonLibraries
             catch(Exception e)
             {
                 Log.Error(String.Format("Exception caught executing GET {0}", requestUri), e);
+            }
+            return result;
+        }
+
+        public virtual HTTPResult ExecutePost(string requestUri, string data)
+        {
+            var result = new HTTPResult();
+            try
+            {
+                var task = httpClient.PostAsync(requestUri, new StringContent(data, Encoding.UTF8, "application/json"));
+                task.Wait();
+                var response = task.Result;
+                result.statusCode = response.StatusCode;
+                result.content = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Exception caught executing POST {0}", requestUri), e);
             }
             return result;
         }
