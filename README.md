@@ -1,4 +1,4 @@
 # .net-client
 The .net sdk client
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ea1cv7ujcnpyqdh4/branch/development?svg=true)](https://ci.appveyor.com/project/SplitDevOps/net-client/branch/development)
+[![Build status](https://ci.appveyor.com/api/projects/status/c9h6qe1y3q4mkusr/branch/development?svg=true)](https://ci.appveyor.com/project/SplitDevOps/net-client-m2j04/branch/development)
