@@ -11,15 +11,25 @@ namespace Splitio.Domain
     public class Segment: ISegment
     {
         public string name { get; set; }
-        protected long change_number;
+        public long changeNumber;
         protected HashSet<string> keys;
         protected SdkReadinessGates gates;
 
-        public Segment(string name, long change_number = -1, HashSet<string> keys = null)
+        public Segment(string name, long changeNumber = -1, HashSet<string> keys = null)
         {
             this.name = name;
-            this.change_number = change_number;
+            this.changeNumber = changeNumber;
             this.keys = keys ?? new HashSet<string>();
+        }
+
+        public void AddKeys(HashSet<string> keys)
+        {
+            this.keys.UnionWith(keys);
+        }
+
+        public void RemoveKeys(HashSet<string> keys)
+        {
+            this.keys.ExceptWith(keys);
         }
 
         public bool Contains(string key)

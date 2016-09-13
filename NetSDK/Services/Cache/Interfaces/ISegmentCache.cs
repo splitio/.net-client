@@ -7,9 +7,9 @@ namespace Splitio.Services.Cache.Interfaces
 {
     public interface ISegmentCache
     {
-        void AddToSegment (string segmentName, string[] segmentKeys);
+        void AddToSegment(string segmentName, HashSet<string> segmentKeys);
 
-        void RemoveFromSegment(string segmentName, string[] segmentKeys);
+        void RemoveFromSegment(string segmentName, HashSet<string> segmentKeys);
 
         bool IsInSegment(string segmentName, string key);
 

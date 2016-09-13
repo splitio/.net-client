@@ -59,12 +59,12 @@ namespace Splitio.Services.SegmentFetcher.Classes
             {
                 try
                 {            
-                    var response = segmentChangeFetcher.Fetch(name, change_number);
+                    var response = segmentChangeFetcher.Fetch(name, changeNumber);
                     if (response == null)
                     {
                         return;
                     }
-                    if (change_number >= response.till)
+                    if (changeNumber >= response.till)
                     {
                         gates.SegmentIsReady(name);
                         return;
@@ -89,7 +89,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                         }
                     }
 
-                    change_number = response.till;                  
+                    changeNumber = response.till;                  
                 }
                 catch (Exception e)
                 {
