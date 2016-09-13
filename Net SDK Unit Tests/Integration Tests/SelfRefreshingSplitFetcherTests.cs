@@ -66,7 +66,7 @@ namespace Splitio_Tests.Integration_Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, -1);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
             selfRefreshingSplitFetcher.Start();
 
             //Act           
@@ -103,7 +103,7 @@ namespace Splitio_Tests.Integration_Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, -1);
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
             selfRefreshingSplitFetcher.Start();
 
             //Act

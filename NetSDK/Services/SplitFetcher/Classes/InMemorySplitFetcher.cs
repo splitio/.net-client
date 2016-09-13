@@ -1,4 +1,6 @@
 ﻿using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -11,23 +13,20 @@ namespace Splitio.Services.SplitFetcher.Classes
 {
     public class InMemorySplitFetcher: ISplitFetcher
     {
-        protected ConcurrentDictionary<string, ParsedSplit> splits;
-
-        public InMemorySplitFetcher(ConcurrentDictionary<string, ParsedSplit> splits = null)
+        protected ISplitCache splitCache;
+        public InMemorySplitFetcher(ISplitCache splitCache)
         {
-            this.splits = splits ?? new ConcurrentDictionary<string, ParsedSplit>();
+            this.splitCache = splitCache ?? new SplitCache(new ConcurrentDictionary<string, ParsedSplit>(), -1);
         }
 
         public ParsedSplit Fetch(string feature)
         {
-            ParsedSplit value;
-            splits.TryGetValue(feature, out value);
-            return value;
+            return splitCache.GetSplit(feature);
         }
 
         public List<ParsedSplit> FetchAll()
         {
-            return splits.Values.ToList(); 
+            return splitCache.GetAllSplits();
         }
     }
 }

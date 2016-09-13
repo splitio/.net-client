@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Interfaces;
@@ -19,20 +20,18 @@ namespace Splitio.Services.SplitFetcher.Classes
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;
-        private long change_number;
         private bool stopped;
         private SdkReadinessGates gates;
 
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval,
-                 long change_number = -1, ConcurrentDictionary<string, ParsedSplit> splits = null)
-            : base(splits)
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, 
+            SplitParser splitParser, SdkReadinessGates gates, int interval, ISplitCache splitCache = null)
+            : base(splitCache)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
             this.gates = gates;
             this.interval = interval;
-            this.change_number = change_number;
             this.stopped = true;
         }
 
@@ -68,21 +67,19 @@ namespace Splitio.Services.SplitFetcher.Classes
             List<Split> addedSplits = new List<Split>();
             List<Split> removedSplits = new List<Split>();
 
-            var tempSplits = new ConcurrentDictionary<string, ParsedSplit>(splits);
-
             foreach (Split split in splitChanges)
             {
                 ParsedSplit parsedSplit;
                 //If not active --> Remove Split
                 if (split.status != StatusEnum.ACTIVE)
                 {                    
-                    tempSplits.TryRemove(split.name, out parsedSplit);
+                    splitCache.RemoveSplit(split.name);
                     removedSplits.Add(split);
                 }
                 else
                 {
-                    //Test if its a new Split, remove if existing
-                    bool isRemoved = tempSplits.TryRemove(split.name, out parsedSplit);
+                   //Test if its a new Split, remove if existing
+                   bool isRemoved = splitCache.RemoveSplit(split.name);
 
                     if (!isRemoved)
                     {
@@ -90,10 +87,9 @@ namespace Splitio.Services.SplitFetcher.Classes
                         addedSplits.Add(split);
                     }
                     parsedSplit = splitParser.Parse(split);
-                    tempSplits.TryAdd(parsedSplit.name, parsedSplit);
+                    splitCache.AddSplit(parsedSplit.name, parsedSplit);
                 }
             }
-            splits = tempSplits;
 
             if (addedSplits.Count() > 0)
             {
@@ -109,15 +105,15 @@ namespace Splitio.Services.SplitFetcher.Classes
 
         private void RefreshSplits()
         {
-            var changeNumberBefore = change_number;
+            var changeNumber = splitCache.GetChangeNumber();
             try
             {
-                var result = splitChangeFetcher.Fetch(change_number);
+                var result = splitChangeFetcher.Fetch(changeNumber);
                 if (result == null)
                 {
                     return;
                 }
-                if (change_number >= result.till)
+                if (changeNumber >= result.till)
                 {
                     gates.SplitsAreReady();
                     //There are no new split changes
@@ -126,7 +122,7 @@ namespace Splitio.Services.SplitFetcher.Classes
                 if (result.splits != null && result.splits.Count > 0)
                 {
                     UpdateSplitsFromChangeFetcherResponse(result.splits);
-                    change_number = result.till;
+                    splitCache.SetChangeNumber(result.till);
                 }
             }
             catch (Exception e)
@@ -136,7 +132,7 @@ namespace Splitio.Services.SplitFetcher.Classes
             }
             finally
             {
-                Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumberBefore, change_number));
+                Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
             }
         }
     }
