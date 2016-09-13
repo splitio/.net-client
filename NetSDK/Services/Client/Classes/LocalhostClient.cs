@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Classes;
@@ -46,7 +47,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildSplitFetcher(ConcurrentDictionary<string,ParsedSplit> splits)
         {
-            splitFetcher = new InMemorySplitFetcher(splits);
+            splitFetcher = new InMemorySplitFetcher(new SplitCache(splits, -1));
         }
 
         private ConcurrentDictionary<string, ParsedSplit> ParseSplitFile(string filePath)

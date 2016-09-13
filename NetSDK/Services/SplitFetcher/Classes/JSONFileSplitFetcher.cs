@@ -7,20 +7,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
+using Splitio.Services.Cache.Classes;
 
 namespace Splitio.Services.SplitFetcher.Classes
 {
     public class JSONFileSplitFetcher: InMemorySplitFetcher
     {
         private SplitParser splitParser;
-        public JSONFileSplitFetcher(string filePath, SplitParser splitParser)
+        public JSONFileSplitFetcher(string filePath, SplitParser splitParser):base(null)
         {
             this.splitParser = splitParser;
             var json = File.ReadAllText(filePath);
             var splitChangesResult = JsonConvert.DeserializeObject<SplitChangesResult>(json);
-            splits = new ConcurrentDictionary<string,ParsedSplit>(splitChangesResult.splits
+            splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>(splitChangesResult.splits
                             .Select(x => new { Key = x.name, Value = splitParser.Parse(x)})
-                            .ToDictionary(x => x.Key, x => x.Value));
+                            .ToDictionary(x => x.Key, x => x.Value)), -1);
         }
     }
 }
