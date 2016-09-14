@@ -13,7 +13,7 @@ namespace Splitio.Services.Cache.Classes
         private ConcurrentDictionary<string, ParsedSplit> splits;
         private long changeNumber;
 
-        public SplitCache(ConcurrentDictionary<string, ParsedSplit> splits, long changeNumber)
+        public SplitCache(ConcurrentDictionary<string, ParsedSplit> splits, long changeNumber = -1)
         {
             this.splits = splits;
             this.changeNumber = changeNumber;

@@ -47,7 +47,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildSplitFetcher(ConcurrentDictionary<string,ParsedSplit> splits)
         {
-            splitFetcher = new InMemorySplitFetcher(new SplitCache(splits, -1));
+            splitFetcher = new InMemorySplitFetcher(new SplitCache(splits));
         }
 
         private ConcurrentDictionary<string, ParsedSplit> ParseSplitFile(string filePath)

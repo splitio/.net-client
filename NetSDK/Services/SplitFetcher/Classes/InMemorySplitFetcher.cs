@@ -16,7 +16,7 @@ namespace Splitio.Services.SplitFetcher.Classes
         protected ISplitCache splitCache;
         public InMemorySplitFetcher(ISplitCache splitCache)
         {
-            this.splitCache = splitCache ?? new SplitCache(new ConcurrentDictionary<string, ParsedSplit>(), -1);
+            this.splitCache = splitCache ?? new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
         }
 
         public ParsedSplit Fetch(string feature)
