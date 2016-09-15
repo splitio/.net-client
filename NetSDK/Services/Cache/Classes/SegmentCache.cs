@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Cache.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SegmentFetcher.Classes;
 using System;
 using System.Collections.Concurrent;
@@ -10,20 +11,31 @@ namespace Splitio.Services.Cache.Classes
 {
     public class SegmentCache : ISegmentCache
     {
-        private ConcurrentDictionary<string, SelfRefreshingSegment> segments;
+        private ConcurrentDictionary<string, Segment> segments;
 
-        public void AddToSegment(string segmentName, HashSet<string> segmentKeys)
+        public SegmentCache(ConcurrentDictionary<string, Segment> segments)
         {
-            SelfRefreshingSegment segment;
+            this.segments = segments;
+        }
+
+        public void RegisterSegment(string segmentName) 
+        {
+            Segment segment = new Segment(segmentName);
+            segments.TryAdd(segmentName, segment);
+        }
+
+        public void AddToSegment(string segmentName, List<string> segmentKeys)
+        {
+            Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
                 segment.AddKeys(segmentKeys);
             }
         }
 
-        public void RemoveFromSegment(string segmentName, HashSet<string> segmentKeys)
+        public void RemoveFromSegment(string segmentName, List<string> segmentKeys)
         {
-            SelfRefreshingSegment segment;
+            Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
                 segment.RemoveKeys(segmentKeys);
@@ -32,7 +44,7 @@ namespace Splitio.Services.Cache.Classes
 
         public bool IsInSegment(string segmentName, string key)
         {
-            SelfRefreshingSegment segment;
+            Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
                 return segment.Contains(key);
@@ -43,7 +55,7 @@ namespace Splitio.Services.Cache.Classes
 
         public void SetChangeNumber(string segmentName, long changeNumber)
         {
-            SelfRefreshingSegment segment;
+            Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
                 segment.changeNumber = changeNumber;
@@ -52,7 +64,7 @@ namespace Splitio.Services.Cache.Classes
 
         public long GetChangeNumber(string segmentName)
         {
-            SelfRefreshingSegment segment;
+            Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
                 return segment.changeNumber;

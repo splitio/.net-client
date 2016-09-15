@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
@@ -13,10 +14,12 @@ namespace Splitio.Services.Parsing
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitParser));
         private readonly ISegmentFetcher segmentFetcher;
+        private ISegmentCache segmentsCache;
 
-        public SplitParser(ISegmentFetcher segmentFetcher)
+        public SplitParser(ISegmentFetcher segmentFetcher, ISegmentCache segmentsCache)
         {
             this.segmentFetcher = segmentFetcher;
+            this.segmentsCache = segmentsCache;
         }
 
         public ParsedSplit Parse(Split split)
@@ -152,8 +155,8 @@ namespace Splitio.Services.Parsing
         private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
-            var segment = segmentFetcher.Fetch(matcherData.segmentName);
-            return new UserDefinedSegmentMatcher(segment);
+            segmentFetcher.Fetch(matcherData.segmentName);
+            return new UserDefinedSegmentMatcher(matcherData.segmentName, segmentsCache); 
         }
 
         private IMatcher GetAllKeysMatcher()

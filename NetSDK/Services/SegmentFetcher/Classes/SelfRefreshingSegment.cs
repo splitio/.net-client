@@ -1,8 +1,10 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +12,19 @@ using System.Threading;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
-    public class SelfRefreshingSegment: Segment
+    public class SelfRefreshingSegment : Segment
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
+        private SdkReadinessGates gates;
         private ISegmentChangeFetcher segmentChangeFetcher;
+        private ISegmentCache segmentCache;
         private int interval;
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, long change_number = -1) : base(name, change_number)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentCache):base(name)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
+            this.segmentCache = segmentCache;
             this.interval = interval;
             this.stopped = true;
             this.gates = gates;
@@ -58,7 +63,8 @@ namespace Splitio.Services.SegmentFetcher.Classes
             while (true)
             {
                 try
-                {            
+                {
+                    var changeNumber = segmentCache.GetChangeNumber(name);
                     var response = segmentChangeFetcher.Fetch(name, changeNumber);
                     if (response == null)
                     {
@@ -72,12 +78,9 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
                     if (response.added.Count() > 0 || response.removed.Count() > 0)
                     {
-                        var tempKeys = new HashSet<string>(keys);
 
-                        tempKeys.UnionWith(response.added);
-                        tempKeys.ExceptWith(response.removed);
-
-                        keys = tempKeys;
+                        segmentCache.AddToSegment(name, response.added);
+                        segmentCache.RemoveFromSegment(name, response.removed);
 
                         if (response.added.Count() > 0)
                         {
@@ -89,7 +92,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                         }
                     }
 
-                    changeNumber = response.till;                  
+                    segmentCache.SetChangeNumber(name, response.till);                  
                 }
                 catch (Exception e)
                 {

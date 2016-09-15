@@ -141,9 +141,9 @@
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\JSONFileSegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
     <Compile Include="Domain\SegmentChange.cs" />
-    <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegment.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentSdkApiClient.cs" />

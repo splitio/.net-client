@@ -1,4 +1,5 @@
 ﻿using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,20 +9,18 @@ namespace Splitio.Services.Parsing
 {
     public class UserDefinedSegmentMatcher: IMatcher
     {
-        private Segment segment;
+        private string segmentName;
+        private ISegmentCache segmentsCache;
 
-        public UserDefinedSegmentMatcher(Segment segment)
+        public UserDefinedSegmentMatcher(string segmentName, ISegmentCache segmentsCache)
         {
-            if (segment == null)
-            {
-                throw new Exception("Segment cannot be null");
-            }
-
-            this.segment = segment;
+            this.segmentName = segmentName;
+            this.segmentsCache = segmentsCache;
         }
+
         public bool Match(string key)
         {
-            return segment.Contains(key);
+            return segmentsCache.IsInSegment(segmentName, key);
         }
     }
 }

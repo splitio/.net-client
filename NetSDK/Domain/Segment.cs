@@ -1,6 +1,7 @@
 ﻿using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,31 +11,38 @@ namespace Splitio.Domain
 {
     public class Segment: ISegment
     {
-        public string name { get; set; }
+        protected string name { get; set; }
         public long changeNumber;
-        protected HashSet<string> keys;
-        protected SdkReadinessGates gates;
+        private ConcurrentDictionary<string, byte> keys;
 
-        public Segment(string name, long changeNumber = -1, HashSet<string> keys = null)
+        public Segment(string name, long changeNumber = -1, ConcurrentDictionary<string, byte> keys= null)
         {
             this.name = name;
             this.changeNumber = changeNumber;
-            this.keys = keys ?? new HashSet<string>();
+            this.keys = keys ?? new ConcurrentDictionary<string, byte>();
         }
 
-        public void AddKeys(HashSet<string> keys)
+        public void AddKeys(List<string> keys)
         {
-            this.keys.UnionWith(keys);
+            foreach (var key in keys)
+            {
+                this.keys.TryAdd(key, 0);
+            }
         }
 
-        public void RemoveKeys(HashSet<string> keys)
+        public void RemoveKeys(List<string> keys)
         {
-            this.keys.ExceptWith(keys);
+            foreach (var key in keys)
+            {
+                byte value;
+                this.keys.TryRemove(key, out value);
+            }
         }
 
         public bool Contains(string key)
         {
-            return keys.Contains(key);
+            byte value;
+            return keys.TryGetValue(key, out value);
         }
     }
 }

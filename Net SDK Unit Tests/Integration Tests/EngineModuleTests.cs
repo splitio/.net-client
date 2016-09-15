@@ -10,6 +10,8 @@ using Splitio.Domain;
 using Splitio.Services.EngineEvaluator;
 using System.Collections.Generic;
 using Splitio.Services.Client.Classes;
+using Splitio.Services.Cache.Classes;
+using System.Collections.Concurrent;
 
 namespace Splitio_Tests.Integration_Tests
 {
@@ -22,9 +24,10 @@ namespace Splitio_Tests.Integration_Tests
         public void Initialize()
         {
             log4net.Config.XmlConfigurator.Configure();
-            
-            var segmentFetcher = new JSONFileSegmentFetcher(@"segment_payed.json");
-            var splitParser = new SplitParser(segmentFetcher);
+
+            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentFetcher = new JSONFileSegmentFetcher(@"segment_payed.json", segmentCache);
+            var splitParser = new SplitParser(segmentFetcher, segmentCache);
             splitFetcher = new JSONFileSplitFetcher(@"splits_staging_2.json", splitParser);
         }
 

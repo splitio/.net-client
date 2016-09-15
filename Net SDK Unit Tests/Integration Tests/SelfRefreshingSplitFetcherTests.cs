@@ -11,6 +11,8 @@ using Splitio.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
 using log4net;
 using Splitio.Services.Client.Classes;
+using Splitio.Services.Cache.Classes;
+using System.Collections.Concurrent;
 
 namespace Splitio_Tests.Integration_Tests
 {
@@ -30,7 +32,8 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetSuccessfulWithResultsFromJSONFile()
         {
             //Arrange
-            var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json"));
+            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json", segmentCache), segmentCache);
             var splitFetcher = new JSONFileSplitFetcher("splits_staging.json", splitParser);
 
             //Act           
@@ -63,9 +66,10 @@ namespace Splitio_Tests.Integration_Tests
             var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
             var gates = new SdkReadinessGates();
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
+            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
 
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
             var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
             selfRefreshingSplitFetcher.Start();
 
@@ -100,9 +104,11 @@ namespace Splitio_Tests.Integration_Tests
             var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
             var gates = new SdkReadinessGates();
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
+          
+            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
 
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
             var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
             selfRefreshingSplitFetcher.Start();
 

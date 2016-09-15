@@ -1,9 +1,12 @@
 ﻿using log4net;
+using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +20,9 @@ namespace Splitio.Services.Client.Classes
         public JSONFileClient(string splitsFilePath, string segmentsFilePath)
         {
             InitializeLogger();
-            var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath);
-            var splitParser = new SplitParser(segmentFetcher);
+            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
+            var splitParser = new SplitParser(segmentFetcher, segmentCache);
             splitFetcher = new JSONFileSplitFetcher(splitsFilePath, splitParser);
             splitter = new Splitter();
             engine = new Engine(splitter);
