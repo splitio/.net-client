@@ -22,7 +22,6 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         public override void Fetch(string name)
         {
-            IEnumerable<KeyValuePair<string, byte>> items = added.Select(x=> new KeyValuePair<string, byte>(x, 0));
             segmentCache.RegisterSegment(name);
             segmentCache.AddToSegment(name, added);
         }

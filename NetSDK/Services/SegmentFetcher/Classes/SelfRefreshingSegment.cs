@@ -12,17 +12,20 @@ using System.Threading;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
-    public class SelfRefreshingSegment : Segment
+    public class SelfRefreshingSegment
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
+
+        private string name;
         private SdkReadinessGates gates;
         private ISegmentChangeFetcher segmentChangeFetcher;
         private ISegmentCache segmentCache;
         private int interval;
         public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentCache):base(name)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentCache)
         {
+            this.name = name;
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segmentCache = segmentCache;
             this.interval = interval;

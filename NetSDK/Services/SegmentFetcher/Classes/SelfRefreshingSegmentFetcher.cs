@@ -15,6 +15,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
     public class SelfRefreshingSegmentFetcher : SegmentFetcher
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
+        
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
         private ConcurrentDictionary<string, SelfRefreshingSegment> segmentsThreads;
         private SdkReadinessGates gates;

@@ -11,8 +11,8 @@ namespace Splitio.Domain
 {
     public class Segment: ISegment
     {
-        protected string name { get; set; }
-        public long changeNumber;
+        private string name;
+        public long changeNumber { get; set; }
         private ConcurrentDictionary<string, byte> keys;
 
         public Segment(string name, long changeNumber = -1, ConcurrentDictionary<string, byte> keys= null)

@@ -19,9 +19,9 @@ namespace Splitio.Services.SplitFetcher.Classes
             this.splitParser = splitParser;
             var json = File.ReadAllText(filePath);
             var splitChangesResult = JsonConvert.DeserializeObject<SplitChangesResult>(json);
-            splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>(splitChangesResult.splits
-                            .Select(x => new { Key = x.name, Value = splitParser.Parse(x)})
-                            .ToDictionary(x => x.Key, x => x.Value)));
+            splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>(
+                splitChangesResult.splits.Select(x => new KeyValuePair<string,ParsedSplit>(x.name, splitParser.Parse(x) ))
+            ));
         }
     }
 }
