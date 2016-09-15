@@ -26,6 +26,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Assert
             Assert.IsTrue(result != null);
+            Assert.IsTrue(result.splits.Count > 0);
 
         }
     }

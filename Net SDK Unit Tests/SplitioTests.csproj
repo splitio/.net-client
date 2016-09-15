@@ -65,18 +65,20 @@
     <Compile Include="Integration Tests\EngineModuleTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Unit Tests\ApiSplitChangeFetcherTests.cs" />
-    <Compile Include="Unit Tests\AllKeysMatcherTests.cs" />
-    <Compile Include="Unit Tests\AttributeMatcherTests.cs" />
-    <Compile Include="Unit Tests\LessOrEqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\GreaterOrEqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\BetweenMatcherTests.cs" />
-    <Compile Include="Unit Tests\EqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\CombiningMatcherTests.cs" />
-    <Compile Include="Unit Tests\SplitterTests.cs" />
-    <Compile Include="Unit Tests\BinarySearchLatencyTrackerTests.cs" />
-    <Compile Include="Unit Tests\WhitelistMatcherTests.cs" />
-    <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
+    <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
+    <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\LessOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\GreaterOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\BetweenMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\CombiningMatcherTests.cs" />
+    <Compile Include="Unit Tests\Splitter\SplitterTests.cs" />
+    <Compile Include="Unit Tests\Metrics\BinarySearchLatencyTrackerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\WhitelistMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetSDK\Splitio.csproj">
