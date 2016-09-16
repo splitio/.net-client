@@ -74,6 +74,7 @@
     <Compile Include="CommonLibraries\CurrentTimeHelper.cs" />
     <Compile Include="CommonLibraries\HTTPResult.cs" />
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
+    <Compile Include="CommonLibraries\PeriodicTaskFactory.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
     <Compile Include="CommonLibraries\TypeConverter.cs" />

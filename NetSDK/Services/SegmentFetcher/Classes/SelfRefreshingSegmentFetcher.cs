@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
@@ -7,8 +8,11 @@ using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -20,6 +24,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private ConcurrentDictionary<string, SelfRefreshingSegment> segmentsThreads;
         private SdkReadinessGates gates;
         private int interval;
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
 
         public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentsCache):base(segmentsCache)
         {
@@ -29,15 +34,26 @@ namespace Splitio.Services.SegmentFetcher.Classes
             this.gates = gates;
         }
 
+        public void Stop()
+        {
+            cancelTokenSource.Cancel();
+        }
+
         public override void InitializeSegment(string name)
         {
             SelfRefreshingSegment segment;
             segmentsThreads.TryGetValue(name, out segment);
             if (segment == null)
             {
-                segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, interval, segmentCache);
+                segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
                 gates.RegisterSegment(name);
-                segment.Start();
+                Task periodicTask = PeriodicTaskFactory.Start(() =>
+                                      {
+                                         segment.RefreshSegment();
+                                      }, 
+                                      intervalInMilliseconds: interval * 1000, 
+                                      cancelToken: cancelTokenSource.Token);
+
                 segmentsThreads.TryAdd(name, segment);
             }
         }

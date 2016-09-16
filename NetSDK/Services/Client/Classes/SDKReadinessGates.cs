@@ -116,6 +116,8 @@ namespace Splitio.Services.Client.Classes
                 timeLeft = timeLeft - (int)clock.ElapsedMilliseconds;
             }
 
+            Log.Info("Segments are ready");
+
             return true;
         }
     }

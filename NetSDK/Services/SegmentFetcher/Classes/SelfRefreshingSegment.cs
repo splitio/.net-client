@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -20,63 +21,32 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private SdkReadinessGates gates;
         private ISegmentChangeFetcher segmentChangeFetcher;
         private ISegmentCache segmentCache;
-        private int interval;
-        public bool stopped { get; private set; }
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentCache)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates,  ISegmentCache segmentCache)
         {
             this.name = name;
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segmentCache = segmentCache;
-            this.interval = interval;
-            this.stopped = true;
             this.gates = gates;
         }
 
-        public void Start()
-        {
-            Thread thread = new Thread(StartRefreshing);
-            thread.Start();
-        }
-
-        public void Stop()
-        {
-            stopped = true;
-        }
-
-        private void StartRefreshing()
-        {
-            if (!stopped)
-            {
-                return;
-            }
-
-            stopped = false;
-
-            while (!stopped)
-            {
-                RefreshSegment();
-                Thread.Sleep(interval * 1000);
-            }
-        }
-
-
-        private void RefreshSegment()
+        public void RefreshSegment()
         {        
             while (true)
             {
+                var changeNumber = segmentCache.GetChangeNumber(name);
+
                 try
                 {
-                    var changeNumber = segmentCache.GetChangeNumber(name);
                     var response = segmentChangeFetcher.Fetch(name, changeNumber);
                     if (response == null)
                     {
-                        return;
+                        break;
                     }
                     if (changeNumber >= response.till)
                     {
                         gates.SegmentIsReady(name);
-                        return;
+                        break;
                     }
 
                     if (response.added.Count() > 0 || response.removed.Count() > 0)
@@ -100,8 +70,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 catch (Exception e)
                 {
                     Log.Error("Exception caught refreshing segment", e);
-                    stopped = true;
-                }               
+                }
+                finally
+                {
+                    Log.Info(String.Format("segment fetch before: {0}, after: {1}", changeNumber, segmentCache.GetChangeNumber(name)));
+                }
             }
         }
     }

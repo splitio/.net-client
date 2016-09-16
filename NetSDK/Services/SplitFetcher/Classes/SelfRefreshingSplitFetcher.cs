@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
@@ -21,7 +22,7 @@ namespace Splitio.Services.SplitFetcher.Classes
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;
-        private bool stopped;
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
         private SdkReadinessGates gates;
 
 
@@ -32,35 +33,22 @@ namespace Splitio.Services.SplitFetcher.Classes
             this.splitParser = splitParser;
             this.gates = gates;
             this.interval = interval;
-            this.stopped = true;
             this.splitCache = splitCache;
         }
 
         public void Start()
         {
-            Thread thread = new Thread(StartRefreshing);
-            thread.Start();
+            Task periodicTask = PeriodicTaskFactory.Start(() =>
+                                {
+                                    RefreshSplits();
+                                },
+                                intervalInMilliseconds: interval * 1000,
+                                cancelToken: cancelTokenSource.Token);
         }
 
         public void Stop()
         {
-            stopped = true;
-        }
-
-        private void StartRefreshing()
-        {
-            if (!stopped)
-            {
-                return;
-            }
-
-            stopped = false;
-
-            while (!stopped)
-            {
-                RefreshSplits();
-                Thread.Sleep(interval * 1000);
-            }
+            cancelTokenSource.Cancel();
         }
 
         private void UpdateSplitsFromChangeFetcherResponse(List<Split> splitChanges)
@@ -106,34 +94,37 @@ namespace Splitio.Services.SplitFetcher.Classes
 
         private void RefreshSplits()
         {
-            var changeNumber = splitCache.GetChangeNumber();
-            try
+            while (true)
             {
-                var result = splitChangeFetcher.Fetch(changeNumber);
-                if (result == null)
+                var changeNumber = splitCache.GetChangeNumber();
+                try
                 {
-                    return;
+                    var result = splitChangeFetcher.Fetch(changeNumber);
+                    if (result == null)
+                    {
+                        break;
+                    }
+                    if (changeNumber >= result.till)
+                    {
+                        gates.SplitsAreReady();
+                        //There are no new split changes
+                        break;
+                    }
+                    if (result.splits != null && result.splits.Count > 0)
+                    {
+                        UpdateSplitsFromChangeFetcherResponse(result.splits);
+                        splitCache.SetChangeNumber(result.till);
+                    }
                 }
-                if (changeNumber >= result.till)
+                catch (Exception e)
                 {
-                    gates.SplitsAreReady();
-                    //There are no new split changes
-                    return;
+                    Log.Error("Exception caught refreshing splits", e);
+                    Stop();
                 }
-                if (result.splits != null && result.splits.Count > 0)
+                finally
                 {
-                    UpdateSplitsFromChangeFetcherResponse(result.splits);
-                    splitCache.SetChangeNumber(result.till);
+                    Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
                 }
-            }
-            catch (Exception e)
-            {
-                Log.Error("Exception caught refreshing splits", e);
-                stopped = true;
-            }
-            finally
-            {
-                Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
             }
         }
     }
