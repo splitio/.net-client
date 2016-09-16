@@ -73,7 +73,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 }
                 finally
                 {
-                    Log.Info(String.Format("segment fetch before: {0}, after: {1}", changeNumber, segmentCache.GetChangeNumber(name)));
+                    Log.Info(String.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
                 }
             }
         }
