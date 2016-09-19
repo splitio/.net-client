@@ -13,7 +13,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void AddAndGetSplitTest()
         {
             //Arrange
-            var splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
             var splitName = "test1";
 
             //Act
@@ -28,7 +28,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void AddDuplicateSplitTest()
         {
             //Arrange
-            var splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
             var splitName = "test1";
 
             //Act
@@ -45,7 +45,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void GetInexistentSplitTest()
         {
             //Arrange
-            var splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
             var splitName = "test1";
 
             //Act
@@ -62,7 +62,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var splitName = "test1";
             var splits = new ConcurrentDictionary<string, ParsedSplit>();
             splits.TryAdd(splitName, new ParsedSplit() { name = splitName });
-            var splitCache = new SplitCache(splits);
+            var splitCache = new InMemorySplitCache(splits);
             
             //Act
             splitCache.RemoveSplit(splitName);
@@ -76,7 +76,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void SetAndGetChangeNumberTest()
         {
             //Arrange
-            var splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
             var changeNumber = 1234;
 
             //Act
@@ -91,7 +91,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void GetAllSplitsTest()
         {
             //Arrange
-            var splitCache = new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
             var splitName = "test1";
             var splitName2 = "test2";
 

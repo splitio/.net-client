@@ -9,28 +9,25 @@ using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
-    public class SegmentCache : ISegmentCache
+    public class InMemorySegmentCache : ISegmentCache
     {
         private ConcurrentDictionary<string, Segment> segments;
 
-        public SegmentCache(ConcurrentDictionary<string, Segment> segments)
+        public InMemorySegmentCache(ConcurrentDictionary<string, Segment> segments)
         {
             this.segments = segments;
-        }
-
-        public void RegisterSegment(string segmentName) 
-        {
-            Segment segment = new Segment(segmentName);
-            segments.TryAdd(segmentName, segment);
         }
 
         public void AddToSegment(string segmentName, List<string> segmentKeys)
         {
             Segment segment;
-            if (segments.TryGetValue(segmentName, out segment))
+            segments.TryGetValue(segmentName, out segment);
+            if (segment == null)
             {
-                segment.AddKeys(segmentKeys);
+                segment = new Segment(segmentName);
+                segments.TryAdd(segmentName, segment);
             }
+            segment.AddKeys(segmentKeys);
         }
 
         public void RemoveFromSegment(string segmentName, List<string> segmentKeys)

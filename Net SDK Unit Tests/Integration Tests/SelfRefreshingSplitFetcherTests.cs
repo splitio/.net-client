@@ -32,7 +32,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetSuccessfulWithResultsFromJSONFile()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json", segmentCache), segmentCache);
             var splitFetcher = new JSONFileSplitFetcher("splits_staging.json", splitParser);
 
@@ -66,7 +66,7 @@ namespace Splitio_Tests.Integration_Tests
             var sdkSegmentApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
             var gates = new SdkReadinessGates();
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
@@ -105,7 +105,7 @@ namespace Splitio_Tests.Integration_Tests
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkSegmentApiClient);
             var gates = new SdkReadinessGates();
           
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
 
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);

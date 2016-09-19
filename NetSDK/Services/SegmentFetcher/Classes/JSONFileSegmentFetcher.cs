@@ -20,9 +20,8 @@ namespace Splitio.Services.SegmentFetcher.Classes
             added = segmentChangesResult.added;
         }
 
-        public override void Fetch(string name)
+        public override void InitializeSegment(string name)
         {
-            segmentCache.RegisterSegment(name);
             segmentCache.AddToSegment(name, added);
         }
 

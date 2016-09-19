@@ -16,17 +16,17 @@ namespace Splitio.Services.SplitFetcher.Classes
         protected ISplitCache splitCache;
         public InMemorySplitFetcher(ISplitCache splitCache)
         {
-            this.splitCache = splitCache ?? new SplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            this.splitCache = splitCache ?? new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
         }
 
         public ParsedSplit Fetch(string feature)
         {
-            return splitCache.GetSplit(feature);
+            return splitCache.GetSplit(feature); 
         }
 
         public List<ParsedSplit> FetchAll()
         {
-            return splitCache.GetAllSplits();
+            return splitCache.GetAllSplits(); //TODO: manager should access cache (same for segments)
         }
     }
 }

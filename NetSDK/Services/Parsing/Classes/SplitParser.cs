@@ -155,7 +155,7 @@ namespace Splitio.Services.Parsing
         private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
         {
             var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
-            segmentFetcher.Fetch(matcherData.segmentName);
+            segmentFetcher.InitializeSegment(matcherData.segmentName);
             return new UserDefinedSegmentMatcher(matcherData.segmentName, segmentsCache); 
         }
 

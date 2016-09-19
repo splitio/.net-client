@@ -25,7 +25,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             log4net.Config.XmlConfigurator.Configure();
 
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(@"segment_payed.json", segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
             splitFetcher = new JSONFileSplitFetcher(@"splits_staging_2.json", splitParser);

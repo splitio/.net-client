@@ -16,12 +16,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         public SegmentFetcher(ISegmentCache segmentCache)
         {
-            this.segmentCache = segmentCache ?? new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            this.segmentCache = segmentCache ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
         }
 
-        public virtual void Fetch(string name)
+        public virtual void InitializeSegment(string name)
         {
-            segmentCache.RegisterSegment(name);
         }
     }
 }

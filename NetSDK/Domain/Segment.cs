@@ -13,6 +13,7 @@ namespace Splitio.Domain
     {
         private string name;
         public long changeNumber { get; set; }
+        //ConcurrentDictionary with no value is the concurrent alternative for HashSet
         private ConcurrentDictionary<string, byte> keys;
 
         public Segment(string name, long changeNumber = -1, ConcurrentDictionary<string, byte> keys= null)
@@ -24,18 +25,24 @@ namespace Splitio.Domain
 
         public void AddKeys(List<string> keys)
         {
-            foreach (var key in keys)
+            if (keys != null)
             {
-                this.keys.TryAdd(key, 0);
+                foreach (var key in keys)
+                {
+                    this.keys.TryAdd(key, 0);
+                }
             }
         }
 
         public void RemoveKeys(List<string> keys)
         {
-            foreach (var key in keys)
+            if (keys != null)
             {
-                byte value;
-                this.keys.TryRemove(key, out value);
+                foreach (var key in keys)
+                {
+                    byte value;
+                    this.keys.TryRemove(key, out value);
+                }
             }
         }
 

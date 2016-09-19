@@ -87,8 +87,8 @@
     <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
-    <Compile Include="Services\Cache\Classes\SegmentCache.cs" />
-    <Compile Include="Services\Cache\Classes\SplitCache.cs" />
+    <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
+    <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISplitCache.cs" />
     <Compile Include="Services\Client\Classes\SplitFactory.cs" />

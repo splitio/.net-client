@@ -20,7 +20,7 @@ namespace Splitio.Services.Client.Classes
         public JSONFileClient(string splitsFilePath, string segmentsFilePath)
         {
             InitializeLogger();
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
             splitFetcher = new JSONFileSplitFetcher(splitsFilePath, splitParser);

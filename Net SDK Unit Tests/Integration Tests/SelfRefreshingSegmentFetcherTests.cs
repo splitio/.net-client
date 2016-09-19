@@ -29,12 +29,12 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetSuccessfulWithResultsFromJSONFile()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
 
             var segmentFetcher = new JSONFileSegmentFetcher("segment_payed.json", segmentCache);
 
             //Act
-            segmentFetcher.Fetch("payed");
+            segmentFetcher.InitializeSegment("payed");
 
             //Assert
             Assert.IsTrue(segmentCache.IsInSegment("payed", "abcdz"));
@@ -59,12 +59,12 @@ namespace Splitio_Tests.Integration_Tests
             var sdkApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkApiClient);
             var gates = new SdkReadinessGates();
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
 
             //Act
             var name = "payed";
-            selfRefreshingSegmentFetcher.Fetch(name);
+            selfRefreshingSegmentFetcher.InitializeSegment(name);
 
             while(!gates.AreSegmentsReady(1000))
             {

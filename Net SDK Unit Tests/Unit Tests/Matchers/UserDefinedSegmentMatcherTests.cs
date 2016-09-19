@@ -20,8 +20,7 @@ namespace Splitio_Tests.Unit_Tests
             keys.Add("test2");
 
             var segmentName = "test-segment";
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
-            segmentCache.RegisterSegment(segmentName);
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             segmentCache.AddToSegment(segmentName, keys);
 
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
@@ -42,8 +41,7 @@ namespace Splitio_Tests.Unit_Tests
             keys.Add("test2");
 
             var segmentName = "test-segment";
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
-            segmentCache.RegisterSegment(segmentName);
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             segmentCache.AddToSegment(segmentName, keys);
 
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
@@ -60,8 +58,24 @@ namespace Splitio_Tests.Unit_Tests
         {
             //Arrange
             var segmentName = "test-segment";
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
-            segmentCache.RegisterSegment(segmentName);
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+            segmentCache.AddToSegment(segmentName, null);
+
+            var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
+
+            //Act
+            var result = matcher.Match("test2");
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfCacheEmpty()
+        {
+            //Arrange
+            var segmentName = "test-segment";
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
 
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
 

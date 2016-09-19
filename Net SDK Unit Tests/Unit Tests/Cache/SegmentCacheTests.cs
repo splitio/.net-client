@@ -14,12 +14,11 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void RegisterSegmentTest()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var keys = new List<string> { "abcd", "1234" };
             var segmentName = "test";
 
             //Act
-            segmentCache.RegisterSegment(segmentName);
             segmentCache.AddToSegment(segmentName, keys);
             var result = segmentCache.IsInSegment(segmentName, "abcd");
             
@@ -31,12 +30,11 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void IsNotInSegmentTest()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var keys = new List<string> { "1234" };
             var segmentName = "test";
 
             //Act
-            segmentCache.RegisterSegment(segmentName);
             segmentCache.AddToSegment(segmentName, keys);
             var result = segmentCache.IsInSegment(segmentName, "abcd");
 
@@ -48,7 +46,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void IsInSegmentWithInexistentSegmentTest()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
 
             //Act
             var result = segmentCache.IsInSegment("test", "abcd");
@@ -61,12 +59,11 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void RemoveKeyFromSegmentTest()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var keys = new List<string> { "1234" };
             var segmentName = "test";
 
             //Act
-            segmentCache.RegisterSegment(segmentName);
             segmentCache.AddToSegment(segmentName, keys);
             var result = segmentCache.IsInSegment(segmentName, "1234");
             segmentCache.RemoveFromSegment(segmentName, keys);
@@ -81,11 +78,11 @@ namespace Splitio_Tests.Unit_Tests.Cache
         public void SetAndGetChangeNumberTest()
         {
             //Arrange
-            var segmentCache = new SegmentCache(new ConcurrentDictionary<string, Segment>());
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentName = "test";
 
             //Act
-            segmentCache.RegisterSegment(segmentName);
+            segmentCache.AddToSegment(segmentName, null);
             segmentCache.SetChangeNumber(segmentName, 1234);
             var result = segmentCache.GetChangeNumber(segmentName);
 

@@ -29,13 +29,12 @@ namespace Splitio.Services.SegmentFetcher.Classes
             this.gates = gates;
         }
 
-        public override void Fetch(string name)
+        public override void InitializeSegment(string name)
         {
             SelfRefreshingSegment segment;
             segmentsThreads.TryGetValue(name, out segment);
             if (segment == null)
             {
-                segmentCache.RegisterSegment(name);
                 segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, interval, segmentCache);
                 gates.RegisterSegment(name);
                 segment.Start();

@@ -8,12 +8,12 @@ using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
-    public class SplitCache : ISplitCache
+    public class InMemorySplitCache : ISplitCache
     {
         private ConcurrentDictionary<string, ParsedSplit> splits;
         private long changeNumber;
 
-        public SplitCache(ConcurrentDictionary<string, ParsedSplit> splits, long changeNumber = -1)
+        public InMemorySplitCache(ConcurrentDictionary<string, ParsedSplit> splits, long changeNumber = -1)
         {
             this.splits = splits;
             this.changeNumber = changeNumber;

@@ -8,8 +8,6 @@ namespace Splitio.Services.Cache.Interfaces
 {
     public interface ISegmentCache
     {
-        void RegisterSegment(string segmentName);
-
         void AddToSegment(string segmentName, List<string> segmentKeys);
 
         void RemoveFromSegment(string segmentName, List<string> segmentKeys);
