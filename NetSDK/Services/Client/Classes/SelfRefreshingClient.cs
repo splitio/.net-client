@@ -167,7 +167,8 @@ namespace Splitio.Services.Client.Classes
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentsCache);
-            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity)));
+            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
+            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
 
         private void BuildTreatmentLog()
@@ -205,7 +206,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildManager()
         {
-            manager = new SplitManager(splitFetcher);
+            manager = new SplitManager(splitCache);
         }
     }
 }

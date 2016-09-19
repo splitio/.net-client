@@ -10,6 +10,5 @@ namespace Splitio.Services.SplitFetcher.Interfaces
     public interface ISplitFetcher
     {
         ParsedSplit Fetch(String feature);
-        List<ParsedSplit> FetchAll();
     }
 }

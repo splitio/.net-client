@@ -23,10 +23,5 @@ namespace Splitio.Services.SplitFetcher.Classes
         {
             return splitCache.GetSplit(feature); 
         }
-
-        public List<ParsedSplit> FetchAll()
-        {
-            return splitCache.GetAllSplits(); //TODO: manager should access cache (same for segments)
-        }
     }
 }

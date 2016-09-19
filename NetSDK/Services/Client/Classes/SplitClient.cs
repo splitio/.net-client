@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
@@ -25,7 +26,7 @@ namespace Splitio.Services.Client.Classes
         protected IMetricsLog metricsLog;
         protected Engine engine;
         protected ISplitManager manager;
-
+        protected ISplitCache splitCache;
         public ISplitManager GetSplitManager()
         {
             return manager;
