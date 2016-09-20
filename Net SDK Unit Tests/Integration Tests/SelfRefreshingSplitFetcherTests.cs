@@ -41,7 +41,7 @@ namespace Splitio_Tests.Integration_Tests
             var gates = new SdkReadinessGates();
             var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, 30, splitCache);
             selfRefreshingSplitFetcher.Start();
-            gates.IsSDKReady(10);
+            gates.IsSDKReady(1000);
 
             //Act           
             ParsedSplit result = splitCache.GetSplit("Pato_Test_1");
