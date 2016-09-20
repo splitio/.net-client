@@ -37,7 +37,7 @@ namespace Splitio_Tests.Integration_Tests
             var splitFetcher = new JSONFileSplitFetcher("splits_staging.json", splitParser);
 
             //Act           
-            ParsedSplit result = splitFetcher.Fetch("Pato_Test_1");
+            ParsedSplit result = splitFetcher.splitCache.GetSplit("Pato_Test_1");
 
             //Assert
             Assert.IsNotNull(result);
@@ -70,14 +70,15 @@ namespace Splitio_Tests.Integration_Tests
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
 
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, splitCache);
             selfRefreshingSplitFetcher.Start();
 
             //Act           
             gates.IsSDKReady(1000);
             selfRefreshingSplitFetcher.Stop();
-            ParsedSplit result  = selfRefreshingSplitFetcher.Fetch("Pato_Test_1");
-            ParsedSplit result2 = selfRefreshingSplitFetcher.Fetch("Manu_Test_1");
+            ParsedSplit result  = splitCache.GetSplit("Pato_Test_1");
+            ParsedSplit result2 = splitCache.GetSplit("Manu_Test_1");
             //Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.name == "Pato_Test_1");
@@ -109,13 +110,14 @@ namespace Splitio_Tests.Integration_Tests
 
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
-            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30);
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(apiSplitChangeFetcher, splitParser, gates, 30, splitCache);
             selfRefreshingSplitFetcher.Start();
 
             //Act
             gates.IsSDKReady(10);
 
-            var result = selfRefreshingSplitFetcher.Fetch("condition_and");
+            var result = splitCache.GetSplit("condition_and");
 
             //Assert
             Assert.IsNull(result);

@@ -37,7 +37,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw_4SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.Fetch("test_jw4");
+            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw4");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -71,7 +71,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw3_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.Fetch("test_jw3");
+            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw3");
       
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -93,7 +93,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.Fetch("test_jw");
+            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -119,7 +119,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw2_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.Fetch("test_jw2");
+            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw2");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);

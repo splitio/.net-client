@@ -14,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace Splitio.Services.SplitFetcher.Classes
 {
-    public class SelfRefreshingSplitFetcher : InMemorySplitFetcher
+    public class SelfRefreshingSplitFetcher 
     {
+        protected ISplitCache splitCache;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher));
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
@@ -26,13 +27,13 @@ namespace Splitio.Services.SplitFetcher.Classes
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, 
             SplitParser splitParser, SdkReadinessGates gates, int interval, ISplitCache splitCache = null)
-            : base(splitCache)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
             this.gates = gates;
             this.interval = interval;
             this.stopped = true;
+            this.splitCache = splitCache;
         }
 
         public void Start()

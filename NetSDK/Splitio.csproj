@@ -151,14 +151,12 @@
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
     <Compile Include="Domain\SplitChange.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>

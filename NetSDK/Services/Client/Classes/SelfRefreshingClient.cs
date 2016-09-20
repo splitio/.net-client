@@ -58,6 +58,7 @@ namespace Splitio.Services.Client.Classes
 
 
         private SdkReadinessGates gates;
+        private SelfRefreshingSplitFetcher splitFetcher;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
         private ITreatmentSdkApiClient treatmentSdkApiClient;

@@ -21,7 +21,6 @@ namespace Splitio.Services.Client.Classes
         private const string SdkGetTreatment = "sdk.getTreatment";
 
         protected Splitter splitter;
-        protected ISplitFetcher splitFetcher;
         protected ITreatmentLog treatmentLog;
         protected IMetricsLog metricsLog;
         protected Engine engine;
@@ -36,7 +35,7 @@ namespace Splitio.Services.Client.Classes
         {
             try
             {
-                var split = splitFetcher.Fetch(feature);
+                var split = splitCache.GetSplit(feature);
 
                 if (split == null)
                 {
