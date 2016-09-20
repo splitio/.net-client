@@ -141,8 +141,10 @@
     <Compile Include="Services\Parsing\Classes\WhitelistMatcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\JSONFileSegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentTaskQueue.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentTaskWorker.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
     <Compile Include="Domain\SegmentChange.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegment.cs" />

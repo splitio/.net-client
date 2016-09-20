@@ -22,21 +22,36 @@ namespace Splitio.Services.SegmentFetcher.Classes
         
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
         private ConcurrentDictionary<string, SelfRefreshingSegment> segmentsThreads;
+        private SegmentTaskWorker worker;
         private SdkReadinessGates gates;
         private int interval;
         private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentsCache):base(segmentsCache)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments):base(segmentsCache)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segmentsThreads = new ConcurrentDictionary<string, SelfRefreshingSegment>();
+            worker = new SegmentTaskWorker(numberOfParallelSegments); 
             this.interval = interval;
             this.gates = gates;
+            Start();
         }
 
         public void Stop()
         {
             cancelTokenSource.Cancel();
+        }
+
+        public void Start()
+        {
+            Task schedulerTask = PeriodicTaskFactory.Start(
+                () =>  AddSegmentsToQueue(),
+                intervalInMilliseconds: interval * 1000,
+                cancelToken: cancelTokenSource.Token);
+
+            Task workerTask = Task.Factory.StartNew(
+                () => worker.ExecuteTasks(), 
+                cancelTokenSource.Token);
         }
 
         public override void InitializeSegment(string name)
@@ -47,17 +62,17 @@ namespace Splitio.Services.SegmentFetcher.Classes
             {
                 segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
                 gates.RegisterSegment(name);
-                Task periodicTask = PeriodicTaskFactory.Start(() =>
-                                      {
-                                         segment.RefreshSegment();
-                                      }, 
-                                      intervalInMilliseconds: interval * 1000, 
-                                      cancelToken: cancelTokenSource.Token);
-
                 segmentsThreads.TryAdd(name, segment);
             }
         }
 
-
+        private void AddSegmentsToQueue()
+        {
+            foreach (SelfRefreshingSegment segment in segmentsThreads.Values)
+            {
+                SegmentTaskQueue.segmentsQueue.Enqueue(segment);
+                Log.Info(String.Format("Segment queued: {0}", segment.name));
+            }
+        }
     }
 }

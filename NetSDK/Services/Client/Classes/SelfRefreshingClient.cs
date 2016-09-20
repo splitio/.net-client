@@ -46,6 +46,7 @@ namespace Splitio.Services.Client.Classes
         private static string EventsBaseUrl;
         private static int MaxCountCalls;
         private static int MaxTimeBetweenCalls;
+        private static int NumberOfParalellSegmentTasks;
 
 
         /// <summary>
@@ -103,6 +104,7 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
+            NumberOfParalellSegmentTasks = config.NumberOfParelellSegmentTasks ?? 4;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -165,7 +167,7 @@ namespace Splitio.Services.Client.Classes
 
             var segmentsCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache);
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentsCache);
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
