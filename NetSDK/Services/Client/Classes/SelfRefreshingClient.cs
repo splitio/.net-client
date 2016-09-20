@@ -131,8 +131,7 @@ namespace Splitio.Services.Client.Classes
                     while (true)
                     {
                         if (gates.IsSDKReady(0))
-                        {
-                            Thread.Sleep(SegmentRefreshRate * 1000);
+                        {                           
                             selfRefreshingSegmentFetcher.StartScheduler();
                             break;
                         }
