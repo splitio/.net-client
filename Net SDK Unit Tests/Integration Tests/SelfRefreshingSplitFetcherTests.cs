@@ -37,11 +37,11 @@ namespace Splitio_Tests.Integration_Tests
             var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json", segmentCache), segmentCache);
             var splitChangeFetcher = new JSONFileSplitChangeFetcher("splits_staging.json");
             var splitChangesResult = splitChangeFetcher.Fetch(-1);
-            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(
-                splitChangesResult.splits.Select(x => new KeyValuePair<string, ParsedSplit>(x.name, splitParser.Parse(x)))
-            )); 
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());         
             var gates = new SdkReadinessGates();
             var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, 30, splitCache);
+            selfRefreshingSplitFetcher.Start();
+            gates.IsSDKReady(10);
 
             //Act           
             ParsedSplit result = splitCache.GetSplit("Pato_Test_1");
