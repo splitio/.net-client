@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SplitClient: ISplitClient
+    public abstract class SplitClient: ISplitClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
         private const string Control = "control";
