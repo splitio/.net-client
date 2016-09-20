@@ -37,7 +37,8 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 if (counter < numberOfParallelTasks)
                 {
                     SelfRefreshingSegment segment;
-                    if (SegmentTaskQueue.segmentsQueue.TryDequeue(out segment))
+                    //Wait indefinitely until a segment is queued
+                    if (SegmentTaskQueue.segmentsQueue.TryTake(out segment, -1))
                     {
                         Log.Info(String.Format("Segment dequeued: {0}", segment.name));
                         IncrementCounter();

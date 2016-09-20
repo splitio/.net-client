@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -64,6 +65,7 @@ namespace Splitio.Services.Client.Classes
         private ISegmentSdkApiClient segmentSdkApiClient;
         private ITreatmentSdkApiClient treatmentSdkApiClient;
         private IMetricsSdkApiClient metricsSdkApiClient;
+        private SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher;
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
@@ -82,6 +84,7 @@ namespace Splitio.Services.Client.Classes
             {
                 BlockUntilReady(BlockMilisecondsUntilReady);
             }
+            LaunchTaskSchedulerOnReady();
         }
 
         private void ReadConfig(ConfigurationOptions config)
@@ -104,7 +107,7 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
-            NumberOfParalellSegmentTasks = config.NumberOfParelellSegmentTasks ?? 4;
+            NumberOfParalellSegmentTasks = config.NumberOfParelellSegmentTasks ?? 5;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -119,6 +122,22 @@ namespace Splitio.Services.Client.Classes
         {
             ((SelfUpdatingTreatmentLog)treatmentLog).Start();
             ((SelfRefreshingSplitFetcher)splitFetcher).Start();
+        }
+
+        private void LaunchTaskSchedulerOnReady()
+        {
+            Task workerTask = Task.Factory.StartNew(
+                () => {
+                    while (true)
+                    {
+                        if (gates.IsSDKReady(0))
+                        {
+                            Thread.Sleep(SegmentRefreshRate * 1000);
+                            selfRefreshingSegmentFetcher.StartScheduler();
+                            break;
+                        }
+                    }
+                });
         }
 
         public void Stop()
@@ -167,7 +186,7 @@ namespace Splitio.Services.Client.Classes
 
             var segmentsCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache, NumberOfParalellSegmentTasks);
+            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
             var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentsCache);
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));

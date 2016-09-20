@@ -34,7 +34,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             worker = new SegmentTaskWorker(numberOfParallelSegments); 
             this.interval = interval;
             this.gates = gates;
-            Start();
+            StartWorker();
         }
 
         public void Stop()
@@ -42,16 +42,19 @@ namespace Splitio.Services.SegmentFetcher.Classes
             cancelTokenSource.Cancel();
         }
 
-        public void Start()
+        private void StartWorker()
         {
-            Task schedulerTask = PeriodicTaskFactory.Start(
-                () =>  AddSegmentsToQueue(),
-                intervalInMilliseconds: interval * 1000,
-                cancelToken: cancelTokenSource.Token);
-
             Task workerTask = Task.Factory.StartNew(
                 () => worker.ExecuteTasks(), 
                 cancelTokenSource.Token);
+        }
+
+        public void StartScheduler()
+        {
+            Task schedulerTask = PeriodicTaskFactory.Start(
+                    () => AddSegmentsToQueue(),
+                    intervalInMilliseconds: interval * 1000,
+                    cancelToken: cancelTokenSource.Token);
         }
 
         public override void InitializeSegment(string name)
@@ -63,6 +66,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
                 gates.RegisterSegment(name);
                 segmentsThreads.TryAdd(name, segment);
+                SegmentTaskQueue.segmentsQueue.TryAdd(segment);
             }
         }
 
@@ -70,7 +74,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         {
             foreach (SelfRefreshingSegment segment in segmentsThreads.Values)
             {
-                SegmentTaskQueue.segmentsQueue.Enqueue(segment);
+                SegmentTaskQueue.segmentsQueue.TryAdd(segment);
                 Log.Info(String.Format("Segment queued: {0}", segment.name));
             }
         }
