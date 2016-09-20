@@ -13,6 +13,7 @@ using log4net;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.Cache.Classes;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Splitio_Tests.Integration_Tests
 {
@@ -34,10 +35,16 @@ namespace Splitio_Tests.Integration_Tests
             //Arrange
             var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var splitParser = new SplitParser(new JSONFileSegmentFetcher("segment_payed.json", segmentCache), segmentCache);
-            var splitFetcher = new JSONFileSplitFetcher("splits_staging.json", splitParser);
+            var splitChangeFetcher = new JSONFileSplitChangeFetcher("splits_staging.json");
+            var splitChangesResult = splitChangeFetcher.Fetch(-1);
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(
+                splitChangesResult.splits.Select(x => new KeyValuePair<string, ParsedSplit>(x.name, splitParser.Parse(x)))
+            )); 
+            var gates = new SdkReadinessGates();
+            var selfRefreshingSplitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, 30, splitCache);
 
             //Act           
-            ParsedSplit result = splitFetcher.splitCache.GetSplit("Pato_Test_1");
+            ParsedSplit result = splitCache.GetSplit("Pato_Test_1");
 
             //Assert
             Assert.IsNotNull(result);
@@ -120,10 +127,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = splitCache.GetSplit("condition_and");
 
             //Assert
-            Assert.IsNull(result);
-        
+            Assert.IsNull(result);      
         }
-
-
     }
 }

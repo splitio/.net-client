@@ -12,13 +12,14 @@ using System.Collections.Generic;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.Cache.Classes;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
     public class EngineModuleTests
     {
-        JSONFileSplitFetcher splitFetcher;
+        InMemorySplitCache splitCache;
 
         [TestInitialize]
         public void Initialize()
@@ -28,7 +29,11 @@ namespace Splitio_Tests.Integration_Tests
             var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(@"segment_payed.json", segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
-            splitFetcher = new JSONFileSplitFetcher(@"splits_staging_2.json", splitParser);
+            var splitChangeFetcher = new JSONFileSplitChangeFetcher("splits_staging_2.json");
+            var splitChangesResult = splitChangeFetcher.Fetch(-1);
+            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(
+                splitChangesResult.splits.Select(x => new KeyValuePair<string, ParsedSplit>(x.name, splitParser.Parse(x)))
+            )); 
         }
 
         [DeploymentItem(@"Resources\splits_staging_2.json")]
@@ -37,7 +42,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw_4SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw4");
+            ParsedSplit split = splitCache.GetSplit("test_jw4");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -71,7 +76,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw3_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw3");
+            ParsedSplit split = splitCache.GetSplit("test_jw3");
       
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -93,7 +98,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw");
+            ParsedSplit split = splitCache.GetSplit("test_jw");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
@@ -119,7 +124,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetTreatment_Test_jw2_SuccessfulWithResults()
         {
             //Arrange
-            ParsedSplit split = splitFetcher.splitCache.GetSplit("test_jw2");
+            ParsedSplit split = splitCache.GetSplit("test_jw2");
 
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);

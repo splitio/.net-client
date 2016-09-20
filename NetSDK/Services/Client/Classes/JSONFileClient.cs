@@ -23,7 +23,11 @@ namespace Splitio.Services.Client.Classes
             var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
-            var splitFetcher = new JSONFileSplitFetcher(splitsFilePath, splitParser);
+            var splitChangeFetcher = new JSONFileSplitChangeFetcher(splitsFilePath);
+            var splitChangesResult = splitChangeFetcher.Fetch(-1);
+            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(
+                splitChangesResult.splits.Select(x => new KeyValuePair<string, ParsedSplit>(x.name, splitParser.Parse(x)))
+            ));
             splitter = new Splitter();
             engine = new Engine(splitter);
         }
