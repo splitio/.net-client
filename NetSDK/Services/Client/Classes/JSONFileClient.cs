@@ -20,14 +20,16 @@ namespace Splitio.Services.Client.Classes
         public JSONFileClient(string splitsFilePath, string segmentsFilePath)
         {
             InitializeLogger();
-            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+            segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
             var splitChangeFetcher = new JSONFileSplitChangeFetcher(splitsFilePath);
             var splitChangesResult = splitChangeFetcher.Fetch(-1);
-            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(
-                splitChangesResult.splits.Select(x => new KeyValuePair<string, ParsedSplit>(x.name, splitParser.Parse(x)))
-            ));
+            var parsedSplits = new ConcurrentDictionary<string, ParsedSplit>();
+            foreach (Split split in splitChangesResult.splits)
+                parsedSplits.TryAdd(split.name, splitParser.Parse(split));         
+            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
+            
             splitter = new Splitter();
             engine = new Engine(splitter);
         }
@@ -35,6 +37,16 @@ namespace Splitio.Services.Client.Classes
         private void InitializeLogger()
         {
             log4net.Config.XmlConfigurator.Configure();
+        }
+
+        public void RemoveSplitFromCache(string splitName)
+        {
+            splitCache.RemoveSplit(splitName);
+        }
+
+        public void RemoveKeyFromSegmentCache(string segmentName, List<string> keys)
+        {
+            segmentCache.RemoveFromSegment(segmentName, keys);
         }
     }
 }

@@ -183,11 +183,11 @@ namespace Splitio.Services.Client.Classes
             var segmentRefreshRate = RandomizeRefreshRates ? Random(SegmentRefreshRate) : SegmentRefreshRate;
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
-            var segmentsCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
+            segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache, NumberOfParalellSegmentTasks);
+            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentsCache);
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
