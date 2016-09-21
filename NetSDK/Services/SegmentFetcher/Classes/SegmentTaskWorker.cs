@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
@@ -13,6 +14,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         int numberOfParallelTasks;
         int counter;
+        ManualResetEventSlim waitForExecution = new ManualResetEventSlim();
 
         public SegmentTaskWorker(int numberOfParallelTasks)
         {
@@ -28,6 +30,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private void DecrementCounter()
         {
             counter--;
+            waitForExecution.Set();
         }
 
         public void ExecuteTasks()
@@ -46,6 +49,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
                         task.ContinueWith((x) => { DecrementCounter(); }); 
                         task.Start();                   
                     }
+                }
+                else
+                {
+                    waitForExecution.Wait();
+                    waitForExecution.Reset();
                 }
             }
         }
