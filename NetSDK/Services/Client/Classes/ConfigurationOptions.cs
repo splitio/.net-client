@@ -23,6 +23,6 @@ namespace Splitio.Services.Client.Classes
         public int? SplitsStorageConcurrencyLevel { get; set; } 
         public string SdkMachineName { get; set; }
         public string SdkMachineIP{ get; set; }
-        public int? NumberOfParelellSegmentTasks { get; set; }
+        public int? NumberOfParalellSegmentTasks { get; set; }
     }
 }

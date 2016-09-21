@@ -107,7 +107,7 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
-            NumberOfParalellSegmentTasks = config.NumberOfParelellSegmentTasks ?? 5;
+            NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
