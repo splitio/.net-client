@@ -32,13 +32,17 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var splitName = "test1";
 
             //Act
-            splitCache.AddSplit(splitName, new ParsedSplit() { name = splitName });
-            splitCache.AddSplit(splitName, new ParsedSplit() { name = splitName });
+            var parsedSplit1 = new ParsedSplit() { name = splitName };
+            splitCache.AddSplit(splitName, parsedSplit1);
+            var parsedSplit2 = new ParsedSplit() { name = splitName };
+            splitCache.AddSplit(splitName, parsedSplit2);
             var result = splitCache.GetAllSplits();
 
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(result[0], parsedSplit1);
+            Assert.AreNotEqual(result[0], parsedSplit2);
         }
 
         [TestMethod]
