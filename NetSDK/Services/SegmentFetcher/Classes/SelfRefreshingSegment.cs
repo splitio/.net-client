@@ -28,6 +28,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segmentCache = segmentCache;
             this.gates = gates;
+            gates.RegisterSegment(name);
         }
 
         public void RefreshSegment()

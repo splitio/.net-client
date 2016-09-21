@@ -21,7 +21,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
         
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
-        private ConcurrentDictionary<string, SelfRefreshingSegment> segmentsThreads;
+        private ConcurrentDictionary<string, SelfRefreshingSegment> segments;
         private SegmentTaskWorker worker;
         private SdkReadinessGates gates;
         private int interval;
@@ -30,7 +30,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments):base(segmentsCache)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
-            this.segmentsThreads = new ConcurrentDictionary<string, SelfRefreshingSegment>();
+            this.segments = new ConcurrentDictionary<string, SelfRefreshingSegment>();
             worker = new SegmentTaskWorker(numberOfParallelSegments); 
             this.interval = interval;
             this.gates = gates;
@@ -62,19 +62,19 @@ namespace Splitio.Services.SegmentFetcher.Classes
         public override void InitializeSegment(string name)
         {
             SelfRefreshingSegment segment;
-            segmentsThreads.TryGetValue(name, out segment);
+            segments.TryGetValue(name, out segment);
             if (segment == null)
             {
                 segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
-                gates.RegisterSegment(name);
-                segmentsThreads.TryAdd(name, segment);
+                segments.TryAdd(name, segment);
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
+                Log.Info(String.Format("Segment queued: {0}", segment.name));
             }
         }
 
         private void AddSegmentsToQueue()
         {
-            foreach (SelfRefreshingSegment segment in segmentsThreads.Values)
+            foreach (SelfRefreshingSegment segment in segments.Values)
             {
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
                 Log.Info(String.Format("Segment queued: {0}", segment.name));
