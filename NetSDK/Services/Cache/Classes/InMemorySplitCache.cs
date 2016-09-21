@@ -1,4 +1,5 @@
-﻿using Splitio.Domain;
+﻿using log4net;
+using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -10,6 +11,8 @@ namespace Splitio.Services.Cache.Classes
 {
     public class InMemorySplitCache : ISplitCache
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(InMemorySplitCache));
+
         private ConcurrentDictionary<string, ParsedSplit> splits;
         private long changeNumber;
 
@@ -32,6 +35,10 @@ namespace Splitio.Services.Cache.Classes
 
         public void SetChangeNumber(long changeNumber)
         {
+            if (changeNumber < this.changeNumber)
+            {
+                Log.Error("ChangeNumber for splits cache is less than previous");
+            }
             this.changeNumber = changeNumber;
         }
 

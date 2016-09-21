@@ -1,4 +1,5 @@
-﻿using Splitio.Domain;
+﻿using log4net;
+using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SegmentFetcher.Classes;
 using System;
@@ -11,6 +12,8 @@ namespace Splitio.Services.Cache.Classes
 {
     public class InMemorySegmentCache : ISegmentCache
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(InMemorySegmentCache));
+
         private ConcurrentDictionary<string, Segment> segments;
 
         public InMemorySegmentCache(ConcurrentDictionary<string, Segment> segments)
@@ -55,7 +58,11 @@ namespace Splitio.Services.Cache.Classes
             Segment segment;
             if (segments.TryGetValue(segmentName, out segment))
             {
-                segment.changeNumber = changeNumber;
+                if (changeNumber < segment.changeNumber)
+                {
+                    Log.Error("ChangeNumber for segment cache is less than previous");
+                }
+                segment.changeNumber = changeNumber;              
             }
         }
 
