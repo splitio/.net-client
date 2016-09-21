@@ -25,11 +25,8 @@ Install-Package Splitio
 /** Create the Split Client instance. */
 var sdk = factory.BuildSplitClient("API_KEY", configurations);
 
-/** Set the attributes dictionary as null*/
-attributes = null;
-
 /** Checking if the key belongs to treatment 'on' in sample_feature. */
-if (sdk.GetTreatment("key", "sample_feature", attributes) == "on") 
+if (sdk.GetTreatment("key", "sample_feature") == "on") 
 {
     //Code for enabled feature
 } 
