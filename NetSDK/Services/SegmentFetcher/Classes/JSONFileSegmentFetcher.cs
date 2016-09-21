@@ -15,9 +15,12 @@ namespace Splitio.Services.SegmentFetcher.Classes
         List<string> added;
         public JSONFileSegmentFetcher(string filePath, ISegmentCache segmentsCache):base(segmentsCache)
         {
-            var json = File.ReadAllText(filePath);
-            var segmentChangesResult = JsonConvert.DeserializeObject<SegmentChange>(json);
-            added = segmentChangesResult.added;
+            if (!String.IsNullOrEmpty(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                var segmentChangesResult = JsonConvert.DeserializeObject<SegmentChange>(json);
+                added = segmentChangesResult.added;
+            }
         }
 
         public override void InitializeSegment(string name)
