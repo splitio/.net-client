@@ -14,7 +14,9 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         int numberOfParallelTasks;
         int counter;
-        ManualResetEventSlim waitForExecution = new ManualResetEventSlim();
+        //Worker is always one task, so when it is signaled, after the
+        //task stops its wait, this variable is auto-reseted
+        AutoResetEvent waitForExecution = new AutoResetEvent(false);
 
         public SegmentTaskWorker(int numberOfParallelTasks)
         {
@@ -29,8 +31,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         private void DecrementCounter()
         {
+            if (counter == numberOfParallelTasks)
+            {
+                waitForExecution.Set();
+            }
             counter--;
-            waitForExecution.Set();
         }
 
         public void ExecuteTasks()
@@ -52,8 +57,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 }
                 else
                 {
-                    waitForExecution.Wait();
-                    waitForExecution.Reset();
+                    waitForExecution.WaitOne();
                 }
             }
         }
