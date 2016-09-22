@@ -8,6 +8,6 @@ namespace Splitio.Services.SegmentFetcher.Interfaces
 {
     public interface ISegmentFetcher
     {
-        Segment Fetch(string name);
+        void InitializeSegment(string name);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
@@ -10,16 +11,16 @@ namespace Splitio.Services.Client.Classes
 {
     public class SplitManager : ISplitManager
     {
-        ISplitFetcher splitFetcher;
+        ISplitCache splitCache;
 
-        public SplitManager (ISplitFetcher splitFetcher)
+        public SplitManager(ISplitCache splitCache)
         {
-            this.splitFetcher = splitFetcher;
+            this.splitCache = splitCache;
         }
 
         public List<LightSplit> Splits()
         {
-            var currentSplits = splitFetcher.FetchAll();
+            var currentSplits = splitCache.GetAllSplits();
 
             var lightSplits = currentSplits.Select(x =>
                 new LightSplit()

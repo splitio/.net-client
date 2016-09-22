@@ -181,7 +181,7 @@ namespace Splitio.Services.Metrics.Classes
         {
             try
             {
-            return JsonConvert.SerializeObject(timeMetrics.Select(x => new { name = x.Key, latencies = x.Value.GetLatencies()}));
+                return JsonConvert.SerializeObject(timeMetrics.Select(x => new { name = x.Key, latencies = x.Value.GetLatencies()}));
             }
             catch (Exception e)
             {

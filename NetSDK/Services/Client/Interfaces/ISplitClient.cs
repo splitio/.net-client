@@ -10,6 +10,6 @@ namespace Splitio.Services.Client.Interfaces
     public interface ISplitClient
     {
         ISplitManager GetSplitManager();
-        string GetTreatment(string key, string feature, Dictionary<string,object> attributes);
+        string GetTreatment(string key, string feature, Dictionary<string, object> attributes);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Classes;
@@ -22,7 +24,7 @@ namespace Splitio.Services.Client.Classes
             InitializeLogger();
             filePath = LookupFilePath(filePath);
             var splits = ParseSplitFile(filePath);
-            BuildSplitFetcher(splits);
+            splitCache = new InMemorySplitCache(splits);
             BuildSplitter();
             BuildEngine();
         }
@@ -42,11 +44,6 @@ namespace Splitio.Services.Client.Classes
             }
 
             throw new DirectoryNotFoundException("Splits file could not be found");
-        }
-
-        private void BuildSplitFetcher(ConcurrentDictionary<string,ParsedSplit> splits)
-        {
-            splitFetcher = new InMemorySplitFetcher(splits);
         }
 
         private ConcurrentDictionary<string, ParsedSplit> ParseSplitFile(string filePath)

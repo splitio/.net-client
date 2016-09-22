@@ -74,6 +74,7 @@
     <Compile Include="CommonLibraries\CurrentTimeHelper.cs" />
     <Compile Include="CommonLibraries\HTTPResult.cs" />
     <Compile Include="CommonLibraries\ISdkApiClient.cs" />
+    <Compile Include="CommonLibraries\PeriodicTaskFactory.cs" />
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
     <Compile Include="CommonLibraries\TypeConverter.cs" />
@@ -87,6 +88,10 @@
     <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
+    <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
+    <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
+    <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
+    <Compile Include="Services\Cache\Interfaces\ISplitCache.cs" />
     <Compile Include="Services\Client\Classes\SplitFactory.cs" />
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\JSONFileClient.cs" />
@@ -136,10 +141,12 @@
     <Compile Include="Services\Parsing\Classes\WhitelistMatcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\ApiSegmentChangeFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\JSONFileSegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentTaskQueue.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentChangeFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
+    <Compile Include="Services\SegmentFetcher\Classes\SegmentTaskWorker.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentChangeFetcher.cs" />
     <Compile Include="Domain\SegmentChange.cs" />
-    <Compile Include="Services\SegmentFetcher\Classes\SegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegment.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SelfRefreshingSegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Classes\SegmentSdkApiClient.cs" />
@@ -147,14 +154,12 @@
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Classes\InMemorySplitFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitFetcher.cs" />
+    <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />
     <Compile Include="Domain\SplitChange.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SplitSdkApiClient.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitChangeFetcher.cs" />
-    <Compile Include="Services\SplitFetcher\Interfaces\ISplitFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Interfaces\ISplitSdkApiClient.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>

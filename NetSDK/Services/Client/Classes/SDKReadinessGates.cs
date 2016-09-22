@@ -101,7 +101,6 @@ namespace Splitio.Services.Client.Classes
                 {
                     if (!countdown.Wait(timeLeft))
                     {
-                        Log.Error(segmentName + " is not ready yet");
                         return false;
                     }
                 }
@@ -109,12 +108,13 @@ namespace Splitio.Services.Client.Classes
                 {
                     if (!countdown.Wait(0))
                     {
-                        Log.Error(segmentName + " is not ready yet");
                         return false;
                     }
                 }
                 timeLeft = timeLeft - (int)clock.ElapsedMilliseconds;
             }
+
+            Log.Info("Segments are ready");
 
             return true;
         }

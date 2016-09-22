@@ -1,83 +1,60 @@
 ﻿using log4net;
 using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
-    public class SelfRefreshingSegment: Segment
+    public class SelfRefreshingSegment
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
+
+        public string name;
+        private SdkReadinessGates gates;
         private ISegmentChangeFetcher segmentChangeFetcher;
-        private int interval;
-        public bool stopped { get; private set; }
+        private ISegmentCache segmentCache;
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, long change_number = -1) : base(name, change_number)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates,  ISegmentCache segmentCache)
         {
+            this.name = name;
             this.segmentChangeFetcher = segmentChangeFetcher;
-            this.interval = interval;
-            this.stopped = true;
+            this.segmentCache = segmentCache;
             this.gates = gates;
+            gates.RegisterSegment(name);
         }
 
-        public void Start()
-        {
-            Thread thread = new Thread(StartRefreshing);
-            thread.Start();
-        }
-
-        public void Stop()
-        {
-            stopped = true;
-        }
-
-        private void StartRefreshing()
-        {
-            if (!stopped)
-            {
-                return;
-            }
-
-            stopped = false;
-
-            while (!stopped)
-            {
-                RefreshSegment();
-                Thread.Sleep(interval * 1000);
-            }
-        }
-
-
-        private void RefreshSegment()
+        public void RefreshSegment()
         {        
             while (true)
             {
+                var changeNumber = segmentCache.GetChangeNumber(name);
+
                 try
-                {            
-                    var response = segmentChangeFetcher.Fetch(name, change_number);
+                {
+                    var response = segmentChangeFetcher.Fetch(name, changeNumber);
                     if (response == null)
                     {
-                        return;
+                        break;
                     }
-                    if (change_number >= response.till)
+                    if (changeNumber >= response.till)
                     {
                         gates.SegmentIsReady(name);
-                        return;
+                        break;
                     }
 
                     if (response.added.Count() > 0 || response.removed.Count() > 0)
                     {
-                        var tempKeys = new HashSet<string>(keys);
 
-                        tempKeys.UnionWith(response.added);
-                        tempKeys.ExceptWith(response.removed);
-
-                        keys = tempKeys;
+                        segmentCache.AddToSegment(name, response.added);
+                        segmentCache.RemoveFromSegment(name, response.removed);
 
                         if (response.added.Count() > 0)
                         {
@@ -89,13 +66,16 @@ namespace Splitio.Services.SegmentFetcher.Classes
                         }
                     }
 
-                    change_number = response.till;                  
+                    segmentCache.SetChangeNumber(name, response.till);                  
                 }
                 catch (Exception e)
                 {
                     Log.Error("Exception caught refreshing segment", e);
-                    stopped = true;
-                }               
+                }
+                finally
+                {
+                    Log.Info(String.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
@@ -13,29 +14,30 @@ using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SplitClient: ISplitClient
+    public abstract class SplitClient: ISplitClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
         private const string Control = "control";
         private const string SdkGetTreatment = "sdk.getTreatment";
 
         protected Splitter splitter;
-        protected ISplitFetcher splitFetcher;
         protected ITreatmentLog treatmentLog;
         protected IMetricsLog metricsLog;
         protected Engine engine;
         protected ISplitManager manager;
+        protected ISplitCache splitCache;
+        protected ISegmentCache segmentCache;
 
         public ISplitManager GetSplitManager()
         {
             return manager;
         }
 
-        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes)
+        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null)
         {
             try
             {
-                var split = splitFetcher.Fetch(feature);
+                var split = splitCache.GetSplit(feature);
 
                 if (split == null)
                 {

@@ -4,6 +4,7 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
@@ -21,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -45,6 +47,7 @@ namespace Splitio.Services.Client.Classes
         private static string EventsBaseUrl;
         private static int MaxCountCalls;
         private static int MaxTimeBetweenCalls;
+        private static int NumberOfParalellSegmentTasks;
 
 
         /// <summary>
@@ -57,10 +60,12 @@ namespace Splitio.Services.Client.Classes
 
 
         private SdkReadinessGates gates;
+        private SelfRefreshingSplitFetcher splitFetcher;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
         private ITreatmentSdkApiClient treatmentSdkApiClient;
         private IMetricsSdkApiClient metricsSdkApiClient;
+        private SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher;
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
@@ -79,6 +84,7 @@ namespace Splitio.Services.Client.Classes
             {
                 BlockUntilReady(BlockMilisecondsUntilReady);
             }
+            LaunchTaskSchedulerOnReady();
         }
 
         private void ReadConfig(ConfigurationOptions config)
@@ -101,6 +107,7 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
+            NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -115,6 +122,21 @@ namespace Splitio.Services.Client.Classes
         {
             ((SelfUpdatingTreatmentLog)treatmentLog).Start();
             ((SelfRefreshingSplitFetcher)splitFetcher).Start();
+        }
+
+        private void LaunchTaskSchedulerOnReady()
+        {
+            Task workerTask = Task.Factory.StartNew(
+                () => {
+                    while (true)
+                    {
+                        if (gates.IsSDKReady(0))
+                        {                           
+                            selfRefreshingSegmentFetcher.StartScheduler();
+                            break;
+                        }
+                    }
+                });
         }
 
         public void Stop()
@@ -161,11 +183,13 @@ namespace Splitio.Services.Client.Classes
             var segmentRefreshRate = RandomizeRefreshRates ? Random(SegmentRefreshRate) : SegmentRefreshRate;
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
+            segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, new ConcurrentDictionary<string, SelfRefreshingSegment>(ConcurrencyLevel, InitialCapacity));
+            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher);
-            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, -1, new ConcurrentDictionary<string, Domain.ParsedSplit>(ConcurrencyLevel, InitialCapacity));
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
+            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
+            splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
 
         private void BuildTreatmentLog()
@@ -203,7 +227,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildManager()
         {
-            manager = new SplitManager(splitFetcher);
+            manager = new SplitManager(splitCache);
         }
     }
 }
