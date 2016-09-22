@@ -26,12 +26,12 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         private void IncrementCounter()
         {
-            counter++;
+            Interlocked.Increment(ref counter);
         }
 
         private void DecrementCounter()
         {
-            counter--;
+            Interlocked.Decrement(ref counter);
             waitForExecution.Set();
         }
 
