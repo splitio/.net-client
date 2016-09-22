@@ -26,6 +26,8 @@ namespace Splitio.Services.Client.Classes
         protected Engine engine;
         protected ISplitManager manager;
         protected ISplitCache splitCache;
+        protected ISegmentCache segmentCache;
+
         public ISplitManager GetSplitManager()
         {
             return manager;

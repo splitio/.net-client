@@ -64,6 +64,7 @@
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
     <Compile Include="Integration Tests\EngineModuleTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
+    <Compile Include="Integration Tests\JSONFileClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
@@ -97,7 +98,13 @@
     <None Include="Resources\segment_payed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\splits_staging_4.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\splits_staging.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\splits_staging_3.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\splits_staging_2.json">

@@ -107,7 +107,7 @@ namespace Splitio.Services.Client.Classes
             TreatmentLogSize = config.MaxImpressionsLogSize ?? 30000;
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
-            NumberOfParalellSegmentTasks = config.NumberOfParelellSegmentTasks ?? 5;
+            NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -183,11 +183,11 @@ namespace Splitio.Services.Client.Classes
             var segmentRefreshRate = RandomizeRefreshRates ? Random(SegmentRefreshRate) : SegmentRefreshRate;
             var splitsRefreshRate = RandomizeRefreshRates ? Random(SplitsRefreshRate) : SplitsRefreshRate;
 
-            var segmentsCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
+            segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>(ConcurrencyLevel, InitialCapacity));
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
-            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentsCache, NumberOfParalellSegmentTasks);
+            selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentsCache);
+            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
