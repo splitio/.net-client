@@ -31,11 +31,8 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         private void DecrementCounter()
         {
-            if (counter == numberOfParallelTasks)
-            {
-                waitForExecution.Set();
-            }
             counter--;
+            waitForExecution.Set();
         }
 
         public void ExecuteTasks()
