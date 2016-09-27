@@ -20,8 +20,8 @@ namespace Splitio_Tests.Unit_Tests
                 negate = false
             };
 
-            var attributes = new Dictionary<string, object>();
-            attributes.Add("card_number", 12012);
+            var attributes = new Dictionary<string, string>();
+            attributes.Add("card_number", "12012");
             attributes.Add("card_type", "ABC");
             
             //Act
@@ -42,8 +42,8 @@ namespace Splitio_Tests.Unit_Tests
                 negate = true
             };
 
-            var attributes = new Dictionary<string, object>();
-            attributes.Add("card_number", 12012);
+            var attributes = new Dictionary<string, string>();
+            attributes.Add("card_number", "12012");
             attributes.Add("card_type", "ABC");
 
             //Act
@@ -83,8 +83,8 @@ namespace Splitio_Tests.Unit_Tests
                 negate = false
             };
 
-            var attributes = new Dictionary<string, object>();
-            attributes.Add("card_number", 12012);
+            var attributes = new Dictionary<string, string>();
+            attributes.Add("card_number", "12012");
             attributes.Add("card_type", "ABC");
 
             //Act
@@ -105,8 +105,8 @@ namespace Splitio_Tests.Unit_Tests
                 negate = false
             };
 
-            var attributes = new Dictionary<string, object>();
-            attributes.Add("card_number", 12012);
+            var attributes = new Dictionary<string, string>();
+            attributes.Add("card_number", "12012");
             attributes.Add("card_type", "ABC");
 
             //Act

@@ -49,18 +49,18 @@ namespace Splitio_Tests.Integration_Tests
 
             //Act
             //get treatment for split test_jw4
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("date", 9);
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("date", "9");
             dict.Add("test", "acdefx");
             var result = engine.GetTreatment("xadcc", split, dict);
 
-            Dictionary<string, object> dict2 = new Dictionary<string, object>();
-            dict2.Add("date", 9);
+            Dictionary<string, string> dict2 = new Dictionary<string, string>();
+            dict2.Add("date", "9");
             dict2.Add("test", "azzdefx");
             var result2 = engine.GetTreatment("xadcscdcc", split, dict2);
 
-            Dictionary<string, object> dict3 = new Dictionary<string, object>();
-            dict3.Add("date", 9);
+            Dictionary<string, string> dict3 = new Dictionary<string, string>();
+            dict3.Add("date", "9");
             dict3.Add("test", "azzdefx");
             var result3 = engine.GetTreatment("abcdef", split, dict3);
 
@@ -81,8 +81,8 @@ namespace Splitio_Tests.Integration_Tests
             Splitter splitter = new Splitter();
             Engine engine = new Engine(splitter);
 
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("date", 9);
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("date", "9");
 
             //Act
             //get treatment for split test_jw3
@@ -105,12 +105,12 @@ namespace Splitio_Tests.Integration_Tests
 
             //Act
             //get treatment for split test_jw
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("date", 1470960000000);
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("date", "1470960000000");
             var result1 = engine.GetTreatment("1f84e5ddb06a3e66145ccfc1aac247", split, dict);
 
-            Dictionary<string, object> dict2 = new Dictionary<string, object>();
-            dict2.Add("date", 9);
+            Dictionary<string, string> dict2 = new Dictionary<string, string>();
+            dict2.Add("date", "9");
             var result2 = engine.GetTreatment("axdzcccczzcce66145ccfc1aac247", split, dict2);
 
             //Assert
@@ -131,12 +131,12 @@ namespace Splitio_Tests.Integration_Tests
 
             //Act
             //get treatment for split test_jw2
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("date", 9);
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("date", "9");
             var result1 = engine.GetTreatment("abcdz", split, dict);
 
-            Dictionary<string, object> dict2 = new Dictionary<string, object>();
-            dict2.Add("date", 9);
+            Dictionary<string, string> dict2 = new Dictionary<string, string>();
+            dict2.Add("date", "9");
             var result2 = engine.GetTreatment("xadcc", split, dict2);
 
             //Assert
