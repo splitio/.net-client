@@ -35,7 +35,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             waitForExecution.Set();
         }
 
-        public void ExecuteTasks()
+        public void ExecuteTasks(CancellationToken token)
         {
             while (true)
             {
@@ -47,7 +47,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     {
                         Log.Info(String.Format("Segment dequeued: {0}", segment.name));
                         IncrementCounter();
-                        Task task = new Task(() => segment.RefreshSegment());
+                        Task task = new Task(() => segment.RefreshSegment(), token);
                         task.ContinueWith((x) => { DecrementCounter(); }); 
                         task.Start();                   
                     }

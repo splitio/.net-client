@@ -45,7 +45,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private void StartWorker()
         {
             Task workerTask = Task.Factory.StartNew(
-                () => worker.ExecuteTasks(), 
+                () => worker.ExecuteTasks(cancelTokenSource.Token), 
                 cancelTokenSource.Token);
         }
 

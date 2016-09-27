@@ -142,6 +142,7 @@ namespace Splitio.Services.Client.Classes
         public void Stop()
         {
             ((SelfRefreshingSplitFetcher)splitFetcher).Stop();
+            ((SelfRefreshingSegmentFetcher)selfRefreshingSegmentFetcher).Stop();
             ((SelfUpdatingTreatmentLog)treatmentLog).Stop();
         }
 

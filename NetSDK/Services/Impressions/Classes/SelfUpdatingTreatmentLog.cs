@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Newtonsoft.Json;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Impressions.Interfaces;
 using System;
@@ -19,6 +20,7 @@ namespace Splitio.Services.Impressions.Classes
         private int interval;
         private bool stopped;
         private BlockingQueue<KeyImpression> queue;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
 
@@ -27,35 +29,18 @@ namespace Splitio.Services.Impressions.Classes
             this.queue = queue ?? new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache);
             this.apiClient = apiClient;
             this.interval = interval;
-            this.stopped = true;
         }
 
         public void Start()
         {
-            Thread thread = new Thread(StartRefreshing);
-            thread.Start();
+            PeriodicTaskFactory.Start(() => { SendBulkImpressions(); }, interval * 1000, cancellationTokenSource.Token);
         }
 
         public void Stop()
         {
-            stopped = true;
+            cancellationTokenSource.Cancel();
         }
 
-        private void StartRefreshing()
-        {
-            if (!stopped)
-            {
-                return;
-            }
-
-            stopped = false;
-
-            while (!stopped)
-            {
-                SendBulkImpressions();
-                Thread.Sleep(interval * 1000);
-            }
-        }
 
         private void SendBulkImpressions()
         {
