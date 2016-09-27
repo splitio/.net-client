@@ -10,7 +10,12 @@ namespace Microbenchmark
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<Benchmark>();
+            var switcher = new BenchmarkSwitcher(new[] {
+                typeof(BenchmarkGetTreatmentLocalhost),
+                typeof(BenchmarkGetTreatmentStagingTestingAccount),
+                typeof(BenchmarkGetTreatmentStagingGoogleJSAccount)
+            });
+            switcher.Run(args);
             Console.Read();
         }
     }

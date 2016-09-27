@@ -7,12 +7,13 @@ using System.Collections.Generic;
 
 namespace Microbenchmark
 {
-    public class Benchmark
+    public class BenchmarkGetTreatmentLocalhost
     {
         ISplitClient localhostClient;
         ISplitClient jsonClient;
-        private Dictionary<string, object> attributes;
-        public Benchmark()
+        private Dictionary<string, string> attributes;
+
+        public BenchmarkGetTreatmentLocalhost()
         {
             String apikey = "localhost";
 
@@ -21,10 +22,11 @@ namespace Microbenchmark
             configurations.LocalhostFilePath = @"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\test.splits";
             localhostClient = factory.BuildSplitClient(apikey, configurations);
 
-            attributes = new Dictionary<string, object>();
+            attributes = new Dictionary<string, string>();
             attributes.Add("attr", "18");
 
             jsonClient = new JSONFileClient(@"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\splits_staging.json", @"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\segment_payed.json");
+
         }
 
         [Benchmark]
@@ -80,6 +82,28 @@ namespace Microbenchmark
         public string GetTreatmentBenchmarkJsonClient_MultipleMatchers_InSegment()
         {
             var result = jsonClient.GetTreatment("abc123", "Manu_Test_1");
+            return result;
+        }
+
+
+        [Benchmark]
+        public string GetTreatmentBenchmarkJsonClient_MultipleMatchers2_LongKey()
+        {
+            var result = jsonClient.GetTreatment(Guid.NewGuid().ToString(), "Manu_Test_2");
+            return result;
+        }
+
+        [Benchmark]
+        public string GetTreatmentBenchmarkJsonClient_MultipleMatchers2_Attribute()
+        {
+            var result = jsonClient.GetTreatment(Guid.NewGuid().ToString(), "Manu_Test_2", attributes);
+            return result;
+        }
+
+        [Benchmark]
+        public string GetTreatmentBenchmarkJsonClient_MultipleMatchers2_InSegment()
+        {
+            var result = jsonClient.GetTreatment(Guid.NewGuid().ToString(), "Manu_Test_2");
             return result;
         }
     }

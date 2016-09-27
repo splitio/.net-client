@@ -48,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Benchmark.cs" />
+    <Compile Include="BenchmarkGetTreatmentStagingGoogleJSAcount.cs" />
+    <Compile Include="BenchmarkGetTreatmentStagingTestingAccount.cs" />
+    <Compile Include="BenchmarkGetTreatmentLocalhost.cs" />
+    <Compile Include="ClientSingleInstance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
