@@ -7,12 +7,12 @@ namespace Splitio.CommonLibraries
 {
     public static class TypeConverter
     {
+        private static readonly DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+
         public static DateTime ToDateTime(this long timestamp)
         {
-            DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             var timestampTruncatedToMinutes = timestamp - timestamp % 60000;
-            date = date.AddMilliseconds(timestampTruncatedToMinutes);
-            return date;
+            return date.AddMilliseconds(timestampTruncatedToMinutes);
         }
 
         public static DateTime? ToDateTime(this string timestampString)
