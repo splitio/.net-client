@@ -38,6 +38,9 @@
     <Reference Include="BenchmarkDotNet">
       <HintPath>..\packages\BenchmarkDotNet.0.9.7\lib\net40\BenchmarkDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="Metrics">
+      <HintPath>libraries\Metrics.NET-net40\Metrics.NET-net40\bin\Release\Metrics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -52,6 +55,7 @@
     <Compile Include="BenchmarkGetTreatmentStagingTestingAccount.cs" />
     <Compile Include="BenchmarkGetTreatmentLocalhost.cs" />
     <Compile Include="ClientSingleInstance.cs" />
+    <Compile Include="MetricsProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

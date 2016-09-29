@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Metrics.NLog</name>
+    </assembly>
+    <members>
+        <member name="M:Metrics.NLogReportsConfigExtensions.WithNLogCSVReports(Metrics.Reports.MetricsReports,System.TimeSpan,System.String)">
+            <summary>
+            Write CSV Metrics Reports using NLog. 
+            </summary>
+            <param name="reports">Instance to configure</param>
+            <param name="interval">Interval at which to report values</param>
+            <param name="delimiter">Delimiter to use for CSV</param>
+            <returns>Same Reports instance for chaining</returns>
+        </member>
+        <member name="M:Metrics.NLogReportsConfigExtensions.WithNLogTextReports(Metrics.Reports.MetricsReports,System.TimeSpan)">
+            <summary>
+            Write human readable text using NLog
+            </summary>
+            <param name="reports">Instance to configure</param>
+            <param name="interval">Interval at which to report values</param>
+            <returns>Same Reports instance for chaining</returns>
+        </member>
+    </members>
+</doc>
