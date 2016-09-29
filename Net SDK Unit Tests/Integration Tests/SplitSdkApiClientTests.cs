@@ -4,6 +4,7 @@ using Splitio.CommonLibraries;
 using System.Net;
 using Splitio.Services.SplitFetcher;
 using System.IO;
+using Splitio.Services.SplitFetcher.Classes;
 
 
 namespace Splitio_Tests.Integration_Tests
