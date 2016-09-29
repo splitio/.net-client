@@ -12,7 +12,7 @@ namespace Splitio.Domain
         public IMatcher matcher { get; set; }
         public bool negate { get; set; }
 
-        public virtual bool Match(string key, Dictionary<string, string> attributes)
+        public virtual bool Match(string key, Dictionary<string, object> attributes)
         {
             if (attribute == null)
             {
@@ -24,7 +24,7 @@ namespace Splitio.Domain
                 return false;
             }
 
-            string value;
+            object value;
             attributes.TryGetValue(attribute, out value);
 
             if (value == null)
@@ -32,7 +32,7 @@ namespace Splitio.Domain
                 return false;
             }
 
-            return (negate ^ matcher.Match(value));
+            return (negate ^ matcher.Match(value.ToString()));
         }
     }
 }

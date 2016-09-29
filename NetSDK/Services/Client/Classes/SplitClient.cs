@@ -33,7 +33,7 @@ namespace Splitio.Services.Client.Classes
             return manager;
         }
 
-        public string GetTreatment(string key, string feature, Dictionary<string, string> attributes = null)
+        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null)
         {
             try
             {

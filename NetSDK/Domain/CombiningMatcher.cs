@@ -10,7 +10,7 @@ namespace Splitio.Domain
         public CombinerEnum combiner { get; set; }
         public List<AttributeMatcher> delegates { get; set; }
         
-        public bool Match(string key, Dictionary<string, string> attributes)
+        public bool Match(string key, Dictionary<string, object> attributes)
         {
             if (delegates == null || delegates.Count() == 0)
             {

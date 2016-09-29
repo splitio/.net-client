@@ -19,8 +19,8 @@ namespace Splitio_Tests.Unit_Tests
                 combiner = CombinerEnum.AND
             };
             
-            var attributes = new Dictionary<string, string>();
-            attributes.Add("card_number", "12012");
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("card_number", 12012);
             attributes.Add("card_type", "ABC");
 
             //Act
@@ -34,8 +34,8 @@ namespace Splitio_Tests.Unit_Tests
         public void MatchShouldReturnTrueIfAllMatchersMatch()
         {
             //Arrange
-            var attributes = new Dictionary<string, string>();
-            attributes.Add("card_number", "12012");
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("card_number", 12012);
             attributes.Add("card_type", "ABC");
 
             var delegates = new List<AttributeMatcher>();
@@ -67,8 +67,8 @@ namespace Splitio_Tests.Unit_Tests
         public void MatchShouldReturnFalseIfAnyMatchersNoMatch()
         {
             //Arrange
-            var attributes = new Dictionary<string, string>();
-            attributes.Add("card_number", "12012");
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("card_number", 12012);
             attributes.Add("card_type", "ABC");
 
             var delegates = new List<AttributeMatcher>();

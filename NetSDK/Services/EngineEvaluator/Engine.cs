@@ -15,7 +15,7 @@ namespace Splitio.Services.EngineEvaluator
             this.splitter = splitter;
         }
 
-        public string GetTreatment(string key, ParsedSplit split, Dictionary<string, string> attributes)
+        public string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
         {
             if (!split.killed)
             {
