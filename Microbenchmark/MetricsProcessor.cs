@@ -43,7 +43,7 @@ namespace Microbenchmark
             {
                 Task.Factory.StartNew(() =>
                 {
-                    var atributes = new Dictionary<string, string>();
+                    var atributes = new Dictionary<string, object>();
                     atributes.Add("atrib", "1475094824");
                     atributes.Add("atrib2", "20");
                     while (true)

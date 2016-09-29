@@ -11,7 +11,7 @@ namespace Microbenchmark
     {
         ISplitClient localhostClient;
         ISplitClient jsonClient;
-        private Dictionary<string, string> attributes;
+        private Dictionary<string, object> attributes;
 
         public BenchmarkGetTreatmentLocalhost()
         {
@@ -22,7 +22,7 @@ namespace Microbenchmark
             configurations.LocalhostFilePath = @"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\test.splits";
             localhostClient = factory.BuildSplitClient(apikey, configurations);
 
-            attributes = new Dictionary<string, string>();
+            attributes = new Dictionary<string, object>();
             attributes.Add("attr", "18");
 
             jsonClient = new JSONFileClient(@"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\splits_staging.json", @"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\segment_payed.json");
