@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
     <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
