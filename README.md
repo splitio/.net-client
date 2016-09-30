@@ -106,3 +106,33 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 			// SDK was not ready in 1000 miliseconds
 		}
 ```
+
+###  Running the SDK in 'off-the-grid' Mode 
+
+Features start their life on one developer's machine. A developer should be able to put a feature behind Split on their development machine without the SDK requiring network connectivity. To achieve this, Split SDK can be started in 'localhost' (aka off-the-grid mode). In this mode, the SDK neither polls nor updates Split servers, rather it uses an in-memory data structure to determine what treatments to show to the logged in customer for each of the features. Here is how you can start the SDK in 'localhost' mode:
+
+```cs
+	var client = factory.BuildSplitClient("localhost", configurations);
+```
+
+In this mode, the SDK loads a mapping of feature name to treatment from a file at $HOME/.split. For a given feature, the specified treatment will be returned for every customer. In Split terms, the roll-out plan for that feature becomes:
+
+```
+if user is in segment all then split 100%:treatment
+```
+
+Any feature that is not mentioned in the file is assumed to not exist. The SDK returns The Control Treatment for every customer of that feature.
+
+The format of this file is two columns separated by whitespace. The left column is the feature name, the right column is the treatment name. Here is a sample feature file:
+
+```
+# this is a comment
+
+reporting_v2 on # sdk.getTreatment(*, reporting_v2) will return 'on'
+
+double_writes_to_cassandra off
+
+new-navigation v3
+```
+
+
