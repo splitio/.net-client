@@ -8,6 +8,18 @@ namespace Splitio_Tests.Unit_Tests.Client
     public class SplitFactoryUnitTests
     {
         [TestMethod]
+        [ExpectedException(typeof(TimeoutException), "SDK was not ready in 1 miliseconds")]
+        public void BuildSplitClientShouldReturnExceptionIfSdkNotReady()
+        {
+            //Arrange
+            var factory = new SplitFactory();
+            var options = new ConfigurationOptions() { Ready = 1 };
+
+            //Act         
+            var client = factory.BuildSplitClient("any", options);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(Exception), "API Key should be set to initialize Split SDK.")]
         public void BuildSplitClientWithEmptyApiKeyShouldReturnException()
         {
