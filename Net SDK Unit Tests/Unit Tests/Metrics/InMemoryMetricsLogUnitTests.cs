@@ -4,6 +4,8 @@ using Splitio.Services.Metrics.Classes;
 using System.Collections.Concurrent;
 using Splitio.Services.Metrics.Interfaces;
 using System.Linq;
+using Moq;
+using System.Threading;
 
 namespace Splitio_Tests.Unit_Tests.Metrics
 {
@@ -219,5 +221,52 @@ namespace Splitio_Tests.Unit_Tests.Metrics
             gauges.TryGetValue("", out gauge);
             Assert.AreEqual(0, gauge);
         }
+
+
+        [TestMethod]
+        public void SendCountMetricsSuccessfully()
+        {
+            //Arrange
+            var counters = new ConcurrentDictionary<string, Counter>();
+            var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, counters, null, null, 1);
+            
+            //Act
+            metricsLog.Count("counter_test", 150);
+
+            //Assert
+            metricsApiClientMock.Verify(x => x.SendCountMetrics(It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void SendTimeMetricsSuccessfully()
+        {
+            //Arrange
+            var timers = new ConcurrentDictionary<string, ILatencyTracker>();
+            var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, null, timers, null, 1, -1);
+
+            //Act
+            metricsLog.Time("time_test", 1);
+
+            //Assert
+            metricsApiClientMock.Verify(x => x.SendTimeMetrics(It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void SendGaugeMetricsSuccessfully()
+        {
+            //Arrange
+            var gauges = new ConcurrentDictionary<string, long>();
+            var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, null, null, gauges, 1);
+
+            //Act
+            metricsLog.Gauge("gauge_test", 1234);
+
+            //Assert
+            metricsApiClientMock.Verify(x => x.SendGaugeMetrics(It.IsAny<string>()));
+        }
+
     }
 }

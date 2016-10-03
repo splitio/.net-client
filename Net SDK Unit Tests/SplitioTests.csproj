@@ -73,6 +73,7 @@
     <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SplitClientUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
