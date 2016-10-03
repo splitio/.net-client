@@ -17,13 +17,13 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new AsyncMetricsLog(null, counters, null, null, 10,2000);
+            var metricsLog = new AsyncMetricsLog(null, counters, null, null, 10, 3000);
 
             //Act
             metricsLog.Count("counter_test", 150);
 
             //Assert
-            Thread.Sleep(1500);
+            Thread.Sleep(2000);
             Counter counter;
             counters.TryGetValue("counter_test", out counter);
             Assert.IsNotNull(counter);
@@ -37,13 +37,13 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new AsyncMetricsLog(null, null, timers, null, 10, 2000);
+            var metricsLog = new AsyncMetricsLog(null, null, timers, null, 10, 3000);
 
             //Act
             metricsLog.Time("time_test", 1);
 
             //Assert
-            Thread.Sleep(1500);
+            Thread.Sleep(2000);
             ILatencyTracker timer;
             timers.TryGetValue("time_test", out timer);
             Assert.IsNotNull(timer);
@@ -58,13 +58,13 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new AsyncMetricsLog(null, null, null, gauges, 10, 2000);
+            var metricsLog = new AsyncMetricsLog(null, null, null, gauges, 10, 3000);
 
             //Act
             metricsLog.Gauge("gauge_test", 1234);
 
             //Assert
-            Thread.Sleep(1500);
+            Thread.Sleep(2000);
             long gauge;
             gauges.TryGetValue("gauge_test", out gauge);
             Assert.IsNotNull(gauge);

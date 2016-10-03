@@ -22,7 +22,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log("GetTreatment", "test", "on", 7000);
 
             //Assert
-            Thread.Sleep(1000);
+            Thread.Sleep(5000);
             var element = queue.Dequeue();
             Assert.IsNotNull(element);
             Assert.AreEqual("GetTreatment", element.keyName);
@@ -44,7 +44,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log("GetTreatment", "test", "on", 7000);
 
             //Assert
-            Thread.Sleep(1500);
+            Thread.Sleep(5000);
             apiClientMock.Verify(x => x.SendBulkImpressions(It.IsAny<string>()));
         }
     }
