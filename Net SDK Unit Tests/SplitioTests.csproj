@@ -75,6 +75,8 @@
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\ApiSegmentChangeFetcherUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentUnitTests.cs" />
     <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
