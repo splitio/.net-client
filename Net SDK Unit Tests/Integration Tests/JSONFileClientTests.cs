@@ -105,5 +105,22 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("on", result3);
         }
 
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentOnSplitWithSegmentNotInitialized()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_3.json", "");
+
+            //Act           
+            //feature test_jw2 has UserDefinedSegmentMatcher 
+            //on "payed" segment, and it is not initialized.
+            var result = client.GetTreatment("abcdz", "test_jw2", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result);
+        }
+
     }
 }
