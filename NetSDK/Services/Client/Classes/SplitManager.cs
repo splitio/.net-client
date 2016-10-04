@@ -20,6 +20,11 @@ namespace Splitio.Services.Client.Classes
 
         public List<LightSplit> Splits()
         {
+            if (splitCache == null)
+            {
+                return null;
+            }
+
             var currentSplits = splitCache.GetAllSplits();
 
             var lightSplits = currentSplits.Select(x =>

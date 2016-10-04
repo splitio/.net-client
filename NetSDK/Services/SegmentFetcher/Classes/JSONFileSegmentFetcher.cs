@@ -25,7 +25,10 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         public override void InitializeSegment(string name)
         {
-            segmentCache.AddToSegment(name, added);
+            if (added != null)
+            {
+                segmentCache.AddToSegment(name, added);
+            }
         }
 
     }

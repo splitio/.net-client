@@ -10,12 +10,17 @@ namespace Splitio.Services.EngineEvaluator
     {
         private Splitter splitter;
 
-        public Engine(Splitter splitter)
+        public Engine()
         {
-            this.splitter = splitter;
+            this.splitter = new Splitter();
         }
 
-        public string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
+        public Engine(Splitter splitter)
+        {
+            this.splitter = splitter ?? new Splitter();
+        }
+
+        public virtual string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
         {
             if (!split.killed)
             {

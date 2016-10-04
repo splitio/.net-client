@@ -10,7 +10,7 @@ using log4net;
 using Splitio.Services.Metrics.Interfaces;
 using System.Diagnostics;
 
-namespace Splitio.Services.SplitFetcher
+namespace Splitio.Services.SplitFetcher.Classes
 {
     public class SplitSdkApiClient : SdkApiClient, ISplitSdkApiClient
     {

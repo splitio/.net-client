@@ -96,9 +96,9 @@
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\JSONFileClient.cs" />
     <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
-    <Compile Include="Services\Client\Classes\SplitManager.cs" />
     <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
+    <Compile Include="Services\Client\Classes\SplitManager.cs" />
     <Compile Include="Services\Client\Interfaces\ISplitClient.cs" />
     <Compile Include="Services\Client\Classes\SplitClient.cs" />
     <Compile Include="Services\Client\Interfaces\ISplitManager.cs" />

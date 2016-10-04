@@ -47,12 +47,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Count(string counterName, long delta)
         {
-            if (delta <= 0)
-            {
-                return;
-            }
-
-            if (String.IsNullOrEmpty(counterName))
+            if (String.IsNullOrEmpty(counterName) ||  delta <= 0)
             {
                 return;
             }

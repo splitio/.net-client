@@ -68,6 +68,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitFactoryUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitClientUnitTests.cs" />
+    <Compile Include="Unit Tests\CommonLibraries\TypeConverterUnitTests.cs" />
+    <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\ApiSegmentChangeFetcherUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentFetcherUnitTests.cs" />
     <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
