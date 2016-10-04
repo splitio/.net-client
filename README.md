@@ -65,6 +65,24 @@ else
     //Code for old feature
 }
 ```
+
+Using matching key and bucketing key
+
+```cs
+Key key = new Key();
+key.matchingKey = "sample_matching_key";
+key.bucketingKey = "sample_bucketing_key";
+
+if (sdk.GetTreatment(key, "sample_feature") == "on") 
+{
+    //Code for enabled feature
+} 
+else 
+{
+    //Code for disabled feature
+}
+```
+
 **NOTE:** For date and time values the attribute should be set as Unix Timestamp in UTC.
 
 ### Advanced Configuration of the SDK 
