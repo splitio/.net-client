@@ -112,6 +112,7 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 Features start their life on one developer's machine. A developer should be able to put a feature behind Split on their development machine without the SDK requiring network connectivity. To achieve this, Split SDK can be started in 'localhost' (aka off-the-grid mode). In this mode, the SDK neither polls nor updates Split servers, rather it uses an in-memory data structure to determine what treatments to show to the logged in customer for each of the features. Here is how you can start the SDK in 'localhost' mode:
 
 ```cs
+	var factory = new SplitFactory();
 	var client = factory.BuildSplitClient("localhost", configurations);
 ```
 
@@ -135,4 +136,31 @@ double_writes_to_cassandra off
 new-navigation v3
 ```
 
+###  Split Manager 
 
+In order to obtain a list of Split features available in the in-memory dataset used by Split client to evaluate treatments, use the Split Manager.
+
+```cs
+    var factory = new SplitFactory();
+    var client = factory.BuildSplitClient("API_KEY", null);
+    var splitManager = factory.GetSplitManager();
+```
+
+Currently, SplitManager exposes the following interface:
+
+```cs
+	List<LightSplit> Splits();
+```
+
+calling splitManager.Splits() will return the following structure:
+
+```cs
+    public class LightSplit
+    {
+        public string name { get; set; }
+        public string trafficType { get; set; }
+        public bool killed { get; set; }
+        public List<string> treatments { get; set; }
+        public long changeNumber { get; set; }
+    }
+```
