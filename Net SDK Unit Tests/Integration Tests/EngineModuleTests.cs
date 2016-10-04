@@ -143,5 +143,30 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsTrue(result1 == "on"); //is in segment payed
             Assert.IsTrue(result2 == "off"); // default
         }
+
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
+        [DeploymentItem(@"Resources\segment_payed.json")]
+        [TestMethod]
+        public void ExecuteGetTreatment_Test_jw2_SuccessfullyUsingBucketingKey()
+        {
+            //Arrange
+            ParsedSplit split = splitCache.GetSplit("test_jw2_b");
+
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            //Act
+            //get treatment for split test_jw2_b
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            Key key = new Key() { bucketingKey = "ab", matchingKey = "abcdz" };
+            var result1 = engine.GetTreatment(key, split, dict);
+
+            key = new Key() { bucketingKey = "abcdzsdsadasd345", matchingKey = "abcdz" };
+            var result2 = engine.GetTreatment(key, split, dict);
+
+            //Assert
+            Assert.IsTrue(result1 == "off"); //is in segment payed and bucketing key matches partition off
+            Assert.IsTrue(result2 == "on"); //is in segment payed and bucketing key matches partition on
+        }
     }
 }

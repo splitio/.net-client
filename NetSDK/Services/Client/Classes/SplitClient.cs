@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
+using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
@@ -73,6 +74,49 @@ namespace Splitio.Services.Client.Classes
             if (treatmentLog != null)
             {
                 treatmentLog.Log(key, feature, treatment, start);
+            }
+        }
+
+        private void RecordStats(Key key, string feature, long start, string treatment, string operation, Stopwatch clock)
+        {
+            if (metricsLog != null)
+            {
+                metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
+            }
+
+            if (treatmentLog != null)
+            {
+                treatmentLog.Log(key, feature, treatment, start);
+            }
+        }
+
+
+        public string GetTreatment(Domain.Key key, string feature, Dictionary<string, object> attributes = null)
+        {
+            try
+            {
+                var split = splitCache.GetSplit(feature);
+
+                if (split == null)
+                {
+                    Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
+                    return Control;
+                }
+
+                long start = CurrentTimeHelper.CurrentTimeMillis();
+                var clock = new Stopwatch();
+                clock.Start();
+
+                var treatment = engine.GetTreatment(key, split, attributes);
+
+                RecordStats(key, feature, start, treatment, SdkGetTreatment, clock);
+
+                return treatment;
+            }
+            catch (Exception e)
+            {
+                Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
+                return Control;
             }
         }
     }

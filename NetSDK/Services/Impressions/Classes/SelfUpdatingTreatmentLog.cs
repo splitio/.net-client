@@ -81,5 +81,13 @@ namespace Splitio.Services.Impressions.Classes
             var enqueueTask = new Task(() => queue.Enqueue(impression));
             enqueueTask.Start();
         }
+
+
+        public void Log(Key key, string feature, string treatment, long time)
+        {
+            KeyImpression impression = new KeyImpression() { feature = feature, keyName = key.matchingKey, treatment = treatment, time = time, bucketingKey = key.bucketingKey };
+            var enqueueTask = new Task(() => queue.Enqueue(impression));
+            enqueueTask.Start();
+        }
     }
 }
