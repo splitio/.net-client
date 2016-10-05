@@ -15,29 +15,16 @@ namespace Splitio.Services.Parsing
             this.value = value;
         }
 
-        protected override bool MatchNumber(string key)
+        public override bool Match(long key)
         {
-            long transformedKey;
-            if (long.TryParse(key, out transformedKey))
-            {
-                return value == transformedKey;
-            }
-            return false;  
+            return value == key;
         }
 
-        protected override bool MatchDate(string key)
+        public override bool Match(DateTime key)
         {
             var date = value.ToDateTime();
-            var transformedKey = key.ToDateTime();
 
-            if (transformedKey.HasValue)
-            {
-                return date.Date == transformedKey.Value.Date;
-            }
-            else
-            {
-                return false;
-            }
+            return date.Date == key;
         }
     }
 }
