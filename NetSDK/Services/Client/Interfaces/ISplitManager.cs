@@ -8,8 +8,8 @@ namespace Splitio.Services.Client.Interfaces
 {
     public interface ISplitManager
     {
-        List<LightSplit> Splits();
+        List<SplitView> Splits();
 
-        LightSplit Split(String featureName);
+        SplitView Split(String featureName);
     }
 }
