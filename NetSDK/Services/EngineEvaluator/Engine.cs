@@ -20,16 +20,16 @@ namespace Splitio.Services.EngineEvaluator
             this.splitter = splitter ?? new Splitter();
         }
 
-        public virtual string GetTreatment(string key, ParsedSplit split, Dictionary<string, object> attributes)
+        public virtual string GetTreatment(Key key, ParsedSplit split, Dictionary<string, object> attributes)
         {
             if (!split.killed)
             {
                 foreach (ConditionWithLogic condition in split.conditions)
                 {
                     var combiningMatcher = condition.matcher;
-                    if (combiningMatcher.Match(key, attributes))
+                    if (combiningMatcher.Match(key.matchingKey, attributes))
                     {
-                        return splitter.GetTreatment(key, split.seed, condition.partitions);
+                        return splitter.GetTreatment(key.bucketingKey, split.seed, condition.partitions);
                     }
                 }
             }

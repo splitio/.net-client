@@ -75,9 +75,9 @@ namespace Splitio.Services.Impressions.Classes
         }
 
 
-        public void Log(string id, string feature, string treatment, long time)
+        public void Log(string matchingKey, string feature, string treatment, long time, string bucketingKey = null)
         {
-            KeyImpression impression = new KeyImpression() { feature = feature, keyName = id, treatment = treatment, time = time };
+            KeyImpression impression = new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, bucketingKey = bucketingKey };
             var enqueueTask = new Task(() => queue.Enqueue(impression));
             enqueueTask.Start();
         }
