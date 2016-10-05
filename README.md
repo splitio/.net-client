@@ -69,9 +69,7 @@ else
 Using matching key and bucketing key
 
 ```cs
-Key key = new Key();
-key.matchingKey = "sample_matching_key";
-key.bucketingKey = "sample_bucketing_key";
+Key key = new Key("sample_matching_key", "sample_bucketing_key");
 
 if (sdk.GetTreatment(key, "sample_feature") == "on") 
 {
