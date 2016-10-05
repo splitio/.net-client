@@ -9,5 +9,7 @@ namespace Splitio.Services.Client.Interfaces
     public interface ISplitManager
     {
         List<LightSplit> Splits();
+
+        LightSplit Split(String featureName);
     }
 }

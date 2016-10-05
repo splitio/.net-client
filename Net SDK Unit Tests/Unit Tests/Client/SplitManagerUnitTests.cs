@@ -51,6 +51,43 @@ namespace Splitio_Tests.Unit_Tests.Client
         }
 
         [TestMethod]
+        public void SplitReturnSuccessfully()
+        {
+            //Arrange
+            var conditionsWithLogic = new List<ConditionWithLogic>();
+            var conditionWithLogic = new ConditionWithLogic()
+            {
+                partitions = new List<PartitionDefinition>()
+                {
+                    new PartitionDefinition(){size = 100, treatment = "on"}
+                }
+            };
+            conditionsWithLogic.Add(conditionWithLogic);
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+            splitCache.AddSplit("test1", new ParsedSplit() { name = "test1", changeNumber = 10000, killed = false, trafficTypeName = "user", seed = -1, conditions = conditionsWithLogic });
+            splitCache.AddSplit("test2", new ParsedSplit() { name = "test2", conditions = conditionsWithLogic });
+            splitCache.AddSplit("test3", new ParsedSplit() { name = "test3", conditions = conditionsWithLogic });
+            splitCache.AddSplit("test4", new ParsedSplit() { name = "test4", conditions = conditionsWithLogic });
+            splitCache.AddSplit("test5", new ParsedSplit() { name = "test5", conditions = conditionsWithLogic });
+            splitCache.AddSplit("test6", new ParsedSplit() { name = "test6", conditions = conditionsWithLogic });
+
+            var manager = new SplitManager(splitCache);
+
+            //Act
+            var result = manager.Split("test1");
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.name, "test1");
+            Assert.AreEqual(result.changeNumber, 10000);
+            Assert.AreEqual(result.killed, false);
+            Assert.AreEqual(result.trafficType, "user");
+            Assert.AreEqual(result.treatments.Count, 1);
+            var firstTreatment = result.treatments[0];
+            Assert.AreEqual(firstTreatment, "on");
+        }
+
+        [TestMethod]
         public void SplitsWhenCacheIsEmptyShouldReturnEmptyList()
         {
             //Arrange
@@ -73,6 +110,19 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             //Act
             var result = manager.Splits();
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void SplitWhenCacheIsNotInstancedShouldReturnNull()
+        {
+            //Arrange
+            var manager = new SplitManager(null);
+
+            //Act
+            var result = manager.Split("name");
 
             //Assert
             Assert.IsNull(result);

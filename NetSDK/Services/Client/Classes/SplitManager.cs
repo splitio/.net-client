@@ -39,5 +39,27 @@ namespace Splitio.Services.Client.Classes
 
             return lightSplits.ToList();
         }
+
+
+        public LightSplit Split(string featureName)
+        {
+            if (splitCache == null)
+            {
+                return null;
+            }
+
+            var split = splitCache.GetSplit(featureName);
+
+            var lightSplit = new LightSplit()
+                {
+                    name = split.name,
+                    killed = split.killed,
+                    changeNumber = split.changeNumber,
+                    treatments = split.conditions[0].partitions.Select(y => y.treatment).ToList(),
+                    trafficType = split.trafficTypeName
+                };
+
+            return lightSplit;
+        }
     }
 }
