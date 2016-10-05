@@ -22,8 +22,11 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log("GetTreatment", "test", "on", 7000);
 
             //Assert
-            Thread.Sleep(2000);
-            var element = queue.Dequeue();
+            KeyImpression element = null;
+            while (element == null)
+            {
+                element = queue.Dequeue();
+            }
             Assert.IsNotNull(element);
             Assert.AreEqual("GetTreatment", element.keyName);
             Assert.AreEqual("test", element.feature);
@@ -43,8 +46,11 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log(key.matchingKey, "test", "on", 7000, key.bucketingKey);
 
             //Assert
-            Thread.Sleep(2000);
-            var element = queue.Dequeue();
+            KeyImpression element = null;
+            while (element == null)
+            {
+                element = queue.Dequeue();
+            }
             Assert.IsNotNull(element);
             Assert.AreEqual("testkey", element.keyName);
             Assert.AreEqual("a", element.bucketingKey);
