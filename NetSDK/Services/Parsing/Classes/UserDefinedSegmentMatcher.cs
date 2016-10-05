@@ -22,5 +22,15 @@ namespace Splitio.Services.Parsing
         {
             return segmentsCache.IsInSegment(segmentName, key);
         }
+
+        public bool Match(DateTime key)
+        {
+            return false;
+        }
+
+        public bool Match(long key)
+        {
+            return false;
+        }
     }
 }

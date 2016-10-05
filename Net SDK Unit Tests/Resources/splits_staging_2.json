@@ -81,12 +81,71 @@
       ]
     },
     {
+        "trafficTypeName": "user",
+        "name": "anding",
+        "seed": -1457122958,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "off",
+        "changeNumber": 1471546967605,
+        "conditions": [
+            {
+                "matcherGroup": {
+                    "combiner": "AND",
+                    "matchers": [
+                        {
+                            "keySelector": {
+                                "trafficType": "user",
+                                "attribute": "d1"
+                            },
+                            "matcherType": "EQUAL_TO",
+                            "negate": false,
+                            "userDefinedSegmentMatcherData": null,
+                            "whitelistMatcherData": null,
+                            "unaryNumericMatcherData": {
+                                "dataType": "DATETIME",
+                                "value": 1471478400000
+                            },
+                            "betweenMatcherData": null
+                        },
+                        {
+                            "keySelector": {
+                                "trafficType": "user",
+                                "attribute": "d2"
+                            },
+                            "matcherType": "BETWEEN",
+                            "negate": false,
+                            "userDefinedSegmentMatcherData": null,
+                            "whitelistMatcherData": null,
+                            "unaryNumericMatcherData": null,
+                            "betweenMatcherData": {
+                                "dataType": "DATETIME",
+                                "start": 1471542900000,
+                                "end": 1471632900000
+                            }
+                        }
+                    ]
+                },
+                "partitions": [
+                    {
+                        "treatment": "on",
+                        "size": 0
+                    },
+                    {
+                        "treatment": "off",
+                        "size": 100
+                    }
+                ]
+            }
+        ]
+    },
+     {
       "trafficTypeName": "user",
-      "name": "anding",
+      "name": "and_date_number",
       "seed": -1457122958,
       "status": "ACTIVE",
       "killed": false,
-      "defaultTreatment": "off",
+      "defaultTreatment": "on",
       "changeNumber": 1471546967605,
       "conditions": [
         {
@@ -103,8 +162,8 @@
                 "userDefinedSegmentMatcherData": null,
                 "whitelistMatcherData": null,
                 "unaryNumericMatcherData": {
-                  "dataType": "DATETIME",
-                  "value": 1471478400000
+                  "dataType": "NUMBER",
+                  "value": 14
                 },
                 "betweenMatcherData": null
               },

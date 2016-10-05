@@ -17,23 +17,17 @@ namespace Splitio.Services.Parsing
             this.end = end;
         }
 
-        protected override bool MatchNumber(string key)
+        public override bool Match(long key)
         {
-            long transformedKey;
-            if (long.TryParse(key, out transformedKey))
-            {
-                return (start <= transformedKey) && (transformedKey <= end);
-            }
-            return false;            
+            return (start <= key) && (key <= end);         
         }
 
-        protected override bool MatchDate(string key)
+        public override bool Match(DateTime key)
         {
             var startDate = start.ToDateTime();
             var endDate = end.ToDateTime();
-            var transformedKey = key.ToDateTime();
 
-            return (startDate <= transformedKey) && (transformedKey <= endDate);
-        }       
+            return (startDate <= key) && (key <= endDate);
+        }
     }
 }
