@@ -3,29 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Splitio.CommonLibraries;
 
 namespace Splitio.Services.Parsing
 {
-    public abstract class CompareMatcher: IMatcher
+    public abstract class CompareMatcher:IMatcher
     {
         protected DataTypeEnum? dataType;
         protected long value;
         protected long start;
         protected long end;
-
         public bool Match(string key)
         {
             switch (dataType)
             {
                 case DataTypeEnum.DATETIME:
-                    return MatchDate(key);
+                    var date = key.ToDateTime();
+                    return date != null ? Match(date.Value) : false;
                 case DataTypeEnum.NUMBER:
-                    return MatchNumber(key);
+                    long number;
+                    var result = long.TryParse(key, out number);
+                    return result ? Match(number) : false;
                 default: return false;
             }
         }
 
-        protected abstract bool MatchNumber(string key);
-        protected abstract bool MatchDate(string key);
+        public abstract bool Match(DateTime key);
+
+        public abstract bool Match(long key);
     }
 }

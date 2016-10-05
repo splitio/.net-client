@@ -17,5 +17,15 @@ namespace Splitio.Services.Parsing
         {
             return list.Contains(key);
         }
+
+        public bool Match(DateTime key)
+        {
+            return false;
+        }
+
+        public bool Match(long key)
+        {
+            return false;
+        }
     }
 }

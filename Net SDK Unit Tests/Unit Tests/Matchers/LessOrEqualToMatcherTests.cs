@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Parsing;
 using Splitio.Domain;
+using Splitio.CommonLibraries;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -15,9 +16,9 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new LessOrEqualToMatcher(DataTypeEnum.NUMBER, 1000001);
 
             //Act
-            var result1 = matcher.Match("170000990");
-            var result2 = matcher.Match("545345");
-            var result3 = matcher.Match("1000001");
+            var result1 = matcher.Match(170000990);
+            var result2 = matcher.Match(545345);
+            var result3 = matcher.Match(1000001);
 
             //Assert        
             Assert.IsFalse(result1);
@@ -45,9 +46,9 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new LessOrEqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
 
             //Act
-            var result = matcher.Match("1470970000000");
-            var result1 = matcher.Match("1470910000000");
-            var result2 = matcher.Match("1470960000000");
+            var result = matcher.Match("1470970000000".ToDateTime().Value);
+            var result1 = matcher.Match("1470910000000".ToDateTime().Value);
+            var result2 = matcher.Match("1470960000000".ToDateTime().Value);
 
             //Assert
             Assert.IsFalse(result);

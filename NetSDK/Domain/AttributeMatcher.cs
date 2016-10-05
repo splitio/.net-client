@@ -32,7 +32,7 @@ namespace Splitio.Domain
                 return false;
             }
 
-            return (negate ^ matcher.Match(value.ToString()));
+            return (negate ^ matcher.Match((dynamic)value));
         }
     }
 }
