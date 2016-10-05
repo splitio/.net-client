@@ -52,17 +52,17 @@ namespace Splitio_Tests.Integration_Tests
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("date", 9);
             dict.Add("test", "acdefx");
-            var result = engine.GetTreatment("xadcc", split, dict);
+            var result = engine.GetTreatment(new Key("xadcc", null), split, dict);
 
             Dictionary<string, object> dict2 = new Dictionary<string, object>();
             dict2.Add("date", 9);
             dict2.Add("test", "azzdefx");
-            var result2 = engine.GetTreatment("xadcscdcc", split, dict2);
+            var result2 = engine.GetTreatment(new Key("xadcscdcc", null), split, dict2);
 
             Dictionary<string, object> dict3 = new Dictionary<string, object>();
             dict3.Add("date", 9);
             dict3.Add("test", "azzdefx");
-            var result3 = engine.GetTreatment("abcdef", split, dict3);
+            var result3 = engine.GetTreatment(new Key("abcdef", null), split, dict3);
 
             //Assert
             Assert.IsTrue(result == "on"); // in whitelist
@@ -86,7 +86,7 @@ namespace Splitio_Tests.Integration_Tests
 
             //Act
             //get treatment for split test_jw3
-            var result = engine.GetTreatment("xadcc", split, dict);
+            var result = engine.GetTreatment(new Key("xadcc", null), split, dict);
 
             //Assert
             Assert.IsTrue(result == "off"); //<killed> default
@@ -107,11 +107,11 @@ namespace Splitio_Tests.Integration_Tests
             //get treatment for split test_jw
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("date", 1470960000000);
-            var result1 = engine.GetTreatment("1f84e5ddb06a3e66145ccfc1aac247", split, dict);
+            var result1 = engine.GetTreatment(new Key("1f84e5ddb06a3e66145ccfc1aac247", null), split, dict);
 
             Dictionary<string, object> dict2 = new Dictionary<string, object>();
             dict2.Add("date", 9);
-            var result2 = engine.GetTreatment("axdzcccczzcce66145ccfc1aac247", split, dict2);
+            var result2 = engine.GetTreatment(new Key("axdzcccczzcce66145ccfc1aac247", null), split, dict2);
 
             //Assert
             Assert.IsTrue(result1 == "on"); //date is equal
@@ -133,11 +133,11 @@ namespace Splitio_Tests.Integration_Tests
             //get treatment for split test_jw2
             Dictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("date", 9);
-            var result1 = engine.GetTreatment("abcdz", split, dict);
+            var result1 = engine.GetTreatment(new Key("abcdz", null), split, dict);
 
             Dictionary<string, object> dict2 = new Dictionary<string, object>();
             dict2.Add("date", 9);
-            var result2 = engine.GetTreatment("xadcc", split, dict2);
+            var result2 = engine.GetTreatment(new Key("xadcc", null), split, dict2);
 
             //Assert
             Assert.IsTrue(result1 == "on"); //is in segment payed
@@ -158,10 +158,10 @@ namespace Splitio_Tests.Integration_Tests
             //Act
             //get treatment for split test_jw2_b
             Dictionary<string, object> dict = new Dictionary<string, object>();
-            Key key = new Key() { bucketingKey = "ab", matchingKey = "abcdz" };
+            Key key = new Key(bucketingKey:"ab", matchingKey:"abcdz");
             var result1 = engine.GetTreatment(key, split, dict);
 
-            key = new Key() { bucketingKey = "abcdzsdsadasd345", matchingKey = "abcdz" };
+            key = new Key(bucketingKey:"abcdzsdsadasd345", matchingKey:"abcdz");
             var result2 = engine.GetTreatment(key, split, dict);
 
             //Assert

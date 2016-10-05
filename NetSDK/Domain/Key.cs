@@ -9,5 +9,11 @@ namespace Splitio.Domain
     {
         public string matchingKey { get; set; }
         public string bucketingKey { get; set; }
+
+        public Key(string matchingKey, string bucketingKey)
+        {
+            this.matchingKey = matchingKey;
+            this.bucketingKey = bucketingKey ?? matchingKey;
+        }
     }
 }

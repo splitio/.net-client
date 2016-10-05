@@ -36,46 +36,15 @@ namespace Splitio.Services.Client.Classes
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null)
         {
-            try
-            {
-                var split = splitCache.GetSplit(feature);
-
-                if (split == null)
-                {
-                    Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
-                    return Control;
-                }
-
-                long start = CurrentTimeHelper.CurrentTimeMillis();
-                var clock = new Stopwatch();
-                clock.Start();
-
-                var treatment = engine.GetTreatment(key, split, attributes);
-
-                RecordStats(key, feature, start, treatment, SdkGetTreatment, clock);
-
-                return treatment;
-            }
-            catch(Exception e)
-            {
-                Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
-                return Control;
-            }
+            Key keys = new Key(key, key);
+            return GetTreatmentForFeature(keys, feature, attributes);
         }
 
-
-        private void RecordStats(string key, string feature, long start, string treatment, string operation, Stopwatch clock)
+        public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null)
         {
-            if (metricsLog != null)
-            {
-                metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
-            }
-
-            if (treatmentLog != null)
-            {
-                treatmentLog.Log(key, feature, treatment, start);
-            }
+            return GetTreatmentForFeature(key, feature, attributes);
         }
+
 
         private void RecordStats(Key key, string feature, long start, string treatment, string operation, Stopwatch clock)
         {
@@ -86,12 +55,11 @@ namespace Splitio.Services.Client.Classes
 
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key, feature, treatment, start);
+                treatmentLog.Log(key.matchingKey, feature, treatment, start, key.bucketingKey);
             }
         }
 
-
-        public string GetTreatment(Domain.Key key, string feature, Dictionary<string, object> attributes = null)
+        private string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes)
         {
             try
             {
@@ -106,9 +74,9 @@ namespace Splitio.Services.Client.Classes
                 long start = CurrentTimeHelper.CurrentTimeMillis();
                 var clock = new Stopwatch();
                 clock.Start();
-
+                
                 var treatment = engine.GetTreatment(key, split, attributes);
-
+                
                 RecordStats(key, feature, start, treatment, SdkGetTreatment, clock);
 
                 return treatment;

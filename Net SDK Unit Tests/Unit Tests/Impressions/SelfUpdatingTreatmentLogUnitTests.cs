@@ -16,13 +16,13 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         {
             //Arrange
             var queue = new BlockingQueue<KeyImpression>(10);
-            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1000, queue, 10);
+            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, queue, 10);
 
             //Act
             treatmentLog.Log("GetTreatment", "test", "on", 7000);
 
             //Assert
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
             var element = queue.Dequeue();
             Assert.IsNotNull(element);
             Assert.AreEqual("GetTreatment", element.keyName);
@@ -36,14 +36,14 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         {
             //Arrange
             var queue = new BlockingQueue<KeyImpression>(10);
-            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1000, queue, 10);
+            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, queue, 10);
 
             //Act
-            Key key = new Key() { bucketingKey = "a", matchingKey = "testkey" };
-            treatmentLog.Log(key, "test", "on", 7000);
+            Key key = new Key(bucketingKey : "a", matchingKey : "testkey");
+            treatmentLog.Log(key.matchingKey, "test", "on", 7000, key.bucketingKey);
 
             //Assert
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
             var element = queue.Dequeue();
             Assert.IsNotNull(element);
             Assert.AreEqual("testkey", element.keyName);
@@ -66,7 +66,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log("GetTreatment", "test", "on", 7000);
 
             //Assert
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
             apiClientMock.Verify(x => x.SendBulkImpressions(It.IsAny<string>()));
         }
     }
