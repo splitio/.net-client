@@ -15,9 +15,9 @@ namespace Splitio_Tests.Integration_Tests
             var client = new LocalhostClient("test.splits");
 
             //Act
-            var result1 = client.GetTreatment(null, "double_writes_to_cassandra");
+            var result1 = client.GetTreatment("", "double_writes_to_cassandra");
             var result2 = client.GetTreatment("id", "double_writes_to_cassandra");
-            var result3 = client.GetTreatment(null, "other_test_feature");
+            var result3 = client.GetTreatment("", "other_test_feature");
             var result4 = client.GetTreatment("id", "other_test_feature");
 
             //Asert

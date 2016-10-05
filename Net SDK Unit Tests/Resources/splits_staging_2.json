@@ -510,8 +510,50 @@
       ]
     },
     {
+        "trafficTypeName": "user",
+        "name": "test_jw2",
+        "seed": 626505653,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "off",
+        "changeNumber": 1470947500357,
+        "conditions": [
+            {
+                "matcherGroup": {
+                    "combiner": "AND",
+                    "matchers": [
+                        {
+                            "keySelector": {
+                                "trafficType": "user",
+                                "attribute": null
+                            },
+                            "matcherType": "IN_SEGMENT",
+                            "negate": false,
+                            "userDefinedSegmentMatcherData": {
+                                "segmentName": "payed"
+                            },
+                            "whitelistMatcherData": null,
+                            "unaryNumericMatcherData": null,
+                            "betweenMatcherData": null
+                        }
+                    ]
+                },
+                "partitions": [
+                    {
+                        "treatment": "on",
+                        "size": 100
+                    },
+                    {
+                        "treatment": "off",
+                        "size": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
       "trafficTypeName": "user",
-      "name": "test_jw2",
+      "name": "test_jw2_b",
       "seed": 626505653,
       "status": "ACTIVE",
       "killed": false,
@@ -541,11 +583,11 @@
           "partitions": [
             {
               "treatment": "on",
-              "size": 100
+              "size": 30
             },
             {
               "treatment": "off",
-              "size": 0
+              "size": 70
             }
           ]
         }

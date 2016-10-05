@@ -85,6 +85,7 @@
     <Compile Include="Domain\ConditionDefinition.cs" />
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
+    <Compile Include="Domain\Key.cs" />
     <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
