@@ -45,27 +45,6 @@ else
 }
 ```
 
-### Attributes support
-Set the attributes values as a dictionary 
-
-```cs
-attributes = new Dictionary<string, object>();
-attributes.Add("age", "21");
-```
-
-Checking if the attribute 'age' belongs to treatment 'young' in sample_feature. 
-
-```cs
-if (sdk.GetTreatment("key", "sample_feature", attributes) == "young") 
-{
-    //Code for young feature
-} 
-else 
-{
-    //Code for old feature
-}
-```
-
 Using matching key and bucketing key
 
 ```cs
@@ -81,7 +60,96 @@ else
 }
 ```
 
-**NOTE:** For date and time values the attribute should be set as Unix Timestamp in UTC.
+### Using Attributes in SDK
+
+In order to Target Based on Custom Attributes, the SDK should be given an attributes dictionary. In the example below, we are rolling out a feature to users. The provided attributes - plan_type, registered_date, and deal_size - can be used in the Split Editor to decide whether to show the 'on' or 'off' treatment to this account.
+
+```cs
+var attributes = new Dictionary<string, object>();
+attributes.Add("plan_type", "growth");
+attributes.Add("registered_date", System.DateTime.UtcNow);
+attributes.Add("deal_size", 1000);
+
+string treatment = sdk.getTreatment("CUSTOMER_ID", "FEATURE_NAME", attributes);
+
+if (treatment == "on") 
+{
+    // insert on code here
+} 
+else if (treatment == "off") 
+{
+    // insert off code here
+} 
+else 
+{
+    // insert control code here
+}
+```
+
+In the attributes Dictionary used in this example, you can provide three types of attributes:
+
+*String Literal Attributes*
+
+String literal attributes capture the concept of a character Strings. The values for String literal attributes should be of type String. For instance, the value for attribute plan_type is a String. Such attributes can be used with the following matchers:
+
+    in list
+
+*Numeric Attributes*
+
+Numeric attributes capture the concept of signed numbers. Their values can be of type long or int. For instance, the value for attribute deal_size is int. Negative numbers are allowed. Floating point numbers are not supported. Numeric attributes can be used with the following matchers:
+
+    is =
+    is >=
+    is <=
+    is between
+
+*DateTime Attributes*
+
+DateTime attributes capture the concept of a Date, with optional Time. DateTime should be expressed in UTC.
+
+DateTime attributes can be used with the following matchers:
+
+    is on
+    is on or after
+    is on or before
+    is between
+
+### FAQ On Attributes
+
+*What happens if a Split uses an attribute whose value is not provided in code?*
+
+For instance, take this Split definition:
+
+if user.age <= 60 then split 100%:on
+else
+if user is in segment all then split 100%:off
+
+If the value for age attribute is not provided in the attributes map passed to getTreatment call, then the matcher in the first condition user.age <= 60 will not match. The user will get the evaluation of the second condition: if user is in segment all then split 100%:off which is off.
+
+*What happens if a Split uses an attribute whose value in code is not of correct type?*
+
+For instance, take this Split definition:
+
+if user.plan_type is in list ["basic"] then split 100%:on
+else
+if user is in segment all then split 100%:off
+
+And say the value provided for plan_type is an int instead of a String:
+
+In this scenario, the matcher in the first condition user.plan_type is in list ["basic"] will not match. The user will get the evaluation of the second condition: if user is in segment all then split 100%:off which is off.
+
+*How can I use boolean types?*
+
+At this point, the SDK does not provide matchers specifically for booleans. You can either translate booleans into a numeric attribute 1 or 0 and use is = 1 matcher, or a String attribute true or false and use is in list ["true"] matcher.
+
+*How does the SDK perform date equality?*
+
+If we have the following Split:
+
+if user.registration_date is on 2016/01/01 then split 100%:on
+
+Then there are 8.64 x 10^7 milliseconds that can fall on that date. The SDK ensures that if you provide any of those milliseconds, it will be considered equal to 2016/01/01.
+	
 
 ### Advanced Configuration of the SDK 
 
@@ -180,3 +248,34 @@ calling splitManager.Splits() will return the following structure:
         public long changeNumber { get; set; }
     }
 ```
+
+###  Randomization of Polling Periods 
+
+The SDK polls Split servers for feature split and segment changes at regular periods. The configuration parameters FeaturesRefreshRate and SegmentsRefreshRate control these periods. Say the value set for FeaturesRefreshRate is 60 seconds. Then, instead of polling at exactly p seconds interval, each SDK instance polls at a randomly chosen time period in the range (0.5 * p, p). This randomization is done to avoid letting SDKs deployed across multiple machines to poll at the same time which can lead to bad performance.
+
+###  Logging in the SDK 
+
+The .Net SDK uses log4net for logging. It is self-configured, as follows:
+
+```cs
+	FileAppender fileAppender = new FileAppender();
+        fileAppender.AppendToFile = true;
+        fileAppender.LockingModel = new FileAppender.MinimalLock();
+        fileAppender.File = @"Logs\split-sdk.log";
+        PatternLayout pl = new PatternLayout();
+        pl.ConversionPattern = "%date %level %logger - %message%newline";
+        pl.ActivateOptions();
+        fileAppender.Layout = pl;
+        fileAppender.ActivateOptions();
+
+        log4net.Config.BasicConfigurator.Configure(fileAppender);
+```
+
+And every class in the SDK, gets its logger instance itself.
+
+Example:
+
+```cs
+    private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
+```
+ 
