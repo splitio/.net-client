@@ -50,6 +50,11 @@ namespace Splitio.Services.Client.Classes
 
             var split = splitCache.GetSplit(featureName);
 
+            if (split == null)
+            {
+                return null;
+            }
+
             var lightSplit = new SplitView()
                 {
                     name = split.name,

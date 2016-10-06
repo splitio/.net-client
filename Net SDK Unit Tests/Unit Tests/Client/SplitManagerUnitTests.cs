@@ -88,6 +88,34 @@ namespace Splitio_Tests.Unit_Tests.Client
         }
 
         [TestMethod]
+        public void SplitReturnsNullWhenInexistent()
+        {
+            //Arrange
+            var splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>());
+
+            var manager = new SplitManager(splitCache);
+
+            //Act
+            var result = manager.Split("test1");
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void SplitReturnsNullWhenCacheIsNull()
+        {
+            //Arrange
+            var manager = new SplitManager(null);
+
+            //Act
+            var result = manager.Split("test1");
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
         public void SplitsWhenCacheIsEmptyShouldReturnEmptyList()
         {
             //Arrange
