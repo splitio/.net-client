@@ -95,8 +95,8 @@ The SDK can configured for performance. Each configuration has a default, howeve
             configurations.SegmentsRefreshRate = 30;
 			configurations.ImpressionsRefreshRate = 30;
             configurations.MetricsRefreshRate = 30;
-            configurations.ReadTimeoutInMs = 15000;
-            configurations.ConnectionTimeOutInMs = 15000;
+            configurations.ReadTimeout = 15000;
+            configurations.ConnectionTimeOut = 15000;
 
 	var sdk = factory.BuildSplitClient("API_KEY", configurations);
 ```

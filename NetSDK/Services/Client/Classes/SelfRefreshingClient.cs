@@ -94,8 +94,8 @@ namespace Splitio.Services.Client.Classes
             SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
             SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
             HttpEncoding = "gzip";
-            HttpConnectionTimeout = config.ConnectionTimeOutInMs ?? 15000;
-            HttpReadTimeout = config.ReadTimeoutInMs ?? 15000;
+            HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
+            HttpReadTimeout = config.ReadTimeout ?? 15000;
             SdkVersion = Version.SplitSdkVersion;
             SdkSpecVersion = "net-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName;

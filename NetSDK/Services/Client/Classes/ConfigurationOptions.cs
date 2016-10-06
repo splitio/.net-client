@@ -15,8 +15,8 @@ namespace Splitio.Services.Client.Classes
         public bool RandomizeRefreshRates { get; set; } 
         public int? ImpressionsRefreshRate { get; set; }
         public int? MaxImpressionsLogSize { get; set; }  
-        public long? ConnectionTimeOutInMs { get; set; } 
-        public long? ReadTimeoutInMs { get; set; } 
+        public long? ConnectionTimeout { get; set; } 
+        public long? ReadTimeout { get; set; } 
         public int? Ready { get; set; }  
         public int? MaxMetricsCountCallsBeforeFlush { get; set; } 
         public int? MetricsRefreshRate { get; set; } 

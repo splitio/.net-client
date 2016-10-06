@@ -18,7 +18,7 @@ namespace Splitio.Services.Client.Classes
             this.splitCache = splitCache;
         }
 
-        public List<LightSplit> Splits()
+        public List<SplitView> Splits()
         {
             if (splitCache == null)
             {
@@ -28,7 +28,7 @@ namespace Splitio.Services.Client.Classes
             var currentSplits = splitCache.GetAllSplits();
 
             var lightSplits = currentSplits.Select(x =>
-                new LightSplit()
+                new SplitView()
                 {
                     name = x.name,
                     killed = x.killed,
@@ -38,6 +38,28 @@ namespace Splitio.Services.Client.Classes
                 });
 
             return lightSplits.ToList();
+        }
+
+
+        public SplitView Split(string featureName)
+        {
+            if (splitCache == null)
+            {
+                return null;
+            }
+
+            var split = splitCache.GetSplit(featureName);
+
+            var lightSplit = new SplitView()
+                {
+                    name = split.name,
+                    killed = split.killed,
+                    changeNumber = split.changeNumber,
+                    treatments = split.conditions[0].partitions.Select(y => y.treatment).ToList(),
+                    trafficType = split.trafficTypeName
+                };
+
+            return lightSplit;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Splitio.Services.Client.Classes
         private ISplitClient client;
         private ISplitManager manager;
 
-        public ISplitClient BuildSplitClient(string apiKey, ConfigurationOptions options)
+        public ISplitClient BuildSplitClient(string apiKey, ConfigurationOptions options = null)
         {
             if (client == null)
             {
