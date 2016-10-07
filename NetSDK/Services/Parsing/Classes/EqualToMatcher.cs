@@ -24,7 +24,7 @@ namespace Splitio.Services.Parsing
         {
             var date = value.ToDateTime();
 
-            return date.Date == key;
+            return date.Date == key.Date; // Compare just date part
         }
     }
 }

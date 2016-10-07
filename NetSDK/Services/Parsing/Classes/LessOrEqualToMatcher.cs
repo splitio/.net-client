@@ -24,7 +24,7 @@ namespace Splitio.Services.Parsing
         public override bool Match(DateTime key)
         {
             var date = value.ToDateTime();
-
+            key = key.Truncate(TimeSpan.FromMinutes(1)); // Truncate to whole minute
             return key <= date;
         }
     }

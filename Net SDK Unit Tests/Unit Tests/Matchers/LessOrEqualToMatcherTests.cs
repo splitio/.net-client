@@ -57,6 +57,32 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
+        public void MatchDateTruncateToMinutesSuccesfully()
+        {
+            //Arrange
+            var matcher = new LessOrEqualToMatcher(DataTypeEnum.DATETIME, 1482207323000);
+
+            //Act
+            var date1 = "1482207323000".ToDateTime().Value;
+            date1 = date1.AddSeconds(14);
+            date1 = date1.AddMilliseconds(324);
+            var result = matcher.Match(date1);
+            var date2 = "1482207383000".ToDateTime().Value;
+            date2 = date2.AddSeconds(12);
+            date2 = date2.AddMilliseconds(654);
+            var result1 = matcher.Match(date2);
+            var date3 = "1470960065443".ToDateTime().Value;
+            date3 = date3.AddSeconds(11);
+            date3 = date3.AddMilliseconds(456);
+            var result2 = matcher.Match(date3);
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(result1);
+            Assert.IsTrue(result2);
+        }
+
+        [TestMethod]
         public void MatchDateShouldReturnFalseOnInvalidDate()
         {
             //Arrange
