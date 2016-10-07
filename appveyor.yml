@@ -11,7 +11,7 @@ after_build:
  - nuget pack NetSDK\Splitio.nuspec -Version %appveyor_build_version%
 
 artifacts:
- - path: '**\*.nupkg'
+ - path: '**\Splitio.*.nupkg'
 #notifications:
 #  - provider: Slack
 #    auth_token:
