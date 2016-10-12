@@ -20,39 +20,44 @@ namespace Splitio.Services.Client.Classes
             this.options = options;
         }
 
-        public ISplitClient BuildSplitClient()
-        {
-            if (client == null)
-            {
-                if (String.IsNullOrEmpty(apiKey)) 
-                {
-                    throw new Exception("API Key should be set to initialize Split SDK.");
-                }
-
-                if (options == null)
-                {
-                    options = new ConfigurationOptions();
-                }
-
-                if (apiKey == "localhost")
-                {
-                    client = new LocalhostClient(options.LocalhostFilePath);
-                }
-                else
-                {
-                    client = new SelfRefreshingClient(apiKey, options);
-                }
-            }
-            return client;
-        }
-
-        public ISplitManager GetSplitManager()
+        public ISplitClient Client()
         {
             if (client == null)
             {
                 BuildSplitClient();
             }
+            return client;
+        }
 
+        private void BuildSplitClient()
+        {
+            if (String.IsNullOrEmpty(apiKey))
+            {
+                throw new Exception("API Key should be set to initialize Split SDK.");
+            }
+
+            if (options == null)
+            {
+                options = new ConfigurationOptions();
+            }
+
+            if (apiKey == "localhost")
+            {
+                client = new LocalhostClient(options.LocalhostFilePath);
+            }
+            else
+            {
+                client = new SelfRefreshingClient(apiKey, options);
+            }
+        }
+
+        public ISplitManager Manager()
+        {
+            if (client == null)
+            {
+                BuildSplitClient();
+            }
+           
             manager = client.GetSplitManager();
 
             return manager;

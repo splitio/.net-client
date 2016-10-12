@@ -16,7 +16,7 @@ namespace Splitio_Tests.Unit_Tests.Client
             var factory = new SplitFactory("any", options);
 
             //Act         
-            var client = factory.BuildSplitClient();
+            var client = factory.Client();
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace Splitio_Tests.Unit_Tests.Client
             var factory = new SplitFactory(null, null);
 
             //Act         
-            var client = factory.BuildSplitClient();
+            var client = factory.Client();
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Splitio_Tests.Unit_Tests.Client
             var factory = new SplitFactory("localhost", options);
 
             //Act         
-            var client = factory.BuildSplitClient();
+            var client = factory.Client();
 
             //Assert
             Assert.AreEqual(typeof(LocalhostClient), client.GetType());
@@ -52,7 +52,7 @@ namespace Splitio_Tests.Unit_Tests.Client
             var factory = new SplitFactory("any", null);
 
             //Act         
-            var client = factory.BuildSplitClient();
+            var client = factory.Client();
 
             //Assert
             Assert.AreEqual(typeof(SelfRefreshingClient), client.GetType());
