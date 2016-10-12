@@ -30,7 +30,7 @@ Create the Split Client instance.
 
 ```cs
 var factory = new SplitFactory("API_KEY", configurations);
-var sdk = factory.BuildSplitClient();
+var sdk = factory.Client();
 ```
 
 Checking if the key belongs to treatment 'on' in sample_feature. 
@@ -166,7 +166,7 @@ The SDK can configured for performance. Each configuration has a default, howeve
             configurations.ReadTimeout = 15000;
             configurations.ConnectionTimeOut = 15000;
 	var factory = new SplitFactory("API_KEY", configurations);
-	var sdk = factory.BuildSplitClient();
+	var sdk = factory.Client();
 ```
 
 ###  Blocking the SDK Until It Is Ready 
@@ -183,7 +183,7 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 			var configurations = new ConfigurationOptions();
 			configurations.Ready = 1000;
 			var factory = new SplitFactory("API_KEY", configurations);
-			client = factory.BuildSplitClient();
+			client = factory.Client();
 		}
 		catch (TimeoutException t)
 		{
@@ -197,7 +197,7 @@ Features start their life on one developer's machine. A developer should be able
 
 ```cs
 	var factory = new SplitFactory("localhost", configurations);
-	var client = factory.BuildSplitClient();
+	var client = factory.Client();
 ```
 
 In this mode, the SDK loads a mapping of feature name to treatment from a file at $HOME/.split. For a given feature, the specified treatment will be returned for every customer. In Split terms, the roll-out plan for that feature becomes:
@@ -226,7 +226,7 @@ In order to obtain a list of Split features available in the in-memory dataset u
 
 ```cs
     var factory = new SplitFactory("API_KEY", configurations);
-    var splitManager = factory.GetSplitManager();
+    var splitManager = factory.Manager();
 ```
 
 Currently, SplitManager exposes the following interface:
