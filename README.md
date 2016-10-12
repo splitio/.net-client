@@ -255,27 +255,27 @@ The SDK polls Split servers for feature split and segment changes at regular per
 
 ###  Logging in the SDK 
 
-The .Net SDK uses log4net for logging. It is self-configured, as follows:
+The .Net SDK uses log4net for logging. You can configure it this way, before you create a SplitFactory instance:
 
 ```cs
 	FileAppender fileAppender = new FileAppender();
         fileAppender.AppendToFile = true;
         fileAppender.LockingModel = new FileAppender.MinimalLock();
-        fileAppender.File = @"Logs\split-sdk.log";
+        fileAppender.File = @"ANY FILE NAME";
         PatternLayout pl = new PatternLayout();
         pl.ConversionPattern = "%date %level %logger - %message%newline";
         pl.ActivateOptions();
         fileAppender.Layout = pl;
         fileAppender.ActivateOptions();
 
-        log4net.Config.BasicConfigurator.Configure(fileAppender);
+    log4net.Config.BasicConfigurator.Configure(fileAppender);
+	
+	...
+	
+	var factory = new SplitFactory("API_KEY", configurations);
 ```
 
-And every class in the SDK, gets its logger instance itself.
+Or you can configure it using all log4net available options. Learn more [here](https://logging.apache.org/log4net/release/manual/introduction.html)
 
-Example:
-
-```cs
-    private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
-```
+If you don't configure it yourself, the SDK creates a default file appender and register logs in 'Logs\split-sdk.log' file.
  
