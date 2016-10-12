@@ -12,6 +12,7 @@ after_build:
 
 artifacts:
  - path: '**\Splitio.*.nupkg'
+   name: splitio-nuget
  
 deploy:
  - provider: Environment
