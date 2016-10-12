@@ -29,7 +29,8 @@ SDK Configuration options
 Create the Split Client instance. 
 
 ```cs
-var sdk = factory.BuildSplitClient("API_KEY", configurations);
+var factory = new SplitFactory("API_KEY", configurations);
+var sdk = factory.BuildSplitClient();
 ```
 
 Checking if the key belongs to treatment 'on' in sample_feature. 
@@ -156,8 +157,7 @@ Then there are 8.64 x 10^7 milliseconds that can fall on that date. The SDK ensu
 The SDK can configured for performance. Each configuration has a default, however, you can provide an override value while instantiating the SDK.
 
 
-```cs
-	var factory = new SplitFactory();
+```cs	
     var configurations = new ConfigurationOptions();
             configurations.FeaturesRefreshRate = 30;
             configurations.SegmentsRefreshRate = 30;
@@ -165,8 +165,8 @@ The SDK can configured for performance. Each configuration has a default, howeve
             configurations.MetricsRefreshRate = 30;
             configurations.ReadTimeout = 15000;
             configurations.ConnectionTimeOut = 15000;
-
-	var sdk = factory.BuildSplitClient("API_KEY", configurations);
+	var factory = new SplitFactory("API_KEY", configurations);
+	var sdk = factory.BuildSplitClient();
 ```
 
 ###  Blocking the SDK Until It Is Ready 
@@ -179,11 +179,11 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 		ISplitClient client = null;
 
 		try
-		{
-			var factory = new SplitFactory();
+		{			
 			var configurations = new ConfigurationOptions();
 			configurations.Ready = 1000;
-			client = factory.BuildSplitClient(apikey, configurations);
+			var factory = new SplitFactory("API_KEY", configurations);
+			client = factory.BuildSplitClient();
 		}
 		catch (TimeoutException t)
 		{
@@ -196,8 +196,8 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 Features start their life on one developer's machine. A developer should be able to put a feature behind Split on their development machine without the SDK requiring network connectivity. To achieve this, Split SDK can be started in 'localhost' (aka off-the-grid mode). In this mode, the SDK neither polls nor updates Split servers, rather it uses an in-memory data structure to determine what treatments to show to the logged in customer for each of the features. Here is how you can start the SDK in 'localhost' mode:
 
 ```cs
-	var factory = new SplitFactory();
-	var client = factory.BuildSplitClient("localhost", configurations);
+	var factory = new SplitFactory("localhost", configurations);
+	var client = factory.BuildSplitClient();
 ```
 
 In this mode, the SDK loads a mapping of feature name to treatment from a file at $HOME/.split. For a given feature, the specified treatment will be returned for every customer. In Split terms, the roll-out plan for that feature becomes:
@@ -225,21 +225,21 @@ new-navigation v3
 In order to obtain a list of Split features available in the in-memory dataset used by Split client to evaluate treatments, use the Split Manager.
 
 ```cs
-    var factory = new SplitFactory();
-    var client = factory.BuildSplitClient("API_KEY", null);
+    var factory = new SplitFactory("API_KEY", configurations);
     var splitManager = factory.GetSplitManager();
 ```
 
 Currently, SplitManager exposes the following interface:
 
 ```cs
-	List<LightSplit> Splits();
+	List<SplitView> Splits();
+	SplitView Split(String featureName);
 ```
 
-calling splitManager.Splits() will return the following structure:
+calling splitManager.Split(String featureName) will return the following structure:
 
 ```cs
-    public class LightSplit
+    public class SplitView
     {
         public string name { get; set; }
         public string trafficType { get; set; }
