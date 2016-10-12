@@ -13,14 +13,17 @@ after_build:
 artifacts:
  - path: '**\Splitio.*.nupkg'
  
-branches:
- only:
-   - master
-   - development 
 deploy:
- provider: Environment
- name: NugetPublish
+ - provider: Environment
+   name: NugetPublish
+   on:
+    branch: master
 
+ - provider: Environment
+   name: NugetPublish2
+   on:
+    branch: development
+ 
 #notifications:
 #  - provider: Slack
 #    auth_token:
