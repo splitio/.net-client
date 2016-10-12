@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Parsing;
 using Splitio.Domain;
+using Splitio.CommonLibraries;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -15,9 +16,9 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new LessOrEqualToMatcher(DataTypeEnum.NUMBER, 1000001);
 
             //Act
-            var result1 = matcher.Match("170000990");
-            var result2 = matcher.Match("545345");
-            var result3 = matcher.Match("1000001");
+            var result1 = matcher.Match(170000990);
+            var result2 = matcher.Match(545345);
+            var result3 = matcher.Match(1000001);
 
             //Assert        
             Assert.IsFalse(result1);
@@ -45,13 +46,39 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new LessOrEqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
 
             //Act
-            var result = matcher.Match("1470970000000");
-            var result1 = matcher.Match("1470910000000");
-            var result2 = matcher.Match("1470960000000");
+            var result = matcher.Match("1470970000000".ToDateTime().Value);
+            var result1 = matcher.Match("1470910000000".ToDateTime().Value);
+            var result2 = matcher.Match("1470960000000".ToDateTime().Value);
 
             //Assert
             Assert.IsFalse(result);
             Assert.IsTrue(result1);           
+            Assert.IsTrue(result2);
+        }
+
+        [TestMethod]
+        public void MatchDateTruncateToMinutesSuccesfully()
+        {
+            //Arrange
+            var matcher = new LessOrEqualToMatcher(DataTypeEnum.DATETIME, 1482207323000);
+
+            //Act
+            var date1 = "1482207323000".ToDateTime().Value;
+            date1 = date1.AddSeconds(14);
+            date1 = date1.AddMilliseconds(324);
+            var result = matcher.Match(date1);
+            var date2 = "1482207383000".ToDateTime().Value;
+            date2 = date2.AddSeconds(12);
+            date2 = date2.AddMilliseconds(654);
+            var result1 = matcher.Match(date2);
+            var date3 = "1470960065443".ToDateTime().Value;
+            date3 = date3.AddSeconds(11);
+            date3 = date3.AddMilliseconds(456);
+            var result2 = matcher.Match(date3);
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(result1);
             Assert.IsTrue(result2);
         }
 

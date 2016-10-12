@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Parsing;
 using Splitio.Domain;
+using Splitio.CommonLibraries;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -15,8 +16,8 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.NUMBER, 1000001);
 
             //Act
-            var result1 = matcher.Match("1000001");
-            var result2 = matcher.Match("545345");
+            var result1 = matcher.Match(1000001);
+            var result2 = matcher.Match(545345);
 
             //Assert
             Assert.IsTrue(result1);
@@ -43,8 +44,29 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
 
             //Act
-            var result = matcher.Match("1470960000000");
-            var result1 = matcher.Match("1470910000000");
+            var result = matcher.Match("1470960000000".ToDateTime().Value);
+            var result1 = matcher.Match("1470910000000".ToDateTime().Value);
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(result1);
+        }
+
+        [TestMethod]
+        public void MatchDateTruncateToDaySuccesfully()
+        {
+            //Arrange
+            var matcher = new EqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
+
+            //Act
+            var date1 = "1470960000000".ToDateTime().Value;
+            date1 = date1.AddSeconds(14);
+            date1 = date1.AddMilliseconds(324);
+            var result = matcher.Match(date1);
+            var date2 = "1470910000000".ToDateTime().Value;
+            date2 = date2.AddSeconds(12);
+            date2 = date2.AddMilliseconds(654);
+            var result1 = matcher.Match(date2);
 
             //Assert
             Assert.IsTrue(result);

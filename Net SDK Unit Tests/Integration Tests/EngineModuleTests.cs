@@ -106,7 +106,7 @@ namespace Splitio_Tests.Integration_Tests
             //Act
             //get treatment for split test_jw
             Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("date", 1470960000000);
+            dict.Add("date", "1470960000000".ToDateTime().Value);
             var result1 = engine.GetTreatment(new Key("1f84e5ddb06a3e66145ccfc1aac247", null), split, dict);
 
             Dictionary<string, object> dict2 = new Dictionary<string, object>();
@@ -167,6 +167,48 @@ namespace Splitio_Tests.Integration_Tests
             //Assert
             Assert.IsTrue(result1 == "off"); //is in segment payed and bucketing key matches partition off
             Assert.IsTrue(result2 == "on"); //is in segment payed and bucketing key matches partition on
+        }
+
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
+        [DeploymentItem(@"Resources\segment_payed.json")]
+        [TestMethod]
+        public void ExecuteGetTreatment_And_Date_Number_SuccessfulWithResults()
+        {
+            //Arrange
+            ParsedSplit split = splitCache.GetSplit("and_date_number");
+
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            //Act
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("d1", 14);
+            dict.Add("d2", "1471543000000".ToDateTime().Value);
+            var result = engine.GetTreatment(new Key("1f84e5ddb06a3e66145ccfc1aac247", null), split, dict);
+
+            //Assert
+            Assert.IsTrue(result == "off"); //date is between and number is equal
+        }
+
+        [DeploymentItem(@"Resources\splits_staging_2.json")]
+        [DeploymentItem(@"Resources\segment_payed.json")]
+        [TestMethod]
+        public void ExecuteGetTreatment_And_Date_Number_NotMatchingAnyCondition()
+        {
+            //Arrange
+            ParsedSplit split = splitCache.GetSplit("and_date_number");
+
+            Splitter splitter = new Splitter();
+            Engine engine = new Engine(splitter);
+
+            //Act
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("d1", 16);
+            dict.Add("d2", "1471543000000".ToDateTime().Value);
+            var result = engine.GetTreatment(new Key("1f84e5ddb06a3e66145ccfc1aac247", null), split, dict);
+
+            //Assert
+            Assert.IsTrue(result == "on"); //date is between and number is not equal > default treatment
         }
     }
 }

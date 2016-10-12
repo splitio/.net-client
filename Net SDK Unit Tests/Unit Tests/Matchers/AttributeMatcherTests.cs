@@ -73,7 +73,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void MatchShouldReturnFalseIfValueForAttributeIsNullAndKeyNotMatching()
+        public void MatchShouldReturnFalseIfValueForAttributeIsNullAndKeyIsNull()
         {
             //Arrange
             var matcher = new AttributeMatcher()
@@ -89,6 +89,28 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             var result = matcher.Match(null, attributes);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfValueForAttributeIsNullAndKeyNotMatching()
+        {
+            //Arrange
+            var matcher = new AttributeMatcher()
+            {
+                attribute = null,
+                matcher = new EqualToMatcher(DataTypeEnum.NUMBER, 12012),
+                negate = false
+            };
+
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("card_number", 12012);
+            attributes.Add("card_type", "ABC");
+
+            //Act
+            var result = matcher.Match("1", attributes);
 
             //Assert
             Assert.IsFalse(result);

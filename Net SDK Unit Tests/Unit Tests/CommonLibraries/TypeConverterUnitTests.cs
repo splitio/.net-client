@@ -58,5 +58,24 @@ namespace Splitio_Tests.Unit_Tests.CommonLibraries
             //Assert
             Assert.IsNull(result);
         }
+
+        [TestMethod]
+        public void TruncateToMinutesSuccessfully()
+        {
+            //Arrange
+            var date = new DateTime(2016, 12, 10, 11, 55, 23, 120);
+            
+            //Act
+            var result = date.Truncate(TimeSpan.FromMinutes(1));
+
+            //Assert
+            Assert.AreEqual(2016, result.Year);
+            Assert.AreEqual(12, result.Month);
+            Assert.AreEqual(10, result.Day);
+            Assert.AreEqual(11, result.Hour);
+            Assert.AreEqual(55, result.Minute);
+            Assert.AreEqual(0, result.Second);
+            Assert.AreEqual(0, result.Millisecond);
+        }
     }
 }
