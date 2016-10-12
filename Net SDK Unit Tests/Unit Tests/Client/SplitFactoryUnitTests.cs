@@ -11,12 +11,12 @@ namespace Splitio_Tests.Unit_Tests.Client
         [ExpectedException(typeof(TimeoutException), "SDK was not ready in 1 miliseconds")]
         public void BuildSplitClientShouldReturnExceptionIfSdkNotReady()
         {
-            //Arrange
-            var factory = new SplitFactory();
+            //Arrange            
             var options = new ConfigurationOptions() { Ready = 1 };
+            var factory = new SplitFactory("any", options);
 
             //Act         
-            var client = factory.BuildSplitClient("any", options);
+            var client = factory.BuildSplitClient();
         }
 
         [TestMethod]
@@ -24,10 +24,10 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void BuildSplitClientWithEmptyApiKeyShouldReturnException()
         {
             //Arrange
-            var factory = new SplitFactory();
+            var factory = new SplitFactory(null, null);
 
             //Act         
-            var client = factory.BuildSplitClient(null, null);
+            var client = factory.BuildSplitClient();
         }
 
         [TestMethod]
@@ -35,12 +35,11 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void BuildSplitClientWithLocalhostApiKeyShouldReturnLocalhostClient()
         {
             //Arrange
-            var factory = new SplitFactory();
+            var options = new ConfigurationOptions() { LocalhostFilePath = "test.splits" };
+            var factory = new SplitFactory("localhost", options);
 
             //Act         
-            var options = new ConfigurationOptions() { LocalhostFilePath = "test.splits" };
-
-            var client = factory.BuildSplitClient("localhost", options);
+            var client = factory.BuildSplitClient();
 
             //Assert
             Assert.AreEqual(typeof(LocalhostClient), client.GetType());
@@ -50,10 +49,10 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void BuildSplitClientWithApiKeyShouldReturnSelfRefreshingSplitClient()
         {
             //Arrange
-            var factory = new SplitFactory();
+            var factory = new SplitFactory("any", null);
 
             //Act         
-            var client = factory.BuildSplitClient("any", null);
+            var client = factory.BuildSplitClient();
 
             //Assert
             Assert.AreEqual(typeof(SelfRefreshingClient), client.GetType());
