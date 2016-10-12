@@ -20,9 +20,9 @@ Install-Package Splitio
 SDK Configuration options
 
 ```cs
- var configurations = new ConfigurationOptions();
-					  configurations.FeaturesRefreshRate = 30;
-					  configurations.SegmentsRefreshRate = 30;
+    var configurations = new ConfigurationOptions();
+    configurations.FeaturesRefreshRate = 30;
+    configurations.SegmentsRefreshRate = 30;
 
 ```
 
@@ -150,23 +150,24 @@ If we have the following Split:
 if user.registration_date is on 2016/01/01 then split 100%:on
 
 Then there are 8.64 x 10^7 milliseconds that can fall on that date. The SDK ensures that if you provide any of those milliseconds, it will be considered equal to 2016/01/01.
-	
+    
 
 ### Advanced Configuration of the SDK 
 
 The SDK can configured for performance. Each configuration has a default, however, you can provide an override value while instantiating the SDK.
 
 
-```cs	
+```cs    
     var configurations = new ConfigurationOptions();
-            configurations.FeaturesRefreshRate = 30;
-            configurations.SegmentsRefreshRate = 30;
-			configurations.ImpressionsRefreshRate = 30;
-            configurations.MetricsRefreshRate = 30;
-            configurations.ReadTimeout = 15000;
-            configurations.ConnectionTimeOut = 15000;
-	var factory = new SplitFactory("API_KEY", configurations);
-	var sdk = factory.Client();
+    configurations.FeaturesRefreshRate = 30;
+    configurations.SegmentsRefreshRate = 30;
+    configurations.ImpressionsRefreshRate = 30;
+    configurations.MetricsRefreshRate = 30;
+    configurations.ReadTimeout = 15000;
+    configurations.ConnectionTimeOut = 15000;
+    
+    var factory = new SplitFactory("API_KEY", configurations);
+    var sdk = factory.Client();
 ```
 
 ###  Blocking the SDK Until It Is Ready 
@@ -176,19 +177,19 @@ When the SDK is instantiated, it kicks off background tasks to update an in-memo
 If you would rather wait to send traffic till the SDK is ready, you can do that by blocking until the SDK is ready. This is best done as part of the startup sequence of your application. Here is an example:
 
 ```cs
-		ISplitClient client = null;
+        ISplitClient client = null;
 
-		try
-		{			
-			var configurations = new ConfigurationOptions();
-			configurations.Ready = 1000;
-			var factory = new SplitFactory("API_KEY", configurations);
-			client = factory.Client();
-		}
-		catch (TimeoutException t)
-		{
-			// SDK was not ready in 1000 miliseconds
-		}
+        try
+        {            
+            var configurations = new ConfigurationOptions();
+            configurations.Ready = 1000;
+            var factory = new SplitFactory("API_KEY", configurations);
+            client = factory.Client();
+        }
+        catch (TimeoutException t)
+        {
+            // SDK was not ready in 1000 miliseconds
+        }
 ```
 
 ###  Running the SDK in 'off-the-grid' Mode 
@@ -196,8 +197,8 @@ If you would rather wait to send traffic till the SDK is ready, you can do that 
 Features start their life on one developer's machine. A developer should be able to put a feature behind Split on their development machine without the SDK requiring network connectivity. To achieve this, Split SDK can be started in 'localhost' (aka off-the-grid mode). In this mode, the SDK neither polls nor updates Split servers, rather it uses an in-memory data structure to determine what treatments to show to the logged in customer for each of the features. Here is how you can start the SDK in 'localhost' mode:
 
 ```cs
-	var factory = new SplitFactory("localhost", configurations);
-	var client = factory.Client();
+    var factory = new SplitFactory("localhost", configurations);
+    var client = factory.Client();
 ```
 
 In this mode, the SDK loads a mapping of feature name to treatment from a file at $HOME/.split. For a given feature, the specified treatment will be returned for every customer. In Split terms, the roll-out plan for that feature becomes:
@@ -232,8 +233,8 @@ In order to obtain a list of Split features available in the in-memory dataset u
 Currently, SplitManager exposes the following interface:
 
 ```cs
-	List<SplitView> Splits();
-	SplitView Split(String featureName);
+    List<SplitView> Splits();
+    SplitView Split(String featureName);
 ```
 
 calling splitManager.Split(String featureName) will return the following structure:
@@ -258,24 +259,51 @@ The SDK polls Split servers for feature split and segment changes at regular per
 The .Net SDK uses log4net for logging. You can configure it this way, before you create a SplitFactory instance:
 
 ```cs
-	FileAppender fileAppender = new FileAppender();
-        fileAppender.AppendToFile = true;
-        fileAppender.LockingModel = new FileAppender.MinimalLock();
-        fileAppender.File = @"ANY FILE NAME";
-        PatternLayout pl = new PatternLayout();
-        pl.ConversionPattern = "%date %level %logger - %message%newline";
-        pl.ActivateOptions();
-        fileAppender.Layout = pl;
-        fileAppender.ActivateOptions();
+    FileAppender fileAppender = new FileAppender();
+    fileAppender.AppendToFile = true;
+    fileAppender.LockingModel = new FileAppender.MinimalLock();
+    fileAppender.File = @"ANY FILE NAME";
+    PatternLayout pl = new PatternLayout();
+    pl.ConversionPattern = "%date %level %logger - %message%newline";
+    pl.ActivateOptions();
+    fileAppender.Layout = pl;
+    fileAppender.ActivateOptions();
 
     log4net.Config.BasicConfigurator.Configure(fileAppender);
-	
-	...
-	
-	var factory = new SplitFactory("API_KEY", configurations);
+    
+    ...
+    
+    var factory = new SplitFactory("API_KEY", configurations);
 ```
 
 Or you can configure it using all log4net available options. Learn more [here](https://logging.apache.org/log4net/release/manual/introduction.html)
 
-If you don't configure it yourself, the SDK creates a default file appender and register logs in 'Logs\split-sdk.log' file.
+In the previous example, we show you how to configure a FileAppender. Also you can create a custom appender that implements AppenderSkeleton, for example:
+
+```cs
+    public class MyCustomAppender : AppenderSkeleton
+    {
+        protected override void Append(LoggingEvent loggingEvent)
+        {
+            // Write your code here. For example:
+            // MyLogService.Log(loggingEvent.Level.Name, loggingEvent.MessageObject);
+        }
+    }
+```
+Where MyLogService could be whatever you want.
+
+And configure log4net to use it:
+
+```cs
+    MyCustomAppender appender = new MyCustomAppender();
+    appender.ActivateOptions();
+
+    log4net.Config.BasicConfigurator.Configure(appender);
+    
+    ...
+    
+    var factory = new SplitFactory("API_KEY", configurations);
+```
+
+If you don't configure log4net yourself, the SDK creates a default file appender and register logs in 'Logs\split-sdk.log' file.
  

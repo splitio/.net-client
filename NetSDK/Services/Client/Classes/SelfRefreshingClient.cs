@@ -149,19 +149,20 @@ namespace Splitio.Services.Client.Classes
         private void InitializeLogger()
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            hierarchy.Root.RemoveAllAppenders(); /*Remove any other appenders*/
+            if (hierarchy.Root.Appenders.Count == 0)
+            {
+                FileAppender fileAppender = new FileAppender();
+                fileAppender.AppendToFile = true;
+                fileAppender.LockingModel = new FileAppender.MinimalLock();
+                fileAppender.File = @"Logs\split-sdk.log";
+                PatternLayout pl = new PatternLayout();
+                pl.ConversionPattern = "%date %level %logger - %message%newline";
+                pl.ActivateOptions();
+                fileAppender.Layout = pl;
+                fileAppender.ActivateOptions();
 
-            FileAppender fileAppender = new FileAppender();
-            fileAppender.AppendToFile = true;
-            fileAppender.LockingModel = new FileAppender.MinimalLock();
-            fileAppender.File = @"Logs\split-sdk.log";
-            PatternLayout pl = new PatternLayout();
-            pl.ConversionPattern = "%date %level %logger - %message%newline";
-            pl.ActivateOptions();
-            fileAppender.Layout = pl;
-            fileAppender.ActivateOptions();
-
-            log4net.Config.BasicConfigurator.Configure(fileAppender);
+                log4net.Config.BasicConfigurator.Configure(fileAppender);
+            }
         }
 
         private void BuildSplitter()
