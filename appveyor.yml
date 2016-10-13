@@ -20,14 +20,7 @@ deploy:
    name: NugetPublish
    on:
     branch: master
-
- - provider: Environment
-   name: NugetPublish2
-   on:
-    branch: development
  
-after_deploy:
- - if($env:APPVEYOR_REPO_BRANCH -eq "development"){nuget delete splitio-nuget  %appveyor_build_version% -Source nuget.org -ApiKey $env:nugetkey -NonInteractive}
 
 #notifications:
 #  - provider: Slack
