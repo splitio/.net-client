@@ -64,19 +64,33 @@
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
     <Compile Include="Integration Tests\EngineModuleTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
+    <Compile Include="Integration Tests\JSONFileClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Unit Tests\ApiSplitChangeFetcherTests.cs" />
-    <Compile Include="Unit Tests\AllKeysMatcherTests.cs" />
-    <Compile Include="Unit Tests\AttributeMatcherTests.cs" />
-    <Compile Include="Unit Tests\LessOrEqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\GreaterOrEqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\BetweenMatcherTests.cs" />
-    <Compile Include="Unit Tests\EqualToMatcherTests.cs" />
-    <Compile Include="Unit Tests\CombiningMatcherTests.cs" />
-    <Compile Include="Unit Tests\SplitterTests.cs" />
-    <Compile Include="Unit Tests\BinarySearchLatencyTrackerTests.cs" />
-    <Compile Include="Unit Tests\WhitelistMatcherTests.cs" />
-    <Compile Include="Unit Tests\UserDefinedSegmentMatcherTests.cs" />
+    <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitFactoryUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\SplitClientUnitTests.cs" />
+    <Compile Include="Unit Tests\CommonLibraries\TypeConverterUnitTests.cs" />
+    <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\ApiSegmentChangeFetcherUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentUnitTests.cs" />
+    <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentFetcherUnitTests.cs" />
+    <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\LessOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\GreaterOrEqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\BetweenMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualToMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\CombiningMatcherTests.cs" />
+    <Compile Include="Unit Tests\Splitter\SplitterTests.cs" />
+    <Compile Include="Unit Tests\Metrics\BinarySearchLatencyTrackerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\WhitelistMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\UserDefinedSegmentMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetSDK\Splitio.csproj">
@@ -95,7 +109,13 @@
     <None Include="Resources\segment_payed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\splits_staging_4.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\splits_staging.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\splits_staging_3.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\splits_staging_2.json">

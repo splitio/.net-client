@@ -10,6 +10,8 @@ using Splitio.Services.SegmentFetcher.Classes;
 using System.Collections.Generic;
 using Splitio.Services.Parsing;
 using Splitio.Services.Client.Classes;
+using Splitio.Services.Cache.Classes;
+using System.Collections.Concurrent;
 
 namespace Splitio_Tests.Integration_Tests
 {
@@ -27,15 +29,15 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetSuccessfulWithResultsFromJSONFile()
         {
             //Arrange
-            var segmentFetcher = new JSONFileSegmentFetcher("segment_payed.json");
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+
+            var segmentFetcher = new JSONFileSegmentFetcher("segment_payed.json", segmentCache);
 
             //Act
-            var result = segmentFetcher.Fetch("payed");
+            segmentFetcher.InitializeSegment("payed");
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.name == "payed");
-            Assert.IsTrue(result.Contains("abcdz"));
+            Assert.IsTrue(segmentCache.IsInSegment("payed", "abcdz"));
         }
 
 
@@ -57,12 +59,12 @@ namespace Splitio_Tests.Integration_Tests
             var sdkApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkApiClient);
             var gates = new SdkReadinessGates();
-            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, null);
+            var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+            var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache, 4);
 
             //Act
-            var result = (SelfRefreshingSegment)selfRefreshingSegmentFetcher.Fetch("payed");
-            gates.RegisterSegment(result.name);
-            result.Start();
+            var name = "payed";
+            selfRefreshingSegmentFetcher.InitializeSegment(name);
 
             while(!gates.AreSegmentsReady(1000))
             {
@@ -70,10 +72,7 @@ namespace Splitio_Tests.Integration_Tests
             }
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.name == "payed");
-            Assert.IsTrue(result.Contains("abcdz"));
-
+            Assert.IsTrue(segmentCache.IsInSegment(name, "abcdz"));
         }
 
     }

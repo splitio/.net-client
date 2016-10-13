@@ -1,5 +1,7 @@
 ﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Interfaces;
@@ -13,54 +15,40 @@ using System.Threading.Tasks;
 
 namespace Splitio.Services.SplitFetcher.Classes
 {
-    public class SelfRefreshingSplitFetcher : InMemorySplitFetcher
+    public class SelfRefreshingSplitFetcher 
     {
+        protected ISplitCache splitCache;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher));
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;
-        private long change_number;
-        private bool stopped;
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
         private SdkReadinessGates gates;
 
 
-        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, SplitParser splitParser, SdkReadinessGates gates, int interval,
-                 long change_number = -1, ConcurrentDictionary<string, ParsedSplit> splits = null)
-            : base(splits)
+        public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, 
+            SplitParser splitParser, SdkReadinessGates gates, int interval, ISplitCache splitCache = null)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;
             this.gates = gates;
             this.interval = interval;
-            this.change_number = change_number;
-            this.stopped = true;
+            this.splitCache = splitCache;
         }
 
         public void Start()
         {
-            Thread thread = new Thread(StartRefreshing);
-            thread.Start();
+            Task periodicTask = PeriodicTaskFactory.Start(() =>
+                                {
+                                    RefreshSplits();
+                                },
+                                intervalInMilliseconds: interval * 1000,
+                                cancelToken: cancelTokenSource.Token);
         }
 
         public void Stop()
         {
-            stopped = true;
-        }
-
-        private void StartRefreshing()
-        {
-            if (!stopped)
-            {
-                return;
-            }
-
-            stopped = false;
-
-            while (!stopped)
-            {
-                RefreshSplits();
-                Thread.Sleep(interval * 1000);
-            }
+            cancelTokenSource.Cancel();
         }
 
         private void UpdateSplitsFromChangeFetcherResponse(List<Split> splitChanges)
@@ -68,21 +56,19 @@ namespace Splitio.Services.SplitFetcher.Classes
             List<Split> addedSplits = new List<Split>();
             List<Split> removedSplits = new List<Split>();
 
-            var tempSplits = new ConcurrentDictionary<string, ParsedSplit>(splits);
-
             foreach (Split split in splitChanges)
             {
                 ParsedSplit parsedSplit;
                 //If not active --> Remove Split
                 if (split.status != StatusEnum.ACTIVE)
                 {                    
-                    tempSplits.TryRemove(split.name, out parsedSplit);
+                    splitCache.RemoveSplit(split.name);
                     removedSplits.Add(split);
                 }
                 else
                 {
-                    //Test if its a new Split, remove if existing
-                    bool isRemoved = tempSplits.TryRemove(split.name, out parsedSplit);
+                   //Test if its a new Split, remove if existing
+                   bool isRemoved = splitCache.RemoveSplit(split.name);
 
                     if (!isRemoved)
                     {
@@ -90,10 +76,9 @@ namespace Splitio.Services.SplitFetcher.Classes
                         addedSplits.Add(split);
                     }
                     parsedSplit = splitParser.Parse(split);
-                    tempSplits.TryAdd(parsedSplit.name, parsedSplit);
+                    splitCache.AddSplit(parsedSplit.name, parsedSplit);
                 }
             }
-            splits = tempSplits;
 
             if (addedSplits.Count() > 0)
             {
@@ -109,34 +94,37 @@ namespace Splitio.Services.SplitFetcher.Classes
 
         private void RefreshSplits()
         {
-            var changeNumberBefore = change_number;
-            try
+            while (true)
             {
-                var result = splitChangeFetcher.Fetch(change_number);
-                if (result == null)
+                var changeNumber = splitCache.GetChangeNumber();
+                try
                 {
-                    return;
+                    var result = splitChangeFetcher.Fetch(changeNumber);
+                    if (result == null)
+                    {
+                        break;
+                    }
+                    if (changeNumber >= result.till)
+                    {
+                        gates.SplitsAreReady();
+                        //There are no new split changes
+                        break;
+                    }
+                    if (result.splits != null && result.splits.Count > 0)
+                    {
+                        UpdateSplitsFromChangeFetcherResponse(result.splits);
+                        splitCache.SetChangeNumber(result.till);
+                    }
                 }
-                if (change_number >= result.till)
+                catch (Exception e)
                 {
-                    gates.SplitsAreReady();
-                    //There are no new split changes
-                    return;
+                    Log.Error("Exception caught refreshing splits", e);
+                    Stop();
                 }
-                if (result.splits != null && result.splits.Count > 0)
+                finally
                 {
-                    UpdateSplitsFromChangeFetcherResponse(result.splits);
-                    change_number = result.till;
+                    Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
                 }
-            }
-            catch (Exception e)
-            {
-                Log.Error("Exception caught refreshing splits", e);
-                stopped = true;
-            }
-            finally
-            {
-                Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumberBefore, change_number));
             }
         }
     }

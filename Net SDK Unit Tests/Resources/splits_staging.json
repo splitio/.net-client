@@ -84,7 +84,7 @@
       "trafficTypeName": "account",
       "name": "Segment_Integration_UI",
       "seed": 744697639,
-      "status": "ACTIVE",
+      "status": "ARCHIVED",
       "killed": false,
       "defaultTreatment": "off",
       "changeNumber": 1470697216235,

@@ -12,5 +12,15 @@ namespace Splitio.Services.Parsing
         {
             return key != null;
         }
+
+        public bool Match(DateTime key)
+        {
+            return key != null;
+        }
+
+        public bool Match(long key)
+        {
+            return key != null;
+        }
     }
 }

@@ -13,7 +13,6 @@ namespace Splitio.Services.SplitFetcher.Classes
         private SplitChangesResult splitChanges;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitChangeFetcher));
 
-        //TODO: add logger in constructor
         protected abstract SplitChangesResult FetchFromBackend(long since);
 
         public SplitChangesResult Fetch(long since)

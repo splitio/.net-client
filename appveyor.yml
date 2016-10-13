@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 0.0.5.{build}
+version: 2.0.{build}
 
 before_build:
  - nuget restore
@@ -11,10 +11,11 @@ after_build:
  - nuget pack NetSDK\Splitio.nuspec -Version %appveyor_build_version%
 
 artifacts:
- - path: '**\*.nupkg'
-#notifications:
-#  - provider: Slack
-#    auth_token:
-#      secure: xxxxxxxxxx
-#    channel: xxxxxxxxxx
-#template: "<{{buildUrl}}|Build {{projectName}} {{buildVersion}} {{status}}> Commit <{{commitUrl}}|{{commitId}}> by {{commitAuthor}} on {{commitDate}}: _{{commitMessage}}_"
+ - path: '**\Splitio.*.nupkg'
+   name: splitio-nuget
+
+deploy:
+ - provider: Environment
+   name: NugetPublish
+   on:
+    branch: master

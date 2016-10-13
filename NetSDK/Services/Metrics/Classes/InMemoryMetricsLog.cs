@@ -47,12 +47,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Count(string counterName, long delta)
         {
-            if (delta <= 0)
-            {
-                return;
-            }
-
-            if (String.IsNullOrEmpty(counterName))
+            if (String.IsNullOrEmpty(counterName) ||  delta <= 0)
             {
                 return;
             }
@@ -181,7 +176,7 @@ namespace Splitio.Services.Metrics.Classes
         {
             try
             {
-            return JsonConvert.SerializeObject(timeMetrics.Select(x => new { name = x.Key, latencies = x.Value.GetLatencies()}));
+                return JsonConvert.SerializeObject(timeMetrics.Select(x => new { name = x.Key, latencies = x.Value.GetLatencies()}));
             }
             catch (Exception e)
             {

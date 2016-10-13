@@ -1,4 +1,5 @@
 ﻿using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
@@ -10,19 +11,24 @@ namespace Splitio.Services.Client.Classes
 {
     public class SplitManager : ISplitManager
     {
-        ISplitFetcher splitFetcher;
+        ISplitCache splitCache;
 
-        public SplitManager (ISplitFetcher splitFetcher)
+        public SplitManager(ISplitCache splitCache)
         {
-            this.splitFetcher = splitFetcher;
+            this.splitCache = splitCache;
         }
 
-        public List<LightSplit> Splits()
+        public List<SplitView> Splits()
         {
-            var currentSplits = splitFetcher.FetchAll();
+            if (splitCache == null)
+            {
+                return null;
+            }
+
+            var currentSplits = splitCache.GetAllSplits();
 
             var lightSplits = currentSplits.Select(x =>
-                new LightSplit()
+                new SplitView()
                 {
                     name = x.name,
                     killed = x.killed,
@@ -32,6 +38,33 @@ namespace Splitio.Services.Client.Classes
                 });
 
             return lightSplits.ToList();
+        }
+
+
+        public SplitView Split(string featureName)
+        {
+            if (splitCache == null)
+            {
+                return null;
+            }
+
+            var split = splitCache.GetSplit(featureName);
+
+            if (split == null)
+            {
+                return null;
+            }
+
+            var lightSplit = new SplitView()
+                {
+                    name = split.name,
+                    killed = split.killed,
+                    changeNumber = split.changeNumber,
+                    treatments = split.conditions[0].partitions.Select(y => y.treatment).ToList(),
+                    trafficType = split.trafficTypeName
+                };
+
+            return lightSplit;
         }
     }
 }

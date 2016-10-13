@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Splitio.Domain
 {
-    public class LightSplit
+    public class SplitView
     {
         public string name { get; set; }
         public string trafficType { get; set; }
