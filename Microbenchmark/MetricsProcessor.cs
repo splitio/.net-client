@@ -22,8 +22,8 @@ namespace Microbenchmark
             config.SegmentsRefreshRate = 30;
             config.Endpoint = "https://sdk-aws-staging.split.io";
             config.EventsEndpoint = "https://events-aws-staging.split.io";
-            config.ReadTimeoutInMs = 30000;
-            config.ConnectionTimeOutInMs = 30000;
+            config.ReadTimeout = 30000;
+            config.ConnectionTimeout = 30000;
             config.Ready = 240000;
             config.NumberOfParalellSegmentTasks = 10;
             config.MaxImpressionsLogSize = 500000;

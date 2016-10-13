@@ -17,10 +17,11 @@ namespace Microbenchmark
         {
             String apikey = "localhost";
 
-            var factory = new SplitFactory();
+            
             var configurations = new ConfigurationOptions();
             configurations.LocalhostFilePath = @"C:\Making Sense\net-client\Microbenchmark\bin\Release\Resources\test.splits";
-            localhostClient = factory.BuildSplitClient(apikey, configurations);
+            var factory = new SplitFactory(apikey, configurations);
+            localhostClient = factory.Client();
 
             attributes = new Dictionary<string, object>();
             attributes.Add("attr", "18");
