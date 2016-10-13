@@ -9,6 +9,7 @@ before_build:
 
 after_build:
  - nuget pack NetSDK\Splitio.nuspec -Version %appveyor_build_version%
+ 
 
 artifacts:
  - path: '**\Splitio.*.nupkg'
@@ -25,6 +26,9 @@ deploy:
    on:
     branch: development
  
+after_deploy:
+ - if($env:APPVEYOR_REPO_BRANCH -eq "development"){nuget delete splitio-nuget  %appveyor_build_version% -Source nuget.org -ApiKey $env:nugetkey -NonInteractive}
+
 #notifications:
 #  - provider: Slack
 #    auth_token:
