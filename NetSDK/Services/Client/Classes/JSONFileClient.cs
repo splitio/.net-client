@@ -31,7 +31,6 @@ namespace Splitio.Services.Client.Classes
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
             
             splitter = new Splitter();
-            engine = new Engine(splitter);
         }
 
         private void InitializeLogger()

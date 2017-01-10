@@ -77,7 +77,6 @@ namespace Splitio.Services.Client.Classes
             BuildSplitFetcher();
             BuildTreatmentLog();
             BuildSplitter();
-            BuildEngine();
             BuildManager();
             Start();
             if (BlockMilisecondsUntilReady > 0)
@@ -168,11 +167,6 @@ namespace Splitio.Services.Client.Classes
         private void BuildSplitter()
         {
             splitter = new Splitter();
-        }
-
-        private void BuildEngine()
-        {
-            engine = new Engine(splitter);
         }
 
         private void BuildSdkReadinessGates()

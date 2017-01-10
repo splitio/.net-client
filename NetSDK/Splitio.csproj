@@ -103,7 +103,6 @@
     <Compile Include="Services\Client\Interfaces\ISplitClient.cs" />
     <Compile Include="Services\Client\Classes\SplitClient.cs" />
     <Compile Include="Services\Client\Interfaces\ISplitManager.cs" />
-    <Compile Include="Services\EngineEvaluator\Engine.cs" />
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
     <Compile Include="Services\Impressions\Classes\BlockingQueue.cs" />
     <Compile Include="Services\Impressions\Classes\SelfUpdatingTreatmentLog.cs" />
