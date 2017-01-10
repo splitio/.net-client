@@ -11,6 +11,8 @@ namespace Splitio.Domain
         public string keyName { get; set; }
         public string treatment { get; set; }
         public long time { get; set; }
+        public long? changeNumber { get; set; }
+        public string label { get; set; }
         public string bucketingKey { get; set; }
     }
     

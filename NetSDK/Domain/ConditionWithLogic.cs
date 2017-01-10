@@ -9,5 +9,6 @@ namespace Splitio.Domain
     {
         public CombiningMatcher matcher { get; set; }
         public List<PartitionDefinition> partitions { get; set; }
+        public string label { get; set; }
     }
 }

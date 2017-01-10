@@ -19,14 +19,13 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
 
-        public LocalhostClient(string filePath, Engine engine = null, Splitter splitter = null)
+        public LocalhostClient(string filePath, Splitter splitter = null)
         {
             InitializeLogger();
             filePath = LookupFilePath(filePath);
             var splits = ParseSplitFile(filePath);
             splitCache = new InMemorySplitCache(splits);
             BuildSplitter(splitter);
-            BuildEngine(engine);
         }
 
         private string LookupFilePath(string filePath)
@@ -112,11 +111,5 @@ namespace Splitio.Services.Client.Classes
         {
             this.splitter = splitter ?? new Splitter();
         }
-
-        private void BuildEngine(Engine engine)
-        {
-            this.engine = engine ?? new Engine(splitter);
-        }
-
     }
 }

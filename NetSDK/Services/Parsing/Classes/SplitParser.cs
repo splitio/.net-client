@@ -56,7 +56,8 @@ namespace Splitio.Services.Parsing
             parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
             {
                 partitions = x.partitions,
-                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup)
+                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup),
+                label = x.label
             }));
 
             return parsedSplit;
