@@ -1,11 +1,6 @@
-﻿using Splitio.Services.Client.Classes;
-using Splitio.Services.SegmentFetcher.Interfaces;
-using System;
+﻿using Splitio.Services.SegmentFetcher.Interfaces;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace Splitio.Domain
 {
