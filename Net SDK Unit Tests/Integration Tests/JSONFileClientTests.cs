@@ -1,9 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Client.Classes;
-using Splitio.Domain;
 using System.Collections.Generic;
-using Splitio.Services.Impressions.Classes;
 using Moq;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Cache.Interfaces;
@@ -15,7 +13,7 @@ namespace Splitio_Tests.Integration_Tests
     {
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
-        public void ExecuteGetTreatmentOnFailedParsingSplitShouldReturnCONTROL()
+        public void ExecuteGetTreatmentOnFailedParsingSplitShouldReturnControl()
         {
             //Arrange
             var client = new JSONFileClient("splits_staging_3.json", "");
@@ -61,6 +59,25 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsNotNull(result2);
             Assert.AreEqual("control", result2);
         }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentOnExceptionShouldReturnControl()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var splitCacheMock = new Mock<ISplitCache>();
+            splitCacheMock.Setup(x => x.GetSplit(It.IsAny<string>())).Throws<Exception>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, splitCacheMock.Object, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "asd", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("control", result);
+        }
+
 
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
