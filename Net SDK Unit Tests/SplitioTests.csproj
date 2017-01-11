@@ -62,7 +62,6 @@
     <Compile Include="Integration Tests\SelfRefreshingSplitFetcherTests.cs" />
     <Compile Include="Integration Tests\SplitSdkApiClientTests.cs" />
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
-    <Compile Include="Integration Tests\EngineModuleTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
     <Compile Include="Integration Tests\JSONFileClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,7 +70,7 @@
     <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SplitFactoryUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
-    <Compile Include="Unit Tests\Client\SplitClientUnitTests.cs" />
+    <Compile Include="Unit Tests\Client\LocalhostClientUnitTests.cs" />
     <Compile Include="Unit Tests\CommonLibraries\TypeConverterUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
