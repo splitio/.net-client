@@ -1,9 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.CommonLibraries;
-using System.Net;
-using Splitio.Services.SplitFetcher;
-using System.IO;
 using Splitio.Services.SplitFetcher.Classes;
 
 
