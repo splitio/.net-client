@@ -1,16 +1,10 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
-using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
-using Splitio.Services.Parsing;
-using Splitio.Services.SplitFetcher.Classes;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Splitio.Services.Client.Classes

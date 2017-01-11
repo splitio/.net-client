@@ -6,12 +6,9 @@ using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
-using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {

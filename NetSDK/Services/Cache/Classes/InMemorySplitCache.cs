@@ -1,11 +1,9 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {

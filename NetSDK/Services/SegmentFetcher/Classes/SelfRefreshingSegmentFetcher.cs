@@ -1,16 +1,10 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
-using Splitio.Domain;
-using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
