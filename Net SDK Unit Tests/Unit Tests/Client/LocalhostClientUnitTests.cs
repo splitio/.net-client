@@ -1,9 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Client.Classes;
-using Splitio.Services.EngineEvaluator;
-using Moq;
-using System.Collections.Generic;
 using Splitio.Domain;
 
 namespace Splitio_Tests.Unit_Tests.Client
