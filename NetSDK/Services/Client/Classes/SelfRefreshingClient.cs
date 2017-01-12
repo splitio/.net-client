@@ -96,7 +96,7 @@ namespace Splitio.Services.Client.Classes
             HttpEncoding = "gzip";
             HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
             HttpReadTimeout = config.ReadTimeout ?? 15000;
-            SdkVersion = Version.SplitSdkVersion;
+            SdkVersion = "net-" + Version.SplitSdkVersion;
             SdkSpecVersion = "net-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName;
             SdkMachineIP = config.SdkMachineIP;
