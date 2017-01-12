@@ -18,7 +18,6 @@ namespace Splitio.Services.Impressions.Classes
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
-        private bool stopped;
         private BlockingQueue<KeyImpression> queue;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -70,7 +69,7 @@ namespace Splitio.Services.Impressions.Classes
             var impressionsPerFeature = 
                 impressions
                 .GroupBy(item => item.feature)
-                .Select(group => new { testName = group.Key, keyImpressions = group.Select(x => new { keyName = x.keyName, treatment = x.treatment, time = x.time }) });
+                .Select(group => new { testName = group.Key, keyImpressions = group.Select(x => new { keyName = x.keyName, treatment = x.treatment, time = x.time, changeNumber = x.changeNumber, label = x.label, bucketingKey = x.bucketingKey }) });
             return JsonConvert.SerializeObject(impressionsPerFeature);
         }
 
