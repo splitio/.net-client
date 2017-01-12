@@ -22,6 +22,8 @@ namespace Splitio.Services.Client.Classes
         private const string LabelSplitNotFound = "rules not found";
         private const string LabelException = "exception";
 
+        protected bool labelsEnabled;
+
         protected Splitter splitter;
         protected ITreatmentLog treatmentLog;
         protected IMetricsLog metricsLog;
@@ -45,7 +47,6 @@ namespace Splitio.Services.Client.Classes
             return GetTreatmentForFeature(key, feature, attributes);
         }
 
-
         private void RecordStats(Key key, string feature, long? changeNumber, string label, long start, string treatment, string operation, Stopwatch clock)
         {
             if (metricsLog != null)
@@ -55,7 +56,7 @@ namespace Splitio.Services.Client.Classes
 
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, label, key.bucketingKey);
+                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, labelsEnabled ? label : null, key.bucketingKey);
             }
         }
 
