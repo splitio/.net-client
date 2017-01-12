@@ -43,7 +43,6 @@ namespace Splitio.Services.Client.Classes
         private static int MaxTimeBetweenCalls;
         private static int NumberOfParalellSegmentTasks;
 
-
         /// <summary>
         /// Represents the initial number of buckets for a ConcurrentDictionary. 
         /// Should not be divisible by a small prime number. 
@@ -101,6 +100,7 @@ namespace Splitio.Services.Client.Classes
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
             NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
+            labelsEnabled = config.LabelsEnabled;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
