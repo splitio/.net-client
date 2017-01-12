@@ -1,11 +1,8 @@
 ﻿using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
-using Splitio.Services.SplitFetcher.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {

@@ -1,14 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.CommonLibraries;
-using System.Net;
-using Splitio.Services.SplitFetcher.Classes;
-using Splitio.Services.SplitFetcher;
 using System.Threading;
 using Splitio.Domain;
 using Splitio.Services.SegmentFetcher.Classes;
-using System.Collections.Generic;
-using Splitio.Services.Parsing;
 using Splitio.Services.Client.Classes;
 using Splitio.Services.Cache.Classes;
 using System.Collections.Concurrent;

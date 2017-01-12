@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Splitio.Domain
 {
@@ -9,5 +6,6 @@ namespace Splitio.Domain
     {
         public CombiningMatcher matcher { get; set; }
         public List<PartitionDefinition> partitions { get; set; }
+        public string label { get; set; }
     }
 }

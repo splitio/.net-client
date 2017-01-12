@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Parsing;
-using Splitio.Domain;
 using System.Collections.Generic;
 
 namespace Splitio_Tests.Unit_Tests

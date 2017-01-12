@@ -1,9 +1,5 @@
-﻿using Splitio.Services.Client.Classes;
-using Splitio.Services.Client.Interfaces;
+﻿using Splitio.Services.Client.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {

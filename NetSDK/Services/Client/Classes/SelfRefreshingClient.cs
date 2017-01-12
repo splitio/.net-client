@@ -5,7 +5,6 @@ using log4net.Repository.Hierarchy;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
-using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
@@ -13,15 +12,10 @@ using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
-using Splitio.Services.SplitFetcher;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
@@ -48,7 +42,6 @@ namespace Splitio.Services.Client.Classes
         private static int MaxCountCalls;
         private static int MaxTimeBetweenCalls;
         private static int NumberOfParalellSegmentTasks;
-
 
         /// <summary>
         /// Represents the initial number of buckets for a ConcurrentDictionary. 
@@ -77,7 +70,6 @@ namespace Splitio.Services.Client.Classes
             BuildSplitFetcher();
             BuildTreatmentLog();
             BuildSplitter();
-            BuildEngine();
             BuildManager();
             Start();
             if (BlockMilisecondsUntilReady > 0)
@@ -108,6 +100,7 @@ namespace Splitio.Services.Client.Classes
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
             NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
+            labelsEnabled = config.LabelsEnabled;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -168,11 +161,6 @@ namespace Splitio.Services.Client.Classes
         private void BuildSplitter()
         {
             splitter = new Splitter();
-        }
-
-        private void BuildEngine()
-        {
-            engine = new Engine(splitter);
         }
 
         private void BuildSdkReadinessGates()

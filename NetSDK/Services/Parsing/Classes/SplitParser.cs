@@ -1,12 +1,10 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Parsing
 {
@@ -56,7 +54,8 @@ namespace Splitio.Services.Parsing
             parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
             {
                 partitions = x.partitions,
-                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup)
+                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup),
+                label = x.label
             }));
 
             return parsedSplit;

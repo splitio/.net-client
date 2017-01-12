@@ -5,9 +5,7 @@ using Splitio.Domain;
 using Splitio.Services.Impressions.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +16,6 @@ namespace Splitio.Services.Impressions.Classes
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
-        private bool stopped;
         private BlockingQueue<KeyImpression> queue;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -70,14 +67,14 @@ namespace Splitio.Services.Impressions.Classes
             var impressionsPerFeature = 
                 impressions
                 .GroupBy(item => item.feature)
-                .Select(group => new { testName = group.Key, keyImpressions = group.Select(x => new { keyName = x.keyName, treatment = x.treatment, time = x.time }) });
+                .Select(group => new { testName = group.Key, keyImpressions = group.Select(x => new { keyName = x.keyName, treatment = x.treatment, time = x.time, changeNumber = x.changeNumber, label = x.label, bucketingKey = x.bucketingKey }) });
             return JsonConvert.SerializeObject(impressionsPerFeature);
         }
 
 
-        public void Log(string matchingKey, string feature, string treatment, long time, string bucketingKey = null)
+        public void Log(string matchingKey, string feature, string treatment, long time, long? changeNumber, string label, string bucketingKey = null)
         {
-            KeyImpression impression = new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, bucketingKey = bucketingKey };
+            KeyImpression impression = new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, changeNumber = changeNumber, label = label, bucketingKey = bucketingKey };
             var enqueueTask = new Task(() => queue.Enqueue(impression));
             enqueueTask.Start();
         }
