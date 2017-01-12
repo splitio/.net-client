@@ -16,7 +16,7 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
 
-        public JSONFileClient(string splitsFilePath, string segmentsFilePath, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, ITreatmentLog treatmentLogInstance = null)
+        public JSONFileClient(string splitsFilePath, string segmentsFilePath, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, ITreatmentLog treatmentLogInstance = null, bool isLabelsEnabled = true)
         {
             InitializeLogger();
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
@@ -30,6 +30,7 @@ namespace Splitio.Services.Client.Classes
             splitCache = splitCacheInstance ?? new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
             treatmentLog = treatmentLogInstance;
             splitter = new Splitter();
+            labelsEnabled = isLabelsEnabled;
         }
 
         private void InitializeLogger()
