@@ -38,7 +38,7 @@ namespace Splitio.Services.Client.Classes
 
         public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null)
         {
-            Key keys = new Key(key, key);
+            Key keys = new Key(key, null);
             return GetTreatmentForFeature(keys, feature, attributes);
         }
 
@@ -56,7 +56,7 @@ namespace Splitio.Services.Client.Classes
 
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, labelsEnabled ? label : null, key.bucketingKey);
+                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, labelsEnabled ? label : null, key.bucketingKeyHadValue ? key.bucketingKey : null);
             }
         }
 
