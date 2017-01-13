@@ -1,7 +1,10 @@
-﻿using Splitio.Domain;
+﻿using Murmur;
+using Splitio.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Splitio.Services.EngineEvaluator
 {
@@ -43,12 +46,24 @@ namespace Splitio.Services.EngineEvaluator
 
         public int Hash(string key, int seed)
         {
-            int h = 0;
-            for (int i = 0; i< key.Length; i++)
-            {
-                h = 31 * h + key[i];
-            }
-            return h ^ seed;
+            var unsignedSeed = (uint)seed;
+            HashAlgorithm hashAlgorithm = MurmurHash.Create32(unsignedSeed); // returns a managed 32-bit algorithm with seed
+            byte[] keyToBytes = Encoding.ASCII.GetBytes(key);
+            byte[] seedResult = hashAlgorithm.ComputeHash(keyToBytes, 0, keyToBytes.Length);
+            var result = BitConverter.ToInt32(seedResult, 0);
+
+            return result;
         }
+
+        //TODO: remove legacy code
+        //public int Hash(string key, int seed)
+        //{
+        //    int h = 0;
+        //    for (int i = 0; i < key.Length; i++)
+        //    {
+        //        h = 31 * h + key[i];
+        //    }
+        //    return h ^ seed;
+        //}
     }
 }
