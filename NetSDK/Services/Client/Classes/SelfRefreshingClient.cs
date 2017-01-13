@@ -92,9 +92,8 @@ namespace Splitio.Services.Client.Classes
             HttpReadTimeout = config.ReadTimeout ?? 15000;
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
-            SdkMachineName = Environment.MachineName;
-            var ipAdresses = Dns.GetHostAddresses(Environment.MachineName);
-            SdkMachineIP = ipAdresses.Last().ToString();
+            SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
+            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
             RandomizeRefreshRates = config.RandomizeRefreshRates;
             BlockMilisecondsUntilReady = config.Ready ?? 0;
             ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
