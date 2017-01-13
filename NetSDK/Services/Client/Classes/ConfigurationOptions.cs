@@ -17,8 +17,6 @@ namespace Splitio.Services.Client.Classes
         public int? MaxMetricsCountCallsBeforeFlush { get; set; } 
         public int? MetricsRefreshRate { get; set; } 
         public int? SplitsStorageConcurrencyLevel { get; set; } 
-        public string SdkMachineName { get; set; }
-        public string SdkMachineIP{ get; set; }
         public int? NumberOfParalellSegmentTasks { get; set; }
         public bool LabelsEnabled { get; set; } 
     }
