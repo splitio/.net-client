@@ -1,5 +1,4 @@
 ﻿using Murmur;
-using Splitio.CommonLibraries;
 using Splitio.Domain;
 using System;
 using System.Collections.Generic;
