@@ -63,5 +63,18 @@ namespace Splitio.Services.Client.Classes
 
             return lightSplit;
         }
+
+
+        public List<string> SplitNames()
+        {
+            if (splitCache == null)
+            {
+                return null;
+            }
+
+            var currentSplits = splitCache.GetAllSplits();
+
+            return currentSplits.Select(x => x.name).ToList();
+        }
     }
 }
