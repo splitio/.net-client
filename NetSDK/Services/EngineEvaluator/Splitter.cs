@@ -1,4 +1,5 @@
 ﻿using Murmur;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
 using System;
 using System.Collections.Generic;
@@ -41,29 +42,33 @@ namespace Splitio.Services.EngineEvaluator
 
         public int Bucket(string key, int seed)
         {
-            return Math.Abs(Hash(key, seed) % 100) + 1;
+            return (int) Math.Abs(Hash(key, seed) % 100) + 1;
         }
 
-        public int Hash(string key, int seed)
+        public int LegacyBucket(string key, int seed)
+        {
+            return Math.Abs(LegacyHash(key, seed) % 100) + 1;
+        }
+
+        public long Hash(string key, int seed)
         {
             var unsignedSeed = (uint)seed;
             HashAlgorithm hashAlgorithm = MurmurHash.Create32(unsignedSeed); // returns a managed 32-bit algorithm with seed
-            byte[] keyToBytes = Encoding.ASCII.GetBytes(key);
+            byte[] keyToBytes = Encoding.UTF8.GetBytes(key);
             byte[] seedResult = hashAlgorithm.ComputeHash(keyToBytes, 0, keyToBytes.Length);
             var result = BitConverter.ToInt32(seedResult, 0);
 
             return result;
         }
 
-        //TODO: remove legacy code
-        //public int Hash(string key, int seed)
-        //{
-        //    int h = 0;
-        //    for (int i = 0; i < key.Length; i++)
-        //    {
-        //        h = 31 * h + key[i];
-        //    }
-        //    return h ^ seed;
-        //}
+        public int LegacyHash(string key, int seed)
+        {
+            int h = 0;
+            for (int i = 0; i < key.Length; i++)
+            {
+                h = 31 * h + key[i];
+            }
+            return h ^ seed;
+        }
     }
 }
