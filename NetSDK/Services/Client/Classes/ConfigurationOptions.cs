@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Splitio.Services.Client.Classes
 {
     public class ConfigurationOptions
@@ -20,9 +16,12 @@ namespace Splitio.Services.Client.Classes
         public int? Ready { get; set; }  
         public int? MaxMetricsCountCallsBeforeFlush { get; set; } 
         public int? MetricsRefreshRate { get; set; } 
-        public int? SplitsStorageConcurrencyLevel { get; set; } 
+        public int? SplitsStorageConcurrencyLevel { get; set; }
         public string SdkMachineName { get; set; }
-        public string SdkMachineIP{ get; set; }
+        public string SdkMachineIP { get; set; }
         public int? NumberOfParalellSegmentTasks { get; set; }
+        public bool LabelsEnabled { get; set; } 
+
+
     }
 }

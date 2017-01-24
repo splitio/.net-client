@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.Client.Classes;
 using System.Collections.Concurrent;

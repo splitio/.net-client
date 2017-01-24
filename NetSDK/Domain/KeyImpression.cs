@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Splitio.Domain
 {
     public class KeyImpression
@@ -11,6 +7,8 @@ namespace Splitio.Domain
         public string keyName { get; set; }
         public string treatment { get; set; }
         public long time { get; set; }
+        public long? changeNumber { get; set; }
+        public string label { get; set; }
         public string bucketingKey { get; set; }
     }
     

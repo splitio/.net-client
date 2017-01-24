@@ -1,15 +1,14 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
+using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -17,10 +16,10 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
 
-        public JSONFileClient(string splitsFilePath, string segmentsFilePath)
+        public JSONFileClient(string splitsFilePath, string segmentsFilePath, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, ITreatmentLog treatmentLogInstance = null, bool isLabelsEnabled = true)
         {
             InitializeLogger();
-            segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+            segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new SplitParser(segmentFetcher, segmentCache);
             var splitChangeFetcher = new JSONFileSplitChangeFetcher(splitsFilePath);
@@ -28,10 +27,10 @@ namespace Splitio.Services.Client.Classes
             var parsedSplits = new ConcurrentDictionary<string, ParsedSplit>();
             foreach (Split split in splitChangesResult.splits)
                 parsedSplits.TryAdd(split.name, splitParser.Parse(split));         
-            splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
-            
+            splitCache = splitCacheInstance ?? new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
+            treatmentLog = treatmentLogInstance;
             splitter = new Splitter();
-            engine = new Engine(splitter);
+            labelsEnabled = isLabelsEnabled;
         }
 
         private void InitializeLogger()

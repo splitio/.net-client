@@ -2,10 +2,7 @@
 using Splitio.CommonLibraries;
 using Splitio.Services.Metrics.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace Splitio.Services.Metrics.Classes
 {

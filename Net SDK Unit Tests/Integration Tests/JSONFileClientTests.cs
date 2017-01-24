@@ -1,8 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Client.Classes;
-using Splitio.Domain;
 using System.Collections.Generic;
+using Moq;
+using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Cache.Interfaces;
+using Splitio.Domain;
 
 namespace Splitio_Tests.Integration_Tests
 {
@@ -11,8 +14,7 @@ namespace Splitio_Tests.Integration_Tests
     {
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
-
-        public void ExecuteGetTreatmentOnFailedParsingSplitShouldReturnCONTROL()
+        public void ExecuteGetTreatmentOnFailedParsingSplitShouldReturnControl()
         {
             //Arrange
             var client = new JSONFileClient("splits_staging_3.json", "");
@@ -27,7 +29,6 @@ namespace Splitio_Tests.Integration_Tests
 
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
-
         public void ExecuteGetTreatmentOnFailedParsingSplitShouldNotAffectOtherSplits()
         {
             //Arrange
@@ -62,8 +63,26 @@ namespace Splitio_Tests.Integration_Tests
 
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
-        [DeploymentItem(@"Resources\segment_payed.json")]
+        public void ExecuteGetTreatmentOnExceptionShouldReturnControl()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var splitCacheMock = new Mock<ISplitCache>();
+            splitCacheMock.Setup(x => x.GetSplit(It.IsAny<string>())).Throws<Exception>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, splitCacheMock.Object, treatmentLogMock.Object);
 
+            //Act           
+            var result = client.GetTreatment("test", "asd", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("control", result);
+        }
+
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        [DeploymentItem(@"Resources\segment_payed.json")]
         public void ExecuteGetTreatmentOnRemovedUserFromSegmentShouldReturnOff()
         {
             //Arrange
@@ -84,7 +103,6 @@ namespace Splitio_Tests.Integration_Tests
 
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_4.json")]
-
         public void ExecuteGetTreatmentOnSplitWithOnOffOnPartition()
         {
             //Arrange
@@ -120,6 +138,117 @@ namespace Splitio_Tests.Integration_Tests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("off", result);
+        }
+
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelKilled()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "test_jw3", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("test", "test_jw3", "off", It.IsAny<long>(), 1470947806420, "killed", null));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelNoConditionMatched()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "whitelisting_elements", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("test", "whitelisting_elements", "off", It.IsAny<long>(), 1471368078203, "no rule matched", null));
+       
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelSplitNotFound()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            client.RemoveSplitFromCache("asd");
+            var result = client.GetTreatment("test", "asd", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("test", "asd", "control", It.IsAny<long>(), null, "rules not found", null));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelException()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var splitCacheMock = new Mock<ISplitCache>();
+            splitCacheMock.Setup(x => x.GetSplit(It.IsAny<string>())).Throws<Exception>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, splitCacheMock.Object, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "asd", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("test", "asd", "control", It.IsAny<long>(), null, "exception", null));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelForTreatment()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", "on", It.IsAny<long>(), 1484084207827, "explicitly included", null));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndNotLogLabelForTreatmentIfLabelsNotEnabled()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object, isLabelsEnabled: false);
+
+            //Act           
+            var result = client.GetTreatment("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", "on", It.IsAny<long>(), 1484084207827, null, null));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentAndLogLabelAndBucketingKeyForTreatment()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_3.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            var key = new Key("db765170-e9f2-11e5-885c-c2f58c3a47a7", "ab765170-e9f2-11e5-885c-c2f58c3a47a7");
+            var result = client.GetTreatment(key, "Segments_Restructuring_UI", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", "on", It.IsAny<long>(), 1484084207827, "explicitly included", "ab765170-e9f2-11e5-885c-c2f58c3a47a7"));
         }
 
     }

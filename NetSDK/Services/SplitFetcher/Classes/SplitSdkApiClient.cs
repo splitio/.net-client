@@ -1,9 +1,5 @@
 ﻿using Splitio.CommonLibraries;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using Splitio.Services.SplitFetcher.Interfaces;
 using log4net;

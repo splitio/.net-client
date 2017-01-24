@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Domain;
 using System.Threading;
@@ -19,7 +18,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, queue, 10);
 
             //Act
-            treatmentLog.Log("GetTreatment", "test", "on", 7000);
+            treatmentLog.Log("GetTreatment", "test", "on", 7000, 1, "test");
 
             //Assert
             KeyImpression element = null;
@@ -43,7 +42,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
 
             //Act
             Key key = new Key(bucketingKey : "a", matchingKey : "testkey");
-            treatmentLog.Log(key.matchingKey, "test", "on", 7000, key.bucketingKey);
+            treatmentLog.Log(key.matchingKey, "test", "on", 7000, 1, "test-label", key.bucketingKey);
 
             //Assert
             KeyImpression element = null;
@@ -69,7 +68,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
 
             //Act
             treatmentLog.Start();
-            treatmentLog.Log("GetTreatment", "test", "on", 7000);
+            treatmentLog.Log("GetTreatment", "test", "on", 7000, 1, "test-label");
 
             //Assert
             Thread.Sleep(2000);

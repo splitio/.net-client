@@ -1,0 +1,9 @@
+CHANGES
+
+2.0.5
+
+- Impression to include the changeNumber of the Split that served a GetTreatment call.
+- Impression to include Label.
+- Expose LabelsEnabled flag in ConfigurationOptions.
+- Add SplitManager.SplitNames() support to retrieve feature names.
+- Deprecate Engine module.

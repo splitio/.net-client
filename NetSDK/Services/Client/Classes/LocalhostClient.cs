@@ -1,16 +1,10 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
-using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
-using Splitio.Services.Parsing;
-using Splitio.Services.SplitFetcher.Classes;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Splitio.Services.Client.Classes
@@ -19,14 +13,13 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
 
-        public LocalhostClient(string filePath, Engine engine = null, Splitter splitter = null)
+        public LocalhostClient(string filePath, Splitter splitter = null)
         {
             InitializeLogger();
             filePath = LookupFilePath(filePath);
             var splits = ParseSplitFile(filePath);
             splitCache = new InMemorySplitCache(splits);
             BuildSplitter(splitter);
-            BuildEngine(engine);
         }
 
         private string LookupFilePath(string filePath)
@@ -112,11 +105,5 @@ namespace Splitio.Services.Client.Classes
         {
             this.splitter = splitter ?? new Splitter();
         }
-
-        private void BuildEngine(Engine engine)
-        {
-            this.engine = engine ?? new Engine(splitter);
-        }
-
     }
 }

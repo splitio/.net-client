@@ -1,13 +1,6 @@
 ﻿using Splitio.Domain;
-using Splitio.Services.Parsing;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
-using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
 
