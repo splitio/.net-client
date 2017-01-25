@@ -1,5 +1,9 @@
 CHANGES
 
+2.0.6
+
+- LabelsEnabled flag is true by default
+
 2.0.5
 
 - Impression to include the changeNumber of the Split that served a GetTreatment call.

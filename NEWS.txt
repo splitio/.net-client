@@ -1,5 +1,9 @@
 NEWS
 
+2.0.6
+
+- No news for this update
+
 2.0.5
 
 - No news for this update
