@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 2.0.{build}
+version: 2.0.6-rc{build}
 
 before_build:
  - nuget restore
@@ -18,4 +18,4 @@ deploy:
  - provider: Environment
    name: NugetPublish
    on:
-    branch: master
+    branch: development

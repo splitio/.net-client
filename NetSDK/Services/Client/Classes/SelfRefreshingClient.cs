@@ -102,7 +102,7 @@ namespace Splitio.Services.Client.Classes
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
             NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
-            labelsEnabled = config.LabelsEnabled;
+            labelsEnabled = config.LabelsEnabled ?? true;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
