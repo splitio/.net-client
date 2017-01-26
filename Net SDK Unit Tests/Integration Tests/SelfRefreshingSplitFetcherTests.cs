@@ -37,7 +37,7 @@ namespace Splitio_Tests.Integration_Tests
             gates.IsSDKReady(1000);
 
             //Act           
-            ParsedSplit result = splitCache.GetSplit("Pato_Test_1");
+            ParsedSplit result = (ParsedSplit)splitCache.GetSplit("Pato_Test_1");
 
             //Assert
             Assert.IsNotNull(result);
@@ -77,8 +77,8 @@ namespace Splitio_Tests.Integration_Tests
             //Act           
             gates.IsSDKReady(1000);
             selfRefreshingSplitFetcher.Stop();
-            ParsedSplit result  = splitCache.GetSplit("Pato_Test_1");
-            ParsedSplit result2 = splitCache.GetSplit("Manu_Test_1");
+            ParsedSplit result  = (ParsedSplit)splitCache.GetSplit("Pato_Test_1");
+            ParsedSplit result2 = (ParsedSplit)splitCache.GetSplit("Manu_Test_1");
             //Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.name == "Pato_Test_1");

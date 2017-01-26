@@ -68,7 +68,7 @@ namespace Splitio.Services.Client.Classes
 
             try
             {
-                var split = splitCache.GetSplit(feature);
+                var split = (ParsedSplit)splitCache.GetSplit(feature);
 
                 if (split == null)
                 {

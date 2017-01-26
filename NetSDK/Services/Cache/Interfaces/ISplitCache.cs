@@ -5,7 +5,7 @@ namespace Splitio.Services.Cache.Interfaces
 {
     public interface ISplitCache
     {
-        void AddSplit(string splitName, ParsedSplit split);
+        void AddSplit(string splitName, SplitBase split);
 
         bool RemoveSplit(string splitName);
 
@@ -13,8 +13,8 @@ namespace Splitio.Services.Cache.Interfaces
 
         long GetChangeNumber();
 
-        ParsedSplit GetSplit(string splitName);
+        SplitBase GetSplit(string splitName);
 
-        List<ParsedSplit> GetAllSplits();
+        List<SplitBase> GetAllSplits();
     }
 }
