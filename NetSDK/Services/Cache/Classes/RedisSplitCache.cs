@@ -57,5 +57,25 @@ namespace Splitio.Services.Cache.Classes
             var splits = splitValues.Select(x=> JsonConvert.DeserializeObject<Split>(x));
             return splits.Cast<SplitBase>().ToList();
         }
+
+        public List<string> GetKeys()
+        {
+            var splitKeys = redisAdapter.Keys(splitKeyPrefix + "*");
+            var result = splitKeys.Select(x => x.ToString()).ToList();
+
+            return result;
+        }
+
+        public long RemoveSplits(List<string> splitNames)
+        {
+            var keys = splitNames.Select(x => (RedisKey)x).ToArray();
+            return redisAdapter.Del(keys);
+        }
+
+
+        public void Flush()
+        {
+            redisAdapter.Flush();
+        }
     }
 }

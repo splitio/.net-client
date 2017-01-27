@@ -17,5 +17,9 @@ namespace Splitio.Services.Cache.Interfaces
         RedisKey[] Keys(string pattern);
 
         bool Del(string key);
+
+        long Del(RedisKey[] keys);
+
+        void Flush();
     }
 }

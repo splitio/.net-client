@@ -46,5 +46,15 @@ namespace Splitio.Services.Cache.Classes
         {
             return database.KeyDelete(key);
         }
+
+        public long Del(RedisKey[] keys)
+        {
+            return database.KeyDelete(keys);
+        }
+
+        public void Flush()
+        {
+            server.FlushDatabase();
+        }
     }
 }
