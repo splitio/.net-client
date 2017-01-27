@@ -13,12 +13,12 @@ namespace Splitio.Services.Cache.Classes
         private IDatabase database;
         private IServer server;
 
-        public RedisAdapter()
+        public RedisAdapter(string host, string port, int databaseNumber = 0, string password = "")
         {
-            //TODO: configs as input
-            redis = ConnectionMultiplexer.Connect("localhost:6379");
-            database = redis.GetDatabase();
-            server = redis.GetServer("localhost", 6379);
+            //TODO: set password
+            redis = ConnectionMultiplexer.Connect(String.Format("{0}:{1}", host, port));
+            database = redis.GetDatabase(databaseNumber);
+            server = redis.GetServer(host, port);
         }
 
         public bool Set(string key, string value)
