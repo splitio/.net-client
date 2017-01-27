@@ -16,9 +16,10 @@ namespace Splitio.Services.Cache.Classes
         public RedisAdapter(string host, string port, int databaseNumber = 0, string password = "")
         {
             //TODO: set password
-            redis = ConnectionMultiplexer.Connect(String.Format("{0}:{1}", host, port));
+            var config = String.Format("{0}:{1}, allowAdmin = true", host, port);
+            redis = ConnectionMultiplexer.Connect(config);
             database = redis.GetDatabase(databaseNumber);
-            server = redis.GetServer(host, port);
+            server = redis.GetServer(String.Format("{0}:{1}", host, port));
         }
 
         public bool Set(string key, string value)
