@@ -2,9 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.CommonLibraries;
 using Splitio.Services.SplitFetcher.Classes;
-using Splitio.Domain;
-using System.Collections.Generic;
-using Splitio.Services.Cache.Classes;
 
 
 namespace Splitio_Tests.Integration_Tests
