@@ -106,5 +106,40 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual(0, result.Count());
         }
 
+        [TestMethod]
+        public void ExecuteSAddAndSMembersSuccessful()
+        {
+            //Arrange
+            var setCount = adapter.SAdd("test_key_set", new RedisValue[]{ "test_value", "test_value2"});
+
+            //Act
+            var result = adapter.SMembers("test_key_set");
+
+            //Assert
+            Assert.AreEqual(2, setCount);
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Contains("test_value"));
+            Assert.IsTrue(result.Contains("test_value2"));
+        }
+
+        [TestMethod]
+        public void ExecuteSAddAndSRemSuccessful()
+        {
+            //Arrange
+            var setCount = adapter.SAdd("test_key_set", new RedisValue[] { "test_value", "test_value2" });
+
+            //Act
+            var remCount = adapter.SRem("test_key_set", new RedisValue[] { "test_value2" });
+            var result = adapter.SIsMember("test_key_set", "test_value");
+            var result2 = adapter.SIsMember("test_key_set", "test_value2");
+            var result3 = adapter.SIsMember("test_key_set", "test_value3");
+
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(result2);
+            Assert.IsFalse(result3);
+        }
+
     }
 }
