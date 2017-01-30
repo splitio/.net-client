@@ -47,7 +47,7 @@ namespace Splitio.Services.Cache.Classes
         public SplitBase GetSplit(string splitName)
         {
             var splitJson = redisAdapter.Get(splitKeyPrefix + splitName);
-            return splitJson != null ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
+            return !String.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
         }
 
         public List<SplitBase> GetAllSplits()
