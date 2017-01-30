@@ -106,6 +106,7 @@
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisAdapter.cs" />
+    <Compile Include="Services\Cache\Classes\RedisSegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisSplitCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IRedisAdapter.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />

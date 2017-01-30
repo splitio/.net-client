@@ -32,12 +32,14 @@ namespace Splitio.Services.Cache.Classes
 
         public void SetChangeNumber(long changeNumber)
         {
-            redisAdapter.Set(splitsKeyPrefix + "till", changeNumber.ToString());
+            var key = splitsKeyPrefix + "till";
+            redisAdapter.Set(key, changeNumber.ToString());
         }
 
         public long GetChangeNumber()
         {
-            string changeNumberString = redisAdapter.Get(splitsKeyPrefix + "till");
+            var key = splitsKeyPrefix + "till";
+            string changeNumberString = redisAdapter.Get(key);
             long changeNumberParsed;
             var result = long.TryParse(changeNumberString, out changeNumberParsed);
             
@@ -68,7 +70,7 @@ namespace Splitio.Services.Cache.Classes
 
         public long RemoveSplits(List<string> splitNames)
         {
-            var keys = splitNames.Select(x => (RedisKey)x).ToArray();
+            var keys = splitNames.Cast<RedisKey>().ToArray();
             return redisAdapter.Del(keys);
         }
 

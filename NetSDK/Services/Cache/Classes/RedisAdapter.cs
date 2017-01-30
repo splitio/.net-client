@@ -53,6 +53,26 @@ namespace Splitio.Services.Cache.Classes
             return database.KeyDelete(keys);
         }
 
+        public long SAdd(string key, RedisValue[] values)
+        {
+            return database.SetAdd(key, values);
+        }
+
+        public long SRem(string key, RedisValue[] values)
+        {
+            return database.SetRemove(key, values);
+        }
+
+        public bool SIsMember(string key, string value)
+        {
+            return database.SetContains(key, value);
+        }
+
+        public RedisValue[] SMembers(string key)
+        {
+            return database.SetMembers(key);
+        }
+
         public void Flush()
         {
             server.FlushDatabase();

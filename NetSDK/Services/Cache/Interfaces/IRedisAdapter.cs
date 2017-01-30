@@ -20,6 +20,14 @@ namespace Splitio.Services.Cache.Interfaces
 
         long Del(RedisKey[] keys);
 
+        long SAdd(string key, RedisValue[] values);
+
+        long SRem(string key, RedisValue[] values);
+
+        bool SIsMember(string key, string value);
+
+        RedisValue[] SMembers(string key);
+
         void Flush();
     }
 }
