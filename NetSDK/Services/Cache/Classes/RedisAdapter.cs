@@ -53,6 +53,11 @@ namespace Splitio.Services.Cache.Classes
             return database.KeyDelete(keys);
         }
 
+        public bool SAdd(string key, RedisValue value)
+        {
+            return database.SetAdd(key, value);
+        }
+
         public long SAdd(string key, RedisValue[] values)
         {
             return database.SetAdd(key, values);
