@@ -186,7 +186,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildTreatmentLog()
         {
-            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new BlockingQueue<KeyImpression>(TreatmentLogSize));
+            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize)));
         }
 
 

@@ -103,11 +103,13 @@
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
     <Compile Include="Domain\SplitBase.cs" />
+    <Compile Include="Services\Cache\Classes\InMemoryImpressionsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisAdapter.cs" />
     <Compile Include="Services\Cache\Classes\RedisSegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisSplitCache.cs" />
+    <Compile Include="Services\Cache\Interfaces\IImpressionsCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IRedisAdapter.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISplitCache.cs" />
