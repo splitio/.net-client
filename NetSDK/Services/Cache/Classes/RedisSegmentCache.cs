@@ -21,13 +21,13 @@ namespace Splitio.Services.Cache.Classes
 
         public void AddToSegment(string segmentName, List<string> segmentKeys)
         {
-            var valuesToAdd = segmentKeys.Cast<RedisValue>().ToArray();
+            var valuesToAdd = segmentKeys.Select(x => (RedisValue)x).ToArray();
             redisAdapter.SAdd(segmentKeyPrefix + segmentName, valuesToAdd);
         }
 
         public void RemoveFromSegment(string segmentName, List<string> segmentKeys)
         {
-            var valuesToRemove = segmentKeys.Cast<RedisValue>().ToArray();
+            var valuesToRemove = segmentKeys.Select(x => (RedisValue)x).ToArray();
             redisAdapter.SRem(segmentKeyPrefix + segmentName, valuesToRemove);
         }
 
@@ -52,16 +52,16 @@ namespace Splitio.Services.Cache.Classes
             return result ? changeNumberParsed : -1;
         }
 
-        public void RegisterSegment(string segmentName)
+        public long RegisterSegment(string segmentName)
         {
-            RegisterSegments(new List<string>() { segmentName });
+            return RegisterSegments(new List<string>() { segmentName });
         }
 
-        public void RegisterSegments(List<string> segmentNames)
+        public long RegisterSegments(List<string> segmentNames)
         {
             var key = segmentsKeyPrefix + "registered";
-            var segments = segmentNames.Cast<RedisValue>().ToArray();
-            redisAdapter.SAdd(key, segments);
+            var segments = segmentNames.Select(x => (RedisValue)x).ToArray();
+            return redisAdapter.SAdd(key, segments);
         }
 
         public List<string> GetRegisteredSegments()
@@ -69,7 +69,7 @@ namespace Splitio.Services.Cache.Classes
             var key = segmentsKeyPrefix + "registered";
             var result = redisAdapter.SMembers(key);
 
-            return result.Cast<string>().ToList();
+            return result.Select(x => (string)x).ToList();
         }
 
         public void Flush()

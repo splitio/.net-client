@@ -70,7 +70,7 @@ namespace Splitio.Services.Cache.Classes
 
         public long RemoveSplits(List<string> splitNames)
         {
-            var keys = splitNames.Cast<RedisKey>().ToArray();
+            var keys = splitNames.Select(x => (RedisKey)x).ToArray();
             return redisAdapter.Del(keys);
         }
 
