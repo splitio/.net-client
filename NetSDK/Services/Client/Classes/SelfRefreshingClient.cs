@@ -192,7 +192,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildMetricsLog()
         {
-            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>(), MaxCountCalls, MaxTimeBetweenCalls);
+            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, new InMemoryMetricsCache(new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>()), MaxCountCalls, MaxTimeBetweenCalls);
         }
 
         private int Random(int refreshRate)
