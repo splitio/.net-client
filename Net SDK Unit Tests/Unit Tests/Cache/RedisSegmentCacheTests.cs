@@ -33,6 +33,22 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
+        public void AddToSegmentTest()
+        {
+            //Arrange
+            var segmentName = "test";
+            var redisAdapterMock = new Mock<IRedisAdapter>();
+            redisAdapterMock.Setup(x => x.SAdd(It.IsAny<string>(), It.IsAny<RedisValue[]>())).Returns(1);
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
+
+            //Act
+            segmentCache.AddToSegment(segmentName, new List<string>() { "test" });
+
+            //Assert
+            redisAdapterMock.Verify(mock => mock.SAdd(segmentKeyPrefix + segmentName, It.IsAny<RedisValue[]>()));
+        }
+
+        [TestMethod]
         public void GetRegisteredSegmentTest()
         {
             //Arrange
@@ -120,6 +136,37 @@ namespace Splitio_Tests.Unit_Tests.Cache
 
             //Assert
             Assert.AreEqual(1234, result);
+        }
+
+        [TestMethod]
+        public void GetChangeNumberWhenNotSetTest()
+        {
+            //Arrange
+            var changeNumber = -1;
+            var segmentName = "segment_test";
+            var redisAdapterMock = new Mock<IRedisAdapter>();
+            redisAdapterMock.Setup(x => x.Get(segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till")).Returns("");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
+
+            //Act
+            var result = segmentCache.GetChangeNumber(segmentName);
+
+            //Assert
+            Assert.AreEqual(changeNumber, result);
+        }
+
+        [TestMethod]
+        public void FlushTest()
+        {
+            //Arrange
+            var redisAdapterMock = new Mock<IRedisAdapter>();
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
+
+            //Act
+            segmentCache.Flush();
+
+            //Assert
+            redisAdapterMock.Verify(mock => mock.Flush(), Times.Once());
         }
     }
 }
