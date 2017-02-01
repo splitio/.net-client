@@ -107,13 +107,28 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
-        public void ExecuteSAddAndSMembersSuccessful()
+        public void ExecuteSAddAndSMemberSuccessful()
         {
             //Arrange
-            var setCount = adapter.SAdd("test_key_set", new RedisValue[]{ "test_value", "test_value2"});
+            var setCount = adapter.SAdd("test_key_set", "test_value_1");
 
             //Act
             var result = adapter.SMembers("test_key_set");
+
+            //Assert
+            Assert.AreEqual(true, setCount);
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.Contains("test_value_1"));
+        }
+
+        [TestMethod]
+        public void ExecuteSAddAndSMembersSuccessful()
+        {
+            //Arrange
+            var setCount = adapter.SAdd("test_key_set_multiple", new RedisValue[]{ "test_value", "test_value2"});
+
+            //Act
+            var result = adapter.SMembers("test_key_set_multiple");
 
             //Assert
             Assert.AreEqual(2, setCount);
