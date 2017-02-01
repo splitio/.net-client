@@ -97,6 +97,7 @@
     <Compile Include="Unit Tests\Cache\RedisSplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\RedisSegmentCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\ImpressionsCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\RedisImpressionCacheTests.cs" />
     <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SplitFactoryUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
