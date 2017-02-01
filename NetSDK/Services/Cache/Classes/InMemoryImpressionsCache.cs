@@ -19,7 +19,10 @@ namespace Splitio.Services.Cache.Classes
 
         public void AddImpression(KeyImpression impression)
         {
-            queue.Enqueue(impression);
+            if (queue != null)
+            {
+                queue.Enqueue(impression);
+            }
         }
 
         public List<KeyImpression> FetchAllAndClear()
