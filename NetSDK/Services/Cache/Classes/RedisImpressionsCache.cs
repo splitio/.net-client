@@ -22,7 +22,8 @@ namespace Splitio.Services.Cache.Classes
         public void AddImpression(KeyImpression impression)
         {
             var key = impressionKeyPrefix + impression.feature;
-            var impressionJson = JsonConvert.SerializeObject(impression);
+            var impressionToSend = new{ keyName = impression.keyName, treatment = impression.treatment, time = impression.time };
+            var impressionJson = JsonConvert.SerializeObject(impressionToSend);
             redisAdapter.SAdd(key, impressionJson);
         }
 
