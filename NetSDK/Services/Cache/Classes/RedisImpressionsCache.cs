@@ -22,22 +22,27 @@ namespace Splitio.Services.Cache.Classes
         public void AddImpression(KeyImpression impression)
         {
             var key = impressionKeyPrefix + impression.feature;
-            var impressionToSend = new{ keyName = impression.keyName, treatment = impression.treatment, time = impression.time };
+            var impressionToSend = new { keyName = impression.keyName, treatment = impression.treatment, time = impression.time };
             var impressionJson = JsonConvert.SerializeObject(impressionToSend);
             redisAdapter.SAdd(key, impressionJson);
         }
 
         public List<KeyImpression> FetchAllAndClear()
         {
-            var impressions = redisAdapter.SMembers(impressionKeyPrefix + "*");
-            var result = impressions.Select(x => JsonConvert.DeserializeObject<KeyImpression>(x)).ToList();
-            var features = result.Select(x => x.feature).Distinct();
-            foreach (var feature in features)
+            var impressions = new List<KeyImpression>();
+            var impresionKeys = redisAdapter.Keys(impressionKeyPrefix + "*");
+            foreach(var impresionKey in impresionKeys)
             {
-                var key = impressionKeyPrefix + feature;
-                redisAdapter.Del(key);
+                var impressionsJson = redisAdapter.SMembers(impresionKey);
+                var result = impressionsJson.Select(x => JsonConvert.DeserializeObject<KeyImpression>(x)).ToList();
+                foreach (var impression in result)
+                {
+                    impression.feature = impresionKey.ToString().Replace(impressionKeyPrefix, "");
+                    impressions.Add(impression);
+                }
+                redisAdapter.Del(impresionKey);
             }
-            return result;
+            return impressions;
         }
     }
 }
