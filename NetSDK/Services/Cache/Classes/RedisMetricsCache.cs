@@ -53,7 +53,7 @@ namespace Splitio.Services.Cache.Classes
             {
                 var value = redisAdapter.Get(count);
                 var countName = ((string)count).Replace(metricsCountKeyPrefix, "");
-                var counterValue = long.Parse(redisAdapter.Get(countName));
+                var counterValue = long.Parse(redisAdapter.Get(metricsCountKeyPrefix + countName));
                 result.Add(countName, new Counter(counterValue)); //TODO: counter.count is losing its original value!!
                 redisAdapter.Del(count);
             }
@@ -68,7 +68,7 @@ namespace Splitio.Services.Cache.Classes
 
         public long GetGauge(string name)
         {
-            var key = metricsGaugeKeyPrefix.Replace("{gauge}", name);
+            var key = metricsGaugeKeyPrefix + name;
             string value = redisAdapter.Get(key);
 
             return long.Parse(value);
@@ -91,14 +91,14 @@ namespace Splitio.Services.Cache.Classes
 
         public void SetLatency(string name, long value)
         {
-            var bucketToIncrement = latencyTracker.GetBucketForLatencyMillis(value * 1000);
-            var key = metricsLatencyKeyPrefix.Replace("{metricName}", name).Replace("{bucketNumer}", bucketToIncrement.ToString());
+            var bucketToIncrement = ((BinarySearchLatencyTracker)latencyTracker).FindIndex(value * 1000);
+            var key = metricsLatencyKeyPrefix.Replace("{metricName}", name).Replace("{bucketNumber}", bucketToIncrement.ToString());
             var result = redisAdapter.IcrBy(key, 1);
         }
 
         public ILatencyTracker GetLatencyTracker(string name)
         {
-            var bucketsPattern = metricsLatencyKeyPrefix.Replace("{metricName}", name).Replace("{bucketNumer}", "*");
+            var bucketsPattern = metricsLatencyKeyPrefix.Replace("{metricName}", name).Replace("{bucketNumber}", "*");
             var keys = redisAdapter.Keys(bucketsPattern);
             ILatencyTracker result = new BinarySearchLatencyTracker();
             foreach (var key in keys)
