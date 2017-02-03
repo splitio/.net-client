@@ -78,6 +78,11 @@ namespace Splitio.Services.Cache.Classes
             return database.SetMembers(key);
         }
 
+        public long IcrBy(string key, long value)
+        {
+            return database.StringIncrement(key, value);
+        }
+
         public void Flush()
         {
             server.FlushDatabase();

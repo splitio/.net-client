@@ -156,5 +156,17 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsFalse(result3);
         }
 
+        [TestMethod]
+        public void ExecuteIncrBySuccessful()
+        {
+            //Arrange
+            adapter.IcrBy("test_count", 1);
+
+            //Act
+            var result = adapter.IcrBy("test_count", 2);
+
+            //Assert
+            Assert.AreEqual(3, result);
+        }
     }
 }

@@ -47,16 +47,8 @@ namespace Splitio.Services.Metrics.Classes
             {
                 return;
             }
-
-            Counter counter = metricsCache.GetCount(counterName);
-
-            if (counter == null)
-            {
-                counter = new Counter();
-                metricsCache.SetCount(counterName, counter);
-            }
-
-            metricsCache.IncrementCount(counter, delta);
+           
+            Counter counter = metricsCache.SetCount(counterName, delta);
 
             var oldLastCall = countLastCall;
             countLastCall = DateTime.UtcNow;
@@ -72,16 +64,8 @@ namespace Splitio.Services.Metrics.Classes
             {
                 return;
             }
-
-            ILatencyTracker tracker = metricsCache.GetLatencyTracker(operation);
-            
-            if (tracker == null)
-            {
-                tracker = new BinarySearchLatencyTracker();
-                metricsCache.SetLatencyBucketCounter(operation, tracker);
-            }
-
-            metricsCache.IncrementLatencyBucketCounter(tracker, miliseconds);
+          
+            metricsCache.SetLatencyBucketCounter(operation, miliseconds);
 
             var oldLastCall = timeLastCall;
             timeLastCall = DateTime.UtcNow;

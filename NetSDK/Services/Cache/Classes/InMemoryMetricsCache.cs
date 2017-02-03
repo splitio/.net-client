@@ -22,31 +22,45 @@ namespace Splitio.Services.Cache.Classes
             this.gaugeMetrics = gaugeMetrics ?? new ConcurrentDictionary<string, long>();
         }
 
-        public void SetCount(string name, Counter counter)
+        public Counter SetCount(string name, long delta)
         {
-            countMetrics.TryAdd(name, counter);
-        }
+            Counter counter;
 
-        public void IncrementCount(Counter counter, long delta)
-        {
+            countMetrics.TryGetValue(name, out counter);
+
+            if (counter == null)
+            {
+                counter = new Counter();
+            }
+
             counter.AddDelta(delta);
+            countMetrics.TryAdd(name, counter); 
+
+            return counter;
         }
 
         public Counter GetCount(string name)
         {
             Counter counter;
+
             countMetrics.TryGetValue(name, out counter);
             return counter; 
         }
 
         public void SetGauge(string name, long value)
         {
-            if (!gaugeMetrics.ContainsKey(name))
-            {
-                gaugeMetrics.TryAdd(name, 0);
-            }
+            long gauge;
 
-            gaugeMetrics[name] = value;
+            var result = gaugeMetrics.TryGetValue(name, out gauge);
+
+            if (!result)
+            {
+                gaugeMetrics.TryAdd(name, value);
+            }
+            else
+            {
+                gaugeMetrics[name] = value;
+            }
         }
 
         public long GetGauge(string name)
@@ -56,14 +70,18 @@ namespace Splitio.Services.Cache.Classes
             return hasResult ? value : 0;
         }
 
-        public void SetLatencyBucketCounter(string name, ILatencyTracker latencyTracker)
+        public void SetLatencyBucketCounter(string name, long value)
         {
-            timeMetrics.TryAdd(name, latencyTracker);
-        }
+            ILatencyTracker tracker;
+            timeMetrics.TryGetValue(name, out tracker);
 
-        public void IncrementLatencyBucketCounter(ILatencyTracker latencyTracker, long delta)
-        {
-            latencyTracker.AddLatencyMillis((int)delta);
+            if (tracker == null)
+            {
+                tracker = new BinarySearchLatencyTracker();
+            }
+
+            tracker.AddLatencyMillis(value);
+            timeMetrics.TryAdd(name, tracker);
         }
 
         public ILatencyTracker GetLatencyTracker(string name)
@@ -72,7 +90,6 @@ namespace Splitio.Services.Cache.Classes
             timeMetrics.TryGetValue(name, out tracker);
             return tracker;
         }
-
 
         public Dictionary<string, Counter> FetchAllCountersAndClear()
         {
