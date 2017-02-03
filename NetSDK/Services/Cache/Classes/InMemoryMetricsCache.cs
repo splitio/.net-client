@@ -22,7 +22,7 @@ namespace Splitio.Services.Cache.Classes
             this.gaugeMetrics = gaugeMetrics ?? new ConcurrentDictionary<string, long>();
         }
 
-        public Counter SetCount(string name, long delta)
+        public Counter IncrementCount(string name, long delta)
         {
             Counter counter;
 
@@ -70,7 +70,7 @@ namespace Splitio.Services.Cache.Classes
             return hasResult ? value : 0;
         }
 
-        public void SetLatencyBucketCounter(string name, long value)
+        public void SetLatency(string name, long value)
         {
             ILatencyTracker tracker;
             timeMetrics.TryGetValue(name, out tracker);

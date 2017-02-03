@@ -48,7 +48,7 @@ namespace Splitio.Services.Metrics.Classes
                 return;
             }
            
-            Counter counter = metricsCache.SetCount(counterName, delta);
+            Counter counter = metricsCache.IncrementCount(counterName, delta);
 
             var oldLastCall = countLastCall;
             countLastCall = DateTime.UtcNow;
@@ -65,7 +65,7 @@ namespace Splitio.Services.Metrics.Classes
                 return;
             }
           
-            metricsCache.SetLatencyBucketCounter(operation, miliseconds);
+            metricsCache.SetLatency(operation, miliseconds);
 
             var oldLastCall = timeLastCall;
             timeLastCall = DateTime.UtcNow;

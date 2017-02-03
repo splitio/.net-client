@@ -23,7 +23,7 @@ namespace Splitio.Services.Cache.Classes
             this.latencyTracker = new BinarySearchLatencyTracker();
         }
 
-        public Counter SetCount(string name, long delta)
+        public Counter IncrementCount(string name, long delta)
         {
             var key = metricsCountKeyPrefix + name;
             var result = redisAdapter.IcrBy(key, delta);
@@ -89,7 +89,7 @@ namespace Splitio.Services.Cache.Classes
             return result;
         }
 
-        public void SetLatencyBucketCounter(string name, long value)
+        public void SetLatency(string name, long value)
         {
             var bucketToIncrement = latencyTracker.GetBucketForLatencyMillis(value * 1000);
             var key = metricsLatencyKeyPrefix.Replace("{metricName}", name).Replace("{bucketNumer}", bucketToIncrement.ToString());
