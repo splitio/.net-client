@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Cache.Interfaces;
+﻿using log4net;
+using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,26 @@ namespace Splitio.Services.Cache.Classes
 {
     public class RedisAdapter : IRedisAdapter
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RedisAdapter));
+
         private ConnectionMultiplexer redis;
         private IDatabase database;
         private IServer server;
 
         public RedisAdapter(string host, string port, int databaseNumber = 0, string password = "")
         {
-            //TODO: set password
-            var config = String.Format("{0}:{1}, allowAdmin = true", host, port);
-            redis = ConnectionMultiplexer.Connect(config);
-            database = redis.GetDatabase(databaseNumber);
-            server = redis.GetServer(String.Format("{0}:{1}", host, port));
+            try
+            {
+                //TODO: set password
+                var config = String.Format("{0}:{1}, allowAdmin = true", host, port);
+                redis = ConnectionMultiplexer.Connect(config);
+                database = redis.GetDatabase(databaseNumber);
+                server = redis.GetServer(String.Format("{0}:{1}", host, port));
+            }
+            catch(Exception e)
+            {
+                Log.Error(String.Format("Exception caught building Redis Adapter '{0}:{1}': ", host, port), e);
+            }
         }
 
         public bool Set(string key, string value)
