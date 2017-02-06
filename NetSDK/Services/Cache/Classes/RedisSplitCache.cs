@@ -8,37 +8,36 @@ using System.Linq;
 
 namespace Splitio.Services.Cache.Classes
 {
-    public class RedisSplitCache : ISplitCache
+    public class RedisSplitCache : RedisCacheBase, ISplitCache
     {
-        private IRedisAdapter redisAdapter;
-        private const string splitKeyPrefix = "SPLITIO.split.";
-        private const string splitsKeyPrefix = "SPLITIO.splits.";
+        private const string splitKeyPrefix = "split.";
+        private const string splitsKeyPrefix = "splits.";
 
-        public RedisSplitCache(IRedisAdapter redisAdapter)
-        {
-            this.redisAdapter = redisAdapter;
-        }
-         
+        public RedisSplitCache(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion)
+            : base(redisAdapter, machineIP, sdkLanguage, sdkVersion) { }
+        
         public void AddSplit(string splitName, SplitBase split)
         {
+            var key = redisKeyPrefix + splitKeyPrefix + splitName;
             var splitJson = JsonConvert.SerializeObject(split);
-            redisAdapter.Set(splitKeyPrefix + splitName, splitJson);
+            redisAdapter.Set(key, splitJson);
         }
 
         public bool RemoveSplit(string splitName)
         {
-            return redisAdapter.Del(splitKeyPrefix + splitName);
+            var key = redisKeyPrefix + splitKeyPrefix + splitName;
+            return redisAdapter.Del(key);
         }
 
         public void SetChangeNumber(long changeNumber)
         {
-            var key = splitsKeyPrefix + "till";
+            var key = redisKeyPrefix + splitsKeyPrefix + "till";
             redisAdapter.Set(key, changeNumber.ToString());
         }
 
         public long GetChangeNumber()
         {
-            var key = splitsKeyPrefix + "till";
+            var key = redisKeyPrefix + splitsKeyPrefix + "till";
             string changeNumberString = redisAdapter.Get(key);
             long changeNumberParsed;
             var result = long.TryParse(changeNumberString, out changeNumberParsed);
@@ -48,13 +47,15 @@ namespace Splitio.Services.Cache.Classes
 
         public SplitBase GetSplit(string splitName)
         {
-            var splitJson = redisAdapter.Get(splitKeyPrefix + splitName);
+            var key = redisKeyPrefix + splitKeyPrefix + splitName;
+            var splitJson = redisAdapter.Get(key);
             return !String.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
         }
 
         public List<SplitBase> GetAllSplits()
         {
-            var splitKeys = redisAdapter.Keys(splitKeyPrefix + "*");
+            var pattern = redisKeyPrefix + splitKeyPrefix + "*";
+            var splitKeys = redisAdapter.Keys(pattern);
             var splitValues = redisAdapter.Get(splitKeys);
             var splits = splitValues.Select(x=> JsonConvert.DeserializeObject<Split>(x));
             return splits.Cast<SplitBase>().ToList();
@@ -62,7 +63,8 @@ namespace Splitio.Services.Cache.Classes
 
         public List<string> GetKeys()
         {
-            var splitKeys = redisAdapter.Keys(splitKeyPrefix + "*");
+            var pattern = redisKeyPrefix + splitKeyPrefix + "*";
+            var splitKeys = redisAdapter.Keys(pattern);
             var result = splitKeys.Select(x => x.ToString()).ToList();
 
             return result;
@@ -70,7 +72,7 @@ namespace Splitio.Services.Cache.Classes
 
         public long RemoveSplits(List<string> splitNames)
         {
-            var keys = splitNames.Select(x => (RedisKey)x).ToArray();
+            var keys = splitNames.Select(x => (RedisKey)(redisKeyPrefix + splitKeyPrefix + x)).ToArray();
             return redisAdapter.Del(keys);
         }
 

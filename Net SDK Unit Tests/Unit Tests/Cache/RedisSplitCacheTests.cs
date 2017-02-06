@@ -14,8 +14,8 @@ namespace Splitio_Tests.Unit_Tests.Cache
     [TestClass]
     public class RedisSplitCacheTests
     {
-        private const string splitKeyPrefix = "SPLITIO.split.";
-        private const string splitsKeyPrefix = "SPLITIO.splits.";
+        private const string splitKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/split.";
+        private const string splitsKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/splits.";
 
         [TestMethod]
         public void AddAndGetSplitTest()
@@ -27,7 +27,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();          
             redisAdapterMock.Setup(x => x.Set(splitKeyPrefix + "test_split", splitJson)).Returns(true);
             redisAdapterMock.Setup(x => x.Get(splitKeyPrefix + "test_split")).Returns(splitJson);
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             splitCache.AddSplit(splitName, split);
@@ -48,7 +48,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Keys(splitKeyPrefix + "*")).Returns(new RedisKey[]{"test_split"});
             redisAdapterMock.Setup(x => x.Get(It.IsAny<RedisKey[]>())).Returns(new RedisValue[]{splitJson});
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var split1 = new Split() { name = splitName };
@@ -72,7 +72,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             string value = null;
             redisAdapterMock.Setup(x => x.Get(splitKeyPrefix + "test_split")).Returns(value);
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var result = splitCache.GetSplit(splitName);
@@ -90,7 +90,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             redisAdapterMock.Setup(x => x.Del(splitKeyPrefix + "test_split")).Returns(true);
             string value = null;
             redisAdapterMock.Setup(x => x.Get(splitKeyPrefix + "test_split")).Returns(value);
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var isRemoved = splitCache.RemoveSplit(splitName);
@@ -110,7 +110,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             redisAdapterMock.Setup(x => x.Del(It.IsAny<RedisKey[]>())).Returns(1);
             string value = null;
             redisAdapterMock.Setup(x => x.Get(splitKeyPrefix + "test_split")).Returns(value);
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var removedCount = splitCache.RemoveSplits(new List<string>(){splitName});
@@ -129,7 +129,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Set(splitsKeyPrefix + "till", changeNumber.ToString())).Returns(true);
             redisAdapterMock.Setup(x => x.Get(splitsKeyPrefix + "till")).Returns(changeNumber.ToString());
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             splitCache.SetChangeNumber(changeNumber);
@@ -146,7 +146,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var changeNumber = -1;
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Get(splitsKeyPrefix + "till")).Returns("");
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var result = splitCache.GetChangeNumber();
@@ -170,7 +170,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             redisAdapterMock.Setup(x => x.Set(It.IsAny<string>(), splitJson2)).Returns(true);
             redisAdapterMock.Setup(x => x.Keys(splitKeyPrefix + "*")).Returns(new RedisKey[] { "test_split", "test_split2" });
             redisAdapterMock.Setup(x => x.Get(It.IsAny<RedisKey[]>())).Returns(new RedisValue[] { splitJson, splitJson2 });
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             splitCache.AddSplit(splitName, new ParsedSplit() { name = splitName });
@@ -187,7 +187,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         {
             //Arrange
             var redisAdapterMock = new Mock<IRedisAdapter>();
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             splitCache.Flush();
@@ -202,7 +202,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             //Arrange
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Keys(splitKeyPrefix + "*")).Returns(new RedisKey[] { "test_split", "test_split2" });
-            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
 
             //Act
             var result = splitCache.GetKeys();
