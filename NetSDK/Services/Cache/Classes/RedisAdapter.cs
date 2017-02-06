@@ -26,7 +26,7 @@ namespace Splitio.Services.Cache.Classes
                 database = redis.GetDatabase(databaseNumber);
                 server = redis.GetServer(String.Format("{0}:{1}", host, port));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Error(String.Format("Exception caught building Redis Adapter '{0}:{1}': ", host, port), e);
             }
@@ -34,68 +34,171 @@ namespace Splitio.Services.Cache.Classes
 
         public bool Set(string key, string value)
         {
-            return database.StringSet(key, value);
+            try
+            {
+                return database.StringSet(key, value);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Set", e);
+                return false;
+            }
         }
 
         public string Get(string key)
         {
-            return database.StringGet(key);
+            try
+            {
+                return database.StringGet(key);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Get", e);
+                return String.Empty;
+            }
         }
 
         public RedisValue[] Get(RedisKey[] keys)
         {
-            return database.StringGet(keys);
+            try
+            {
+                return database.StringGet(keys);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Get", e);
+                return new RedisValue[0];
+            }
         }
 
         public RedisKey[] Keys(string pattern)
         {
-            var keys = server.Keys(pattern : pattern);
-            return keys.ToArray();
+            try
+            {
+                var keys = server.Keys(pattern: pattern);
+                return keys.ToArray();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Keys", e);
+                return new RedisKey[0];
+            }
         }
 
         public bool Del(string key)
         {
-            return database.KeyDelete(key);
+            try
+            {
+                return database.KeyDelete(key);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Del", e);
+                return false;
+            }
         }
 
         public long Del(RedisKey[] keys)
         {
-            return database.KeyDelete(keys);
+            try
+            {
+                return database.KeyDelete(keys);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Del", e);
+                return 0;
+            }
         }
 
         public bool SAdd(string key, RedisValue value)
         {
-            return database.SetAdd(key, value);
+            try
+            {
+                return database.SetAdd(key, value);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter SAdd", e);
+                return false;
+            }
         }
 
         public long SAdd(string key, RedisValue[] values)
         {
-            return database.SetAdd(key, values);
+            try
+            {
+                return database.SetAdd(key, values);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter SAdd", e);
+                return 0;
+            }
         }
 
         public long SRem(string key, RedisValue[] values)
         {
-            return database.SetRemove(key, values);
+            try
+            {
+                return database.SetRemove(key, values);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter SRem", e);
+                return 0;
+            }
         }
 
         public bool SIsMember(string key, string value)
         {
-            return database.SetContains(key, value);
+            try
+            {
+                return database.SetContains(key, value);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter SIsMember", e);
+                return false;
+            }
         }
 
         public RedisValue[] SMembers(string key)
         {
-            return database.SetMembers(key);
+            try
+            {
+                return database.SetMembers(key);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter SMembers", e);
+                return new RedisValue[0];
+            }
         }
 
         public long IcrBy(string key, long value)
         {
-            return database.StringIncrement(key, value);
+            try
+            {
+                return database.StringIncrement(key, value);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter IcrBy", e);
+                return 0;
+            }
         }
 
         public void Flush()
         {
-            server.FlushDatabase();
+            try
+            {
+                server.FlushDatabase();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception calling Redis Adapter Flush", e);
+            }
         }
     }
 }
