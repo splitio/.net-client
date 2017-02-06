@@ -13,8 +13,7 @@ namespace Splitio.Services.Cache.Classes
         private const string splitKeyPrefix = "split.";
         private const string splitsKeyPrefix = "splits.";
 
-        public RedisSplitCache(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion)
-            : base(redisAdapter, machineIP, sdkLanguage, sdkVersion) { }
+        public RedisSplitCache(IRedisAdapter redisAdapter) : base(redisAdapter) { }
         
         public void AddSplit(string splitName, SplitBase split)
         {

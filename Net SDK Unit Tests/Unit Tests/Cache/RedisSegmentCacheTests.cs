@@ -12,9 +12,9 @@ namespace Splitio_Tests.Unit_Tests.Cache
     [TestClass]
     public class RedisSegmentCacheTests
     {
-        private const string segmentKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/segment.";
-        private const string segmentNameKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/segment.{segmentname}.";
-        private const string segmentsKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/segments.";
+        private const string segmentKeyPrefix = "SPLITIO.segment.";
+        private const string segmentNameKeyPrefix = "SPLITIO.segment.{segmentname}.";
+        private const string segmentsKeyPrefix = "SPLITIO.segments.";
 
         [TestMethod]
         public void RegisterSegmentTest()
@@ -23,7 +23,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var segmentName = "test";
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.SAdd(It.IsAny<string>(), It.IsAny<RedisValue[]>())).Returns(1);
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
             
             //Act
             var result = segmentCache.RegisterSegment(segmentName);
@@ -39,7 +39,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var segmentName = "test";
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.SAdd(It.IsAny<string>(), It.IsAny<RedisValue[]>())).Returns(1);
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             segmentCache.AddToSegment(segmentName, new List<string>() { "test" });
@@ -55,7 +55,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var segmentName = "segment_test";
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.SMembers(segmentsKeyPrefix + "registered")).Returns(new RedisValue[]{segmentName});
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             var result = segmentCache.GetRegisteredSegments();
@@ -73,7 +73,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.SIsMember(segmentKeyPrefix + segmentName, "abcd")).Returns(false);
 
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             var result = segmentCache.IsInSegment(segmentName, "abcd");
@@ -89,7 +89,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.SIsMember(segmentKeyPrefix + "test", "abcd")).Returns(false);
 
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             var result = segmentCache.IsInSegment("test", "abcd");
@@ -108,7 +108,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             redisAdapterMock.Setup(x => x.SRem(segmentKeyPrefix + segmentName, It.IsAny<RedisValue[]>())).Returns(1);
             redisAdapterMock.Setup(x => x.SIsMember(segmentKeyPrefix + segmentName, "abcd")).Returns(false);
 
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             segmentCache.RemoveFromSegment(segmentName, keys);
@@ -128,7 +128,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Set(segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till", changeNumber.ToString())).Returns(true);
             redisAdapterMock.Setup(x => x.Get(segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till")).Returns(changeNumber.ToString());
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             segmentCache.SetChangeNumber(segmentName, 1234);
@@ -146,7 +146,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var segmentName = "segment_test";
             var redisAdapterMock = new Mock<IRedisAdapter>();
             redisAdapterMock.Setup(x => x.Get(segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till")).Returns("");
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             var result = segmentCache.GetChangeNumber(segmentName);
@@ -160,7 +160,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         {
             //Arrange
             var redisAdapterMock = new Mock<IRedisAdapter>();
-            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var segmentCache = new RedisSegmentCache(redisAdapterMock.Object);
 
             //Act
             segmentCache.Flush();

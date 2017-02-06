@@ -13,8 +13,7 @@ namespace Splitio.Services.Cache.Classes
         private const string segmentNameKeyPrefix = "segment.{segmentname}.";
         private const string segmentsKeyPrefix = "segments.";
 
-        public RedisSegmentCache(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion)
-            : base(redisAdapter, machineIP, sdkLanguage, sdkVersion) { }
+        public RedisSegmentCache(IRedisAdapter redisAdapter) : base(redisAdapter) { }
 
         public void AddToSegment(string segmentName, List<string> segmentKeys)
         {

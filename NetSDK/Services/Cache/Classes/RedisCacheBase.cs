@@ -12,11 +12,17 @@ namespace Splitio.Services.Cache.Classes
         protected IRedisAdapter redisAdapter;
         protected string redisKeyPrefix;
 
+        public RedisCacheBase(IRedisAdapter redisAdapter)
+        {
+            this.redisAdapter = redisAdapter;
+            this.redisKeyPrefix = "SPLITIO.";
+        }
+
         public RedisCacheBase(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion)
         {
             this.redisAdapter = redisAdapter;
             this.redisKeyPrefix = RedisKeyPrefixFormat.Replace("{sdk-language-version}", sdkLanguage + "-" + sdkVersion)
-                                                      .Replace("{instance-id}", machineIP);
+                                                          .Replace("{instance-id}", machineIP);
         }
     }
 }
