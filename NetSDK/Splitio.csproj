@@ -107,6 +107,7 @@
     <Compile Include="Services\Cache\Classes\InMemoryMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
+    <Compile Include="Services\Cache\Interfaces\IReadinessGatesCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisAdapter.cs" />
     <Compile Include="Services\Cache\Classes\RedisImpressionsCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisMetricsCache.cs" />
@@ -121,7 +122,7 @@
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\JSONFileClient.cs" />
     <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
-    <Compile Include="Services\Client\Classes\SDKReadinessGates.cs" />
+    <Compile Include="Services\Cache\Classes\InMemoryReadinessGatesCache.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
     <Compile Include="Services\Client\Classes\SplitManager.cs" />
     <Compile Include="Services\Client\Interfaces\ISplitClient.cs" />

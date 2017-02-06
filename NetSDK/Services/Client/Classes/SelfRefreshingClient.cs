@@ -19,6 +19,7 @@ using System.Collections.Concurrent;
 using System.Net;
 using System.Threading.Tasks;
 using System.Linq;
+using Splitio.Services.Cache.Interfaces;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -54,7 +55,7 @@ namespace Splitio.Services.Client.Classes
         private const int InitialCapacity = 31;
 
 
-        private SdkReadinessGates gates;
+        private IReadinessGatesCache gates;
         private SelfRefreshingSplitFetcher splitFetcher;
         private ISplitSdkApiClient splitSdkApiClient;
         private ISegmentSdkApiClient segmentSdkApiClient;
@@ -167,7 +168,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildSdkReadinessGates()
         {
-            gates = new SdkReadinessGates();
+            gates = new InMemoryReadinessGatesCache();
         }
 
         private void BuildSplitFetcher()
