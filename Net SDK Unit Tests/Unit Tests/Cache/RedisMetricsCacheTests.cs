@@ -201,17 +201,22 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
         
 
-        /*[TestMethod] TODO: finish this test
+        [TestMethod] 
         public void FetchAllLatencyMetricsSuccessfully()
         {
             //Arrange
             var redisAdapterMock = new Mock<IRedisAdapter>();
-            var bucketsPattern = metricsLatencyKeyPrefix.Replace("{metricName}", "time_test").Replace("{bucketNumber}", "*");
-            var currentBucketPattern = bucketsPattern.Replace("*", "0");
-            var currentBucketPattern2 = bucketsPattern.Replace("*", "6");
-            redisAdapterMock.Setup(x => x.Keys(bucketsPattern)).Returns(new RedisKey[] { currentBucketPattern, currentBucketPattern2 });
+            var bucketsPattern =  metricsLatencyKeyPrefix.Replace("{metricName}.bucket.{bucketNumber}", "*");
+            var pattern = metricsLatencyKeyPrefix.Replace("{metricName}", "time_test").Replace("{bucketNumber}", "*");
+            var currentBucketPattern = pattern.Replace("*", "0");
+            var currentBucketPattern2 = pattern.Replace("*", "6");
+            var pattern2 = metricsLatencyKeyPrefix.Replace("{metricName}", "time_test_2").Replace("{bucketNumber}", "*");
+            var currentBucketPattern3 = pattern2.Replace("*", "6");
+            redisAdapterMock.Setup(x => x.Keys(bucketsPattern)).Returns(new RedisKey[] { currentBucketPattern, currentBucketPattern2, currentBucketPattern3 });
             redisAdapterMock.Setup(x => x.Get(currentBucketPattern)).Returns("1");
             redisAdapterMock.Setup(x => x.Get(currentBucketPattern2)).Returns("2");
+            redisAdapterMock.Setup(x => x.Get(currentBucketPattern3)).Returns("1");
+
 
             var cache = new RedisMetricsCache(redisAdapterMock.Object);
             cache.SetLatency("time_test", 1);
@@ -233,6 +238,6 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var result2 = result.First(x => x.Key == "time_test_2");
             Assert.IsNotNull(result2);
             Assert.AreEqual(1, result2.Value.GetLatency(6));
-        }*/
+        }
     }
 }

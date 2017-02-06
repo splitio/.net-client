@@ -53,7 +53,7 @@ namespace Splitio.Services.Cache.Classes
             {
                 var value = redisAdapter.Get(count);
                 var countName = ((string)count).Replace(metricsCountKeyPrefix, "");
-                var counterValue = long.Parse(redisAdapter.Get(metricsCountKeyPrefix + countName));
+                var counterValue = long.Parse(value);
                 result.Add(countName, new Counter(counterValue)); //TODO: counter.count is losing its original value!!
                 redisAdapter.Del(count);
             }
@@ -116,14 +116,28 @@ namespace Splitio.Services.Cache.Classes
         public Dictionary<string, ILatencyTracker> FetchAllLatencyTrackersAndClear()
         {
             var result = new Dictionary<string, ILatencyTracker>();
-            var pattern = metricsLatencyKeyPrefix.Replace(".{metricName}.bucket.{bucketNumber}", "*");
+            var pattern = metricsLatencyKeyPrefix.Replace("{metricName}.bucket.{bucketNumber}", "*");
             var keys = redisAdapter.Keys(pattern);
             foreach(var key in keys)
             {
                 var keyParts = ((string)key).Split('.');
                 var latencyPosition = Array.IndexOf(keyParts, "latency");
-                ILatencyTracker tracker = GetLatencyTracker(keyParts[latencyPosition + 1]);
-                result.Add(keyParts[latencyPosition + 1], tracker);
+                var bucketPosition = Array.IndexOf(keyParts, "bucket");
+                string name = keyParts[latencyPosition + 1];
+                string bucket = keyParts[bucketPosition + 1];
+
+                ILatencyTracker tracker;
+                result.TryGetValue(name, out tracker);
+                if (tracker == null)
+                {
+                    tracker = new BinarySearchLatencyTracker();                
+                    result.Add(name, tracker);
+                }
+
+                var valueString = redisAdapter.Get(key);
+                long value = long.Parse(valueString);
+                
+                tracker.SetLatencyCount(int.Parse(bucket), value);
             }
             return result;
         }      
