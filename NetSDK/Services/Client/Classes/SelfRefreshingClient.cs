@@ -20,6 +20,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Linq;
 using Splitio.Services.Cache.Interfaces;
+using Splitio.Services.Parsing.Classes;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -103,7 +104,7 @@ namespace Splitio.Services.Client.Classes
             MaxCountCalls = config.MaxMetricsCountCallsBeforeFlush ?? 1000;
             MaxTimeBetweenCalls = config.MetricsRefreshRate ?? 60;
             NumberOfParalellSegmentTasks = config.NumberOfParalellSegmentTasks ?? 5;
-            labelsEnabled = config.LabelsEnabled ?? true;
+            LabelsEnabled = config.LabelsEnabled ?? true;
         }
 
         private void BlockUntilReady(int BlockMilisecondsUntilReady)
@@ -180,20 +181,22 @@ namespace Splitio.Services.Client.Classes
             var segmentChangeFetcher = new ApiSegmentChangeFetcher(segmentSdkApiClient);
             selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(segmentChangeFetcher, gates, segmentRefreshRate, segmentCache, NumberOfParalellSegmentTasks);
             var splitChangeFetcher = new ApiSplitChangeFetcher(splitSdkApiClient);
-            var splitParser = new SplitParser(selfRefreshingSegmentFetcher, segmentCache);
+            var splitParser = new InMemorySplitParser(selfRefreshingSegmentFetcher, segmentCache);
             splitCache = new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(ConcurrencyLevel, InitialCapacity));
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
 
         private void BuildTreatmentLog()
         {
-            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize)));
+            impressionsCache = new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize));
+            treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
         }
 
 
         private void BuildMetricsLog()
         {
-            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, new InMemoryMetricsCache(new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>()), MaxCountCalls, MaxTimeBetweenCalls);
+            metricsCache = new InMemoryMetricsCache(new ConcurrentDictionary<string, Counter>(), new ConcurrentDictionary<string, ILatencyTracker>(), new ConcurrentDictionary<string, long>());
+            metricsLog = new AsyncMetricsLog(metricsSdkApiClient, metricsCache, MaxCountCalls, MaxTimeBetweenCalls);
         }
 
         private int Random(int refreshRate)
