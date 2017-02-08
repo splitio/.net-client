@@ -57,7 +57,7 @@ namespace Splitio.Services.EngineEvaluator
             byte[] seedResult = hashAlgorithm.ComputeHash(keyToBytes, 0, keyToBytes.Length);
             var result = BitConverter.ToInt32(seedResult, 0);
 
-            return result;
+            return result & 0xFFFFFFFFL;
         }
 
         public int LegacyHash(string key, int seed)

@@ -25,19 +25,19 @@ namespace Splitio_Tests.Unit_Tests
         }
 
 
-        [DeploymentItem(@"Resources\murmur3-sample-data.csv")]
+        [DeploymentItem(@"Resources\murmur3-sample-data-v2.csv")]
         [TestMethod]
         public void VerifyMurmur3HashAndBucketSampleData()
         {
-            VerifyTestFile("murmur3-sample-data.csv", new string[] { "\r\n" }, false);
+            VerifyTestFile("murmur3-sample-data-v2.csv", new string[] { "\r\n" }, false);
         }
 
 
-        [DeploymentItem(@"Resources\murmur3-sample-data-non-alpha-numeric.csv")]
+        [DeploymentItem(@"Resources\murmur3-sample-data-non-alpha-numeric-v2.csv")]
         [TestMethod]
         public void VerifyMurmur3HashAndBucketSampleDataNonAlphanumeric()
         {
-            VerifyTestFile("murmur3-sample-data-non-alpha-numeric.csv", new string[] { "\n" }, false);
+            VerifyTestFile("murmur3-sample-data-non-alpha-numeric-v2.csv", new string[] { "\n" }, false);
         }
 
 
@@ -68,7 +68,7 @@ namespace Splitio_Tests.Unit_Tests
                         var bucket = legacy ? splitter.LegacyBucket(item[1], int.Parse(item[0])) : splitter.Bucket(item[1], int.Parse(item[0]));
 
                         //Assert
-                        Assert.AreEqual(hash, int.Parse(item[2]));
+                        Assert.AreEqual(hash, long.Parse(item[2]));
                         Assert.AreEqual(bucket, int.Parse(item[3]));
                     }
                 }

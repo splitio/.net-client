@@ -146,11 +146,15 @@
     <None Include="Resources\legacy-sample-data.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\murmur3-sample-data-non-alpha-numeric-v2.csv" />
+    <None Include="Resources\murmur3-sample-data-non-alpha-numeric-v2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\murmur3-sample-data-non-alpha-numeric.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\murmur3-sample-data-v2.csv" />
+    <None Include="Resources\murmur3-sample-data-v2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\murmur3-sample-data.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
