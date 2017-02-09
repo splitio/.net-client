@@ -12,10 +12,6 @@ namespace Splitio_Tests.Unit_Tests.Metrics
     [TestClass]
     public class RedisMetricsLogUnitTests
     {
-        private const string metricsLatencyKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/latency.{metricName}.bucket.{bucketNumber}";
-        private const string metricsCountKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/count.";
-        private const string metricsGaugeKeyPrefix = "SPLITIO/net-1.0.2/10.0.0.1/gauge.";
-
         [TestMethod]
         public void CountShouldCallCacheIncrementCount()
         {
