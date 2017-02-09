@@ -106,6 +106,7 @@
     <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
     <Compile Include="Unit Tests\Client\LocalhostClientUnitTests.cs" />
     <Compile Include="Unit Tests\CommonLibraries\TypeConverterUnitTests.cs" />
+    <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
