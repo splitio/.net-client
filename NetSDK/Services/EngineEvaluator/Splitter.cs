@@ -55,9 +55,9 @@ namespace Splitio.Services.EngineEvaluator
             HashAlgorithm hashAlgorithm = MurmurHash.Create32(unsignedSeed); // returns a managed 32-bit algorithm with seed
             byte[] keyToBytes = Encoding.UTF8.GetBytes(key);
             byte[] seedResult = hashAlgorithm.ComputeHash(keyToBytes, 0, keyToBytes.Length);
-            var result = BitConverter.ToInt32(seedResult, 0);
+            var result = BitConverter.ToUInt32(seedResult, 0);
 
-            return result & 0xFFFFFFFFL;
+            return result;
         }
 
         public int LegacyHash(string key, int seed)
