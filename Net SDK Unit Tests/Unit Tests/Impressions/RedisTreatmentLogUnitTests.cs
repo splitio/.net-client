@@ -23,6 +23,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log("GetTreatment", "test", "on", 7000, 1, "test");
 
             //Assert
+            Thread.Sleep(1000);
             impressionsCache.Verify(mock => mock.AddImpression(It.IsAny<KeyImpression>()), Times.Once());
         }
 
@@ -38,6 +39,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log(key.matchingKey, "test", "on", 7000, 1, "test-label", key.bucketingKey);
 
             //Assert
+            Thread.Sleep(1000);
             impressionsCache.Verify(mock => mock.AddImpression(It.IsAny<KeyImpression>()), Times.Once());
         }    
     }
