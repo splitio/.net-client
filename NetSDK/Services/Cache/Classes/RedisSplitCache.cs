@@ -56,8 +56,15 @@ namespace Splitio.Services.Cache.Classes
             var pattern = redisKeyPrefix + splitKeyPrefix + "*";
             var splitKeys = redisAdapter.Keys(pattern);
             var splitValues = redisAdapter.Get(splitKeys);
-            var splits = splitValues.Select(x=> JsonConvert.DeserializeObject<Split>(x));
-            return splits.Cast<SplitBase>().ToList();
+            if (splitValues != null)
+            {
+                var splits = splitValues.Select(x => JsonConvert.DeserializeObject<Split>(x));
+                return splits.Cast<SplitBase>().ToList();
+            }
+            else
+            {
+                return new List<SplitBase>();
+            }          
         }
 
         public List<string> GetKeys()
