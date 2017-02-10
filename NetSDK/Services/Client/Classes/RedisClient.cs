@@ -32,9 +32,9 @@ namespace Splitio.Services.Client.Classes
         private static string RedisPort;
         private static string RedisPassword;
         private static int RedisDatabase;
-        private static long? RedisConnectTimeout;
-        private static long? RedisConnectRetry;
-        private static long? RedisSyncTimeout;
+        private static int? RedisConnectTimeout;
+        private static int? RedisConnectRetry;
+        private static int? RedisSyncTimeout;
         private static string RedisUserPrefix;
 
 
@@ -88,7 +88,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildRedisCache()
         {
-            redisAdapter = new RedisAdapter(RedisHost, RedisPort, RedisDatabase, RedisPassword);
+            redisAdapter = new RedisAdapter(RedisHost, RedisPort, RedisPassword, RedisDatabase, RedisConnectTimeout, RedisConnectRetry, RedisSyncTimeout);
             splitCache = new RedisSplitCache(redisAdapter, RedisUserPrefix);
             segmentCache = new RedisSegmentCache(redisAdapter, RedisUserPrefix);
             metricsCache = new RedisMetricsCache(redisAdapter, SdkMachineIP, ".NET", SdkVersion, RedisUserPrefix);
