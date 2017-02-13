@@ -13,8 +13,8 @@ namespace Splitio.Services.Cache.Classes
     {
         private const string impressionKeyPrefix = "impressions.";
 
-        public RedisImpressionsCache(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion, string userPrefix = null)
-            : base(redisAdapter, machineIP, sdkLanguage, sdkVersion, userPrefix) 
+        public RedisImpressionsCache(IRedisAdapter redisAdapter, string machineIP, string sdkVersion, string userPrefix = null)
+            : base(redisAdapter, machineIP, sdkVersion, userPrefix) 
         {}
 
         public void AddImpression(KeyImpression impression)

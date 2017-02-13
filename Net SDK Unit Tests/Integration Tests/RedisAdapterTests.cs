@@ -159,6 +159,7 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void ExecuteSetAndFlushSuccessful()
         {
             //Arrange

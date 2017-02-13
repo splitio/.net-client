@@ -16,8 +16,8 @@ namespace Splitio.Services.Cache.Classes
         private const string metricsCountKeyPrefix = "count.";
         private const string metricsGaugeKeyPrefix = "gauge.";
 
-        public RedisMetricsCache(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion, string userPrefix = null)
-            : base(redisAdapter, machineIP, sdkLanguage, sdkVersion, userPrefix) 
+        public RedisMetricsCache(IRedisAdapter redisAdapter, string machineIP, string sdkVersion, string userPrefix = null)
+            : base(redisAdapter, machineIP, sdkVersion, userPrefix) 
         {
             this.latencyTracker = new BinarySearchLatencyTracker();       
         }
