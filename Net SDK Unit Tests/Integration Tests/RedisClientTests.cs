@@ -23,6 +23,7 @@ namespace Splitio_Tests.Integration_Tests
             config.RedisConfig.Host = "localhost";
             config.RedisConfig.Port = "6379";
             config.RedisConfig.Password = "";
+            config.SdkMachineIP = "192.168.0.1";
         }
 
         [TestMethod]
