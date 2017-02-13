@@ -142,5 +142,53 @@ namespace Splitio_Tests.Integration_Tests
             cache = null;
         }
 
+
+        [TestMethod]
+        public void ExecuteGetTreatmentOnSplitWithDateMatcherReturnOn()
+        {
+            //Arrange
+            var client = new RedisClient(config);
+
+            //Act           
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("date", "1470960003600");
+            var result = client.GetTreatment("abcdz", "test_jw", data);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("on", result);
+        }
+
+        [TestMethod]
+        public void ExecuteGetTreatmentOnSplitWithDateMatcherReturnOff()
+        {
+            //Arrange
+            var client = new RedisClient(config);
+
+            //Act           
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("date", "1370960003600");
+            var result = client.GetTreatment("abcdz", "test_jw", data);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result);
+        }
+
+        [TestMethod]
+        public void ExecuteGetTreatmentOnSplitWithWhitelistMatcherReturnOn()
+        {
+            //Arrange
+            var client = new RedisClient(config);
+
+            //Act           
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("date", "1370960003600");
+            var result = client.GetTreatment("abcdef", "test_jw4", data);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("on", result);
+        }
     }
 }
