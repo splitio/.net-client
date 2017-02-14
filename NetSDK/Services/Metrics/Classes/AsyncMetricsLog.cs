@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -12,9 +13,9 @@ namespace Splitio.Services.Metrics.Classes
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(AsyncMetricsLog));
 
-        public AsyncMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCalls = -1, int maxTimeBetweenCalls = -1)
+        public AsyncMetricsLog(IMetricsSdkApiClient apiClient, IMetricsCache metricsCache, int maxCountCalls = -1, int maxTimeBetweenCalls = -1)
         {
-            worker = new InMemoryMetricsLog(apiClient, countMetrics, timeMetrics, gaugeMetrics, maxCountCalls, maxTimeBetweenCalls);
+            worker = new InMemoryMetricsLog(apiClient, metricsCache, maxCountCalls, maxTimeBetweenCalls);
         }
 
         public void Count(string counter, long delta)

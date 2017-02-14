@@ -8,17 +8,10 @@ using System.Linq;
 
 namespace Splitio.Services.Parsing
 {
-    public class SplitParser
+    public abstract class SplitParser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SplitParser));
-        private readonly ISegmentFetcher segmentFetcher;
-        private ISegmentCache segmentsCache;
-
-        public SplitParser(ISegmentFetcher segmentFetcher, ISegmentCache segmentsCache)
-        {
-            this.segmentFetcher = segmentFetcher;
-            this.segmentsCache = segmentsCache;
-        }
+        protected ISegmentCache segmentsCache;
 
         public ParsedSplit Parse(Split split)
         {
@@ -151,12 +144,7 @@ namespace Splitio.Services.Parsing
             return new WhitelistMatcher(matcherData.whitelist);
         }
 
-        private IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit)
-        {
-            var matcherData = matcherDefinition.userDefinedSegmentMatcherData;
-            segmentFetcher.InitializeSegment(matcherData.segmentName);
-            return new UserDefinedSegmentMatcher(matcherData.segmentName, segmentsCache); 
-        }
+        protected abstract IMatcher GetInSegmentMatcher(MatcherDefinition matcherDefinition, ParsedSplit parsedSplit);
 
         private IMatcher GetAllKeysMatcher()
         {

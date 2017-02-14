@@ -2,9 +2,12 @@
 using Newtonsoft.Json;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
+using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Impressions.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,14 +19,14 @@ namespace Splitio.Services.Impressions.Classes
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
-        private BlockingQueue<KeyImpression> queue;
+        private IImpressionsCache impressionsCache;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
 
-        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, BlockingQueue<KeyImpression> queue = null, int maximumNumberOfKeysToCache = -1)
+        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, IImpressionsCache impressionsCache, int maximumNumberOfKeysToCache = -1)
         {
-            this.queue = queue ?? new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache);
+            this.impressionsCache = impressionsCache ?? new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache));
             this.apiClient = apiClient;
             this.interval = interval;
         }
@@ -41,12 +44,12 @@ namespace Splitio.Services.Impressions.Classes
 
         private void SendBulkImpressions()
         {
-            if(queue.HasReachedMaxSize())
+            if(((InMemoryImpressionsCache)impressionsCache).HasReachedMaxSize())
             {
                 Logger.Warn("Split SDK impressions queue is full. Impressions may have been dropped. Consider increasing capacity.");
             }
 
-            var impressions = queue.FetchAllAndClear();
+            var impressions = impressionsCache.FetchAllAndClear();
 
             if (impressions.Count > 0)
             {
@@ -62,7 +65,7 @@ namespace Splitio.Services.Impressions.Classes
             }
         }
 
-        private string ConvertToJson(ConcurrentQueue<KeyImpression> impressions)
+        private string ConvertToJson(List<KeyImpression> impressions)
         {
             var impressionsPerFeature = 
                 impressions
@@ -75,7 +78,7 @@ namespace Splitio.Services.Impressions.Classes
         public void Log(string matchingKey, string feature, string treatment, long time, long? changeNumber, string label, string bucketingKey = null)
         {
             KeyImpression impression = new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, changeNumber = changeNumber, label = label, bucketingKey = bucketingKey };
-            var enqueueTask = new Task(() => queue.Enqueue(impression));
+            var enqueueTask = new Task(() => impressionsCache.AddImpression(impression));
             enqueueTask.Start();
         }
     }

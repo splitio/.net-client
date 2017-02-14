@@ -43,7 +43,19 @@ namespace Splitio.Services.Client.Classes
             }
             else
             {
-                client = new SelfRefreshingClient(apiKey, options);
+                if (options.RedisConfig != null)
+                {
+                    if (String.IsNullOrEmpty(options.RedisConfig.Host) || String.IsNullOrEmpty(options.RedisConfig.Port) || String.IsNullOrEmpty(options.RedisConfig.Password))
+                    {
+                        throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
+                    }
+
+                    client = new RedisClient(options);
+                }
+                else
+                {
+                    client = new SelfRefreshingClient(apiKey, options);
+                }
             }
         }
 

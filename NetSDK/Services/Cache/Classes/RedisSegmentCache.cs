@@ -7,44 +7,43 @@ using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
-    public class RedisSegmentCache : ISegmentCache
+    public class RedisSegmentCache : RedisCacheBase, ISegmentCache
     {
-        private IRedisAdapter redisAdapter;
-        private const string segmentKeyPrefix = "SPLITIO.segment.";
-        private const string segmentNameKeyPrefix = "SPLITIO.segment.{segmentname}.";
-        private const string segmentsKeyPrefix = "SPLITIO.segments.";
+        private const string segmentKeyPrefix = "segment.";
+        private const string segmentNameKeyPrefix = "segment.{segmentname}.";
+        private const string segmentsKeyPrefix = "segments.";
 
-        public RedisSegmentCache(IRedisAdapter redisAdapter)
-        {
-            this.redisAdapter = redisAdapter;
-        }
+        public RedisSegmentCache(IRedisAdapter redisAdapter, string userPrefix = null) : base(redisAdapter, userPrefix) { }
 
         public void AddToSegment(string segmentName, List<string> segmentKeys)
         {
+            var key = redisKeyPrefix + segmentKeyPrefix + segmentName;
             var valuesToAdd = segmentKeys.Select(x => (RedisValue)x).ToArray();
-            redisAdapter.SAdd(segmentKeyPrefix + segmentName, valuesToAdd);
+            redisAdapter.SAdd(key, valuesToAdd);
         }
 
         public void RemoveFromSegment(string segmentName, List<string> segmentKeys)
         {
+            var key = redisKeyPrefix + segmentKeyPrefix + segmentName;
             var valuesToRemove = segmentKeys.Select(x => (RedisValue)x).ToArray();
-            redisAdapter.SRem(segmentKeyPrefix + segmentName, valuesToRemove);
+            redisAdapter.SRem(key, valuesToRemove);
         }
 
         public bool IsInSegment(string segmentName, string key)
         {
-            return redisAdapter.SIsMember(segmentKeyPrefix + segmentName, key);
+            var redisKey = redisKeyPrefix + segmentKeyPrefix + segmentName;
+            return redisAdapter.SIsMember(redisKey, key);
         }
 
         public void SetChangeNumber(string segmentName, long changeNumber)
         {
-            var key = segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till";
+            var key = redisKeyPrefix + segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till";
             redisAdapter.Set(key, changeNumber.ToString());
         }
 
         public long GetChangeNumber(string segmentName)
         {
-            var key = segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till";
+            var key = redisKeyPrefix + segmentNameKeyPrefix.Replace("{segmentname}", segmentName) + "till";
             string changeNumberString = redisAdapter.Get(key);
             long changeNumberParsed;
             var result = long.TryParse(changeNumberString, out changeNumberParsed);
@@ -59,14 +58,14 @@ namespace Splitio.Services.Cache.Classes
 
         public long RegisterSegments(List<string> segmentNames)
         {
-            var key = segmentsKeyPrefix + "registered";
+            var key = redisKeyPrefix + segmentsKeyPrefix + "registered";
             var segments = segmentNames.Select(x => (RedisValue)x).ToArray();
             return redisAdapter.SAdd(key, segments);
         }
 
         public List<string> GetRegisteredSegments()
         {
-            var key = segmentsKeyPrefix + "registered";
+            var key = redisKeyPrefix + segmentsKeyPrefix + "registered";
             var result = redisAdapter.SMembers(key);
 
             return result.Select(x => (string)x).ToList();
