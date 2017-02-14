@@ -16,5 +16,7 @@ namespace Splitio.Services.Metrics.Interfaces
 
         long GetBucketForLatencyMicros(long latency);
 
+        void SetLatencyCount(int index, long count);
+
     }
 }

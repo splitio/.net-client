@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using Splitio.Services.Metrics.Interfaces;
 using System.Linq;
 using Moq;
+using Splitio.Services.Cache.Classes;
 
 namespace Splitio_Tests.Unit_Tests.Metrics
 {
@@ -15,14 +16,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new InMemoryMetricsLog(null, counters);
+            var cache = new InMemoryMetricsCache(counters);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
             
             //Act
             metricsLog.Count("counter_test", 150);
 
             //Assert
-            Counter counter;
-            counters.TryGetValue("counter_test", out counter);
+            Counter counter = cache.GetCount("counter_test");
             Assert.IsNotNull(counter);
             Assert.AreEqual(1, counter.GetCount());
             Assert.AreEqual(150, counter.GetDelta());
@@ -33,15 +34,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new InMemoryMetricsLog(null, counters);
+            var cache = new InMemoryMetricsCache(counters);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Count("counter_test", 150);
             metricsLog.Count("counter_test", 10);
 
             //Assert
-            Counter counter;
-            counters.TryGetValue("counter_test", out counter);
+            Counter counter = cache.GetCount("counter_test");
             Assert.AreEqual(2, counter.GetCount());
             Assert.AreEqual(160, counter.GetDelta());
 
@@ -53,15 +54,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new InMemoryMetricsLog(null, counters);
+            var cache = new InMemoryMetricsCache(counters);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Count("counter_test", 0);
             metricsLog.Count("counter_test", -1);
 
             //Assert
-            Counter counter;
-            counters.TryGetValue("counter_test", out counter);
+            Counter counter = cache.GetCount("counter_test");
             Assert.IsNull(counter);
         }
 
@@ -70,14 +71,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new InMemoryMetricsLog(null, counters);
+            var cache = new InMemoryMetricsCache(counters);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Count("", 1);
 
             //Assert
-            Counter counter;
-            counters.TryGetValue("", out counter);
+            Counter counter = cache.GetCount("");
             Assert.IsNull(counter);
         }
 
@@ -87,14 +88,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new InMemoryMetricsLog(null,null, timers);
+            var cache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
             
             //Act
             metricsLog.Time("time_test", 1);
 
             //Assert
-            ILatencyTracker timer;
-            timers.TryGetValue("time_test",out timer);
+            ILatencyTracker timer = cache.GetLatencyTracker("time_test");
             Assert.IsNotNull(timer);
             Assert.AreEqual(1, timer.GetLatency(0));
             long[] latencies = timer.GetLatencies();
@@ -106,7 +107,8 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new InMemoryMetricsLog(null, null, timers);
+            var cache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Time("time_test", 1);
@@ -114,8 +116,7 @@ namespace Splitio_Tests.Unit_Tests.Metrics
             metricsLog.Time("time_test", 8);
           
             //Assert
-            ILatencyTracker timer;
-            timers.TryGetValue("time_test", out timer);
+            ILatencyTracker timer = cache.GetLatencyTracker("time_test");
             Assert.AreEqual(1, timer.GetLatency(0));
             Assert.AreEqual(2, timer.GetLatency(6));
             long[] latencies = timer.GetLatencies();
@@ -128,14 +129,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new InMemoryMetricsLog(null, null, timers);
+            var cache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Time("time_test", -1);
 
             //Assert
-            ILatencyTracker timer;
-            timers.TryGetValue("time_test", out timer);
+            ILatencyTracker timer = cache.GetLatencyTracker("time_test");
             Assert.IsNull(timer);
         }
 
@@ -143,14 +144,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new InMemoryMetricsLog(null, null, timers);
+            var cache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Time("", 1000);
 
             //Assert
-            ILatencyTracker timer;
-            timers.TryGetValue("", out timer);
+            ILatencyTracker timer = cache.GetLatencyTracker("");
             Assert.IsNull(timer);
         }
 
@@ -159,14 +160,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new InMemoryMetricsLog(null, null, null, gauges);
+            var cache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Gauge("gauge_test", 1234);
 
             //Assert
-            long gauge;
-            gauges.TryGetValue("gauge_test", out gauge);
+            long gauge = cache.GetGauge("gauge_test");
             Assert.IsNotNull(gauge);
             Assert.AreEqual(1234, gauge);
         }
@@ -176,15 +177,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new InMemoryMetricsLog(null, null, null, gauges);
+            var cache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Gauge("gauge_test", 1234);
             metricsLog.Gauge("gauge_test", 4567);
 
             //Assert
-            long gauge;
-            gauges.TryGetValue("gauge_test", out gauge);
+            long gauge = cache.GetGauge("gauge_test");
             Assert.AreEqual(4567, gauge);
         }
 
@@ -193,14 +194,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new InMemoryMetricsLog(null, null, null, gauges);
+            var cache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Gauge("gauge_test", -1);
 
             //Assert
-            long gauge;
-            gauges.TryGetValue("gauge_test", out gauge);
+            long gauge = cache.GetGauge("gauge_test");
             Assert.AreEqual(0, gauge);
         }
 
@@ -209,14 +210,14 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new InMemoryMetricsLog(null, null, null, gauges);
+            var cache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new InMemoryMetricsLog(null, cache);
 
             //Act
             metricsLog.Gauge("", 1000);
 
             //Assert
-            long gauge;
-            gauges.TryGetValue("", out gauge);
+            long gauge = cache.GetGauge("");
             Assert.AreEqual(0, gauge);
         }
 
@@ -227,7 +228,8 @@ namespace Splitio_Tests.Unit_Tests.Metrics
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
             var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
-            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, counters, null, null, 1);
+            var cache = new InMemoryMetricsCache(counters);
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, cache, 1);
             
             //Act
             metricsLog.Count("counter_test", 150);
@@ -242,7 +244,8 @@ namespace Splitio_Tests.Unit_Tests.Metrics
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
             var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
-            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, null, timers, null, 1, -1);
+            var cache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, cache, 1, -1);
 
             //Act
             metricsLog.Time("time_test", 1);
@@ -257,7 +260,8 @@ namespace Splitio_Tests.Unit_Tests.Metrics
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
             var metricsApiClientMock = new Mock<IMetricsSdkApiClient>();
-            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, null, null, gauges, 1);
+            var cache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new InMemoryMetricsLog(metricsApiClientMock.Object, cache, 1);
 
             //Act
             metricsLog.Gauge("gauge_test", 1234);

@@ -21,11 +21,11 @@ namespace Splitio.Services.SplitFetcher.Classes
         private readonly SplitParser splitParser;
         private int interval;
         private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
-        private SdkReadinessGates gates;
+        private IReadinessGatesCache gates;
 
 
         public SelfRefreshingSplitFetcher(ISplitChangeFetcher splitChangeFetcher, 
-            SplitParser splitParser, SdkReadinessGates gates, int interval, ISplitCache splitCache = null)
+            SplitParser splitParser, IReadinessGatesCache gates, int interval, ISplitCache splitCache = null)
         {
             this.splitChangeFetcher = splitChangeFetcher;
             this.splitParser = splitParser;

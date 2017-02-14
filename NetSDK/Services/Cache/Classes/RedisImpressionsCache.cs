@@ -9,19 +9,17 @@ using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
-    public class RedisImpressionsCache : IImpressionsCache
+    public class RedisImpressionsCache : RedisCacheBase, IImpressionsCache
     {
-        private IRedisAdapter redisAdapter;
-        private const string impressionKeyPrefix = "SPLITIO.impressions.";
+        private const string impressionKeyPrefix = "impressions.";
 
-        public RedisImpressionsCache(IRedisAdapter redisAdapter)
-        {
-            this.redisAdapter = redisAdapter;
-        }
+        public RedisImpressionsCache(IRedisAdapter redisAdapter, string machineIP, string sdkVersion, string userPrefix = null)
+            : base(redisAdapter, machineIP, sdkVersion, userPrefix) 
+        {}
 
         public void AddImpression(KeyImpression impression)
         {
-            var key = impressionKeyPrefix + impression.feature;
+            var key = redisKeyPrefix + impressionKeyPrefix + impression.feature;
             var impressionJson = JsonConvert.SerializeObject(impression);
             redisAdapter.SAdd(key, impressionJson);
         }
@@ -29,14 +27,15 @@ namespace Splitio.Services.Cache.Classes
         public List<KeyImpression> FetchAllAndClear()
         {
             var impressions = new List<KeyImpression>();
-            var impresionKeys = redisAdapter.Keys(impressionKeyPrefix + "*");
+            var pattern = redisKeyPrefix + impressionKeyPrefix + "*";
+            var impresionKeys = redisAdapter.Keys(pattern);
             foreach(var impresionKey in impresionKeys)
             {
                 var impressionsJson = redisAdapter.SMembers(impresionKey);
                 var result = impressionsJson.Select(x => JsonConvert.DeserializeObject<KeyImpression>(x)).ToList();
                 foreach (var impression in result)
                 {
-                    impression.feature = impresionKey.ToString().Replace(impressionKeyPrefix, "");
+                    impression.feature = impresionKey.ToString().Replace(redisKeyPrefix + impressionKeyPrefix, "");
                     impressions.Add(impression);
                 }
                 redisAdapter.Del(impresionKey);

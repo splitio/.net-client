@@ -1,8 +1,10 @@
 ﻿using log4net;
 using Newtonsoft.Json;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Splitio.Services.Metrics.Classes
@@ -10,9 +12,7 @@ namespace Splitio.Services.Metrics.Classes
     public class InMemoryMetricsLog : IMetricsLog
     {
         IMetricsSdkApiClient apiClient;
-        private ConcurrentDictionary<string, Counter> countMetrics;
-        private ConcurrentDictionary<string, ILatencyTracker> timeMetrics;
-        private ConcurrentDictionary<string, long> gaugeMetrics;
+        IMetricsCache metricsCache;
         private int maxCountCalls;
         private int maxTimeBetweenCalls;
         private DateTime utcNowTimestamp = DateTime.UtcNow;
@@ -30,12 +30,10 @@ namespace Splitio.Services.Metrics.Classes
 
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(InMemoryMetricsLog));
 
-        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, ConcurrentDictionary<string, Counter> countMetrics = null, ConcurrentDictionary<string, ILatencyTracker> timeMetrics = null, ConcurrentDictionary<string, long> gaugeMetrics = null, int maxCountCalls = 1000, int maxTimeBetweenCalls = 60)
+        public InMemoryMetricsLog(IMetricsSdkApiClient apiClient, IMetricsCache metricsCache, int maxCountCalls = 1000, int maxTimeBetweenCalls = 60)
         {
             this.apiClient = apiClient;
-            this.countMetrics = countMetrics ?? new ConcurrentDictionary<string, Counter>();
-            this.timeMetrics = timeMetrics ?? new ConcurrentDictionary<string, ILatencyTracker>();
-            this.gaugeMetrics = gaugeMetrics ?? new ConcurrentDictionary<string, long>();
+            this.metricsCache = metricsCache;
             this.maxCountCalls = maxCountCalls;
             this.maxTimeBetweenCalls = maxTimeBetweenCalls * 1000;
             this.countLastCall = utcNowTimestamp;
@@ -49,16 +47,8 @@ namespace Splitio.Services.Metrics.Classes
             {
                 return;
             }
-
-            Counter counter;
-
-            if (!countMetrics.TryGetValue(counterName, out counter))
-            {
-                counter = new Counter();
-                countMetrics.TryAdd(counterName, counter);
-            }
-
-            counter.AddDelta(delta);
+           
+            Counter counter = metricsCache.IncrementCount(counterName, delta);
 
             var oldLastCall = countLastCall;
             countLastCall = DateTime.UtcNow;
@@ -66,7 +56,6 @@ namespace Splitio.Services.Metrics.Classes
             {
                 SendCountMetrics();
             }
-
         }
 
         public void Time(string operation, long miliseconds)
@@ -75,16 +64,8 @@ namespace Splitio.Services.Metrics.Classes
             {
                 return;
             }
-
-            ILatencyTracker tracker;
-
-            if (!timeMetrics.TryGetValue(operation, out tracker))
-            {
-                tracker = new BinarySearchLatencyTracker();
-                timeMetrics.TryAdd(operation, tracker);
-            }
-
-            tracker.AddLatencyMillis((int)miliseconds);
+          
+            metricsCache.SetLatency(operation, miliseconds);
 
             var oldLastCall = timeLastCall;
             timeLastCall = DateTime.UtcNow;
@@ -101,12 +82,7 @@ namespace Splitio.Services.Metrics.Classes
                 return;
             }
 
-            if (!gaugeMetrics.ContainsKey(gauge))
-            {
-                gaugeMetrics.TryAdd(gauge, 0);
-            }
-
-            gaugeMetrics[gauge] = value;
+            metricsCache.SetGauge(gauge, value);
             gaugeCallCount++;
 
             var oldLastCall = gaugeLastCall;
@@ -129,8 +105,8 @@ namespace Splitio.Services.Metrics.Classes
                 sendingCountMetrics = true;
             }
 
-            var countMetricsJson = ConvertCountMetricsToJson(countMetrics);
-            countMetrics.Clear();
+            var countMetricsJson = ConvertCountMetricsToJson(metricsCache.FetchAllCountersAndClear());
+
             if (countMetricsJson != String.Empty)
             {
                 apiClient.SendCountMetrics(countMetricsJson);
@@ -138,7 +114,7 @@ namespace Splitio.Services.Metrics.Classes
             sendingCountMetrics = false;
         }
 
-        private string ConvertCountMetricsToJson(ConcurrentDictionary<string, Counter> countMetrics)
+        private string ConvertCountMetricsToJson(Dictionary<string, Counter> countMetrics)
         {
             try
             {
@@ -161,8 +137,7 @@ namespace Splitio.Services.Metrics.Classes
                 }
                 sendingTimeMetrics = true;
             }
-            var timeMetricsJson = ConvertTimeMetricsToJson(timeMetrics);
-            timeMetrics.Clear();
+            var timeMetricsJson = ConvertTimeMetricsToJson(metricsCache.FetchAllLatencyTrackersAndClear());
             if (timeMetricsJson != String.Empty)
             {
                 apiClient.SendTimeMetrics(timeMetricsJson);
@@ -170,7 +145,7 @@ namespace Splitio.Services.Metrics.Classes
             sendingTimeMetrics = false;
         }
 
-        private string ConvertTimeMetricsToJson(ConcurrentDictionary<string, ILatencyTracker> timeMetrics)
+        private string ConvertTimeMetricsToJson(Dictionary<string, ILatencyTracker> timeMetrics)
         {
             try
             {
@@ -195,8 +170,7 @@ namespace Splitio.Services.Metrics.Classes
                 sendingGaugeMetrics = true;
             }
 
-            var gaugeMetricsJson = ConvertGaugeMetricsToJson(gaugeMetrics);
-            gaugeMetrics.Clear();
+            var gaugeMetricsJson = ConvertGaugeMetricsToJson(metricsCache.FetchAllGaugesAndClear());
             gaugeCallCount = 0;
             if (gaugeMetricsJson != String.Empty)
             {
@@ -205,7 +179,7 @@ namespace Splitio.Services.Metrics.Classes
             sendingGaugeMetrics = false;
         }
 
-        private string ConvertGaugeMetricsToJson(ConcurrentDictionary<string, long> gaugeMetrics)
+        private string ConvertGaugeMetricsToJson(Dictionary<string, long> gaugeMetrics)
         {
             try
             {

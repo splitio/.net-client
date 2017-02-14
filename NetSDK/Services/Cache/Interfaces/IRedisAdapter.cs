@@ -30,6 +30,8 @@ namespace Splitio.Services.Cache.Interfaces
 
         RedisValue[] SMembers(string key);
 
+        long IcrBy(string key, long delta);
+
         void Flush();
     }
 }
