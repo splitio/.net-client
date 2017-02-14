@@ -57,5 +57,39 @@ namespace Splitio_Tests.Unit_Tests.Client
             //Assert
             Assert.AreEqual(typeof(SelfRefreshingClient), client.GetType());
         }
+
+        [TestMethod]
+        public void BuildSplitClientWithRedisConfigShouldReturnRedisSplitClient()
+        {
+            //Arrange
+            var configurationOptions = new ConfigurationOptions();
+            configurationOptions.RedisConfig = new RedisConfigurationOptions();
+            configurationOptions.RedisConfig.Host = "local";
+            configurationOptions.RedisConfig.Port = "1234";
+            configurationOptions.RedisConfig.Password = "test";
+
+            var factory = new SplitFactory("any", configurationOptions);
+
+            //Act         
+            var client = factory.Client();
+
+            //Assert
+            Assert.AreEqual(typeof(RedisClient), client.GetType());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.")]
+        public void BuildRedisSplitClientWithoutAllRequiredConfigsShouldReturnException()
+        {
+            //Arrange
+            var configurationOptions = new ConfigurationOptions();
+            configurationOptions.RedisConfig = new RedisConfigurationOptions();
+            configurationOptions.RedisConfig.Host = "local";
+
+            var factory = new SplitFactory("any", configurationOptions);
+
+            //Act         
+            var client = factory.Client();
+        }
     }
 }

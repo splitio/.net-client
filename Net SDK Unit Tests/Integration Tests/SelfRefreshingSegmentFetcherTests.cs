@@ -52,7 +52,7 @@ namespace Splitio_Tests.Integration_Tests
             };
             var sdkApiClient = new SegmentSdkApiClient(httpHeader, baseUrl, 10000, 10000);
             var apiSegmentChangeFetcher = new ApiSegmentChangeFetcher(sdkApiClient);
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var segmentCache = new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var selfRefreshingSegmentFetcher = new SelfRefreshingSegmentFetcher(apiSegmentChangeFetcher, gates, 30, segmentCache, 4);
 

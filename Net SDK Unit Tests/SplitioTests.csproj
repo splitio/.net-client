@@ -85,6 +85,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Integration Tests\RedisAdapterTests.cs" />
+    <Compile Include="Integration Tests\RedisClientTests.cs" />
     <Compile Include="Integration Tests\SelfRefreshingSegmentFetcherTests.cs" />
     <Compile Include="Integration Tests\SelfRefreshingSplitFetcherTests.cs" />
     <Compile Include="Integration Tests\SplitSdkApiClientTests.cs" />
@@ -95,12 +96,21 @@
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\RedisSplitCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\RedisSegmentCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\ImpressionsCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\RedisImpressionCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\RedisMetricsCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\InMemoryMetricsCacheTests.cs" />
+    <Compile Include="Unit Tests\Cache\RedisCacheBaseTests.cs" />
+    <Compile Include="Unit Tests\Client\RedisSplitManagerUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SplitManagerUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SplitFactoryUnitTests.cs" />
     <Compile Include="Unit Tests\Client\SdkReadinessGatesUnitTests.cs" />
     <Compile Include="Unit Tests\Client\LocalhostClientUnitTests.cs" />
     <Compile Include="Unit Tests\CommonLibraries\TypeConverterUnitTests.cs" />
+    <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
+    <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\SegmentFetcher\ApiSegmentChangeFetcherUnitTests.cs" />
