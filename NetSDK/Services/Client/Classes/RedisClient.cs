@@ -32,9 +32,9 @@ namespace Splitio.Services.Client.Classes
         private static string RedisPort;
         private static string RedisPassword;
         private static int RedisDatabase;
-        private static int? RedisConnectTimeout;
-        private static int? RedisConnectRetry;
-        private static int? RedisSyncTimeout;
+        private static int RedisConnectTimeout;
+        private static int RedisConnectRetry;
+        private static int RedisSyncTimeout;
         private static string RedisUserPrefix;
 
 
@@ -79,9 +79,9 @@ namespace Splitio.Services.Client.Classes
             RedisPort = config.RedisConfig.Port;
             RedisPassword = config.RedisConfig.Password;
             RedisDatabase = config.RedisConfig.Database ?? 0;
-            RedisConnectTimeout = config.RedisConfig.ConnectTimeout;
-            RedisSyncTimeout = config.RedisConfig.SyncTimeout;
-            RedisConnectRetry = config.RedisConfig.ConnectRetry;
+            RedisConnectTimeout = config.RedisConfig.ConnectTimeout ?? 0;
+            RedisSyncTimeout = config.RedisConfig.SyncTimeout ?? 0;
+            RedisConnectRetry = config.RedisConfig.ConnectRetry ?? 0;
             RedisUserPrefix = config.RedisConfig.UserPrefix;
             LabelsEnabled = config.LabelsEnabled ?? true;
         }
