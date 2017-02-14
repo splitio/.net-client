@@ -16,12 +16,12 @@ namespace Splitio.Services.Cache.Classes
         private IDatabase database;
         private IServer server;
 
-        public RedisAdapter(string host, string port, int databaseNumber = 0, string password = "")
+        public RedisAdapter(string host, string port, string password, int databaseNumber = 0, 
+            int? connectTimeout = null, int? connectRetry = null, int? syncTimeout = null)
         {
             try
             {
-                //TODO: set password
-                var config = String.Format("{0}:{1}, allowAdmin = true", host, port);
+                var config = GetConfig(host, port, password, connectTimeout, connectRetry, syncTimeout);
                 redis = ConnectionMultiplexer.Connect(config);
                 database = redis.GetDatabase(databaseNumber);
                 server = redis.GetServer(String.Format("{0}:{1}", host, port));
@@ -30,6 +30,28 @@ namespace Splitio.Services.Cache.Classes
             {
                 Log.Error(String.Format("Exception caught building Redis Adapter '{0}:{1}': ", host, port), e);
             }
+        }
+
+        private static string GetConfig(string host, string port, string password, int? connectTimeout, int? connectRetry, int? syncTimeout)
+        {
+            var config = String.Format("{0}:{1}, password = {2}, allowAdmin = true", host, port, password);
+            
+            if (connectTimeout != null)
+            {
+                config += ", connectTimeout = " + connectTimeout;
+            }
+            
+            if (connectRetry != null)
+            {
+                config += ", connectRetry = " + connectRetry;
+            }
+            
+            if (syncTimeout != null)
+            {
+                config += ", syncTimeout = " + syncTimeout;
+            }
+            
+            return config;
         }
 
         public bool Set(string key, string value)

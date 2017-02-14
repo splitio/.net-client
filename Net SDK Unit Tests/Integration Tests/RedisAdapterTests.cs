@@ -18,7 +18,7 @@ namespace Splitio_Tests.Integration_Tests
         [TestInitialize]
         public void Initialization()
         {
-            adapter = new RedisAdapter("localhost", "6379");
+            adapter = new RedisAdapter("localhost", "6379", "", 0, 1000, 5, 1000);
             adapter.Flush();
         }
 
@@ -40,7 +40,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteSetShouldReturnFalseOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var isSet = adapter.Set("test_key", "test_value");
@@ -53,7 +53,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetShouldReturnEmptyOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var result = adapter.Get("test_key");
@@ -86,7 +86,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetShouldReturnEmptyArrayOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var result = adapter.Get(new RedisKey[] { "test_key", "test_key2", "test_key3" });
@@ -119,7 +119,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteKeysShouldReturnEmptyArrayOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var result = adapter.Keys("test.*");
@@ -149,7 +149,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteDelShouldReturnFalseOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var isDel = adapter.Del("testdel.test_key");
@@ -159,6 +159,7 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void ExecuteSetAndFlushSuccessful()
         {
             //Arrange
@@ -192,7 +193,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteSAddShouldReturnFalseOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var setCount = adapter.SAdd("test_key_set", "test_value_1");
@@ -205,7 +206,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteSMembersShouldReturnFalseOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var result = adapter.SMembers("test_key_set");
@@ -234,7 +235,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteSAddShouldReturnZeroOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var setCount = adapter.SAdd("test_key_set_multiple", new RedisValue[] { "test_value", "test_value2" });
@@ -266,7 +267,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteSRemShouldReturnZeroOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var remCount = adapter.SRem("test_key_set", new RedisValue[] { "test_value2" });
@@ -292,7 +293,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteIncrShouldReturnZeroOnException()
         {
             //Arrange
-            var adapter = new RedisAdapter("", "");
+            var adapter = new RedisAdapter("", "", "");
 
             //Act
             var result = adapter.IcrBy("test_count", 2);

@@ -23,10 +23,10 @@ namespace Splitio.Services.Cache.Classes
             }
         }
 
-        public RedisCacheBase(IRedisAdapter redisAdapter, string machineIP, string sdkLanguage, string sdkVersion, string userPrefix = null)
+        public RedisCacheBase(IRedisAdapter redisAdapter, string machineIP, string sdkVersion, string userPrefix = null)
         {
             this.redisAdapter = redisAdapter;
-            this.redisKeyPrefix = RedisKeyPrefixFormat.Replace("{sdk-language-version}", sdkLanguage + "-" + sdkVersion)
+            this.redisKeyPrefix = RedisKeyPrefixFormat.Replace("{sdk-language-version}", sdkVersion)
                                                           .Replace("{instance-id}", machineIP);
             if (!String.IsNullOrEmpty(userPrefix))
             {

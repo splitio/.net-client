@@ -19,7 +19,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             //Arrange
             var key = impressionKeyPrefix + "test";
             var redisAdapterMock = new Mock<IRedisAdapter>();
-            var cache = new RedisImpressionsCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var cache = new RedisImpressionsCache(redisAdapterMock.Object, "10.0.0.1", "net-1.0.2");
 
             //Act
             cache.AddImpression(new KeyImpression() { feature = "test", changeNumber = 100, keyName = "date", label = "testdate", time = 10000000 });
@@ -37,7 +37,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
             redisAdapterMock.Setup(x => x.Keys(impressionKeyPrefix + "*")).Returns(new RedisKey[] { impressionKeyPrefix + "test" });
             redisAdapterMock.Setup(x => x.SMembers(impressionKeyPrefix + "test")).Returns(new RedisValue[]{redisValue});
             redisAdapterMock.Setup(x => x.Del(impressionKeyPrefix + "test")).Returns(true);
-            var cache = new RedisImpressionsCache(redisAdapterMock.Object, "10.0.0.1", "net", "1.0.2");
+            var cache = new RedisImpressionsCache(redisAdapterMock.Object, "10.0.0.1", "net-1.0.2");
 
             //Act
             var result = cache.FetchAllAndClear();
