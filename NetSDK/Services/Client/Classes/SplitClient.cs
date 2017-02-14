@@ -14,20 +14,22 @@ namespace Splitio.Services.Client.Classes
 {
     public abstract class SplitClient: ISplitClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
-        private const string Control = "control";
-        private const string SdkGetTreatment = "sdk.getTreatment";
-        private const string LabelKilled = "killed";
-        private const string LabelNoConditionMatched = "no rule matched";
-        private const string LabelSplitNotFound = "rules not found";
-        private const string LabelException = "exception";
+        protected static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
+        protected const string Control = "control";
+        protected const string SdkGetTreatment = "sdk.getTreatment";
+        protected const string LabelKilled = "killed";
+        protected const string LabelNoConditionMatched = "no rule matched";
+        protected const string LabelSplitNotFound = "rules not found";
+        protected const string LabelException = "exception";
 
-        protected bool labelsEnabled;
+        protected static bool LabelsEnabled;
 
         protected Splitter splitter;
         protected ITreatmentLog treatmentLog;
         protected IMetricsLog metricsLog;
         protected ISplitManager manager;
+        protected IMetricsCache metricsCache;
+        protected IImpressionsCache impressionsCache;
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 
@@ -47,7 +49,7 @@ namespace Splitio.Services.Client.Classes
             return GetTreatmentForFeature(key, feature, attributes);
         }
 
-        private void RecordStats(Key key, string feature, long? changeNumber, string label, long start, string treatment, string operation, Stopwatch clock)
+        protected void RecordStats(Key key, string feature, long? changeNumber, string label, long start, string treatment, string operation, Stopwatch clock)
         {
             if (metricsLog != null)
             {
@@ -56,11 +58,11 @@ namespace Splitio.Services.Client.Classes
 
             if (treatmentLog != null)
             {
-                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, labelsEnabled ? label : null, key.bucketingKeyHadValue ? key.bucketingKey : null);
+                treatmentLog.Log(key.matchingKey, feature, treatment, start, changeNumber, LabelsEnabled ? label : null, key.bucketingKeyHadValue ? key.bucketingKey : null);
             }
         }
 
-        private string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes)
+        protected virtual string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes)
         {
             long start = CurrentTimeHelper.CurrentTimeMillis();
             var clock = new Stopwatch();
@@ -93,7 +95,7 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
-        private string GetTreatment(Key key, ParsedSplit split, Dictionary<string, object> attributes, long start, Stopwatch clock)
+        protected string GetTreatment(Key key, ParsedSplit split, Dictionary<string, object> attributes, long start, Stopwatch clock)
         {
             if (!split.killed)
             {

@@ -250,6 +250,5 @@ namespace Splitio_Tests.Integration_Tests
             //Assert
             treatmentLogMock.Verify(x => x.Log("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", "on", It.IsAny<long>(), 1484084207827, "explicitly included", "ab765170-e9f2-11e5-885c-c2f58c3a47a7"));
         }
-
     }
 }

@@ -4,13 +4,13 @@ using Splitio.Services.Client.Classes;
 namespace Splitio_Tests.Unit_Tests.Client
 {
     [TestClass]
-    public class SdkReadinessGatesUnitTests
+    public class InMemoryReadinessGatesCacheUnitTests
     {
         [TestMethod]
         public void IsSDKReadyShouldReturnFalseIfSplitsAreNotReady()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
 
             //Act
             var result = gates.IsSDKReady(0);
@@ -23,7 +23,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void IsSDKReadyShouldReturnFalseIfAnySegmentIsNotReady()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             gates.RegisterSegment("any");
             gates.SplitsAreReady();
 
@@ -38,7 +38,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void IsSDKReadyShouldReturnTrueIfSplitsAndSegmentsAreReady()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             gates.RegisterSegment("any");
             gates.RegisterSegment("other");
             gates.SplitsAreReady();
@@ -56,7 +56,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void RegisterSegmentShouldReturnFalseIfSplitsAreReady()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             gates.SplitsAreReady();
 
             //Act
@@ -70,7 +70,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void RegisterSegmentShouldReturnFalseIfSegmentNameEmpty()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
 
             //Act
             var result = gates.RegisterSegment("");
