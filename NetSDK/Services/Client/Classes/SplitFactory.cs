@@ -27,36 +27,49 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildSplitClient()
         {
-            if (String.IsNullOrEmpty(apiKey))
-            {
-                throw new Exception("API Key should be set to initialize Split SDK.");
-            }
-
             if (options == null)
             {
                 options = new ConfigurationOptions();
             }
 
-            if (apiKey == "localhost")
+            switch(options.Mode)
             {
-                client = new LocalhostClient(options.LocalhostFilePath);
-            }
-            else
-            {
-                if (options.RedisConfig != null)
-                {
-                    if (String.IsNullOrEmpty(options.RedisConfig.Host) || String.IsNullOrEmpty(options.RedisConfig.Port) || String.IsNullOrEmpty(options.RedisConfig.Password))
+                case Mode.Standalone:
+                    if (String.IsNullOrEmpty(apiKey))
                     {
-                        throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
+                        throw new Exception("API Key should be set to initialize Split SDK.");
                     }
-
-                    client = new RedisClient(options);
-                }
-                else
-                {
-                    client = new SelfRefreshingClient(apiKey, options);
-                }
+                    if (apiKey == "localhost")
+                    {
+                        client = new LocalhostClient(options.LocalhostFilePath);
+                    }
+                    else
+                    {
+                        client = new SelfRefreshingClient(apiKey, options);
+                    }
+                    break;
+                case Mode.Consumer:
+                    if (options.RedisConfig != null && options.RedisConfig.CacheAdapter == AdapterType.Redis)
+                    {
+                        if (String.IsNullOrEmpty(options.RedisConfig.Host) || String.IsNullOrEmpty(options.RedisConfig.Port) || String.IsNullOrEmpty(options.RedisConfig.Password))
+                        {
+                            throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
+                        }
+                        client = new RedisClient(options);
+                    }
+                    else
+                    {
+                        throw new Exception("Redis config should be set to build split client in Consumer mode.");
+                    }
+                    break;
+                case Mode.Producer:
+                    throw new Exception("Unsupported mode.");
+                default:
+                    throw new Exception("Mode should be set to build split client.");
             }
+            
+
+            
         }
 
         public ISplitManager Manager()

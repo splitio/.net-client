@@ -7,6 +7,7 @@ namespace Splitio.Services.Client.Classes
 {
     public class RedisConfigurationOptions
     {
+        public AdapterType CacheAdapter { get; set; }
         public string Host { get; set; }
         public string Port { get; set; }
         public string Password { get; set; }

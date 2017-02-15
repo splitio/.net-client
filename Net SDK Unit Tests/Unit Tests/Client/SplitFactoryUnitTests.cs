@@ -63,6 +63,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         {
             //Arrange
             var configurationOptions = new ConfigurationOptions();
+            configurationOptions.Mode = Mode.Consumer;
             configurationOptions.RedisConfig = new RedisConfigurationOptions();
             configurationOptions.RedisConfig.Host = "local";
             configurationOptions.RedisConfig.Port = "1234";
@@ -83,8 +84,37 @@ namespace Splitio_Tests.Unit_Tests.Client
         {
             //Arrange
             var configurationOptions = new ConfigurationOptions();
+            configurationOptions.Mode = Mode.Consumer;
             configurationOptions.RedisConfig = new RedisConfigurationOptions();
             configurationOptions.RedisConfig.Host = "local";
+
+            var factory = new SplitFactory("any", configurationOptions);
+
+            //Act         
+            var client = factory.Client();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Redis config should be set to build split client in Consumer mode.")]
+        public void BuildRedisSplitClientAsConsumerWithNullRedisConfigShouldReturnException()
+        {
+            //Arrange
+            var configurationOptions = new ConfigurationOptions();
+            configurationOptions.Mode = Mode.Consumer;
+
+            var factory = new SplitFactory("any", configurationOptions);
+
+            //Act         
+            var client = factory.Client();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Unsupported mode.")]
+        public void BuildRedisSplitClientAsProducerShouldReturnException()
+        {
+            //Arrange
+            var configurationOptions = new ConfigurationOptions();
+            configurationOptions.Mode = Mode.Producer;
 
             var factory = new SplitFactory("any", configurationOptions);
 

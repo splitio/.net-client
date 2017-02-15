@@ -119,6 +119,8 @@
     <Compile Include="Services\Cache\Interfaces\IRedisAdapter.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISplitCache.cs" />
+    <Compile Include="Services\Client\Classes\AdapterType.cs" />
+    <Compile Include="Services\Client\Classes\Mode.cs" />
     <Compile Include="Services\Client\Classes\RedisClient.cs" />
     <Compile Include="Services\Client\Classes\RedisConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\SplitFactory.cs" />
