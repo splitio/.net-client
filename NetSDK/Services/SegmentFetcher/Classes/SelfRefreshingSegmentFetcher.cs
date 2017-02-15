@@ -17,11 +17,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
         private ConcurrentDictionary<string, SelfRefreshingSegment> segments;
         private SegmentTaskWorker worker;
-        private SdkReadinessGates gates;
+        private IReadinessGatesCache gates;
         private int interval;
         private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments):base(segmentsCache)
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, IReadinessGatesCache gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments):base(segmentsCache)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segments = new ConcurrentDictionary<string, SelfRefreshingSegment>();

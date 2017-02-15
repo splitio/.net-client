@@ -2,7 +2,7 @@
 
 namespace Splitio.Domain
 {
-    public class ParsedSplit 
+    public class ParsedSplit : SplitBase
     {
         public string name { get; set; }
         public int seed { get; set; }
@@ -11,6 +11,5 @@ namespace Splitio.Domain
         public List<ConditionWithLogic> conditions { get; set; }
         public long changeNumber { get; set; }
         public string trafficTypeName { get; set; }
-
     }
 }

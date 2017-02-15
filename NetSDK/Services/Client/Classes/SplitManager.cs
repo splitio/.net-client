@@ -22,7 +22,7 @@ namespace Splitio.Services.Client.Classes
                 return null;
             }
 
-            var currentSplits = splitCache.GetAllSplits();
+            var currentSplits = splitCache.GetAllSplits().Cast<ParsedSplit>();
 
             var lightSplits = currentSplits.Select(x =>
                 new SplitView()
@@ -45,7 +45,7 @@ namespace Splitio.Services.Client.Classes
                 return null;
             }
 
-            var split = splitCache.GetSplit(featureName);
+            var split = (ParsedSplit)splitCache.GetSplit(featureName);
 
             if (split == null)
             {
@@ -72,7 +72,7 @@ namespace Splitio.Services.Client.Classes
                 return null;
             }
 
-            var currentSplits = splitCache.GetAllSplits();
+            var currentSplits = splitCache.GetAllSplits().Cast<ParsedSplit>();
 
             return currentSplits.Select(x => x.name).ToList();
         }

@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using Splitio.Services.Metrics.Interfaces;
 using System.Linq;
+using Splitio.Services.Cache.Classes;
 
 namespace Splitio_Tests.Unit_Tests.Metrics
 {
@@ -15,15 +16,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var counters = new ConcurrentDictionary<string, Counter>();
-            var metricsLog = new AsyncMetricsLog(null, counters, null, null, 10, 3000);
+            var metricsCache = new InMemoryMetricsCache(counters);
+            var metricsLog = new AsyncMetricsLog(null, metricsCache, 10, 3000);
 
             //Act
             metricsLog.Count("counter_test", 150);
 
             //Assert
             Thread.Sleep(2000);
-            Counter counter;
-            counters.TryGetValue("counter_test", out counter);
+            Counter counter = metricsCache.GetCount("counter_test");
             Assert.IsNotNull(counter);
             Assert.AreEqual(1, counter.GetCount());
             Assert.AreEqual(150, counter.GetDelta());
@@ -35,15 +36,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var timers = new ConcurrentDictionary<string, ILatencyTracker>();
-            var metricsLog = new AsyncMetricsLog(null, null, timers, null, 10, 3000);
+            var metricsCache = new InMemoryMetricsCache(null, timers);
+            var metricsLog = new AsyncMetricsLog(null, metricsCache, 10, 3000);
 
             //Act
             metricsLog.Time("time_test", 1);
 
             //Assert
             Thread.Sleep(2000);
-            ILatencyTracker timer;
-            timers.TryGetValue("time_test", out timer);
+            ILatencyTracker timer = metricsCache.GetLatencyTracker("time_test");
             Assert.IsNotNull(timer);
             Assert.AreEqual(1, timer.GetLatency(0));
             long[] latencies = timer.GetLatencies();
@@ -56,15 +57,15 @@ namespace Splitio_Tests.Unit_Tests.Metrics
         {
             //Arrange
             var gauges = new ConcurrentDictionary<string, long>();
-            var metricsLog = new AsyncMetricsLog(null, null, null, gauges, 10, 3000);
+            var metricsCache = new InMemoryMetricsCache(null, null, gauges);
+            var metricsLog = new AsyncMetricsLog(null, metricsCache, 10, 3000);
 
             //Act
             metricsLog.Gauge("gauge_test", 1234);
 
             //Assert
             Thread.Sleep(2000);
-            long gauge;
-            gauges.TryGetValue("gauge_test", out gauge);
+            long gauge = metricsCache.GetGauge("gauge_test");
             Assert.IsNotNull(gauge);
             Assert.AreEqual(1234, gauge);
         }

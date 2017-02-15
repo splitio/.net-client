@@ -4,6 +4,7 @@ using Splitio.Domain;
 using System.Threading;
 using Moq;
 using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Cache.Classes;
 
 namespace Splitio_Tests.Unit_Tests.Impressions
 {
@@ -15,7 +16,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         {
             //Arrange
             var queue = new BlockingQueue<KeyImpression>(10);
-            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, queue, 10);
+            var impressionsCache = new InMemoryImpressionsCache(queue);
+            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, impressionsCache, 10);
 
             //Act
             treatmentLog.Log("GetTreatment", "test", "on", 7000, 1, "test");
@@ -38,7 +40,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         {
             //Arrange
             var queue = new BlockingQueue<KeyImpression>(10);
-            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, queue, 10);
+            var impressionsCache = new InMemoryImpressionsCache(queue);
+            var treatmentLog = new SelfUpdatingTreatmentLog(null, 1, impressionsCache, 10);
 
             //Act
             Key key = new Key(bucketingKey : "a", matchingKey : "testkey");
@@ -64,7 +67,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             //Arrange
             var apiClientMock = new Mock<ITreatmentSdkApiClient>();
             var queue = new BlockingQueue<KeyImpression>(10);
-            var treatmentLog = new SelfUpdatingTreatmentLog(apiClientMock.Object, 1, queue, 10);
+            var impressionsCache = new InMemoryImpressionsCache(queue);
+            var treatmentLog = new SelfUpdatingTreatmentLog(apiClientMock.Object, 1, impressionsCache, 10);
 
             //Act
             treatmentLog.Start();

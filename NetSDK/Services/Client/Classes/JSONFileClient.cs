@@ -5,6 +5,7 @@ using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Parsing;
+using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using System.Collections.Concurrent;
@@ -21,7 +22,7 @@ namespace Splitio.Services.Client.Classes
             InitializeLogger();
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
-            var splitParser = new SplitParser(segmentFetcher, segmentCache);
+            var splitParser = new InMemorySplitParser(segmentFetcher, segmentCache);
             var splitChangeFetcher = new JSONFileSplitChangeFetcher(splitsFilePath);
             var splitChangesResult = splitChangeFetcher.Fetch(-1);
             var parsedSplits = new ConcurrentDictionary<string, ParsedSplit>();
@@ -30,7 +31,7 @@ namespace Splitio.Services.Client.Classes
             splitCache = splitCacheInstance ?? new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
             treatmentLog = treatmentLogInstance;
             splitter = new Splitter();
-            labelsEnabled = isLabelsEnabled;
+            LabelsEnabled = isLabelsEnabled;
         }
 
         private void InitializeLogger()
