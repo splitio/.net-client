@@ -13,13 +13,29 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
 
+        private FileSystemWatcher watcher;
+        private string fullPath;
+
         public LocalhostClient(string filePath, Splitter splitter = null)
         {
             InitializeLogger();
-            filePath = LookupFilePath(filePath);
-            var splits = ParseSplitFile(filePath);
+            fullPath = LookupFilePath(filePath);
+            var directoryPath = Path.GetDirectoryName(fullPath);
+
+            watcher = new FileSystemWatcher(directoryPath != String.Empty ? directoryPath : Directory.GetCurrentDirectory(), Path.GetFileName(fullPath));
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Changed += new FileSystemEventHandler(OnFileChanged);
+            watcher.EnableRaisingEvents = true;
+
+            var splits = ParseSplitFile(fullPath);
             splitCache = new InMemorySplitCache(splits);
             BuildSplitter(splitter);
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            var splits = ParseSplitFile(fullPath);
+            splitCache = new InMemorySplitCache(splits);
         }
 
         private string LookupFilePath(string filePath)
@@ -76,7 +92,7 @@ namespace Splitio.Services.Client.Classes
         /// <summary>
         /// Creates a ParsedSplit instance that always returns 
         /// treatment specified in input file. It is implemented this way
-        /// for simplification. When a split is killed, the engine 
+        /// for simplification. When a split is killed, the client 
         /// returns default treatment for that feature.
         /// </summary>
         /// <param name="name"></param>
