@@ -65,7 +65,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
-        public void GetInexistentSplitTest()
+        public void GetInexistentSplitOrRedisExceptionShouldReturnNull()
         {
             //Arrange
             var splitName = "test_split";
@@ -99,6 +99,22 @@ namespace Splitio_Tests.Unit_Tests.Cache
             //Assert
             Assert.IsTrue(isRemoved);
             Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void RemoveSplitShouldReturnFalseOnException()
+        {
+            //Arrange
+            var splitName = "test_split";
+            var redisAdapterMock = new Mock<IRedisAdapter>();
+            redisAdapterMock.Setup(x => x.Del(splitKeyPrefix + "test_split")).Returns(false);
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+
+            //Act
+            var isRemoved = splitCache.RemoveSplit(splitName);
+
+            //Assert
+            Assert.IsFalse(isRemoved);
         }
 
         [TestMethod]
@@ -140,7 +156,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
-        public void GetChangeNumberWhenNotSetTest()
+        public void GetChangeNumberWhenNotSetOrRedisThrowsException()
         {
             //Arrange
             var changeNumber = -1;
@@ -234,7 +250,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
-        public void GetKeysTest()
+        public void GetKeysTestSuccessfully()
         {
             //Arrange
             var redisAdapterMock = new Mock<IRedisAdapter>();
@@ -245,7 +261,24 @@ namespace Splitio_Tests.Unit_Tests.Cache
             var result = splitCache.GetKeys();
 
             //Assert
+            Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count);
+        }
+
+        [TestMethod]
+        public void GetKeysShouldReturnEmptyResultIfNoKeysOrRedisException()
+        {
+            //Arrange
+            var redisAdapterMock = new Mock<IRedisAdapter>();
+            redisAdapterMock.Setup(x => x.Keys(splitKeyPrefix + "*")).Returns(new RedisKey[] { });
+            var splitCache = new RedisSplitCache(redisAdapterMock.Object);
+
+            //Act
+            var result = splitCache.GetKeys();
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
         }
     }
 }

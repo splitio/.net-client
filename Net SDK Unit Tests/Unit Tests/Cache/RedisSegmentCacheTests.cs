@@ -66,7 +66,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
-        public void IsNotInSegmentTest()
+        public void IsNotInSegmentOrRedisExceptionTest()
         {
             //Arrange
             var segmentName = "segment_test";
@@ -139,7 +139,7 @@ namespace Splitio_Tests.Unit_Tests.Cache
         }
 
         [TestMethod]
-        public void GetChangeNumberWhenNotSetTest()
+        public void GetChangeNumberWhenNotSetOrRedisExceptionTest()
         {
             //Arrange
             var changeNumber = -1;
