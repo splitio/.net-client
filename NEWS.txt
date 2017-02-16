@@ -1,5 +1,11 @@
 NEWS
 
+2.1.0
+
+- Now supporting Redis as a cache adapter
+- Local mode supports reload features
+- Configuration options for Mode and Redis parameters added.
+
 2.0.6
 
 - No news for this update
