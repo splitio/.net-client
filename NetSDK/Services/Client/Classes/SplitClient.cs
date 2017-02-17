@@ -9,6 +9,7 @@ using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -124,6 +125,14 @@ namespace Splitio.Services.Client.Classes
 
                 return split.defaultTreatment;
             }
+        }
+
+
+        public Dictionary<string, string> GetTreatments(Key key, List<string> features, Dictionary<string, object> attributes = null)
+        {
+            Dictionary<string, string> treatmentsForFeatures;
+            treatmentsForFeatures = features.ToDictionary(x => x, x => GetTreatment(key, x, attributes));
+            return treatmentsForFeatures;
         }
     }
 }
