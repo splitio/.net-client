@@ -127,6 +127,13 @@ namespace Splitio.Services.Client.Classes
             }
         }
 
+        public Dictionary<string, string> GetTreatments(string key, List<string> features, Dictionary<string, object> attributes = null)
+        {
+            Key keys = new Key(key, null);
+            Dictionary<string, string> treatmentsForFeatures;
+            treatmentsForFeatures = features.ToDictionary(x => x, x => GetTreatment(keys, x, attributes));
+            return treatmentsForFeatures;
+        }
 
         public Dictionary<string, string> GetTreatments(Key key, List<string> features, Dictionary<string, object> attributes = null)
         {
