@@ -650,6 +650,10 @@
                             "size": 0
                         },
                         {
+                            "treatment": "test",
+                            "size": 0
+                        },
+                        {
                             "treatment": "unknown",
                             "size": 0
                         }
@@ -687,9 +691,54 @@
                             "size": 100
                         },
                         {
+                            "treatment": "test",
+                            "size": 0
+                        },
+                        {
                             "treatment": "unknown",
                             "size": 0
                         }
+                    ]
+                },
+                {
+                    "matcherGroup": {
+                        "combiner": "AND",
+                        "matchers": [
+                            {
+                                "keySelector": {
+                                    "trafficType": "user",
+                                    "attribute": "env"
+                                },
+                                "matcherType": "WHITELIST",
+                                "negate": false,
+                                "userDefinedSegmentMatcherData": null,
+                                "whitelistMatcherData": {
+                                    "whitelist": [
+                                        "test"
+                                    ]
+                                },
+                                "unaryNumericMatcherData": null,
+                                "betweenMatcherData": null
+                            }
+                        ]
+                    },
+                    "partitions": [
+                        {
+                            "treatment": "prod",
+                            "size": 0
+                        },
+                        {
+                            "treatment": "stage",
+                            "size": 0
+                        },
+                        {
+                            "treatment": "test",
+                            "size": 100
+                        },
+                        {
+                            "treatment": "unknown",
+                            "size": 0
+                        },
                     ]
                 }
             ]
