@@ -49,9 +49,9 @@ namespace Splitio.Services.Client.Classes
                     }
                     break;
                 case Mode.Consumer:
-                    if (options.RedisConfig != null && options.RedisConfig.CacheAdapter == AdapterType.Redis)
+                    if (options.CacheAdapterConfig != null && options.CacheAdapterConfig.Type == AdapterType.Redis)
                     {
-                        if (String.IsNullOrEmpty(options.RedisConfig.Host) || String.IsNullOrEmpty(options.RedisConfig.Port) || String.IsNullOrEmpty(options.RedisConfig.Password))
+                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port) || String.IsNullOrEmpty(options.CacheAdapterConfig.Password))
                         {
                             throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
                         }

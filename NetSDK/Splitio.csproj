@@ -122,7 +122,7 @@
     <Compile Include="Services\Client\Classes\AdapterType.cs" />
     <Compile Include="Services\Client\Classes\Mode.cs" />
     <Compile Include="Services\Client\Classes\RedisClient.cs" />
-    <Compile Include="Services\Client\Classes\RedisConfigurationOptions.cs" />
+    <Compile Include="Services\Client\Classes\CacheAdapterConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\SplitFactory.cs" />
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\JSONFileClient.cs" />

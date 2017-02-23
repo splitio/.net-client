@@ -22,6 +22,6 @@ namespace Splitio.Services.Client.Classes
         public string SdkMachineIP { get; set; }
         public int? NumberOfParalellSegmentTasks { get; set; }
         public bool? LabelsEnabled { get; set; }
-        public RedisConfigurationOptions RedisConfig { get; set; }
+        public CacheAdapterConfigurationOptions CacheAdapterConfig { get; set; }
     }
 }
