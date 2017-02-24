@@ -19,10 +19,10 @@ namespace Splitio_Tests.Integration_Tests
         public void Initialization()
         {
             config = new ConfigurationOptions();
-            config.RedisConfig = new RedisConfigurationOptions();
-            config.RedisConfig.Host = "localhost";
-            config.RedisConfig.Port = "6379";
-            config.RedisConfig.Password = "";
+            config.CacheAdapterConfig = new CacheAdapterConfigurationOptions();
+            config.CacheAdapterConfig.Host = "localhost";
+            config.CacheAdapterConfig.Port = "6379";
+            config.CacheAdapterConfig.Password = "";
             config.SdkMachineIP = "192.168.0.1";
         }
 

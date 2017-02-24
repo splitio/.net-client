@@ -75,14 +75,14 @@ namespace Splitio.Services.Client.Classes
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
             SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
-            RedisHost = config.RedisConfig.Host;
-            RedisPort = config.RedisConfig.Port;
-            RedisPassword = config.RedisConfig.Password;
-            RedisDatabase = config.RedisConfig.Database ?? 0;
-            RedisConnectTimeout = config.RedisConfig.ConnectTimeout ?? 0;
-            RedisSyncTimeout = config.RedisConfig.SyncTimeout ?? 0;
-            RedisConnectRetry = config.RedisConfig.ConnectRetry ?? 0;
-            RedisUserPrefix = config.RedisConfig.UserPrefix;
+            RedisHost = config.CacheAdapterConfig.Host;
+            RedisPort = config.CacheAdapterConfig.Port;
+            RedisPassword = config.CacheAdapterConfig.Password;
+            RedisDatabase = config.CacheAdapterConfig.Database ?? 0;
+            RedisConnectTimeout = config.CacheAdapterConfig.ConnectTimeout ?? 0;
+            RedisSyncTimeout = config.CacheAdapterConfig.SyncTimeout ?? 0;
+            RedisConnectRetry = config.CacheAdapterConfig.ConnectRetry ?? 0;
+            RedisUserPrefix = config.CacheAdapterConfig.UserPrefix;
             LabelsEnabled = config.LabelsEnabled ?? true;
         }
 
