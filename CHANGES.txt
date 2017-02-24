@@ -5,6 +5,7 @@ CHANGES
 - Refactor InMemory Metrics and Impressions to comply cache interface style.
 - Support for Redis cache and Redis client.
 - Configuration to support multiple modes and Redis parameters.
+- Support for multiple splits evaluation by including GetTreatments method.
 
 2.0.6
 
