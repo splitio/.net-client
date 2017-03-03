@@ -17,7 +17,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         public void RefreshSegmentNullChangesFetcherResponseShouldNotUpdateCache()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
@@ -38,7 +38,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         public void RefreshSegmentShouldUpdateReadinessGatesWhenNoMoreChanges()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
@@ -69,7 +69,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         public void RefreshSegmentShouldUpdateSegmentsCache()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))

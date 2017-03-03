@@ -27,24 +27,49 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildSplitClient()
         {
-            if (String.IsNullOrEmpty(apiKey))
-            {
-                throw new Exception("API Key should be set to initialize Split SDK.");
-            }
-
             if (options == null)
             {
                 options = new ConfigurationOptions();
             }
 
-            if (apiKey == "localhost")
+            switch(options.Mode)
             {
-                client = new LocalhostClient(options.LocalhostFilePath);
+                case Mode.Standalone:
+                    if (String.IsNullOrEmpty(apiKey))
+                    {
+                        throw new Exception("API Key should be set to initialize Split SDK.");
+                    }
+                    if (apiKey == "localhost")
+                    {
+                        client = new LocalhostClient(options.LocalhostFilePath);
+                    }
+                    else
+                    {
+                        client = new SelfRefreshingClient(apiKey, options);
+                    }
+                    break;
+                case Mode.Consumer:
+                    if (options.CacheAdapterConfig != null && options.CacheAdapterConfig.Type == AdapterType.Redis)
+                    {
+                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port) || String.IsNullOrEmpty(options.CacheAdapterConfig.Password))
+                        {
+                            throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
+                        }
+                        client = new RedisClient(options);
+                    }
+                    else
+                    {
+                        throw new Exception("Redis config should be set to build split client in Consumer mode.");
+                    }
+                    break;
+                case Mode.Producer:
+                    throw new Exception("Unsupported mode.");
+                default:
+                    throw new Exception("Mode should be set to build split client.");
             }
-            else
-            {
-                client = new SelfRefreshingClient(apiKey, options);
-            }
+            
+
+            
         }
 
         public ISplitManager Manager()

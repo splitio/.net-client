@@ -79,6 +79,57 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("control", result);
         }
 
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatments()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_3.json", "");
+            List<string> features = new List<string>();
+            features.Add("fail");
+            features.Add("asd");
+            features.Add("get_environment");
+
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("env", "test");
+
+            //Act           
+            var result = client.GetTreatments("test", features, attributes);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("control", result["fail"]);
+            Assert.AreEqual("off", result["asd"]);
+            Assert.AreEqual("test", result["get_environment"]);
+
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_3.json")]
+        public void ExecuteGetTreatmentsWithBucketing()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_3.json", "");
+            List<string> features = new List<string>();
+            features.Add("fail");
+            features.Add("asd");
+            features.Add("get_environment");
+
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("env", "test");
+
+            var keys = new Key("test", "test");
+
+            //Act           
+            var result = client.GetTreatments(keys, features, attributes);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("control", result["fail"]);
+            Assert.AreEqual("off", result["asd"]);
+            Assert.AreEqual("test", result["get_environment"]);
+        }
+
 
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
@@ -250,6 +301,5 @@ namespace Splitio_Tests.Integration_Tests
             //Assert
             treatmentLogMock.Verify(x => x.Log("db765170-e9f2-11e5-885c-c2f58c3a47a7", "Segments_Restructuring_UI", "on", It.IsAny<long>(), 1484084207827, "explicitly included", "ab765170-e9f2-11e5-885c-c2f58c3a47a7"));
         }
-
     }
 }

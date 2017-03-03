@@ -68,5 +68,10 @@ namespace Splitio.Services.Metrics.Classes
             }
             return index;
         }
+
+        public void SetLatencyCount(int index, long count)
+        {
+            latencies[index] = count;
+        }
     }
 }

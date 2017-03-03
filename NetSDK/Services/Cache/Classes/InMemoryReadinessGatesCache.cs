@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using log4net;
+using Splitio.Services.Cache.Interfaces;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SdkReadinessGates
+    public class InMemoryReadinessGatesCache : IReadinessGatesCache
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SdkReadinessGates));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(InMemoryReadinessGatesCache));
         private CountdownEvent splitsAreReady = new CountdownEvent(1);
         private Dictionary<String, CountdownEvent> segmentsAreReady = new Dictionary<String, CountdownEvent>();
 

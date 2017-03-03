@@ -20,9 +20,9 @@ namespace Splitio.Services.Cache.Classes
             this.changeNumber = changeNumber;
         }
 
-        public void AddSplit(string splitName, ParsedSplit split)
+        public void AddSplit(string splitName, SplitBase split)
         {
-            splits.TryAdd(splitName, split);
+            splits.TryAdd(splitName, (ParsedSplit)split);
         }
 
         public bool RemoveSplit(string splitName)
@@ -45,16 +45,16 @@ namespace Splitio.Services.Cache.Classes
             return changeNumber;
         }
 
-        public ParsedSplit GetSplit(string splitName)
+        public SplitBase GetSplit(string splitName)
         {
             ParsedSplit value;
             splits.TryGetValue(splitName, out value);
             return value;
         }
 
-        public List<ParsedSplit> GetAllSplits()
+        public List<SplitBase> GetAllSplits()
         {
-            return splits.Values.ToList(); 
+            return splits.Values.ToList<SplitBase>(); 
         }
     }
 }

@@ -1,5 +1,12 @@
 NEWS
 
+2.1.0
+
+- Add support for Redis cache.
+- Add support for evaluating multiple treatments.
+- Add support for reload localhost features when file is updated. 
+- Add Mode and Cache Adapter parameters to Configuration options.
+
 2.0.6
 
 - No news for this update

@@ -3,6 +3,7 @@ namespace Splitio.Services.Client.Classes
 {
     public class ConfigurationOptions
     {
+        public Mode Mode { get; set; }
         public string Endpoint { get; set; }
         public string EventsEndpoint { get; set; }
         public string LocalhostFilePath { get; set; }
@@ -20,8 +21,7 @@ namespace Splitio.Services.Client.Classes
         public string SdkMachineName { get; set; }
         public string SdkMachineIP { get; set; }
         public int? NumberOfParalellSegmentTasks { get; set; }
-        public bool? LabelsEnabled { get; set; } 
-
-
+        public bool? LabelsEnabled { get; set; }
+        public CacheAdapterConfigurationOptions CacheAdapterConfig { get; set; }
     }
 }

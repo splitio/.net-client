@@ -17,7 +17,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         public void InitializeSegmentNotExistent()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
@@ -50,7 +50,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         public void StartSchedullerSuccessfully()
         {
             //Arrange
-            var gates = new SdkReadinessGates();
+            var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))

@@ -12,11 +12,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegment));
 
         public string name;
-        private SdkReadinessGates gates;
+        private IReadinessGatesCache gates;
         private ISegmentChangeFetcher segmentChangeFetcher;
         private ISegmentCache segmentCache;
 
-        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, SdkReadinessGates gates,  ISegmentCache segmentCache)
+        public SelfRefreshingSegment(string name, ISegmentChangeFetcher segmentChangeFetcher, IReadinessGatesCache gates,  ISegmentCache segmentCache)
         {
             this.name = name;
             this.segmentChangeFetcher = segmentChangeFetcher;
