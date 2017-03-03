@@ -2,7 +2,10 @@ NEWS
 
 2.1.0
 
-- Configuration options for Mode and Redis parameters added.
+- Add support for Redis cache.
+- Add support for evaluating multiple treatments.
+- Add support for reload localhost features when file is updated. 
+- Add Mode and Cache Adapter parameters to Configuration options.
 
 2.0.6
 
