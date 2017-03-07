@@ -1,8 +1,5 @@
 ﻿using Splitio.Services.Cache.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
@@ -17,7 +14,7 @@ namespace Splitio.Services.Cache.Classes
             this.redisAdapter = redisAdapter;
             this.redisKeyPrefix = "SPLITIO.";
 
-            if (!String.IsNullOrEmpty(userPrefix))
+            if (!string.IsNullOrEmpty(userPrefix))
             {
                 this.redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
             }
@@ -28,7 +25,7 @@ namespace Splitio.Services.Cache.Classes
             this.redisAdapter = redisAdapter;
             this.redisKeyPrefix = RedisKeyPrefixFormat.Replace("{sdk-language-version}", sdkVersion)
                                                           .Replace("{instance-id}", machineIP);
-            if (!String.IsNullOrEmpty(userPrefix))
+            if (!string.IsNullOrEmpty(userPrefix))
             {
                 this.redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
             }

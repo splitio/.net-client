@@ -1,10 +1,12 @@
 ﻿using log4net;
+using log4net.Repository.Hierarchy;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Splitio.Services.Client.Classes
@@ -22,7 +24,7 @@ namespace Splitio.Services.Client.Classes
             fullPath = LookupFilePath(filePath);
             var directoryPath = Path.GetDirectoryName(fullPath);
 
-            watcher = new FileSystemWatcher(directoryPath != String.Empty ? directoryPath : Directory.GetCurrentDirectory(), Path.GetFileName(fullPath));
+            watcher = new FileSystemWatcher(directoryPath != string.Empty ? directoryPath : Directory.GetCurrentDirectory(), Path.GetFileName(fullPath));
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(OnFileChanged);
             watcher.EnableRaisingEvents = true;
@@ -44,13 +46,13 @@ namespace Splitio.Services.Client.Classes
             {
                 return filePath;
             }
-            //TODO: var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var home = Environment.GetEnvironmentVariable("USERPROFILE");
 
-            /*var fullPath = Path.Combine(home, filePath);
+            var fullPath = Path.Combine(home, filePath);
             if (File.Exists(fullPath))
             {
                 return fullPath;
-            }*/
+            }
 
             throw new DirectoryNotFoundException("Splits file could not be found");
         }
@@ -61,17 +63,17 @@ namespace Splitio.Services.Client.Classes
 
             string line;
 
-            StreamReader file = new StreamReader(filePath);
+            StreamReader file = new StreamReader(File.OpenText(filePath).BaseStream);
             
             while ((line = file.ReadLine()) != null)
             {
                 line = line.Trim();
-                if (String.IsNullOrEmpty(line) || line.StartsWith("#"))
+                if (string.IsNullOrEmpty(line) || line.StartsWith("#"))
                 {
                     continue;
                 }
 
-                String[] feature_treatment = Regex.Split(line, @"\s+");
+                string[] feature_treatment = Regex.Split(line, @"\s+");
 
                 if (feature_treatment.Length != 2)
                 {
@@ -84,7 +86,7 @@ namespace Splitio.Services.Client.Classes
 
             }
 
-            file.Close();
+            file.Dispose();
 
             return splits;
         }
@@ -114,7 +116,9 @@ namespace Splitio.Services.Client.Classes
 
         private void InitializeLogger()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            var repository = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(repository.Name);
+            log4net.Config.XmlConfigurator.Configure(hierarchy);
         }
 
         private void BuildSplitter(Splitter splitter)

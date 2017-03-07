@@ -1,9 +1,7 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
-using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,7 +60,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
                 segments.TryAdd(name, segment);
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
-                Log.Info(String.Format("Segment queued: {0}", segment.name));
+                Log.Info(string.Format("Segment queued: {0}", segment.name));
             }
         }
 
@@ -71,7 +69,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             foreach (SelfRefreshingSegment segment in segments.Values)
             {
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
-                Log.Info(String.Format("Segment queued: {0}", segment.name));
+                Log.Info(string.Format("Segment queued: {0}", segment.name));
             }
         }
     }

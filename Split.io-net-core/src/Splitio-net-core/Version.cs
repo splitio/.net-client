@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Splitio_net_core
+﻿namespace Splitio
 {
     public static class Version
     {
-        public static string SplitSdkVersion = "2.1.1";
+        public static string SplitSdkVersion = "4.0.0-rc1";
         public static string SplitSpecVersion = "1.0";
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.Impressions.Interfaces
+﻿namespace Splitio.Services.Impressions.Interfaces
 {
     public interface ITreatmentLog
     {

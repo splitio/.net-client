@@ -1,4 +1,4 @@
-﻿//using Splitio.Services.Parsing;
+﻿using Splitio.Services.Parsing;
 using System.Collections.Generic;
 
 namespace Splitio.Domain
@@ -6,14 +6,14 @@ namespace Splitio.Domain
     public class AttributeMatcher
     {
         public string attribute { get; set; }
-        //public IMatcher matcher { get; set; }
+        public IMatcher matcher { get; set; }
         public bool negate { get; set; }
 
         public virtual bool Match(string key, Dictionary<string, object> attributes)
         {
             if (attribute == null)
             {
-                return true;//(negate ^ matcher.Match(key));
+                return (negate ^ matcher.Match(key));
             }
 
             if (attributes == null)
@@ -29,7 +29,7 @@ namespace Splitio.Domain
                 return false;
             }
 
-            return true;// (negate ^ matcher.Match((dynamic)value));
+            return (negate ^ matcher.Match((dynamic)value));
         }
     }
 }

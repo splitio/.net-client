@@ -1,9 +1,5 @@
 ﻿using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Metrics.Classes
 {
@@ -18,7 +14,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Count(string counterName, long delta)
         {
-            if (String.IsNullOrEmpty(counterName) || delta <= 0)
+            if (string.IsNullOrEmpty(counterName) || delta <= 0)
             {
                 return;
             }
@@ -28,7 +24,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Time(string operation, long miliseconds)
         {
-            if (String.IsNullOrEmpty(operation) || miliseconds < 0)
+            if (string.IsNullOrEmpty(operation) || miliseconds < 0)
             {
                 return;
             }
@@ -38,7 +34,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Gauge(string gauge, long value)
         {
-            if (String.IsNullOrEmpty(gauge) || value < 0)
+            if (string.IsNullOrEmpty(gauge) || value < 0)
             {
                 return;
             }

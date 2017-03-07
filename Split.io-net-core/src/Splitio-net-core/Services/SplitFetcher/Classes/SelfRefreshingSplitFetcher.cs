@@ -2,7 +2,6 @@
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.Parsing;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
@@ -81,12 +80,12 @@ namespace Splitio.Services.SplitFetcher.Classes
             if (addedSplits.Count() > 0)
             {
                 var addedFeatureNames = addedSplits.Select(x => x.name).ToList();
-                Log.Info(String.Format("Added features: {0}", String.Join(" - ", addedFeatureNames)));
+                Log.Info(string.Format("Added features: {0}", string.Join(" - ", addedFeatureNames)));
             }
             if (removedSplits.Count() > 0)
             {
                 var removedFeatureNames = removedSplits.Select(x => x.name).ToList();
-                Log.Info(String.Format("Deleted features: {0}", String.Join(" - ", removedFeatureNames)));
+                Log.Info(string.Format("Deleted features: {0}", string.Join(" - ", removedFeatureNames)));
             }
         }
 
@@ -121,7 +120,7 @@ namespace Splitio.Services.SplitFetcher.Classes
                 }
                 finally
                 {
-                    Log.Info(String.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
+                    Log.Info(string.Format("split fetch before: {0}, after: {1}", changeNumber, splitCache.GetChangeNumber()));
                 }
             }
         }

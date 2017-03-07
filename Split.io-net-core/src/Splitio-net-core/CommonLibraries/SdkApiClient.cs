@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -11,8 +12,9 @@ namespace Splitio.CommonLibraries
     {
         private HttpClient httpClient;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SdkApiClient));
+        protected IMetricsLog metricsLog;
 
-        public SdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout)
+        public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null)
         {
             if (header.encoding == "gzip")
             {
@@ -31,11 +33,11 @@ namespace Splitio.CommonLibraries
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", header.authorizationApiKey);
             httpClient.DefaultRequestHeaders.Add("SplitSDKVersion", header.splitSDKVersion);
             httpClient.DefaultRequestHeaders.Add("SplitSDKSpecVersion", header.splitSDKSpecVersion);
-            if (!String.IsNullOrEmpty(header.splitSDKMachineName))
+            if (!string.IsNullOrEmpty(header.splitSDKMachineName))
             {
                 httpClient.DefaultRequestHeaders.Add("SplitSDKMachineName", header.splitSDKMachineName);
             }
-            if (!String.IsNullOrEmpty(header.splitSDKMachineIP))
+            if (!string.IsNullOrEmpty(header.splitSDKMachineIP))
             {
                 httpClient.DefaultRequestHeaders.Add("SplitSDKMachineIP", header.splitSDKMachineIP);
             }
@@ -45,6 +47,8 @@ namespace Splitio.CommonLibraries
 
             //TODO: find a way to store it in sepparated parameters
             httpClient.Timeout = TimeSpan.FromMilliseconds((connectionTimeOut + readTimeout));
+
+            this.metricsLog = metricsLog;
         }
 
         public virtual HTTPResult ExecuteGet(string requestUri)
@@ -56,11 +60,11 @@ namespace Splitio.CommonLibraries
                 task.Wait();
                 var response = task.Result;
                 result.statusCode = response.StatusCode;
-                result.content = response.Content.ReadAsStringAsync().Result;
+                result.content = response.Content.ReadAsStringAsync().Result;                
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                Log.Error(String.Format("Exception caught executing GET {0}", requestUri), e);
+                Log.Error(string.Format("Exception caught executing GET {0}", requestUri), e);
             }
             return result;
         }
@@ -78,9 +82,11 @@ namespace Splitio.CommonLibraries
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Exception caught executing POST {0}", requestUri), e);
+                Log.Error(string.Format("Exception caught executing POST {0}", requestUri), e);
             }
             return result;
         }
+
+
     }
 }

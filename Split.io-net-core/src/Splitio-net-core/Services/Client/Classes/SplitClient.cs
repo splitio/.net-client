@@ -78,7 +78,7 @@ namespace Splitio.Services.Client.Classes
                     //if split definition was not found, impression label = "rules not found"
                     RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
 
-                    Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
+                    Log.Warn(string.Format("Unknown or invalid feature: {0}", feature));
                     return Control;
                 }
                 
@@ -91,7 +91,7 @@ namespace Splitio.Services.Client.Classes
                 //if there was an exception, impression label = "exception"
                 RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
 
-                Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
+                Log.Error(string.Format("Exception caught getting treatment for feature: {0}", feature), e);
                 return Control;
             }
         }

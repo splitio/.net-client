@@ -1,7 +1,7 @@
-﻿using Splitio.Domain;
-using Splitio.Services.SplitFetcher.Interfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Splitio.Domain;
 using Splitio.Services.SegmentFetcher.Interfaces;
+using Splitio.Services.SplitFetcher.Interfaces;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {

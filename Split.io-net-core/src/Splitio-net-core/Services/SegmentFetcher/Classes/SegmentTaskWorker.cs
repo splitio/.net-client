@@ -1,5 +1,4 @@
 ﻿using log4net;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,7 +41,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     //Wait indefinitely until a segment is queued
                     if (SegmentTaskQueue.segmentsQueue.TryTake(out segment, -1))
                     {
-                        Log.Info(String.Format("Segment dequeued: {0}", segment.name));
+                        Log.Info(string.Format("Segment dequeued: {0}", segment.name));
                         IncrementCounter();
                         Task task = new Task(() => segment.RefreshSegment(), token);
                         task.ContinueWith((x) => { DecrementCounter(); }); 

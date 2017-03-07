@@ -5,22 +5,22 @@ using log4net.Repository.Hierarchy;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
-using Splitio.Services.Parsing;
+using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Net;
-using System.Threading.Tasks;
 using System.Linq;
-using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Parsing.Classes;
+using System.Net;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -85,8 +85,8 @@ namespace Splitio.Services.Client.Classes
 
         private void ReadConfig(ConfigurationOptions config)
         {
-            BaseUrl = String.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
-            EventsBaseUrl = String.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
+            BaseUrl = string.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
+            EventsBaseUrl = string.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
             SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
             SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
             HttpEncoding = "gzip";
@@ -95,7 +95,9 @@ namespace Splitio.Services.Client.Classes
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
+            var hostAddressesTask = Dns.GetHostAddressesAsync(Environment.MachineName);
+            hostAddressesTask.Wait();
+            SdkMachineIP = config.SdkMachineIP ?? hostAddressesTask.Result.Last().ToString();
             RandomizeRefreshRates = config.RandomizeRefreshRates;
             BlockMilisecondsUntilReady = config.Ready ?? 0;
             ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
@@ -111,7 +113,7 @@ namespace Splitio.Services.Client.Classes
         {
             if (!gates.IsSDKReady(BlockMilisecondsUntilReady))
             {
-                throw new TimeoutException(String.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
+                throw new TimeoutException(string.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
             }
         }
 
@@ -145,7 +147,9 @@ namespace Splitio.Services.Client.Classes
 
         private void InitializeLogger()
         {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            var repository = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
+
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(repository.Name);
             if (hierarchy.Root.Appenders.Count == 0)
             {
                 FileAppender fileAppender = new FileAppender();
@@ -158,7 +162,7 @@ namespace Splitio.Services.Client.Classes
                 fileAppender.Layout = pl;
                 fileAppender.ActivateOptions();
 
-                log4net.Config.BasicConfigurator.Configure(fileAppender);
+                log4net.Config.BasicConfigurator.Configure(repository, fileAppender);
             }
         }
 

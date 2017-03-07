@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,7 +42,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Count(string counterName, long delta)
         {
-            if (String.IsNullOrEmpty(counterName) ||  delta <= 0)
+            if (string.IsNullOrEmpty(counterName) ||  delta <= 0)
             {
                 return;
             }
@@ -60,7 +59,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Time(string operation, long miliseconds)
         {
-            if (String.IsNullOrEmpty(operation) || miliseconds < 0)
+            if (string.IsNullOrEmpty(operation) || miliseconds < 0)
             {
                 return;
             }
@@ -77,7 +76,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Gauge(string gauge, long value)
         {
-            if (String.IsNullOrEmpty(gauge) || value < 0)
+            if (string.IsNullOrEmpty(gauge) || value < 0)
             {
                 return;
             }
@@ -107,7 +106,7 @@ namespace Splitio.Services.Metrics.Classes
 
             var countMetricsJson = ConvertCountMetricsToJson(metricsCache.FetchAllCountersAndClear());
 
-            if (countMetricsJson != String.Empty)
+            if (countMetricsJson != string.Empty)
             {
                 apiClient.SendCountMetrics(countMetricsJson);
             }
@@ -124,7 +123,7 @@ namespace Splitio.Services.Metrics.Classes
             {
                 Logger.Error("Exception ocurred serializing count metrics", e);
 
-                return String.Empty;
+                return string.Empty;
             }
         }
         private void SendTimeMetrics()
@@ -138,7 +137,7 @@ namespace Splitio.Services.Metrics.Classes
                 sendingTimeMetrics = true;
             }
             var timeMetricsJson = ConvertTimeMetricsToJson(metricsCache.FetchAllLatencyTrackersAndClear());
-            if (timeMetricsJson != String.Empty)
+            if (timeMetricsJson != string.Empty)
             {
                 apiClient.SendTimeMetrics(timeMetricsJson);
             }
@@ -155,7 +154,7 @@ namespace Splitio.Services.Metrics.Classes
             {
                 Logger.Error("Exception ocurred serializing time metrics", e);
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -172,7 +171,7 @@ namespace Splitio.Services.Metrics.Classes
 
             var gaugeMetricsJson = ConvertGaugeMetricsToJson(metricsCache.FetchAllGaugesAndClear());
             gaugeCallCount = 0;
-            if (gaugeMetricsJson != String.Empty)
+            if (gaugeMetricsJson != string.Empty)
             {
                 apiClient.SendGaugeMetrics(gaugeMetricsJson);
             }
@@ -189,7 +188,7 @@ namespace Splitio.Services.Metrics.Classes
             {
                 Logger.Error("Exception ocurred serializing gauge metrics", e);
 
-                return String.Empty;
+                return string.Empty;
             }
         }
     }

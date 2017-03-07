@@ -2,9 +2,7 @@
 using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Cache.Classes
 {
@@ -24,17 +22,17 @@ namespace Splitio.Services.Cache.Classes
                 var config = GetConfig(host, port, password, connectTimeout, connectRetry, syncTimeout);
                 redis = ConnectionMultiplexer.Connect(config);
                 database = redis.GetDatabase(databaseNumber);
-                server = redis.GetServer(String.Format("{0}:{1}", host, port));
+                server = redis.GetServer(string.Format("{0}:{1}", host, port));
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Exception caught building Redis Adapter '{0}:{1}': ", host, port), e);
+                Log.Error(string.Format("Exception caught building Redis Adapter '{0}:{1}': ", host, port), e);
             }
         }
 
         private static string GetConfig(string host, string port, string password, int connectTimeout, int connectRetry, int syncTimeout)
         {
-            var config = String.Format("{0}:{1}, password = {2}, allowAdmin = true", host, port, password);
+            var config = string.Format("{0}:{1}, password = {2}, allowAdmin = true", host, port, password);
             
             if (connectTimeout > 0)
             {
@@ -76,7 +74,7 @@ namespace Splitio.Services.Cache.Classes
             catch (Exception e)
             {
                 Log.Error("Exception calling Redis Adapter Get", e);
-                return String.Empty;
+                return string.Empty;
             }
         }
 

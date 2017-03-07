@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.Client.Classes
+﻿namespace Splitio.Services.Client.Classes
 {
     public class ConfigurationOptions
     {

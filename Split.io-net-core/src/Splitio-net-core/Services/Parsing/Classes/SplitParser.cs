@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,7 +96,7 @@ namespace Splitio.Services.Parsing
 
             if (matcher == null)
             {
-                throw new Exception(String.Format("Unable to create matcher for matcher type: {0}", matcherType));
+                throw new Exception(string.Format("Unable to create matcher for matcher type: {0}", matcherType));
             }
 
             AttributeMatcher attributeMatcher = new AttributeMatcher()

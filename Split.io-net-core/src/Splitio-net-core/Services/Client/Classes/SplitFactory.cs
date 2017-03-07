@@ -35,7 +35,7 @@ namespace Splitio.Services.Client.Classes
             switch(options.Mode)
             {
                 case Mode.Standalone:
-                    if (String.IsNullOrEmpty(apiKey))
+                    if (string.IsNullOrEmpty(apiKey))
                     {
                         throw new Exception("API Key should be set to initialize Split SDK.");
                     }
@@ -51,7 +51,7 @@ namespace Splitio.Services.Client.Classes
                 case Mode.Consumer:
                     if (options.CacheAdapterConfig != null && options.CacheAdapterConfig.Type == AdapterType.Redis)
                     {
-                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port) || String.IsNullOrEmpty(options.CacheAdapterConfig.Password))
+                        if (string.IsNullOrEmpty(options.CacheAdapterConfig.Host) || string.IsNullOrEmpty(options.CacheAdapterConfig.Port) || string.IsNullOrEmpty(options.CacheAdapterConfig.Password))
                         {
                             throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
                         }

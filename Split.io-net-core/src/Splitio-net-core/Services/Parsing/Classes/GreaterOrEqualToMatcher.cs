@@ -1,6 +1,6 @@
-﻿using Splitio.Domain;
+﻿using Splitio.CommonLibraries;
+using Splitio.Domain;
 using System;
-using Splitio.CommonLibraries;
 
 namespace Splitio.Services.Parsing
 {

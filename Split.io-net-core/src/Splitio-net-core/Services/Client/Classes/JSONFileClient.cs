@@ -1,15 +1,16 @@
 ﻿using log4net;
+using log4net.Repository.Hierarchy;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
-using Splitio.Services.Parsing;
 using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -36,7 +37,9 @@ namespace Splitio.Services.Client.Classes
 
         private void InitializeLogger()
         {
-            log4net.Config.XmlConfigurator.Configure();
+            var repository = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(repository.Name);
+            log4net.Config.XmlConfigurator.Configure(hierarchy);
         }
 
         public void RemoveSplitFromCache(string splitName)

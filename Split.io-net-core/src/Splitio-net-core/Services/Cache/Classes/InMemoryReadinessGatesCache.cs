@@ -11,7 +11,7 @@ namespace Splitio.Services.Client.Classes
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(InMemoryReadinessGatesCache));
         private CountdownEvent splitsAreReady = new CountdownEvent(1);
-        private Dictionary<String, CountdownEvent> segmentsAreReady = new Dictionary<String, CountdownEvent>();
+        private Dictionary<string, CountdownEvent> segmentsAreReady = new Dictionary<string, CountdownEvent>();
 
         public bool IsSDKReady(int milliseconds)
         {
@@ -41,7 +41,7 @@ namespace Splitio.Services.Client.Classes
             }
         }
         
-        public void SegmentIsReady(String segmentName)
+        public void SegmentIsReady(string segmentName)
         {
             CountdownEvent countDown;
             segmentsAreReady.TryGetValue(segmentName, out countDown);
@@ -66,7 +66,7 @@ namespace Splitio.Services.Client.Classes
 
         public bool RegisterSegment(string segmentName)
         {
-            if (String.IsNullOrEmpty(segmentName) || AreSplitsReady(0))
+            if (string.IsNullOrEmpty(segmentName) || AreSplitsReady(0))
             {
                 return false;
             }

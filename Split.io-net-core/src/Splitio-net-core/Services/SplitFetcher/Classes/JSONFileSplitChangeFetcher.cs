@@ -1,8 +1,8 @@
-﻿using Splitio.Domain;
-using Newtonsoft.Json;
-using System.IO;
+﻿using Newtonsoft.Json;
+using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SplitFetcher.Interfaces;
+using System.IO;
 
 namespace Splitio.Services.SplitFetcher.Classes
 {

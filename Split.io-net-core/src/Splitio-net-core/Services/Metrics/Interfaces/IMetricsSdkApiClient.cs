@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.Metrics.Interfaces
+﻿namespace Splitio.Services.Metrics.Interfaces
 {
     public interface IMetricsSdkApiClient
     {

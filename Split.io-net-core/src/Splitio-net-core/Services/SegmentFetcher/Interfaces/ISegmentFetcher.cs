@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.SegmentFetcher.Interfaces
+﻿namespace Splitio.Services.SegmentFetcher.Interfaces
 {
     public interface ISegmentFetcher
     {

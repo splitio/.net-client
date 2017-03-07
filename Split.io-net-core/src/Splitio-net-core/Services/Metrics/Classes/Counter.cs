@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.Metrics.Classes
+﻿namespace Splitio.Services.Metrics.Classes
 {
     public class Counter
     {

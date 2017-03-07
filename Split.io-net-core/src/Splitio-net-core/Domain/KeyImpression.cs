@@ -1,10 +1,10 @@
-﻿
-//using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
 namespace Splitio.Domain
 {
     public class KeyImpression
     {
-        //TODO: [JsonIgnoreAttribute]
+        [JsonIgnoreAttribute]
         public string feature { get; set; }
         public string keyName { get; set; }
         public string treatment { get; set; }

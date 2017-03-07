@@ -11,7 +11,7 @@ namespace Splitio.Services.EngineEvaluator
 
         public string GetTreatment(string key, int seed, List<PartitionDefinition> partitions)
         {
-            if(String.IsNullOrEmpty(key))
+            if(string.IsNullOrEmpty(key))
             {
                 return Control; 
             }

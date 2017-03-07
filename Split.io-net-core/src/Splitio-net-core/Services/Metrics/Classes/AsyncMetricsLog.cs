@@ -2,7 +2,6 @@
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Splitio.Services.Metrics.Classes

@@ -20,7 +20,7 @@ namespace Splitio.Services.SplitFetcher.Classes
             }
             catch(Exception e)
             {
-                Log.Error(String.Format("Exception caught executing Fetch since={0}", since), e);
+                Log.Error(string.Format("Exception caught executing Fetch since={0}", since), e);
                 splitChanges = null; 
             }                   
             return splitChanges;

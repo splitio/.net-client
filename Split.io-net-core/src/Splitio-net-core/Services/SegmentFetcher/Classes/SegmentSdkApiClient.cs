@@ -1,10 +1,10 @@
-﻿using Splitio.CommonLibraries;
-using System;
-using System.Net;
-using Splitio.Services.SplitFetcher.Interfaces;
-using log4net;
+﻿using log4net;
+using Splitio.CommonLibraries;
 using Splitio.Services.Metrics.Interfaces;
+using Splitio.Services.SplitFetcher.Interfaces;
+using System;
 using System.Diagnostics;
+using System.Net;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -33,7 +33,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     if (metricsLog != null)
                     {
                         metricsLog.Time(SegmentFetcherTime, clock.ElapsedMilliseconds);
-                        metricsLog.Count(String.Format(SegmentFetcherStatus, response.statusCode), 1);
+                        metricsLog.Count(string.Format(SegmentFetcherStatus, response.statusCode), 1);
                     }
 
                     return response.content;
@@ -42,12 +42,12 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 {
                     if (metricsLog != null)
                     {
-                        metricsLog.Count(String.Format(SegmentFetcherStatus, response.statusCode), 1);
+                        metricsLog.Count(string.Format(SegmentFetcherStatus, response.statusCode), 1);
                     }
 
-                    Log.Error(String.Format("Http status executing FetchSegmentChanges: {0} - {1}", response.statusCode.ToString(), response.content));
+                    Log.Error(string.Format("Http status executing FetchSegmentChanges: {0} - {1}", response.statusCode.ToString(), response.content));
 
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
             catch (Exception e)
@@ -59,14 +59,14 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     metricsLog.Count(SegmentFetcherException, 1);
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
         private string GetRequestUri(string name, long since)
         {
             var segmentChangesUrl = SegmentChangesUrlTemplate.Replace("{segment_name}", name);
-            return String.Concat(segmentChangesUrl, UrlParameterSince, Uri.EscapeDataString(since.ToString()));
+            return string.Concat(segmentChangesUrl, UrlParameterSince, Uri.EscapeDataString(since.ToString()));
         }
     }
 }

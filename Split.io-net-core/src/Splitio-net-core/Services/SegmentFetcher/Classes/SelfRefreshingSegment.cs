@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Linq;
@@ -52,11 +51,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
                         if (response.added.Count() > 0)
                         {
-                            Log.Info(String.Format("Segment {0} - Added : {1}", name, String.Join(" - ", response.added)));
+                            Log.Info(string.Format("Segment {0} - Added : {1}", name, string.Join(" - ", response.added)));
                         }
                         if (response.removed.Count() > 0)
                         {
-                            Log.Info(String.Format("Segment {0} - Removed : {1}", name, String.Join(" - ", response.removed)));
+                            Log.Info(string.Format("Segment {0} - Removed : {1}", name, string.Join(" - ", response.removed)));
                         }
                     }
 
@@ -68,7 +67,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 }
                 finally
                 {
-                    Log.Info(String.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
+                    Log.Info(string.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
                 }
             }
         }

@@ -2,7 +2,6 @@
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +47,7 @@ namespace Splitio.Services.Cache.Classes
         {
             var key = redisKeyPrefix + splitKeyPrefix + splitName;
             var splitJson = redisAdapter.Get(key);
-            return !String.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
+            return !string.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
         }
 
         public List<SplitBase> GetAllSplits()

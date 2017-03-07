@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
 using Splitio.Services.Impressions.Interfaces;
-using System;
 using System.Net;
 
 namespace Splitio.Services.Impressions.Classes
@@ -19,7 +18,7 @@ namespace Splitio.Services.Impressions.Classes
             var response = ExecutePost(TestImpressionsUrlTemplate, impressions);
             if (response.statusCode != HttpStatusCode.OK)
             {
-                Log.Error(String.Format("Http status executing SendBulkImpressions: {0} - {1}", response.statusCode.ToString(), response.content));
+                Log.Error(string.Format("Http status executing SendBulkImpressions: {0} - {1}", response.statusCode.ToString(), response.content));
             }
         }
     }

@@ -8,14 +8,13 @@ using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Metrics.Classes;
-using Splitio.Services.Parsing;
 using Splitio.Services.Parsing.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Reflection;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -53,7 +52,9 @@ namespace Splitio.Services.Client.Classes
 
         private void InitializeLogger()
         {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+            var repository = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
+
+            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(repository.Name);
             if (hierarchy.Root.Appenders.Count == 0)
             {
                 FileAppender fileAppender = new FileAppender();
@@ -66,7 +67,7 @@ namespace Splitio.Services.Client.Classes
                 fileAppender.Layout = pl;
                 fileAppender.ActivateOptions();
 
-                log4net.Config.BasicConfigurator.Configure(fileAppender);
+                log4net.Config.BasicConfigurator.Configure(repository, fileAppender);
             }
         }
         private void ReadConfig(ConfigurationOptions config)
@@ -74,7 +75,9 @@ namespace Splitio.Services.Client.Classes
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
+            var hostAddressesTask = Dns.GetHostAddressesAsync(Environment.MachineName);
+            hostAddressesTask.Wait();
+            SdkMachineIP = config.SdkMachineIP ?? hostAddressesTask.Result.Last().ToString();
             RedisHost = config.CacheAdapterConfig.Host;
             RedisPort = config.CacheAdapterConfig.Port;
             RedisPassword = config.CacheAdapterConfig.Password;
@@ -135,7 +138,7 @@ namespace Splitio.Services.Client.Classes
                     //if split definition was not found, impression label = "rules not found"
                     RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
 
-                    Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
+                    Log.Warn(string.Format("Unknown or invalid feature: {0}", feature));
                     return Control;
                 }
 
@@ -150,7 +153,7 @@ namespace Splitio.Services.Client.Classes
                 //if there was an exception, impression label = "exception"
                 RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
 
-                Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
+                Log.Error(string.Format("Exception caught getting treatment for feature: {0}", feature), e);
                 return Control;
             }
         }      

@@ -20,7 +20,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
             }
             catch(Exception e)
             {
-                Log.Error(String.Format("Exception caught executing fetch segment changes since={0}", since), e);
+                Log.Error(string.Format("Exception caught executing fetch segment changes since={0}", since), e);
                 segmentChange = null; 
             }                   
             return segmentChange;

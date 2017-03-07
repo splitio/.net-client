@@ -1,5 +1,4 @@
-﻿
-namespace Splitio.Services.SplitFetcher.Interfaces
+﻿namespace Splitio.Services.SplitFetcher.Interfaces
 {
     public interface ISegmentSdkApiClient
     {

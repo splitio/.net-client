@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Splitio.CommonLibraries;
 using Splitio.Services.Metrics.Interfaces;
-using System;
 using System.Net;
 
 namespace Splitio.Services.Metrics.Classes
@@ -19,7 +18,7 @@ namespace Splitio.Services.Metrics.Classes
             var response = ExecutePost(MetricsUrlTemplate.Replace("{endpoint}", "counters"), metrics);
             if (response.statusCode != HttpStatusCode.OK)
             {
-                Log.Error(String.Format("Http status executing SendCountMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
+                Log.Error(string.Format("Http status executing SendCountMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
             }
         }
 
@@ -28,7 +27,7 @@ namespace Splitio.Services.Metrics.Classes
             var response = ExecutePost(MetricsUrlTemplate.Replace("{endpoint}", "times"), metrics);
             if (response.statusCode != HttpStatusCode.OK)
             {
-                Log.Error(String.Format("Http status executing SendTimeMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
+                Log.Error(string.Format("Http status executing SendTimeMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
             }
         }
 
@@ -37,7 +36,7 @@ namespace Splitio.Services.Metrics.Classes
             var response = ExecutePost(MetricsUrlTemplate.Replace("{endpoint}", "gauge"), metrics);
             if (response.statusCode != HttpStatusCode.OK)
             {
-                Log.Error(String.Format("Http status executing SendGaugeMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
+                Log.Error(string.Format("Http status executing SendGaugeMetrics: {0} - {1}", response.statusCode.ToString(), response.content));
             }
         }
     }
