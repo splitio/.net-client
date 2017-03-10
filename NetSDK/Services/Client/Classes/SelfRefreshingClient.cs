@@ -96,7 +96,7 @@ namespace Splitio.Services.Client.Classes
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x=> x.AddressFamily == AddressFamily.InterNetwork).ToString();
+            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x => x.AddressFamily == AddressFamily.InterNetwork && x.IsIPv6LinkLocal == false).Last().ToString();
             RandomizeRefreshRates = config.RandomizeRefreshRates;
             BlockMilisecondsUntilReady = config.Ready ?? 0;
             ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
