@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Splitio.Services.Client.Classes
@@ -74,7 +75,7 @@ namespace Splitio.Services.Client.Classes
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
+            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToString();
             RedisHost = config.CacheAdapterConfig.Host;
             RedisPort = config.CacheAdapterConfig.Port;
             RedisPassword = config.CacheAdapterConfig.Password;

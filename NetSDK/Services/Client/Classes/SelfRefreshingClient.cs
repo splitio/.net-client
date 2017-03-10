@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Parsing.Classes;
+using System.Net.Sockets;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -95,7 +96,7 @@ namespace Splitio.Services.Client.Classes
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
             SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Last().ToString();
+            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x=> x.AddressFamily == AddressFamily.InterNetwork).ToString();
             RandomizeRefreshRates = config.RandomizeRefreshRates;
             BlockMilisecondsUntilReady = config.Ready ?? 0;
             ConcurrencyLevel = config.SplitsStorageConcurrencyLevel ?? 4;
