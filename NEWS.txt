@@ -1,5 +1,8 @@
 NEWS
 
+2.1.2
+- No news for this update
+
 2.1.1
 
 - Add support for Redis cache.
