@@ -1,5 +1,8 @@
 CHANGES
 
+2.1.2
+- Fix Machine IP query
+
 2.1.1
 - Localmode to support reload features.
 - Refactor InMemory Metrics and Impressions to comply cache interface style.
