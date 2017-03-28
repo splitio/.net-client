@@ -279,6 +279,21 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_4.json")]
+        public void ExecuteGetTreatmentAndLogLabelTrafficAllocationFailed()
+        {
+            //Arrange
+            var treatmentLogMock = new Mock<ITreatmentLog>();
+            var client = new JSONFileClient("splits_staging_4.json", "", null, null, treatmentLogMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "Traffic_Allocation_UI2", null);
+
+            //Assert
+            treatmentLogMock.Verify(x => x.Log("test", "Traffic_Allocation_UI2", "off", It.IsAny<long>(), It.IsAny<long>(), "not in split", null));
+        }
+
+        [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
         public void ExecuteGetTreatmentAndLogLabelForTreatment()
         {

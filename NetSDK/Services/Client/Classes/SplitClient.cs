@@ -22,6 +22,7 @@ namespace Splitio.Services.Client.Classes
         protected const string LabelNoConditionMatched = "no rule matched";
         protected const string LabelSplitNotFound = "rules not found";
         protected const string LabelException = "exception";
+        protected const string LabelTrafficAllocationFailed = "not in split";
 
         protected static bool LabelsEnabled;
 
@@ -114,6 +115,8 @@ namespace Splitio.Services.Client.Classes
                             {
                                 // If not in traffic allocation, abort and return
                                 // default treatment
+                                RecordStats(key, split.name, split.changeNumber, LabelTrafficAllocationFailed, start, split.defaultTreatment, SdkGetTreatment, clock);
+
                                 return split.defaultTreatment;
                             }
                         }
