@@ -100,8 +100,25 @@ namespace Splitio.Services.Client.Classes
         {
             if (!split.killed)
             {
+                bool inRollout = false;
+                // use the first matching condition
                 foreach (ConditionWithLogic condition in split.conditions)
                 {
+                    if (!inRollout && condition.conditionType == ConditionType.ROLLOUT)
+                    {
+                        if (split.trafficAllocation < 100) 
+                        {
+                            // bucket ranges from 1-100.
+                            int bucket = splitter.Bucket(key.bucketingKey, split.trafficAllocationSeed);
+                            if (bucket >= split.trafficAllocation)
+                            {
+                                // If not in traffic allocation, abort and return
+                                // default treatment
+                                return split.defaultTreatment;
+                            }
+                        }
+                        inRollout = true;
+                    }
                     var combiningMatcher = condition.matcher;
                     if (combiningMatcher.Match(key.matchingKey, attributes))
                     {
