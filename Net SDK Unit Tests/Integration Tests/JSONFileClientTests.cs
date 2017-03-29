@@ -197,6 +197,28 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_4.json")]
+        public void ExecuteGetTreatmentOnSplitWithTrafficAllocationWhenAllocationIsDifferentThan100()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_4.json", "");
+
+            //Act           
+            var result = client.GetTreatment("01", "Traffic_Allocation_UI3", null);
+            var result2 = client.GetTreatment("ab", "Traffic_Allocation_UI3", null);
+            var result3 = client.GetTreatment("00b0", "Traffic_Allocation_UI3", null);
+
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result);
+            Assert.IsNotNull(result2);
+            Assert.AreEqual("off", result2);
+            Assert.IsNotNull(result3);
+            Assert.AreEqual("off", result3);
+        }
+
+        [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_3.json")]
         public void ExecuteGetTreatmentOnSplitWithSegmentNotInitialized()
         {
