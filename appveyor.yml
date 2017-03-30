@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 2.1.2
+version: 2.2.0-rc{build}
 
 before_build:
  - nuget restore
