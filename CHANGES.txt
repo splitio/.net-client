@@ -1,5 +1,8 @@
 CHANGES
 
+2.2.0
+- Support for Traffic Allocation
+
 2.1.2
 - Fix Machine IP query
 
