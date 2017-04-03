@@ -44,7 +44,7 @@ namespace Splitio.Services.Client.Classes
             InitializeLogger();
             ReadConfig(config);
             BuildRedisCache();
-            BuildTreatmentLog(); 
+            BuildTreatmentLog(config); 
             BuildMetricsLog();
             BuildSplitter();
             BuildManager();
@@ -96,10 +96,12 @@ namespace Splitio.Services.Client.Classes
             impressionsCache = new RedisImpressionsCache(redisAdapter, SdkMachineIP, SdkVersion, RedisUserPrefix);
         }
 
-        private void BuildTreatmentLog()
+        private void BuildTreatmentLog(ConfigurationOptions config)
         {
             var treatmentLog = new RedisTreatmentLog(impressionsCache);
-            this.impressionListener = new AsynchronousImpressionListener(treatmentLog);
+            impressionListener = new AsynchronousImpressionListener();
+            ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
+            ((AsynchronousImpressionListener)impressionListener).AddListener(config.impressionListener);
         }
 
         private void BuildMetricsLog()

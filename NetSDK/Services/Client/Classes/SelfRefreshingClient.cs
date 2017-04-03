@@ -74,7 +74,7 @@ namespace Splitio.Services.Client.Classes
             BuildSdkReadinessGates();
             BuildSdkApiClients();
             BuildSplitFetcher();
-            BuildTreatmentLog();
+            BuildTreatmentLog(config);
             BuildSplitter();
             BuildManager();
             Start();
@@ -188,11 +188,13 @@ namespace Splitio.Services.Client.Classes
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
 
-        private void BuildTreatmentLog()
+        private void BuildTreatmentLog(ConfigurationOptions config)
         {
             impressionsCache = new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize));
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
-            impressionListener = new AsynchronousImpressionListener(treatmentLog);
+            impressionListener = new AsynchronousImpressionListener();
+            ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
+            ((AsynchronousImpressionListener)impressionListener).AddListener(config.impressionListener);
         }
 
 

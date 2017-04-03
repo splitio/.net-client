@@ -13,23 +13,37 @@ namespace Splitio.Services.Impressions.Classes
     public class AsynchronousImpressionListener : IImpressionListener
     {
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(AsynchronousImpressionListener));
-        private IImpressionListener worker;
+        private List<IImpressionListener> workers = new List<IImpressionListener>();
 
-        public AsynchronousImpressionListener(IImpressionListener worker)
+        public void AddListener(IImpressionListener worker)
         {
-            this.worker = worker;
+            workers.Add(worker);
         }
 
         public void Log(KeyImpression impression)
         {
             try
             {
-                var enqueueTask = new Task(() => worker.Log(impression));
+                var enqueueTask = new Task(() => 
+                    {
+                        foreach (IImpressionListener worker in workers)
+                        {
+                            try
+                            {
+                                worker.Log(impression);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.Error("Exception performing Log with worker. ", e);
+                            }
+                        }
+                    });
+                    
                 enqueueTask.Start();
             }
             catch (Exception e)
             {
-                Logger.Error("Exception performing Log. ", e);
+                Logger.Error("Exception creating Log task. ", e);
             }
         }
     }
