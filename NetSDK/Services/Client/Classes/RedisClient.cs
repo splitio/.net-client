@@ -98,7 +98,8 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildTreatmentLog()
         {
-            this.treatmentLog = new RedisTreatmentLog(impressionsCache);
+            var treatmentLog = new RedisTreatmentLog(impressionsCache);
+            this.impressionListener = new AsynchronousImpressionListener(treatmentLog);
         }
 
         private void BuildMetricsLog()

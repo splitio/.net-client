@@ -64,6 +64,7 @@ namespace Splitio.Services.Client.Classes
         private ITreatmentSdkApiClient treatmentSdkApiClient;
         private IMetricsSdkApiClient metricsSdkApiClient;
         private SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher;
+        private IImpressionListener treatmentLog;
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
@@ -191,6 +192,7 @@ namespace Splitio.Services.Client.Classes
         {
             impressionsCache = new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize));
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
+            impressionListener = new AsynchronousImpressionListener(treatmentLog);
         }
 
 

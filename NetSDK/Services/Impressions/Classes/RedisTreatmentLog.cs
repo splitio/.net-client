@@ -20,8 +20,7 @@ namespace Splitio.Services.Impressions.Classes
 
         public void Log(KeyImpression impression)
         {
-            var enqueueTask = new Task(() => impressionsCache.AddImpression(impression));
-            enqueueTask.Start();
+            impressionsCache.AddImpression(impression);
         }
     }
 }
