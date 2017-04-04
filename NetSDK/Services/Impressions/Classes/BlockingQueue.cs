@@ -29,6 +29,15 @@ namespace Splitio.Services.Impressions.Classes
             }
         }
 
+        public ConcurrentQueue<T> FetchAll()
+        {
+            lock (lockingObject)
+            {
+                var existingItems = new ConcurrentQueue<T>(queue);
+                return existingItems;
+            }
+        }
+
         public void Enqueue(T item)
         {
             lock (lockingObject)
