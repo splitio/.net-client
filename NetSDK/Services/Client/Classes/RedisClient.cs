@@ -57,10 +57,12 @@ namespace Splitio.Services.Client.Classes
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             if (hierarchy.Root.Appenders.Count == 0)
             {
-                FileAppender fileAppender = new FileAppender();
+                RollingFileAppender fileAppender = new RollingFileAppender();
                 fileAppender.AppendToFile = true;
                 fileAppender.LockingModel = new FileAppender.MinimalLock();
                 fileAppender.File = @"Logs\split-sdk.log";
+                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
+                fileAppender.DatePattern = "yyyyMMdd";
                 PatternLayout pl = new PatternLayout();
                 pl.ConversionPattern = "%date %level %logger - %message%newline";
                 pl.ActivateOptions();
