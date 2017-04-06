@@ -10,7 +10,6 @@ using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
-using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
