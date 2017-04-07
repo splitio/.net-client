@@ -1,7 +1,10 @@
 NEWS
 
+2.2.0
+- Add support for Traffic Allocation.
+
 2.1.2
-- No news for this update
+- No news for this update.
 
 2.1.1
 
@@ -12,7 +15,7 @@ NEWS
 
 2.0.6
 
-- No news for this update
+- No news for this update.
 
 2.0.5
 

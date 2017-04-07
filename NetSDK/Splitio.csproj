@@ -96,6 +96,7 @@
     <Compile Include="Domain\CombinerEnum.cs" />
     <Compile Include="Domain\CombiningMatcher.cs" />
     <Compile Include="Domain\ConditionDefinition.cs" />
+    <Compile Include="Domain\ConditionType.cs" />
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\Key.cs" />
