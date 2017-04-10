@@ -8,7 +8,6 @@ using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Metrics.Classes;
-using Splitio.Services.Parsing;
 using Splitio.Services.Parsing.Classes;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -44,7 +42,7 @@ namespace Splitio.Services.Client.Classes
             InitializeLogger();
             ReadConfig(config);
             BuildRedisCache();
-            BuildTreatmentLog(); 
+            BuildTreatmentLog(config); 
             BuildMetricsLog();
             BuildSplitter();
             BuildManager();
@@ -57,10 +55,12 @@ namespace Splitio.Services.Client.Classes
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             if (hierarchy.Root.Appenders.Count == 0)
             {
-                FileAppender fileAppender = new FileAppender();
+                RollingFileAppender fileAppender = new RollingFileAppender();
                 fileAppender.AppendToFile = true;
                 fileAppender.LockingModel = new FileAppender.MinimalLock();
                 fileAppender.File = @"Logs\split-sdk.log";
+                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
+                fileAppender.DatePattern = "yyyyMMdd";
                 PatternLayout pl = new PatternLayout();
                 pl.ConversionPattern = "%date %level %logger - %message%newline";
                 pl.ActivateOptions();
@@ -96,9 +96,12 @@ namespace Splitio.Services.Client.Classes
             impressionsCache = new RedisImpressionsCache(redisAdapter, SdkMachineIP, SdkVersion, RedisUserPrefix);
         }
 
-        private void BuildTreatmentLog()
+        private void BuildTreatmentLog(ConfigurationOptions config)
         {
-            this.treatmentLog = new RedisTreatmentLog(impressionsCache);
+            var treatmentLog = new RedisTreatmentLog(impressionsCache);
+            impressionListener = new AsynchronousImpressionListener();
+            ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
+            ((AsynchronousImpressionListener)impressionListener).AddListener(config.ImpressionListener);
         }
 
         private void BuildMetricsLog()

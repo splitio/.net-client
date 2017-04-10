@@ -10,7 +10,6 @@ using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
-using Splitio.Services.Parsing;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
@@ -64,6 +63,7 @@ namespace Splitio.Services.Client.Classes
         private ITreatmentSdkApiClient treatmentSdkApiClient;
         private IMetricsSdkApiClient metricsSdkApiClient;
         private SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher;
+        private IImpressionListener treatmentLog;
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
@@ -73,7 +73,7 @@ namespace Splitio.Services.Client.Classes
             BuildSdkReadinessGates();
             BuildSdkApiClients();
             BuildSplitFetcher();
-            BuildTreatmentLog();
+            BuildTreatmentLog(config);
             BuildSplitter();
             BuildManager();
             Start();
@@ -149,10 +149,12 @@ namespace Splitio.Services.Client.Classes
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
             if (hierarchy.Root.Appenders.Count == 0)
             {
-                FileAppender fileAppender = new FileAppender();
+                RollingFileAppender fileAppender = new RollingFileAppender();
                 fileAppender.AppendToFile = true;
                 fileAppender.LockingModel = new FileAppender.MinimalLock();
                 fileAppender.File = @"Logs\split-sdk.log";
+                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
+                fileAppender.DatePattern = "yyyyMMdd";
                 PatternLayout pl = new PatternLayout();
                 pl.ConversionPattern = "%date %level %logger - %message%newline";
                 pl.ActivateOptions();
@@ -187,10 +189,13 @@ namespace Splitio.Services.Client.Classes
             splitFetcher = new SelfRefreshingSplitFetcher(splitChangeFetcher, splitParser, gates, splitsRefreshRate, splitCache);
         }
 
-        private void BuildTreatmentLog()
+        private void BuildTreatmentLog(ConfigurationOptions config)
         {
             impressionsCache = new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize));
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
+            impressionListener = new AsynchronousImpressionListener();
+            ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
+            ((AsynchronousImpressionListener)impressionListener).AddListener(config.ImpressionListener);
         }
 
 
