@@ -84,6 +84,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Integration Tests\AsynchronousImpressionListenerTests.cs" />
     <Compile Include="Integration Tests\RedisAdapterTests.cs" />
     <Compile Include="Integration Tests\RedisClientTests.cs" />
     <Compile Include="Integration Tests\SelfRefreshingSegmentFetcherTests.cs" />

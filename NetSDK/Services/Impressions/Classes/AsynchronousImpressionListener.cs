@@ -24,22 +24,31 @@ namespace Splitio.Services.Impressions.Classes
         {
             try
             {
-                var enqueueTask = new Task(() => 
-                    {
-                        foreach (IImpressionListener worker in workers)
-                        {
-                            try
+                //This task avoids waiting to fire and forget 
+                //all worker's tasks in the main thread
+                var listenerTask =
+                    new Task(() =>
                             {
-                                worker.Log(impression);
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.Error("Exception performing Log with worker. ", e);
-                            }
-                        }
-                    });
-                    
-                enqueueTask.Start();
+                                foreach (IImpressionListener worker in workers)
+                                {
+                                    try
+                                    {
+                                        //This task makes worker.Log() run independently 
+                                        //and avoid one worker to block another.
+                                        var logTask =
+                                            new Task(() =>
+                                            {
+                                                worker.Log(impression);
+                                            });
+                                        logTask.Start();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Logger.Error("Exception performing Log with worker. ", e);
+                                    }
+                                }
+                            });
+                listenerTask.Start();
             }
             catch (Exception e)
             {
