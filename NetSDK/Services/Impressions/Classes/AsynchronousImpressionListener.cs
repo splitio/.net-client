@@ -6,6 +6,7 @@ using Splitio.Services.Impressions.Interfaces;
 using Splitio.Domain;
 using System.Threading.Tasks;
 using log4net;
+using System.Diagnostics;
 
 
 namespace Splitio.Services.Impressions.Classes
@@ -38,7 +39,10 @@ namespace Splitio.Services.Impressions.Classes
                                         var logTask =
                                             new Task(() =>
                                             {
+                                                var stopwatch = Stopwatch.StartNew();
                                                 worker.Log(impression);
+                                                stopwatch.Stop();
+                                                Logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
                                             });
                                         logTask.Start();
                                     }
