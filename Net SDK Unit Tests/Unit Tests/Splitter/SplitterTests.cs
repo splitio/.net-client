@@ -4,6 +4,7 @@ using System.Linq;
 using Splitio.Services.EngineEvaluator;
 using System;
 using System.Collections.Generic;
+using Splitio.Domain;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -73,6 +74,30 @@ namespace Splitio_Tests.Unit_Tests
                     }
                 }
             }
+        }
+
+
+
+        [TestMethod]
+        public void VerifyCallMurmurOrLegacyDependingOnSplit()
+        {
+            //Arrange
+            var splitter = new Splitter();
+            var partitions = new List<PartitionDefinition>();
+            partitions.Add(new PartitionDefinition(){ size = 10, treatment = "on"});
+            partitions.Add(new PartitionDefinition(){ size = 90, treatment = "off"});
+
+            //Act
+            var result1 = splitter.GetTreatment("aUfEsdPN1twuEjff9Sl", 467569525, partitions, AlgorithmEnum.LegacyHash);
+            var result2 = splitter.GetTreatment("Sx1JzS1TDc", 467569525, partitions, AlgorithmEnum.LegacyHash);
+            var result3 = splitter.GetTreatment("Sx1JzS1TDc", 467569525, partitions, AlgorithmEnum.Murmur);
+            var result4 = splitter.GetTreatment("aUfEsdPN1twuEjff9Sl", 467569525, partitions, AlgorithmEnum.Murmur);
+
+            //Assert
+            Assert.AreEqual("off", result1);
+            Assert.AreEqual("on", result2);
+            Assert.AreEqual("off", result3);
+            Assert.AreEqual("off", result4);
         }
     }
 }

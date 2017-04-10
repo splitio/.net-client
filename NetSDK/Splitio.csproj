@@ -94,6 +94,7 @@
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
     <Compile Include="CommonLibraries\TypeConverter.cs" />
+    <Compile Include="Domain\AlgorithmEnum.cs" />
     <Compile Include="Domain\AttributeMatcher.cs" />
     <Compile Include="Domain\BetweenData.cs" />
     <Compile Include="Domain\CombinerEnum.cs" />

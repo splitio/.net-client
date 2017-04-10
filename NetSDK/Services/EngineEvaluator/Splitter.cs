@@ -12,7 +12,7 @@ namespace Splitio.Services.EngineEvaluator
     {
         private const string Control = "control";
 
-        public string GetTreatment(string key, int seed, List<PartitionDefinition> partitions)
+        public string GetTreatment(string key, int seed, List<PartitionDefinition> partitions, AlgorithmEnum algorithm)
         {
             if(String.IsNullOrEmpty(key))
             {
@@ -24,7 +24,7 @@ namespace Splitio.Services.EngineEvaluator
                 return partitions.First().treatment;
             }
 
-            var bucket = Bucket(key, seed);
+            var bucket = algorithm == AlgorithmEnum.LegacyHash ? LegacyBucket(key, seed) : Bucket(key, seed);
 
             var covered = 0;
             foreach(PartitionDefinition partition in partitions)
