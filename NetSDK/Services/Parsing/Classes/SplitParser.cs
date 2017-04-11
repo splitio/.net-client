@@ -17,7 +17,9 @@ namespace Splitio.Services.Parsing
         {
             try
             {
-                if (split.status != StatusEnum.ACTIVE)
+                StatusEnum result;
+                var isValidStatus = Enum.TryParse(split.status, out result);
+                if (!isValidStatus || result != StatusEnum.ACTIVE)
                 {
                     return null;
                 }
@@ -47,13 +49,18 @@ namespace Splitio.Services.Parsing
 
         private ParsedSplit ParseConditions(Split split, ParsedSplit parsedSplit)
         {
-            parsedSplit.conditions.AddRange(split.conditions.Select(x => new ConditionWithLogic()
+            foreach (var condition in split.conditions)
             {
-                conditionType = x.conditionType,
-                partitions = x.partitions,
-                matcher = ParseMatcherGroup(parsedSplit, x.matcherGroup),
-                label = x.label
-            }));
+                ConditionType result;
+                var isValidCondition = Enum.TryParse(condition.conditionType, out result);
+                parsedSplit.conditions.Add(new ConditionWithLogic()
+                {
+                    conditionType = isValidCondition ? result : ConditionType.WHITELIST,
+                    partitions = condition.partitions,
+                    matcher = ParseMatcherGroup(parsedSplit, condition.matcherGroup),
+                    label = condition.label
+                });                
+            }
 
             return parsedSplit;
         }
@@ -82,16 +89,21 @@ namespace Splitio.Services.Parsing
 
             IMatcher matcher = null;
             try
-            {              
-                switch (matcherType)
+            {
+                MatcherTypeEnum result;
+                var isValidMatcherType = Enum.TryParse(matcherType, out result);
+                if (isValidMatcherType)
                 {
-                    case MatcherTypeEnum.ALL_KEYS: matcher = GetAllKeysMatcher(); break;
-                    case MatcherTypeEnum.BETWEEN: matcher = GetBetweenMatcher(matcherDefinition); break;
-                    case MatcherTypeEnum.EQUAL_TO: matcher = GetEqualToMatcher(matcherDefinition); break;
-                    case MatcherTypeEnum.GREATER_THAN_OR_EQUAL_TO: matcher = GetGreaterThanOrEqualToMatcher(matcherDefinition); break;
-                    case MatcherTypeEnum.IN_SEGMENT: matcher = GetInSegmentMatcher(matcherDefinition, parsedSplit); break;                    
-                    case MatcherTypeEnum.LESS_THAN_OR_EQUAL_TO: matcher = GetLessThanOrEqualToMatcher(matcherDefinition); break;
-                    case MatcherTypeEnum.WHITELIST: matcher = GetWhitelistMatcher(matcherDefinition); break;
+                    switch (result)
+                    {
+                        case MatcherTypeEnum.ALL_KEYS: matcher = GetAllKeysMatcher(); break;
+                        case MatcherTypeEnum.BETWEEN: matcher = GetBetweenMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.EQUAL_TO: matcher = GetEqualToMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.GREATER_THAN_OR_EQUAL_TO: matcher = GetGreaterThanOrEqualToMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.IN_SEGMENT: matcher = GetInSegmentMatcher(matcherDefinition, parsedSplit); break;
+                        case MatcherTypeEnum.LESS_THAN_OR_EQUAL_TO: matcher = GetLessThanOrEqualToMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.WHITELIST: matcher = GetWhitelistMatcher(matcherDefinition); break;
+                    }
                 }
             }
             catch(Exception e)
@@ -155,9 +167,11 @@ namespace Splitio.Services.Parsing
             return new AllKeysMatcher();
         }
 
-        private CombinerEnum ParseCombiner(CombinerEnum combinerEnum)
+        private CombinerEnum ParseCombiner(string combinerEnum)
         {
-            return combinerEnum;
+            CombinerEnum result;
+            var isValidCombiner = Enum.TryParse(combinerEnum, out result);
+            return result;
         }
     }
 }
