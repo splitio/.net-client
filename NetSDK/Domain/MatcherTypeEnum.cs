@@ -9,6 +9,12 @@ namespace Splitio.Domain
         EQUAL_TO,
         GREATER_THAN_OR_EQUAL_TO,
         LESS_THAN_OR_EQUAL_TO,
-        BETWEEN 
+        BETWEEN,
+        IS_PART_OF,
+        CONTAINS_ANY,
+        CONTAINS_ALL,
+        STARTS_WITH,
+        ENDS_WITH,
+        CONTAINS
     }
 }
