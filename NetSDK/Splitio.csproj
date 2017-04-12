@@ -34,6 +34,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MurmurHash">
+      <HintPath>..\packages\murmurhash.1.0.0\lib\net40\MurmurHash.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -91,6 +94,7 @@
     <Compile Include="CommonLibraries\SdkApiClient.cs" />
     <Compile Include="CommonLibraries\HTTPHeader.cs" />
     <Compile Include="CommonLibraries\TypeConverter.cs" />
+    <Compile Include="Domain\AlgorithmEnum.cs" />
     <Compile Include="Domain\AttributeMatcher.cs" />
     <Compile Include="Domain\BetweenData.cs" />
     <Compile Include="Domain\CombinerEnum.cs" />
