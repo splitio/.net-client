@@ -1,5 +1,8 @@
 NEWS
 
+2.2.1
+- Add support for custom Impression Listener.
+
 2.2.0
 - Add support for Traffic Allocation.
 

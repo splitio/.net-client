@@ -1,5 +1,8 @@
 CHANGES
 
+2.2.1
+- Support for Impression Listener on configurations
+
 2.2.0
 - Support for Traffic Allocation
 

@@ -6,16 +6,14 @@ using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Impressions.Interfaces;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace Splitio.Services.Impressions.Classes
 {
-    public class SelfUpdatingTreatmentLog: ITreatmentLog
+    public class SelfUpdatingTreatmentLog: IImpressionListener
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
@@ -75,11 +73,9 @@ namespace Splitio.Services.Impressions.Classes
         }
 
 
-        public void Log(string matchingKey, string feature, string treatment, long time, long? changeNumber, string label, string bucketingKey = null)
+        public void Log(KeyImpression impression)
         {
-            KeyImpression impression = new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, changeNumber = changeNumber, label = label, bucketingKey = bucketingKey };
-            var enqueueTask = new Task(() => impressionsCache.AddImpression(impression));
-            enqueueTask.Start();
+            impressionsCache.AddImpression(impression);
         }
     }
 }
