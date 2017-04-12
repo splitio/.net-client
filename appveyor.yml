@@ -1,14 +1,14 @@
 nuget:
   account_feed: true
 
-version: 2.2.1
+version: 3.0.0
 
 before_build:
  - nuget restore
  - cmd: set BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
 
 after_build:
- - nuget pack NetSDK\Splitio.nuspec -Version %appveyor_build_version%
+ - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%
 
 artifacts:
  - path: '**\Splitio.*.nupkg'

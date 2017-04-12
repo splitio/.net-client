@@ -112,6 +112,7 @@
     <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\SplitParserUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
@@ -140,10 +141,22 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Resources\sample-data-non-alpha-numeric.csv">
+    <None Include="Resources\legacy-sample-data-non-alpha-numeric.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\sample-data.csv">
+    <None Include="Resources\legacy-sample-data.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\murmur3-sample-data-non-alpha-numeric-v2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\murmur3-sample-data-non-alpha-numeric.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\murmur3-sample-data-v2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\murmur3-sample-data.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\segment_payed.json">
