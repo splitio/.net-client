@@ -29,7 +29,14 @@ namespace Splitio.Domain
                 return false;
             }
 
-            return (negate ^ matcher.Match((dynamic)value));
+            try
+            {
+                return (negate ^ matcher.Match((dynamic)value));
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
