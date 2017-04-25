@@ -2,6 +2,7 @@
 using Splitio.Services.Parsing;
 using Splitio.Domain;
 using Splitio.CommonLibraries;
+using System;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -116,7 +117,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             var result = matcher.Match("");
-            var result2 = matcher.Match(null);
+            var result2 = matcher.Match((String)null);
 
             //Assert
             Assert.IsFalse(result);
