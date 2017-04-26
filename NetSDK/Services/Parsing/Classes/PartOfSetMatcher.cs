@@ -19,7 +19,7 @@ namespace Splitio.Services.Parsing
 
         public bool Match(List<string> key)
         {
-            if (key == null)
+            if (key == null || key.Count == 0)
             {
                 return false;
             }
