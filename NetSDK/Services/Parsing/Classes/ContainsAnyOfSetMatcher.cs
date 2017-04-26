@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Splitio.Services.Parsing.Classes
+namespace Splitio.Services.Parsing
 {
     public class ContainsAnyOfSetMatcher: IMatcher
     {
@@ -11,12 +11,10 @@ namespace Splitio.Services.Parsing.Classes
 
         public ContainsAnyOfSetMatcher(List<string> compareTo)
         {
-            if (compareTo == null)
+            if (compareTo != null)
             {
-                throw new ArgumentNullException("ContainsAnyOfSetMatcher does not allow null list as input.");
+                itemsToCompare.UnionWith(compareTo);
             }
-
-            itemsToCompare.UnionWith(compareTo);
         }
 
         public bool Match(List<string> key)
