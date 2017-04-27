@@ -181,6 +181,9 @@
     <None Include="Resources\splits_staging_2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\splits_staging_5.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\test.splits">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
