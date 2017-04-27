@@ -74,8 +74,27 @@ namespace Splitio.Services.Client.Classes
         {
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
             SdkSpecVersion = ".NET-" + Version.SplitSpecVersion;
-            SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
-            SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToString();
+
+            try
+            {
+                SdkMachineName = config.SdkMachineName ?? Environment.MachineName;
+            }
+            catch (Exception e)
+            {
+                SdkMachineName = "unknown";
+                Log.Warn("Exception retrieving machine name.", e);
+            }
+
+            try
+            {
+                SdkMachineIP = config.SdkMachineIP ?? Dns.GetHostAddresses(Environment.MachineName).Where(x => x.AddressFamily == AddressFamily.InterNetwork && x.IsIPv6LinkLocal == false).Last().ToString();
+            }
+            catch (Exception e)
+            {
+                SdkMachineIP = "unknown";
+                Log.Warn("Exception retrieving machine IP.", e);
+            }
+
             RedisHost = config.CacheAdapterConfig.Host;
             RedisPort = config.CacheAdapterConfig.Port;
             RedisPassword = config.CacheAdapterConfig.Password;
