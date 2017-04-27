@@ -43,6 +43,51 @@
           ]
         }
       ]
+    },
+    {
+        "trafficTypeName": "user",
+        "name": "sample_feature_bug",
+        "seed": 673896442,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "off",
+        "changeNumber": 1470855828956,
+        "conditions": [
+            {
+                "conditionType": "WHITELIST",
+                "matcherGroup": {
+                    "combiner": "AND",
+                    "matchers": [
+                        {
+                            "keySelector": {
+                                "trafficType": "user",
+                                "attribute": "boolean_attribute"
+                            },
+                            "matcherType": "WHITELIST",
+                            "negate": false,
+                            "userDefinedSegmentMatcherData": null,
+                            "whitelistMatcherData": {
+                                "whitelist": [
+                                    "true"
+                                ]
+                            },
+                            "unaryNumericMatcherData": null,
+                            "betweenMatcherData": null
+                        }
+                    ]
+                },
+                "partitions": [
+                    {
+                        "treatment": "on",
+                        "size": 100
+                    },
+                    {
+                        "treatment": "off",
+                        "size": 0
+                    }
+                ]
+            }
+        ]
     }
   ],
   "since": -1,
