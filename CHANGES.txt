@@ -1,7 +1,7 @@
 CHANGES
 
 3.0.2
-- Support for TLS 1.2 on SDK HttpClient.
+- Support for TLS 1.2 on SDK Net HttpClient.
 
 3.0.1
 - Bug fixes.
