@@ -1,5 +1,8 @@
 NEWS
 
+3.0.2
+- Add support for TLS 1.2.
+
 3.0.1
 - No news for this update.
 

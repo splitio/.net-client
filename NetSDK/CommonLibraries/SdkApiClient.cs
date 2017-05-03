@@ -16,6 +16,7 @@ namespace Splitio.CommonLibraries
 
         public SdkApiClient (HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null)
         {
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             if (header.encoding == "gzip")
             {
                 HttpClientHandler handler = new HttpClientHandler()
