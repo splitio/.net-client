@@ -112,7 +112,14 @@
     <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\PartOfSetMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualsToSetMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\StartsWithMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EndsWithMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\ContainsStringMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\ContainsAnyOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\SplitParserUnitTests.cs" />
+    <Compile Include="Unit Tests\Matchers\ContainsAllOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
@@ -172,6 +179,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\splits_staging_2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\splits_staging_5.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\test.splits">

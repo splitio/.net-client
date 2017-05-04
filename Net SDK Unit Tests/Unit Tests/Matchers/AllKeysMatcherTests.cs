@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.Parsing;
+using System;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -26,7 +27,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new AllKeysMatcher();
 
             //Act
-            var result2 = matcher.Match(null);
+            var result2 = matcher.Match((String)null);
 
             //Assert
             Assert.IsFalse(result2);

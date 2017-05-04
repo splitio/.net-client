@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Splitio.Services.Parsing
 {
@@ -17,6 +18,12 @@ namespace Splitio.Services.Parsing
         public bool Match(long key)
         {
             return key != null;
+        }
+
+
+        public bool Match(List<string> key)
+        {
+            return false;
         }
     }
 }
