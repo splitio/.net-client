@@ -13,7 +13,7 @@ namespace Microbenchmark
     public class MetricsProcessor
     {
         ISplitClient client;
-        private readonly Timer timer = Metric.Timer("GET TREATMENT", Unit.Requests, SamplingType.FavourRecent, TimeUnit.Milliseconds, TimeUnit.Milliseconds);
+        private readonly Timer timer = Metric.Timer("GET TREATMENT", Unit.Requests, SamplingType.FavourRecent, TimeUnit.Seconds, TimeUnit.Milliseconds);
 
         private ISplitClient GetInstance(string apikey)
         {
