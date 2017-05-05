@@ -13,11 +13,26 @@ namespace Microbenchmark
     public class MetricsProcessor
     {
         ISplitClient client;
-        private readonly Timer timer = Metric.Timer("GET TREATMENT", Unit.Requests, SamplingType.FavourRecent, TimeUnit.Seconds, TimeUnit.Milliseconds);
+        private readonly Timer timer = Metric.Timer("GET TREATMENT", Unit.Requests, SamplingType.FavourRecent, TimeUnit.Milliseconds, TimeUnit.Milliseconds);
 
         private ISplitClient GetInstance(string apikey)
         {
-            var config = new ConfigurationOptions();
+            var configurations = new ConfigurationOptions();
+            configurations.FeaturesRefreshRate = 30;
+            configurations.SegmentsRefreshRate = 30;
+            configurations.Endpoint = "https://sdk-aws-staging.split.io";
+            configurations.EventsEndpoint = "https://events-aws-staging.split.io";
+            configurations.ReadTimeout = 20000;
+            configurations.ConnectionTimeout = 20000;
+            configurations.Ready = 240000;
+            configurations.NumberOfParalellSegmentTasks = 10;
+            configurations.MaxImpressionsLogSize = 500000;
+            configurations.ImpressionsRefreshRate = 300000;
+//configurations.ImpressionListener = new TestingAppImpressionListener(5000);
+
+            var factory = new SplitFactory(apikey, configurations);
+            return factory.Client();
+            /*var config = new ConfigurationOptions();
             config.FeaturesRefreshRate = 30;
             config.SegmentsRefreshRate = 30;
             config.Endpoint = "https://sdk-aws-staging.split.io";
@@ -29,12 +44,12 @@ namespace Microbenchmark
             config.MaxImpressionsLogSize = 500000;
             config.ImpressionsRefreshRate = 300000;
             var instance = new SelfRefreshingClient(apikey, config);
-            return instance;
+            return instance;*/
         }
 
         public void ProcessRequest(int numberOfThreads, int minutesRunning)
         {
-            client = GetInstance("x");
+            client = GetInstance("km84fbpqacnrj0vf6jg86fjnui047omn9een");
             Console.WriteLine("Running with: " + numberOfThreads + " threads " + minutesRunning + " minutes ");
             Stopwatch sw = new Stopwatch();
             sw.Start();
