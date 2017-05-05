@@ -214,7 +214,10 @@ namespace Splitio.Services.Client.Classes
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
             impressionListener = new AsynchronousImpressionListener();
             ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
-            ((AsynchronousImpressionListener)impressionListener).AddListener(config.ImpressionListener);
+            if (config.ImpressionListener != null)
+            {
+                ((AsynchronousImpressionListener)impressionListener).AddListener(config.ImpressionListener);
+            }
         }
 
 
