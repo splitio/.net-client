@@ -55,6 +55,7 @@ namespace Splitio.Services.Client.Classes
         {
             if (metricsLog != null)
             {
+                clock.Stop();
                 metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
             }
 
