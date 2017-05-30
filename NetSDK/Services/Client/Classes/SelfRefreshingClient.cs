@@ -1,8 +1,4 @@
-﻿using log4net;
-using log4net.Appender;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
-using Splitio.CommonLibraries;
+﻿using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
@@ -21,6 +17,9 @@ using System.Linq;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Parsing.Classes;
 using System.Net.Sockets;
+using NLog.Targets;
+using NLog.Config;
+using NLog;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -165,22 +164,34 @@ namespace Splitio.Services.Client.Classes
 
         private void InitializeLogger()
         {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            if (hierarchy.Root.Appenders.Count == 0)
-            {
-                RollingFileAppender fileAppender = new RollingFileAppender();
-                fileAppender.AppendToFile = true;
-                fileAppender.LockingModel = new FileAppender.MinimalLock();
-                fileAppender.File = @"Logs\split-sdk.log";
-                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
-                fileAppender.DatePattern = "yyyyMMdd";
-                PatternLayout pl = new PatternLayout();
-                pl.ConversionPattern = "%date %level %logger - %message%newline";
-                pl.ActivateOptions();
-                fileAppender.Layout = pl;
-                fileAppender.ActivateOptions();
+            var fileTarget = new FileTarget();
+            fileTarget.Name = "splitio";
+            fileTarget.FileName = @".\Logs\splitio.log";
+            fileTarget.ArchiveFileName = @".\Logs\splitio.{#}.log";
+            fileTarget.LineEnding = LineEndingMode.CRLF;
+            fileTarget.Layout = "${longdate} ${level: uppercase = true} ${logger} - ${message} - ${exception:format=tostring}";
+            fileTarget.ConcurrentWrites = true;
+            fileTarget.CreateDirs = true;
+            fileTarget.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            fileTarget.ArchiveAboveSize = 200000000;
+            fileTarget.ArchiveDateFormat = "yyyyMMdd";
+            fileTarget.MaxArchiveFiles = 30;
+            var rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
 
-                log4net.Config.BasicConfigurator.Configure(fileAppender);
+            if (LogManager.Configuration == null)
+            {
+                var config = new LoggingConfiguration();
+                config.AddTarget("splitio", fileTarget);
+                config.LoggingRules.Add(rule);
+                LogManager.Configuration = config;
+            }
+            else
+            {
+                if (LogManager.Configuration.ConfiguredNamedTargets.Where(x => x.Name == "splitio").FirstOrDefault() == null)
+                {
+                    LogManager.Configuration.AddTarget("splitio", fileTarget);
+                    LogManager.Configuration.LoggingRules.Add(rule);
+                }
             }
         }
 

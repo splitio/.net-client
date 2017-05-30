@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using NLog;
 using Splitio.CommonLibraries;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;
@@ -12,7 +12,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
 {
     public class SelfRefreshingSegmentFetcher : SegmentFetcher
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
+        private static readonly Logger Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher).ToString());
         
         private readonly ISegmentChangeFetcher segmentChangeFetcher;
         private ConcurrentDictionary<string, SelfRefreshingSegment> segments;

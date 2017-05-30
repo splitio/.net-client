@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using NLog;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
@@ -15,7 +15,7 @@ namespace Splitio.Services.Client.Classes
 {
     public abstract class SplitClient: ISplitClient
     {
-        protected static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
+        protected static readonly Logger Log = LogManager.GetLogger(typeof(SplitClient).ToString());
         protected const string Control = "control";
         protected const string SdkGetTreatment = "sdk.getTreatment";
         protected const string LabelKilled = "killed";
