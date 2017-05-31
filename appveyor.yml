@@ -9,9 +9,6 @@ before_build:
  - nuget restore
  - cmd: set BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
  
-build: 
- project: NetSDK\Splitio.csproj
-
 after_build:
  - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%
 
