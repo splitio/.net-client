@@ -14,12 +14,6 @@ namespace Splitio_Tests.Integration_Tests
     [TestClass]
     public class SelfRefreshingSplitFetcherTests
     {
-        [TestInitialize]
-        public void Initialization()
-        {
-            log4net.Config.XmlConfigurator.Configure();
-        }
-
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging.json")]
         [DeploymentItem(@"Resources\segment_payed.json")]
