@@ -256,54 +256,5 @@ The SDK polls Split servers for feature split and segment changes at regular per
 
 ###  Logging in the SDK 
 
-The .Net SDK uses log4net for logging. You can configure it this way, before you create a SplitFactory instance:
-
-```cs
-    FileAppender fileAppender = new FileAppender();
-    fileAppender.AppendToFile = true;
-    fileAppender.LockingModel = new FileAppender.MinimalLock();
-    fileAppender.File = @"ANY FILE NAME";
-    PatternLayout pl = new PatternLayout();
-    pl.ConversionPattern = "%date %level %logger - %message%newline";
-    pl.ActivateOptions();
-    fileAppender.Layout = pl;
-    fileAppender.ActivateOptions();
-
-    log4net.Config.BasicConfigurator.Configure(fileAppender);
-    
-    ...
-    
-    var factory = new SplitFactory("API_KEY", configurations);
-```
-
-Or you can configure it using all log4net available options. Learn more [here](https://logging.apache.org/log4net/release/manual/introduction.html)
-
-In the previous example, we show you how to configure a FileAppender. Also you can create a custom appender that implements AppenderSkeleton, for example:
-
-```cs
-    public class MyCustomAppender : AppenderSkeleton
-    {
-        protected override void Append(LoggingEvent loggingEvent)
-        {
-            // Write your code here. For example:
-            // MyLogService.Log(loggingEvent.Level.Name, loggingEvent.MessageObject);
-        }
-    }
-```
-Where MyLogService could be whatever you want.
-
-And configure log4net to use it:
-
-```cs
-    MyCustomAppender appender = new MyCustomAppender();
-    appender.ActivateOptions();
-
-    log4net.Config.BasicConfigurator.Configure(appender);
-    
-    ...
-    
-    var factory = new SplitFactory("API_KEY", configurations);
-```
-
-If you don't configure log4net yourself, the SDK creates a default file appender and register logs in 'Logs\split-sdk.log' file.
+The .NET SDK uses NLog for logging. If you do not configure it yourself, the SDK creates a file target and emits logs in a file named 'Logs\split-sdk.log'. You can learn more about configuring NLog [here](https://github.com/nlog/NLog/wiki/Configuration-API).
  
