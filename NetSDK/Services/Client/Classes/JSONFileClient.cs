@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
@@ -10,16 +12,15 @@ using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
     public class JSONFileClient:SplitClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
-
+        private static readonly Logger Log = LogManager.GetLogger(typeof(JSONFileClient).ToString());
         public JSONFileClient(string splitsFilePath, string segmentsFilePath, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, IImpressionListener treatmentLogInstance = null, bool isLabelsEnabled = true)
         {
-            InitializeLogger();
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new InMemorySplitParser(segmentFetcher, segmentCache);
@@ -32,11 +33,6 @@ namespace Splitio.Services.Client.Classes
             impressionListener = treatmentLogInstance;
             splitter = new Splitter();
             LabelsEnabled = isLabelsEnabled;
-        }
-
-        private void InitializeLogger()
-        {
-            log4net.Config.XmlConfigurator.Configure();
         }
 
         public void RemoveSplitFromCache(string splitName)

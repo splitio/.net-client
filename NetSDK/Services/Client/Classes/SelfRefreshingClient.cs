@@ -1,8 +1,4 @@
-﻿using log4net;
-using log4net.Appender;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
-using Splitio.CommonLibraries;
+﻿using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
@@ -21,6 +17,9 @@ using System.Linq;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Parsing.Classes;
 using System.Net.Sockets;
+using NLog.Targets;
+using NLog.Config;
+using NLog;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -55,7 +54,6 @@ namespace Splitio.Services.Client.Classes
         /// </summary>
         private const int InitialCapacity = 31;
 
-
         private IReadinessGatesCache gates;
         private SelfRefreshingSplitFetcher splitFetcher;
         private ISplitSdkApiClient splitSdkApiClient;
@@ -67,7 +65,6 @@ namespace Splitio.Services.Client.Classes
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
-            InitializeLogger();
             ApiKey = apiKey;
             ReadConfig(config);
             BuildSdkReadinessGates();
@@ -161,27 +158,6 @@ namespace Splitio.Services.Client.Classes
             ((SelfRefreshingSplitFetcher)splitFetcher).Stop();
             ((SelfRefreshingSegmentFetcher)selfRefreshingSegmentFetcher).Stop();
             ((SelfUpdatingTreatmentLog)treatmentLog).Stop();
-        }
-
-        private void InitializeLogger()
-        {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            if (hierarchy.Root.Appenders.Count == 0)
-            {
-                RollingFileAppender fileAppender = new RollingFileAppender();
-                fileAppender.AppendToFile = true;
-                fileAppender.LockingModel = new FileAppender.MinimalLock();
-                fileAppender.File = @"Logs\split-sdk.log";
-                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
-                fileAppender.DatePattern = "yyyyMMdd";
-                PatternLayout pl = new PatternLayout();
-                pl.ConversionPattern = "%date %level %logger - %message%newline";
-                pl.ActivateOptions();
-                fileAppender.Layout = pl;
-                fileAppender.ActivateOptions();
-
-                log4net.Config.BasicConfigurator.Configure(fileAppender);
-            }
         }
 
         private void BuildSplitter()

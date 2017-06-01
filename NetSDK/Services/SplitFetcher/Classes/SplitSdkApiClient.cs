@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 using Splitio.Services.SplitFetcher.Interfaces;
-using log4net;
+using NLog;
 using Splitio.Services.Metrics.Interfaces;
 using System.Diagnostics;
 
@@ -16,7 +16,7 @@ namespace Splitio.Services.SplitFetcher.Classes
         private const string SplitFetcherStatus = "splitChangeFetcher.status.{0}";
         private const string SplitFetcherException = "splitChangeFetcher.exception";
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitSdkApiClient));
+        private static readonly Logger Log = LogManager.GetLogger(typeof(SplitSdkApiClient).ToString());
 
         public SplitSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null) : base(header, baseUrl, connectionTimeOut, readTimeout, metricsLog) { }
 

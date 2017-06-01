@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using NLog;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
@@ -16,7 +16,7 @@ namespace Splitio.Services.SplitFetcher.Classes
     public class SelfRefreshingSplitFetcher 
     {
         protected ISplitCache splitCache;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher));
+        private static readonly Logger Log = LogManager.GetLogger(typeof(SelfRefreshingSplitFetcher).ToString());
         private readonly ISplitChangeFetcher splitChangeFetcher;
         private readonly SplitParser splitParser;
         private int interval;

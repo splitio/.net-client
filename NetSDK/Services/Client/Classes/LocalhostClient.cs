@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.EngineEvaluator;
@@ -6,19 +8,19 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
     public class LocalhostClient : SplitClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
+        private static readonly Logger Log = LogManager.GetLogger(typeof(LocalhostClient).ToString());
 
         private FileSystemWatcher watcher;
         private string fullPath;
 
         public LocalhostClient(string filePath, Splitter splitter = null)
         {
-            InitializeLogger();
             fullPath = LookupFilePath(filePath);
             var directoryPath = Path.GetDirectoryName(fullPath);
 
@@ -110,11 +112,6 @@ namespace Splitio.Services.Client.Classes
             };
 
             return split;
-        }
-
-        private void InitializeLogger()
-        {
-            log4net.Config.XmlConfigurator.Configure();
         }
 
         private void BuildSplitter(Splitter splitter)

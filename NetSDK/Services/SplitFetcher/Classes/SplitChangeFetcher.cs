@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using NLog;
 using Splitio.Domain;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
@@ -8,7 +8,7 @@ namespace Splitio.Services.SplitFetcher.Classes
     public abstract class SplitChangeFetcher : ISplitChangeFetcher
     {
         private SplitChangesResult splitChanges;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitChangeFetcher));
+        private static readonly Logger Log = LogManager.GetLogger(typeof(SplitChangeFetcher).ToString());
 
         protected abstract SplitChangesResult FetchFromBackend(long since);
 
