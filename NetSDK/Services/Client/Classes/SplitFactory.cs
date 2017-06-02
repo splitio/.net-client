@@ -91,7 +91,7 @@ namespace Splitio.Services.Client.Classes
                     {
                         if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port))
                         {
-                            throw new Exception("Redis Host, and Port should be set to initialize Split SDK in Redis Mode.");
+                            throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
                         }
                         client = new RedisClient(options);
                     }
