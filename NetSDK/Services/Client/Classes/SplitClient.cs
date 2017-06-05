@@ -40,15 +40,15 @@ namespace Splitio.Services.Client.Classes
             return manager;
         }
 
-        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null)
+        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
         {
             Key keys = new Key(key, null);
-            return GetTreatmentForFeature(keys, feature, attributes);
+            return GetTreatmentForFeature(keys, feature, attributes, logMetricsAndImpressions);
         }
 
-        public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null)
+        public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
         {
-            return GetTreatmentForFeature(key, feature, attributes);
+            return GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
         }
 
         protected void RecordStats(Key key, string feature, long? changeNumber, string label, long start, string treatment, string operation, Stopwatch clock)
@@ -70,7 +70,7 @@ namespace Splitio.Services.Client.Classes
             return new KeyImpression() { feature = feature, keyName = matchingKey, treatment = treatment, time = time, changeNumber = changeNumber, label = label, bucketingKey = bucketingKey };
         }
 
-        protected virtual string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes)
+        protected virtual string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes, bool logMetricsAndImpressions = true)
         {
             long start = CurrentTimeHelper.CurrentTimeMillis();
             var clock = new Stopwatch();
@@ -82,28 +82,34 @@ namespace Splitio.Services.Client.Classes
 
                 if (split == null)
                 {
-                    //if split definition was not found, impression label = "rules not found"
-                    RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
+                    if (logMetricsAndImpressions)
+                    {
+                        //if split definition was not found, impression label = "rules not found"
+                        RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
+                    }
 
                     Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
                     return Control;
                 }
                 
-                var treatment = GetTreatment(key, split, attributes, start, clock);
+                var treatment = GetTreatment(key, split, attributes, start, clock, this, logMetricsAndImpressions);
                 
                 return treatment;
             }
             catch (Exception e)
             {
-                //if there was an exception, impression label = "exception"
-                RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
+                if (logMetricsAndImpressions)
+                {
+                    //if there was an exception, impression label = "exception"
+                    RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
+                }
 
                 Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
                 return Control;
             }
         }
 
-        protected string GetTreatment(Key key, ParsedSplit split, Dictionary<string, object> attributes, long start, Stopwatch clock)
+        protected string GetTreatment(Key key, ParsedSplit split, Dictionary<string, object> attributes, long start, Stopwatch clock, ISplitClient splitClient, bool logMetricsAndImpressions)
         {
             if (!split.killed)
             {
@@ -120,9 +126,12 @@ namespace Splitio.Services.Client.Classes
 
                             if (bucket >= split.trafficAllocation)
                             {
-                                // If not in traffic allocation, abort and return
-                                // default treatment
-                                RecordStats(key, split.name, split.changeNumber, LabelTrafficAllocationFailed, start, split.defaultTreatment, SdkGetTreatment, clock);
+                                if (logMetricsAndImpressions)
+                                {
+                                    // If not in traffic allocation, abort and return
+                                    // default treatment
+                                    RecordStats(key, split.name, split.changeNumber, LabelTrafficAllocationFailed, start, split.defaultTreatment, SdkGetTreatment, clock);
+                                }
 
                                 return split.defaultTreatment;
                             }
@@ -130,26 +139,34 @@ namespace Splitio.Services.Client.Classes
                         inRollout = true;
                     }
                     var combiningMatcher = condition.matcher;
-                    if (combiningMatcher.Match(key.matchingKey, attributes))
+                    if (combiningMatcher.Match(key.matchingKey, attributes, splitClient))
                     {
                         var treatment = splitter.GetTreatment(key.bucketingKey, split.seed, condition.partitions, split.algo);
 
-                        //If condition matched, impression label = condition.label 
-                        RecordStats(key, split.name, split.changeNumber, condition.label, start, treatment, SdkGetTreatment, clock);
-                        
+                        if (logMetricsAndImpressions)
+                        {
+                            //If condition matched, impression label = condition.label 
+                            RecordStats(key, split.name, split.changeNumber, condition.label, start, treatment, SdkGetTreatment, clock);
+                        }
+
                         return treatment;
                     }
                 }
-                //If no condition matched, impression label = "no rule matched"
-                RecordStats(key, split.name, split.changeNumber, LabelNoConditionMatched, start, split.defaultTreatment, SdkGetTreatment, clock);
 
+                if (logMetricsAndImpressions)
+                {
+                    //If no condition matched, impression label = "no rule matched"
+                    RecordStats(key, split.name, split.changeNumber, LabelNoConditionMatched, start, split.defaultTreatment, SdkGetTreatment, clock);
+                }
                 return split.defaultTreatment;
             }
             else
             {
-                //If split was killed, impression label = "killed"
-                RecordStats(key, split.name, split.changeNumber, LabelKilled, start, split.defaultTreatment, SdkGetTreatment, clock);
-
+                if (logMetricsAndImpressions)
+                {
+                    //If split was killed, impression label = "killed"
+                    RecordStats(key, split.name, split.changeNumber, LabelKilled, start, split.defaultTreatment, SdkGetTreatment, clock);
+                }
                 return split.defaultTreatment;
             }
         }

@@ -1,20 +1,26 @@
 ﻿using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Splitio.Services.Parsing
+namespace Splitio.Services.Parsing.Classes
 {
-    public class WhitelistMatcher: IMatcher
+    public class DependencyMatcher : IMatcher
     {
-        private List<string> list;
+        string split { get; set; }
+        List<string> treatments { get; set; }
 
-        public WhitelistMatcher(List<string> list)
+        public DependencyMatcher(string split, List<string> treatments)
         {
-            this.list = list ?? new List<string>();
+            this.split = split;
+            this.treatments = treatments;
         }
+
         public bool Match(string key, ISplitClient splitClient = null)
         {
-            return list.Contains(key);
+            string treatment = splitClient.GetTreatment(key, split, null, false); 
+            return treatments.Contains(treatment);
         }
 
         public bool Match(DateTime key, ISplitClient splitClient = null)
@@ -25,6 +31,7 @@ namespace Splitio.Services.Parsing
         public bool Match(long key, ISplitClient splitClient = null)
         {
             return false;
+
         }
 
         public bool Match(List<string> key, ISplitClient splitClient = null)

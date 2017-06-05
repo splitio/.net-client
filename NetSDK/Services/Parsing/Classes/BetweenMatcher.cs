@@ -1,6 +1,7 @@
 ﻿using Splitio.Domain;
 using System;
 using Splitio.CommonLibraries;
+using Splitio.Services.Client.Interfaces;
 
 namespace Splitio.Services.Parsing
 {
@@ -14,12 +15,12 @@ namespace Splitio.Services.Parsing
             this.end = end;
         }
 
-        public override bool Match(long key)
+        public override bool Match(long key, ISplitClient splitClient = null)
         {
             return (start <= key) && (key <= end);         
         }
 
-        public override bool Match(DateTime key)
+        public override bool Match(DateTime key, ISplitClient splitClient = null)
         {
             var startDate = start.ToDateTime();
             var endDate = end.ToDateTime();
