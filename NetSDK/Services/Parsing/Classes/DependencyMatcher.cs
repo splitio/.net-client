@@ -19,7 +19,13 @@ namespace Splitio.Services.Parsing.Classes
 
         public bool Match(string key, ISplitClient splitClient = null)
         {
+            if (splitClient == null)
+            {
+                return false;
+            }
+
             string treatment = splitClient.GetTreatment(key, split, null, false); 
+            
             return treatments.Contains(treatment);
         }
 
