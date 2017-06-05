@@ -14,7 +14,7 @@ namespace Splitio.Domain
         {
             if (attribute == null)
             {
-                return (negate ^ matcher.Match(key));
+                return (negate ^ matcher.Match(key, splitClient));
             }
 
             if (attributes == null)

@@ -465,5 +465,22 @@ namespace Splitio_Tests.Integration_Tests
             Assert.IsNotNull(result);
             Assert.AreEqual("off", result); // Starts with "a" or "b" --> 100% off
         }
+
+
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_6.json")]
+        public void ExecuteGetTreatmentWithDependencyMatcherReturnsOn()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_6.json", "");
+
+            //Act           
+            var result = client.GetTreatment("fake_user_id_1", "test_dependency", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("on", result); 
+        }
     }
 }
