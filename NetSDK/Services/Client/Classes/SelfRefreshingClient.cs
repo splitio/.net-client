@@ -17,9 +17,7 @@ using System.Linq;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Parsing.Classes;
 using System.Net.Sockets;
-using NLog.Targets;
-using NLog.Config;
-using NLog;
+using Common.Logging;
 
 namespace Splitio.Services.Client.Classes
 {

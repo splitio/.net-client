@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Common.Logging;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.SegmentFetcher.Interfaces;
@@ -10,7 +10,7 @@ namespace Splitio.Services.Parsing
 {
     public abstract class SplitParser
     {
-        private static readonly Logger Log = LogManager.GetLogger(typeof(SplitParser).ToString());
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SplitParser));
         protected ISegmentCache segmentsCache;
 
         public ParsedSplit Parse(Split split)

@@ -5,7 +5,7 @@ using System.Text;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Domain;
 using System.Threading.Tasks;
-using NLog;
+using Common.Logging;
 using System.Diagnostics;
 
 
@@ -13,7 +13,7 @@ namespace Splitio.Services.Impressions.Classes
 {
     public class AsynchronousImpressionListener : IImpressionListener
     {
-        private static readonly Logger Logger = LogManager.GetLogger(typeof(AsynchronousImpressionListener).ToString());
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(AsynchronousImpressionListener));
         private List<IImpressionListener> workers = new List<IImpressionListener>();
 
         public void AddListener(IImpressionListener worker)
