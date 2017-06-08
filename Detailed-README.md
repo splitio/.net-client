@@ -256,5 +256,5 @@ The SDK polls Split servers for feature split and segment changes at regular per
 
 ###  Logging in the SDK 
 
-The .NET SDK uses NLog for logging. If you do not configure it yourself, the SDK creates a file target and emits logs in a file named 'Logs\split-sdk.log'. You can learn more about configuring NLog [here](https://github.com/nlog/NLog/wiki/Configuration-API).
+The .NET SDK uses Common.Logging for logging. It allows to configure different adapters such as log4net or NLog, and you can also write your own adapter by implementing ILoggerFactoryAdapter interface. More details [here](http://netcommon.sourceforge.net/docs/2.1.0/reference/html/ch01.html)
  
