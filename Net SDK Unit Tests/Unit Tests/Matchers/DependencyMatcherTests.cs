@@ -20,7 +20,7 @@ namespace Splitio_Tests.Unit_Tests
             var splitClientMock = new Mock<ISplitClient>();
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
             //Act
-            var result = matcher.Match("test", splitClientMock.Object);
+            var result = matcher.Match("test", null, splitClientMock.Object);
 
             //Assert
             Assert.IsTrue(result);
@@ -35,7 +35,7 @@ namespace Splitio_Tests.Unit_Tests
             var splitClientMock = new Mock<ISplitClient>();
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
             //Act
-            var result = matcher.Match("test", splitClientMock.Object);
+            var result = matcher.Match("test", null, splitClientMock.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -50,7 +50,7 @@ namespace Splitio_Tests.Unit_Tests
             ISplitClient splitClient = null;
 
             //Act
-            var result = matcher.Match("test2", splitClient);
+            var result = matcher.Match("test2", null, splitClient);
 
             //Assert
             Assert.IsFalse(result);
@@ -66,7 +66,7 @@ namespace Splitio_Tests.Unit_Tests
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
 
             //Act
-            var result = matcher.Match("test2", splitClientMock.Object);
+            var result = matcher.Match("test2", null, splitClientMock.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -82,7 +82,7 @@ namespace Splitio_Tests.Unit_Tests
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
 
             //Act
-            var result = matcher.Match(123, splitClientMock.Object);
+            var result = matcher.Match(123, null, splitClientMock.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -98,7 +98,7 @@ namespace Splitio_Tests.Unit_Tests
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
 
             //Act
-            var result = matcher.Match(DateTime.UtcNow, splitClientMock.Object);
+            var result = matcher.Match(DateTime.UtcNow, null, splitClientMock.Object);
 
             //Assert
             Assert.IsFalse(result);
@@ -115,7 +115,7 @@ namespace Splitio_Tests.Unit_Tests
             splitClientMock.Setup(x => x.GetTreatment("test", "test1", null, false)).Returns("on");
 
             //Act
-            var result = matcher.Match(DateTime.UtcNow, splitClientMock.Object);
+            var result = matcher.Match(DateTime.UtcNow, null, splitClientMock.Object);
 
             //Assert
             Assert.IsFalse(result);

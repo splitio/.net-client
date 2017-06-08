@@ -16,22 +16,22 @@ namespace Splitio.Services.Parsing
             this.segmentsCache = segmentsCache;
         }
 
-        public bool Match(string key, ISplitClient splitClient = null)
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return segmentsCache.IsInSegment(segmentName, key);
         }
 
-        public bool Match(DateTime key, ISplitClient splitClient = null)
+        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, ISplitClient splitClient = null)
+        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(List<string> key, ISplitClient splitClient = null)
+        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }

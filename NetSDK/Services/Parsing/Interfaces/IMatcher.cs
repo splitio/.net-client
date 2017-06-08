@@ -6,12 +6,12 @@ namespace Splitio.Services.Parsing
 {
     public interface IMatcher
     {
-        bool Match(string key, ISplitClient splitClient = null);
+        bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
-        bool Match(DateTime key, ISplitClient splitClient = null);
+        bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
-        bool Match(long key, ISplitClient splitClient = null);
+        bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
-        bool Match(List<string> key, ISplitClient splitClient = null);
+        bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
     }
 }

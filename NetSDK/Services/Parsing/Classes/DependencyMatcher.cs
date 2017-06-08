@@ -17,30 +17,30 @@ namespace Splitio.Services.Parsing.Classes
             this.treatments = treatments;
         }
 
-        public bool Match(string key, ISplitClient splitClient = null)
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             if (splitClient == null)
             {
                 return false;
             }
 
-            string treatment = splitClient.GetTreatment(key, split, null, false); 
+            string treatment = splitClient.GetTreatment(key, split, attributes, false); 
             
             return treatments.Contains(treatment);
         }
 
-        public bool Match(DateTime key, ISplitClient splitClient = null)
+        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, ISplitClient splitClient = null)
+        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
 
         }
 
-        public bool Match(List<string> key, ISplitClient splitClient = null)
+        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }

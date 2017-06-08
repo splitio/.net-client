@@ -12,22 +12,22 @@ namespace Splitio.Services.Parsing
         {
             this.list = list ?? new List<string>();
         }
-        public bool Match(string key, ISplitClient splitClient = null)
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return list.Contains(key);
         }
 
-        public bool Match(DateTime key, ISplitClient splitClient = null)
+        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, ISplitClient splitClient = null)
+        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(List<string> key, ISplitClient splitClient = null)
+        public bool Match(List<string> key, Dictionary<string, object> attributes, ISplitClient splitClient = null)
         {
             return false;
         }

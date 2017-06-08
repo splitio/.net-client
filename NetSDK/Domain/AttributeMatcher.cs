@@ -14,7 +14,7 @@ namespace Splitio.Domain
         {
             if (attribute == null)
             {
-                return (negate ^ matcher.Match(key, splitClient));
+                return (negate ^ matcher.Match(key, attributes, splitClient));
             }
 
             if (attributes == null)
@@ -32,7 +32,7 @@ namespace Splitio.Domain
 
             try
             {
-                return (negate ^ matcher.Match((dynamic)value, splitClient));
+                return (negate ^ matcher.Match((dynamic)value, attributes, splitClient));
             }
             catch
             {

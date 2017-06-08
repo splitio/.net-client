@@ -18,7 +18,7 @@ namespace Splitio.Services.Parsing
             }
         }
 
-        public bool Match(List<string> key, ISplitClient splitClient = null)
+        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             if (key == null || itemsToCompare.Count == 0)
             {
@@ -28,17 +28,17 @@ namespace Splitio.Services.Parsing
             return itemsToCompare.All(i => key.Contains(i));
         }
 
-        public bool Match(string key, ISplitClient splitClient = null)
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(DateTime key, ISplitClient splitClient = null)
+        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, ISplitClient splitClient = null)
+        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
