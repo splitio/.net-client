@@ -275,13 +275,13 @@ This is an example on how to configure NLog and its adapter:
 	var rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
 	config.LoggingRules.Add(rule);
 	LogManager.Configuration = config;     
-    
-    NameValueCollection properties = new NameValueCollection();
-    properties["configType"] = "INLINE";
 
-    Common.Logging.LogManager.Adapter = new Common.Logging.NLog.NLogLoggerFactoryAdapter(properties);
-	
+	NameValueCollection properties = new NameValueCollection();
+	properties["configType"] = "INLINE";
+
+	Common.Logging.LogManager.Adapter = new Common.Logging.NLog.NLogLoggerFactoryAdapter(properties);
+
 	...
-	
-    var factory = new SplitFactory("API_KEY", configurations);
+
+	var factory = new SplitFactory("API_KEY", configurations);
 ```	
