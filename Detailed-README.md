@@ -257,4 +257,31 @@ The SDK polls Split servers for feature split and segment changes at regular per
 ###  Logging in the SDK 
 
 The .NET SDK uses Common.Logging for logging. It allows to configure different adapters such as log4net or NLog, and you can also write your own adapter by implementing ILoggerFactoryAdapter interface. More details [here](http://netcommon.sourceforge.net/docs/2.1.0/reference/html/ch01.html)
- 
+Splitio SDK doesn't log by default, you need to configure an adapter.
+
+This is an example on how to configure NLog and its adapter:
+
+```cs
+	var config = new LoggingConfiguration();
+	var fileTarget = new FileTarget();
+	config.AddTarget("file", fileTarget);
+	fileTarget.FileName = @"ANY FILE NAME";
+	fileTarget.ArchiveFileName = "ANY FILE NAME";
+	fileTarget.LineEnding = LineEndingMode.CRLF;
+	fileTarget.Layout = "${longdate} ${level: uppercase = true} ${logger} - ${message} - ${exception:format=tostring}";
+	fileTarget.ConcurrentWrites = true;
+	fileTarget.CreateDirs = true;
+	fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
+	var rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+	config.LoggingRules.Add(rule);
+	LogManager.Configuration = config;     
+    
+    NameValueCollection properties = new NameValueCollection();
+    properties["configType"] = "INLINE";
+
+    Common.Logging.LogManager.Adapter = new Common.Logging.NLog.NLogLoggerFactoryAdapter(properties);
+	
+	...
+	
+    var factory = new SplitFactory("API_KEY", configurations);
+```	
