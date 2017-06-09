@@ -35,7 +35,7 @@ namespace Splitio.Services.Client.Classes
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 
-        private Dictionary<string, string> treatmentCache = new Dictionary<string, string>();
+        private Dictionary<string, string> treatmentCache;
 
         public ISplitManager GetSplitManager()
         {
@@ -50,14 +50,14 @@ namespace Splitio.Services.Client.Classes
 
         public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true, bool multiple = false)
         {
-            if (multiple && treatmentCache.ContainsKey(feature))
+            if (multiple && treatmentCache != null && treatmentCache.ContainsKey(feature))
             {
                 return treatmentCache[feature];
             }
             
             var result = GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
 
-            if (multiple)
+            if (multiple && treatmentCache != null)
             {
                 treatmentCache.Add(feature, result);
             }
@@ -194,6 +194,7 @@ namespace Splitio.Services.Client.Classes
 
         public Dictionary<string, string> GetTreatments(Key key, List<string> features, Dictionary<string, object> attributes = null)
         {
+            treatmentCache = new Dictionary<string, string>();
             Dictionary<string, string> treatmentsForFeatures = new Dictionary<string, string>();
 
             foreach (string feature in features)
@@ -201,7 +202,7 @@ namespace Splitio.Services.Client.Classes
                 treatmentsForFeatures.Add(feature, GetTreatment(key, feature, attributes, true, true));
             }
 
-            treatmentCache = new Dictionary<string, string>();
+            treatmentCache = null;
             return treatmentsForFeatures;
         }
     }
