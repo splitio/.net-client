@@ -7,6 +7,7 @@ using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Splitio.Services.Client.Classes
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 
-        private Dictionary<string, string> treatmentCache;
+        private ConcurrentDictionary<string, string> treatmentCache = new ConcurrentDictionary<string, string>();
 
         public ISplitManager GetSplitManager()
         {
@@ -50,16 +51,18 @@ namespace Splitio.Services.Client.Classes
 
         public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true, bool multiple = false)
         {
-            if (multiple && treatmentCache != null && treatmentCache.ContainsKey(feature))
+            string featureHash = string.Concat(key.matchingKey, "#", feature, "#", attributes != null ? attributes.GetHashCode() : 0);
+
+            if (multiple && treatmentCache.ContainsKey(featureHash))
             {
-                return treatmentCache[feature];
+                return treatmentCache[featureHash];
             }
             
             var result = GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
 
-            if (multiple && treatmentCache != null)
+            if (multiple)
             {
-                treatmentCache.Add(feature, result);
+                treatmentCache.TryAdd(featureHash, result);
             }
             
             return result;
@@ -194,7 +197,6 @@ namespace Splitio.Services.Client.Classes
 
         public Dictionary<string, string> GetTreatments(Key key, List<string> features, Dictionary<string, object> attributes = null)
         {
-            treatmentCache = new Dictionary<string, string>();
             Dictionary<string, string> treatmentsForFeatures = new Dictionary<string, string>();
 
             foreach (string feature in features)
@@ -202,8 +204,19 @@ namespace Splitio.Services.Client.Classes
                 treatmentsForFeatures.Add(feature, GetTreatment(key, feature, attributes, true, true));
             }
 
-            treatmentCache = null;
+            ClearItemsAddedToTreatmentCache(key.matchingKey);
             return treatmentsForFeatures;
+        }
+
+        private void ClearItemsAddedToTreatmentCache(string key)
+        {
+            var temporaryTreatmentCache = new ConcurrentDictionary<string,string>(treatmentCache);
+            foreach (var item in temporaryTreatmentCache.Keys.Where(x => x.StartsWith(key)))
+            {
+                string result;
+                temporaryTreatmentCache.TryRemove(item, out result);
+            }
+            treatmentCache = temporaryTreatmentCache;
         }
     }
 }

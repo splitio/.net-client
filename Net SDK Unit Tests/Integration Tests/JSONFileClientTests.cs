@@ -517,5 +517,26 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("on", result["test_whitelist"]);
             Assert.AreEqual("on", result["test_dependency"]);
         }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\splits_staging_6.json")]
+        public void ExecuteGetTreatmentsWithDependencyMatcherWithAttributesReturnsOn()
+        {
+            //Arrange
+            var client = new JSONFileClient("splits_staging_6.json", "");
+
+            //Act           
+            var features = new List<string>();
+            features.Add("test_whitelist");
+            features.Add("test_dependency");
+            var attributes = new Dictionary<string, object>();
+            attributes.Add("st", "allow");
+            var result = client.GetTreatments("fake_user_id_1", features, attributes);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("on", result["test_whitelist"]);
+            Assert.AreEqual("on", result["test_dependency"]);
+        }
     }
 }
