@@ -84,6 +84,7 @@ namespace Splitio_Tests.Integration_Tests
         public void ExecuteGetShouldReturnEmptyResponseOnInvalidURL()
         {
             //Arrange
+
             var baseUrl = "http://demo70e.iio";
             var httpHeader = new HTTPHeader()
             {

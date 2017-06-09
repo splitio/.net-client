@@ -35,20 +35,34 @@ namespace Splitio.Services.Client.Classes
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 
+        private Dictionary<string, string> treatmentCache = new Dictionary<string, string>();
+
         public ISplitManager GetSplitManager()
         {
             return manager;
         }
 
-        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
+        public string GetTreatment(string key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true, bool multiple = false)
         {
             Key keys = new Key(key, null);
-            return GetTreatmentForFeature(keys, feature, attributes, logMetricsAndImpressions);
+            return GetTreatment(keys, feature, attributes, logMetricsAndImpressions, multiple);
         }
 
-        public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
+        public string GetTreatment(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true, bool multiple = false)
         {
-            return GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
+            if (multiple && treatmentCache.ContainsKey(feature))
+            {
+                return treatmentCache[feature];
+            }
+            
+            var result = GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
+
+            if (multiple)
+            {
+                treatmentCache.Add(feature, result);
+            }
+            
+            return result;
         }
 
         protected void RecordStats(Key key, string feature, long? changeNumber, string label, long start, string treatment, string operation, Stopwatch clock)
@@ -174,15 +188,20 @@ namespace Splitio.Services.Client.Classes
         public Dictionary<string, string> GetTreatments(string key, List<string> features, Dictionary<string, object> attributes = null)
         {
             Key keys = new Key(key, null);
-            Dictionary<string, string> treatmentsForFeatures;
-            treatmentsForFeatures = features.ToDictionary(x => x, x => GetTreatment(keys, x, attributes));
-            return treatmentsForFeatures;
+            return GetTreatments(keys, features, attributes);
         }
+
 
         public Dictionary<string, string> GetTreatments(Key key, List<string> features, Dictionary<string, object> attributes = null)
         {
-            Dictionary<string, string> treatmentsForFeatures;
-            treatmentsForFeatures = features.ToDictionary(x => x, x => GetTreatment(key, x, attributes));
+            Dictionary<string, string> treatmentsForFeatures = new Dictionary<string, string>();
+
+            foreach (string feature in features)
+            {
+                treatmentsForFeatures.Add(feature, GetTreatment(key, feature, attributes, true, true));
+            }
+
+            treatmentCache = new Dictionary<string, string>();
             return treatmentsForFeatures;
         }
     }
