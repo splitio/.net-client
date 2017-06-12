@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Common.Logging;
 using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
 using System;
@@ -10,7 +10,7 @@ namespace Splitio.Services.Cache.Classes
 {
     public class RedisAdapter : IRedisAdapter
     {
-        private static readonly Logger Log = LogManager.GetLogger(typeof(RedisAdapter).ToString());
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RedisAdapter));
 
         private ConnectionMultiplexer redis;
         private IDatabase database;

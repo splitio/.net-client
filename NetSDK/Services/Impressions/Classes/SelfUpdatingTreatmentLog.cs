@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Common.Logging;
 using Newtonsoft.Json;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
@@ -20,7 +20,7 @@ namespace Splitio.Services.Impressions.Classes
         private IImpressionsCache impressionsCache;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        private static readonly Logger Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog).ToString());
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
 
         public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, IImpressionsCache impressionsCache, int maximumNumberOfKeysToCache = -1)
         {

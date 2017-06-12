@@ -1,6 +1,4 @@
-﻿using NLog;
-using NLog.Config;
-using NLog.Targets;
+﻿using Common.Logging;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
@@ -18,7 +16,7 @@ namespace Splitio.Services.Client.Classes
 {
     public class JSONFileClient:SplitClient
     {
-        private static readonly Logger Log = LogManager.GetLogger(typeof(JSONFileClient).ToString());
+        private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
         public JSONFileClient(string splitsFilePath, string segmentsFilePath, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, IImpressionListener treatmentLogInstance = null, bool isLabelsEnabled = true)
         {
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());

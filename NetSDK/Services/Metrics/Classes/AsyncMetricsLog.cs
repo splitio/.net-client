@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Common.Logging;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
 using System;
@@ -11,7 +11,7 @@ namespace Splitio.Services.Metrics.Classes
     {
         IMetricsLog worker;
 
-        private static readonly Logger Logger = LogManager.GetLogger(typeof(AsyncMetricsLog).ToString());
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(AsyncMetricsLog));
 
         public AsyncMetricsLog(IMetricsSdkApiClient apiClient, IMetricsCache metricsCache, int maxCountCalls = -1, int maxTimeBetweenCalls = -1)
         {

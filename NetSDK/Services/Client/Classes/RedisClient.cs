@@ -1,6 +1,4 @@
-﻿using NLog;
-using NLog.Config;
-using NLog.Targets;
+﻿using Common.Logging;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
