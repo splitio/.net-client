@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Common.Logging;
 using Splitio.CommonLibraries;
 using Splitio.Services.Impressions.Interfaces;
 using System;
@@ -9,7 +9,7 @@ namespace Splitio.Services.Impressions.Classes
     public class TreatmentSdkApiClient : SdkApiClient, ITreatmentSdkApiClient
     {
         private const string TestImpressionsUrlTemplate = "/api/testImpressions/bulk";
-        
+
         private static readonly ILog Log = LogManager.GetLogger(typeof(TreatmentSdkApiClient));
 
         public TreatmentSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout) : base(header, baseUrl, connectionTimeOut, readTimeout) { }

@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Common.Logging;
 using Splitio.CommonLibraries;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Classes;

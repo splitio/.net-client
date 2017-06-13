@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Common.Logging;
 using Splitio.Services.Metrics.Interfaces;
 using System;
 using System.Net;

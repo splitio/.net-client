@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Common.Logging;
 using Newtonsoft.Json;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Metrics.Interfaces;

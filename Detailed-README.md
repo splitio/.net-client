@@ -256,54 +256,32 @@ The SDK polls Split servers for feature split and segment changes at regular per
 
 ###  Logging in the SDK 
 
-The .Net SDK uses log4net for logging. You can configure it this way, before you create a SplitFactory instance:
+The .NET SDK uses Common.Logging for logging. It allows to configure different adapters such as log4net or NLog, and you can also write your own adapter by implementing ILoggerFactoryAdapter interface. More details [here](http://netcommon.sourceforge.net/docs/2.1.0/reference/html/ch01.html)
+Splitio SDK doesn't log by default, you need to configure an adapter.
+
+This is an example on how to configure NLog and its adapter:
 
 ```cs
-    FileAppender fileAppender = new FileAppender();
-    fileAppender.AppendToFile = true;
-    fileAppender.LockingModel = new FileAppender.MinimalLock();
-    fileAppender.File = @"ANY FILE NAME";
-    PatternLayout pl = new PatternLayout();
-    pl.ConversionPattern = "%date %level %logger - %message%newline";
-    pl.ActivateOptions();
-    fileAppender.Layout = pl;
-    fileAppender.ActivateOptions();
+	var config = new LoggingConfiguration();
+	var fileTarget = new FileTarget();
+	config.AddTarget("file", fileTarget);
+	fileTarget.FileName = @"ANY FILE NAME";
+	fileTarget.ArchiveFileName = "ANY FILE NAME";
+	fileTarget.LineEnding = LineEndingMode.CRLF;
+	fileTarget.Layout = "${longdate} ${level: uppercase = true} ${logger} - ${message} - ${exception:format=tostring}";
+	fileTarget.ConcurrentWrites = true;
+	fileTarget.CreateDirs = true;
+	fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
+	var rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+	config.LoggingRules.Add(rule);
+	LogManager.Configuration = config;     
 
-    log4net.Config.BasicConfigurator.Configure(fileAppender);
-    
-    ...
-    
-    var factory = new SplitFactory("API_KEY", configurations);
-```
+	NameValueCollection properties = new NameValueCollection();
+	properties["configType"] = "INLINE";
 
-Or you can configure it using all log4net available options. Learn more [here](https://logging.apache.org/log4net/release/manual/introduction.html)
+	Common.Logging.LogManager.Adapter = new Common.Logging.NLog.NLogLoggerFactoryAdapter(properties);
 
-In the previous example, we show you how to configure a FileAppender. Also you can create a custom appender that implements AppenderSkeleton, for example:
+	...
 
-```cs
-    public class MyCustomAppender : AppenderSkeleton
-    {
-        protected override void Append(LoggingEvent loggingEvent)
-        {
-            // Write your code here. For example:
-            // MyLogService.Log(loggingEvent.Level.Name, loggingEvent.MessageObject);
-        }
-    }
-```
-Where MyLogService could be whatever you want.
-
-And configure log4net to use it:
-
-```cs
-    MyCustomAppender appender = new MyCustomAppender();
-    appender.ActivateOptions();
-
-    log4net.Config.BasicConfigurator.Configure(appender);
-    
-    ...
-    
-    var factory = new SplitFactory("API_KEY", configurations);
-```
-
-If you don't configure log4net yourself, the SDK creates a default file appender and register logs in 'Logs\split-sdk.log' file.
- 
+	var factory = new SplitFactory("API_KEY", configurations);
+```	

@@ -1,7 +1,4 @@
-﻿using log4net;
-using log4net.Appender;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
+﻿using Common.Logging;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
@@ -39,7 +36,6 @@ namespace Splitio.Services.Client.Classes
 
         public RedisClient(ConfigurationOptions config)
         {
-            InitializeLogger();
             ReadConfig(config);
             BuildRedisCache();
             BuildTreatmentLog(config); 
@@ -50,26 +46,6 @@ namespace Splitio.Services.Client.Classes
         }
 
 
-        private void InitializeLogger()
-        {
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
-            if (hierarchy.Root.Appenders.Count == 0)
-            {
-                RollingFileAppender fileAppender = new RollingFileAppender();
-                fileAppender.AppendToFile = true;
-                fileAppender.LockingModel = new FileAppender.MinimalLock();
-                fileAppender.File = @"Logs\split-sdk.log";
-                fileAppender.RollingStyle = RollingFileAppender.RollingMode.Date;
-                fileAppender.DatePattern = "yyyyMMdd";
-                PatternLayout pl = new PatternLayout();
-                pl.ConversionPattern = "%date %level %logger - %message%newline";
-                pl.ActivateOptions();
-                fileAppender.Layout = pl;
-                fileAppender.ActivateOptions();
-
-                log4net.Config.BasicConfigurator.Configure(fileAppender);
-            }
-        }
         private void ReadConfig(ConfigurationOptions config)
         {
             SdkVersion = ".NET-" + Version.SplitSdkVersion;

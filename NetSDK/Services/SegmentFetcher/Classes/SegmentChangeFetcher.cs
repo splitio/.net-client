@@ -1,4 +1,4 @@
-﻿using log4net;
+﻿using Common.Logging;
 using Splitio.Domain;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;

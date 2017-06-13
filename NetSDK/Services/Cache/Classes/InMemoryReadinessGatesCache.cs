@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
-using log4net;
+using Common.Logging;
 using Splitio.Services.Cache.Interfaces;
 
 namespace Splitio.Services.Client.Classes

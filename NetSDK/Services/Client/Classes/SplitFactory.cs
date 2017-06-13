@@ -1,5 +1,7 @@
-﻿using Splitio.Services.Client.Interfaces;
+﻿using Common.Logging;
+using Splitio.Services.Client.Interfaces;
 using System;
+using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -15,6 +17,7 @@ namespace Splitio.Services.Client.Classes
             this.apiKey = apiKey;
             this.options = options;
         }
+
 
         public ISplitClient Client()
         {
@@ -51,9 +54,9 @@ namespace Splitio.Services.Client.Classes
                 case Mode.Consumer:
                     if (options.CacheAdapterConfig != null && options.CacheAdapterConfig.Type == AdapterType.Redis)
                     {
-                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port) || String.IsNullOrEmpty(options.CacheAdapterConfig.Password))
+                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port))
                         {
-                            throw new Exception("Redis Host, Port and Password should be set to initialize Split SDK in Redis Mode.");
+                            throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
                         }
                         client = new RedisClient(options);
                     }
