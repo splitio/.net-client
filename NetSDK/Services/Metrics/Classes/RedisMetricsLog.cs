@@ -45,5 +45,12 @@ namespace Splitio.Services.Metrics.Classes
 
             metricsCache.SetGauge(gauge, value);
         }
+
+
+        public void Clear()
+        {
+            //TODO: implement this
+            throw new NotImplementedException();
+        }
     }
 }

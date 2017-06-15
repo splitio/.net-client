@@ -42,5 +42,11 @@ namespace Splitio.Services.Client.Classes
         {
             segmentCache.RemoveFromSegment(segmentName, keys);
         }
+
+        public override void Destroy()
+        {
+            splitCache.Clear();
+            segmentCache.Clear();
+        }
     }
 }

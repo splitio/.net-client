@@ -116,5 +116,11 @@ namespace Splitio.Services.Client.Classes
         {
             this.splitter = splitter ?? new Splitter();
         }
+
+        public override void Destroy()
+        {
+            watcher.Dispose();
+            splitCache.Clear();
+        }
     }
 }
