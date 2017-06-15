@@ -256,7 +256,7 @@ The SDK polls Split servers for feature split and segment changes at regular per
 
 ###  Impression Listener
 
-In order to capture every single impression in your app SDK provides option called Impression Listener. It works pretty straightforward: you define a class that implements IImpressionListener interface, which must have instance method called Log, which must receive 1 argument of type KeyImpression. 
+In order to capture every single impression in your app SDK provides an option called Impression Listener. It works pretty straightforward: you define a class that implements IImpressionListener interface, which must have instance method called Log, which must receive an argument of type KeyImpression. 
 
 This is an example on how to write your custom impression listener:
 
