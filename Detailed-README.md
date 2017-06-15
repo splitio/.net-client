@@ -275,12 +275,12 @@ This is an example on how to write your custom impression listener:
 And then, you can configure the SDK to use it in ConfigurationOptions object:
 
 ```cs
-    ...
+	...
 	configurations.ImpressionListener = new CustomImpressionListener();
 	...
-	
+
 	var factory = new SplitFactory("API_KEY", configurations);
-    var sdk = factory.Client();
+	var sdk = factory.Client();
 ```
 
 ###  Logging in the SDK 
