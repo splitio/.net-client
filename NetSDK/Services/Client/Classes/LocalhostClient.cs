@@ -121,6 +121,7 @@ namespace Splitio.Services.Client.Classes
         {
             watcher.Dispose();
             splitCache.Clear();
+            segmentCache.Clear();
         }
     }
 }

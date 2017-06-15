@@ -79,8 +79,7 @@ namespace Splitio.Services.Cache.Classes
 
         public void Clear()
         {
-            //TODO: implement this
-            throw new NotImplementedException();
+            return;
         }
     }
 }

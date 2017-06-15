@@ -165,8 +165,7 @@ namespace Splitio.Services.Client.Classes
 
         public override void Destroy()
         {
-            //TODO: implement this
-            throw new NotImplementedException();
+            return;
         }
     }
 }

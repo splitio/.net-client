@@ -49,8 +49,7 @@ namespace Splitio.Services.Metrics.Classes
 
         public void Clear()
         {
-            //TODO: implement this
-            throw new NotImplementedException();
+            return;
         }
     }
 }

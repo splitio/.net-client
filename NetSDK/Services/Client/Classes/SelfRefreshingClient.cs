@@ -156,7 +156,7 @@ namespace Splitio.Services.Client.Classes
             ((SelfRefreshingSplitFetcher)splitFetcher).Stop(); // Stop + Clear
             ((SelfRefreshingSegmentFetcher)selfRefreshingSegmentFetcher).Stop(); // Stop + Clear
             ((SelfUpdatingTreatmentLog)treatmentLog).Stop(); //Stop + SendBulk + Clear
-            metricsLog.Clear();
+            metricsLog.Clear(); //Clear
         }
 
         private void BuildSplitter()
@@ -232,8 +232,6 @@ namespace Splitio.Services.Client.Classes
         public override void Destroy()
         {
             this.Stop(); 
-
-            throw new NotImplementedException();
         }
     }
 }
