@@ -5,6 +5,7 @@ using Splitio.Services.Client.Classes;
 namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
+    [Ignore]
     public class SelfRefreshingSplitClientTests
     {
         [TestMethod]
