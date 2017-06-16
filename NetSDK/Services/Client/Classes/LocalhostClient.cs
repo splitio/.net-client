@@ -30,6 +30,7 @@ namespace Splitio.Services.Client.Classes
             var splits = ParseSplitFile(fullPath);
             splitCache = new InMemorySplitCache(splits);
             BuildSplitter(splitter);
+            manager = new SplitManager(splitCache);
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
@@ -121,7 +122,6 @@ namespace Splitio.Services.Client.Classes
         {
             watcher.Dispose();
             splitCache.Clear();
-            segmentCache.Clear();
         }
     }
 }

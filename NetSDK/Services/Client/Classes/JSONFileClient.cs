@@ -31,6 +31,7 @@ namespace Splitio.Services.Client.Classes
             impressionListener = treatmentLogInstance;
             splitter = new Splitter();
             LabelsEnabled = isLabelsEnabled;
+            manager = new SplitManager(splitCache);
         }
 
         public void RemoveSplitFromCache(string splitName)
