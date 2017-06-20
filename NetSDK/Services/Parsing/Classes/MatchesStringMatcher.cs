@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Splitio.Services.Parsing.Classes
 {
     public class MatchesStringMatcher:IMatcher
     {
-        string value;
+        Regex regex;
 
 
-        public MatchesStringMatcher(string value)
+        public MatchesStringMatcher(string pattern)
         {
-            this.value = value;
+            regex = new Regex(pattern);
         }
 
 
         public bool Match(string key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
         {
-            //TODO: pending implementation
-
-            throw new NotImplementedException();
+            return regex.IsMatch(key);
         }
 
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
