@@ -111,6 +111,7 @@
     <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualToBooleanMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\PartOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\EqualsToSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\StartsWithMatcherTests.cs" />
