@@ -3,6 +3,8 @@ using Splitio.Services.Parsing;
 using Splitio.Services.Parsing.Classes;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -92,5 +94,39 @@ namespace Splitio_Tests.Unit_Tests
             Assert.IsFalse(result);
         }
 
+        [DeploymentItem(@"Resources\regex.txt")]
+        [TestMethod]
+        public void VerifyRegexMatcher()
+        {
+            VerifyTestFile("regex.txt", new string[] { "\r\n" });
+        }
+
+
+        private void VerifyTestFile(string file, string[] sepparator)
+        {
+            //Arrange
+            var fileContent = File.ReadAllText(file);
+            var contents = fileContent.Split(sepparator, StringSplitOptions.None);
+            var csv = from line in contents
+                      select line.Split('#').ToArray();
+
+            var results = new List<string>();
+            //Act
+            foreach (string[] item in csv)
+            {
+                if (item.Length == 3)
+                {
+                    //Arrange
+                    var matcher = new MatchesStringMatcher(item[0]);
+
+                    //Act
+                    var result = matcher.Match(item[1]);
+
+                    //Assert
+                    Assert.AreEqual(Convert.ToBoolean(item[2]), result, item[0]+"-"+item[1]);
+                }
+
+            }
+        }
     }
 }
