@@ -24,7 +24,7 @@ namespace Splitio.Services.Parsing.Classes
                 return false;
             }
 
-            string treatment = splitClient.GetTreatment(key, split, attributes, false, true); 
+            string treatment = splitClient.GetTreatment(key, split, attributes, false, false); 
             
             return treatments.Contains(treatment);
         }
