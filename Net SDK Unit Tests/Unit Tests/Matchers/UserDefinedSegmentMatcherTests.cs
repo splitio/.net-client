@@ -25,7 +25,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
 
             //Act
-            var result = matcher.Match("test2");
+            var result = matcher.Match(new Key("test2", "test2"));
 
             //Assert
             Assert.IsTrue(result);
@@ -46,7 +46,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
 
             //Act
-            var result = matcher.Match("test3");
+            var result = matcher.Match(new Key("test3", "test3"));
 
             //Assert
             Assert.IsFalse(result);
@@ -63,7 +63,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
 
             //Act
-            var result = matcher.Match("test2");
+            var result = matcher.Match(new Key("test2", "test2"));
 
             //Assert
             Assert.IsFalse(result);
@@ -79,7 +79,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new UserDefinedSegmentMatcher(segmentName, segmentCache);
 
             //Act
-            var result = matcher.Match("test2");
+            var result = matcher.Match(new Key("test2", "test2"));
 
             //Assert
             Assert.IsFalse(result);

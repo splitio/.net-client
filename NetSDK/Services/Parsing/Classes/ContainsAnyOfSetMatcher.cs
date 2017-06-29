@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Client.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace Splitio.Services.Parsing
             }
         }
 
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return false;
+        }
+
         public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             if (key == null || itemsToCompare.Count == 0)
@@ -28,7 +34,7 @@ namespace Splitio.Services.Parsing
             return itemsToCompare.Any(i => key.Contains(i));
         }
 
-        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }

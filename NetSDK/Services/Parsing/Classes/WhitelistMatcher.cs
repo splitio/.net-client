@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Client.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -12,9 +13,15 @@ namespace Splitio.Services.Parsing
         {
             this.list = list ?? new List<string>();
         }
+
         public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return list.Contains(key);
+        }
+
+        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return list.Contains(key.matchingKey);
         }
 
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
@@ -31,5 +38,7 @@ namespace Splitio.Services.Parsing
         {
             return false;
         }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splitio.Domain;
 using Splitio.Services.Parsing;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new WhitelistMatcher(keys);
 
             //Act
-            var result = matcher.Match("test2");
+            var result = matcher.Match(new Key("test2", "test2"));
 
             //Assert
             Assert.IsTrue(result);
@@ -34,7 +35,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new WhitelistMatcher(keys);
 
             //Act
-            var result = matcher.Match("test3");
+            var result = matcher.Match(new Key("test3", "test3"));
 
             //Assert
             Assert.IsFalse(result);
@@ -48,7 +49,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new WhitelistMatcher(keys);
 
             //Act
-            var result = matcher.Match("test2");
+            var result = matcher.Match(new Key("test2", "test2"));
 
             //Assert
             Assert.IsFalse(result);

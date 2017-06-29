@@ -12,16 +12,16 @@ namespace Splitio.Services.Parsing
         protected long value;
         protected long start;
         protected long end;
-        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             switch (dataType)
             {
                 case DataTypeEnum.DATETIME:
-                    var date = key.ToDateTime();
+                    var date = key.matchingKey.ToDateTime();
                     return date != null ? Match(date.Value, attributes, splitClient) : false;
                 case DataTypeEnum.NUMBER:
                     long number;
-                    var result = long.TryParse(key, out number);
+                    var result = long.TryParse(key.matchingKey, out number);
                     return result ? Match(number, attributes, splitClient) : false;
                 default: return false;
             }
@@ -32,6 +32,11 @@ namespace Splitio.Services.Parsing
         public abstract bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
         public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return false;
+        }
+
+        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }

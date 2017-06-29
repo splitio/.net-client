@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Cache.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace Splitio.Services.Parsing
             return segmentsCache.IsInSegment(segmentName, key);
         }
 
+        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return segmentsCache.IsInSegment(segmentName, key.matchingKey);
+        }
+
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
@@ -35,5 +41,6 @@ namespace Splitio.Services.Parsing
         {
             return false;
         }
+
     }
 }

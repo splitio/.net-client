@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splitio.Domain;
 using Splitio.Services.Parsing;
 using System;
 using System.Collections.Generic;
@@ -168,7 +169,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new PartOfSetMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("test");
+            var result = matcher.Match(new Key("test", "test"));
 
             //Assert
             Assert.IsFalse(result);

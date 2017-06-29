@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splitio.Domain;
 using Splitio.Services.Parsing;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new ContainsStringMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("test1");
+            var result = matcher.Match(new Key("test1", "test1"));
 
             //Assert
             Assert.IsTrue(result); //keys contains test1
@@ -34,7 +35,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new ContainsStringMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("abctest1abc");
+            var result = matcher.Match(new Key("abctest1abc", "abctest1abc"));
 
             //Assert
             Assert.IsTrue(result); //keys contains test1
@@ -50,7 +51,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new ContainsStringMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("test3");
+            var result = matcher.Match(new Key("test3", "test3"));
 
             //Assert
             Assert.IsFalse(result); //key not contains any element of whitelist
@@ -64,7 +65,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new ContainsStringMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("test1");
+            var result = matcher.Match(new Key("test1", "test1"));
 
             //Assert
             Assert.IsFalse(result); //Empty whitelist
@@ -81,7 +82,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             string key = null;
-            var result = matcher.Match(key);
+            var result = matcher.Match(new Key(key, key));
 
             //Assert
             Assert.IsFalse(result);
@@ -98,7 +99,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             string key = "";
-            var result = matcher.Match(key);
+            var result = matcher.Match(new Key(key, key));
 
             //Assert
             Assert.IsFalse(result);

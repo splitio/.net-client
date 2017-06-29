@@ -23,7 +23,7 @@ namespace Splitio_Tests.Unit_Tests
             attributes.Add("card_type", "ABC");
 
             //Act
-            var result = matcher.Match("test", attributes);
+            var result = matcher.Match(new Key("test", "test"), attributes);
 
             //Assert
             Assert.IsFalse(result);
@@ -36,14 +36,14 @@ namespace Splitio_Tests.Unit_Tests
             var attributes = new Dictionary<string, object>();
             attributes.Add("card_number", 12012);
             attributes.Add("card_type", "ABC");
-
+            var key = new Key("test", "test");
             var delegates = new List<AttributeMatcher>();
             var mock1 = new Mock<AttributeMatcher>();
-            mock1.Setup(x=>x.Match("test",attributes, null)).Returns(true);
+            mock1.Setup(x => x.Match(key, attributes, null)).Returns(true);
             var mock2 = new Mock<AttributeMatcher>();
-            mock2.Setup(x=>x.Match("test",attributes, null)).Returns(true);
+            mock2.Setup(x => x.Match(key, attributes, null)).Returns(true);
             var mock3 = new Mock<AttributeMatcher>();
-            mock3.Setup(x=>x.Match("test",attributes, null)).Returns(true);
+            mock3.Setup(x => x.Match(key, attributes, null)).Returns(true);
 
             delegates.Add(mock1.Object);
             delegates.Add(mock2.Object);
@@ -56,7 +56,7 @@ namespace Splitio_Tests.Unit_Tests
             };
 
             //Act
-            var result = matcher.Match("test", attributes);
+            var result = matcher.Match(key, attributes);
 
             //Assert
             Assert.IsTrue(result);
@@ -72,11 +72,11 @@ namespace Splitio_Tests.Unit_Tests
 
             var delegates = new List<AttributeMatcher>();
             var mock1 = new Mock<AttributeMatcher>();
-            mock1.Setup(x => x.Match("test", attributes, null)).Returns(true);
+            mock1.Setup(x => x.Match(new Key("test", "test"), attributes, null)).Returns(true);
             var mock2 = new Mock<AttributeMatcher>();
-            mock2.Setup(x => x.Match("test", attributes, null)).Returns(false);
+            mock2.Setup(x => x.Match(new Key("test", "test"), attributes, null)).Returns(false);
             var mock3 = new Mock<AttributeMatcher>();
-            mock3.Setup(x => x.Match("test", attributes, null)).Returns(true);
+            mock3.Setup(x => x.Match(new Key("test", "test"), attributes, null)).Returns(true);
 
             delegates.Add(mock1.Object);
             delegates.Add(mock2.Object);
@@ -89,7 +89,7 @@ namespace Splitio_Tests.Unit_Tests
             };
 
             //Act
-            var result = matcher.Match("test", attributes);
+            var result = matcher.Match(new Key("test", "test"), attributes);
 
             //Assert
             Assert.IsFalse(result);

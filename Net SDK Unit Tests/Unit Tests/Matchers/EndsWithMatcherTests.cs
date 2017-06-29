@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splitio.Domain;
 using Splitio.Services.Parsing;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EndsWithMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("starttest1");
+            var result = matcher.Match(new Key("starttest1", "starttest1"));
 
             //Assert
             Assert.IsTrue(result); //starttest1 ends with test1
@@ -34,7 +35,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EndsWithMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("starttest3");
+            var result = matcher.Match(new Key("starttest3", "starttest3"));
 
             //Assert
             Assert.IsFalse(result); //key not ends with any element of whitelist
@@ -48,7 +49,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EndsWithMatcher(toCompare);
 
             //Act
-            var result = matcher.Match("test1");
+            var result = matcher.Match(new Key("test1", "test1"));
 
             //Assert
             Assert.IsFalse(result); //Empty whitelist
@@ -65,7 +66,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             string key = null;
-            var result = matcher.Match(key);
+            var result = matcher.Match(new Key(key, key));
 
             //Assert
             Assert.IsFalse(result);
@@ -82,7 +83,7 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             string key = "";
-            var result = matcher.Match(key);
+            var result = matcher.Match(new Key(key, key));
 
             //Assert
             Assert.IsFalse(result);

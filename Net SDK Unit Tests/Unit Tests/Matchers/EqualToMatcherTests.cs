@@ -31,7 +31,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.NUMBER, 1000001);
 
             //Act
-            var result = matcher.Match("1aaaaa0");
+            var result = matcher.Match(new Key("1aaaaa0", "1aaaaa0"));
 
             //Assert
             Assert.IsFalse(result);
@@ -80,7 +80,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
 
             //Act
-            var result = matcher.Match("1aaa0000000");
+            var result = matcher.Match(new Key("1aaa0000000", "1aaa0000000"));
 
             //Assert
             Assert.IsFalse(result);
@@ -93,7 +93,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.STRING, 1470960000000);
 
             //Act
-            var result = matcher.Match("abcd");
+            var result = matcher.Match(new Key("abcd", "abcd"));
 
             //Assert
             Assert.IsFalse(result);
@@ -106,8 +106,8 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new EqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
 
             //Act
-            var result = matcher.Match("");
-            var result2 = matcher.Match((String)null);
+            var result = matcher.Match(new Key("", ""));
+            var result2 = matcher.Match(new Key((String)null, (String)null));
 
             //Assert
             Assert.IsFalse(result);

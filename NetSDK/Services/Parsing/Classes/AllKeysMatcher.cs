@@ -1,4 +1,5 @@
-﻿using Splitio.Services.Client.Interfaces;
+﻿using Splitio.Domain;
+using Splitio.Services.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,11 @@ namespace Splitio.Services.Parsing
         public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return key != null;
+        }
+
+        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return key.matchingKey != null;
         }
 
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
