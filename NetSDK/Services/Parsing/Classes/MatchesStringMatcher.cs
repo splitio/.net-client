@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Splitio.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,12 @@ namespace Splitio.Services.Parsing.Classes
         {
             return regex.IsMatch(key);
         }
+
+        public bool Match(Key key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
+        {
+            return regex.IsMatch(key.matchingKey);
+        }
+
 
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
         {

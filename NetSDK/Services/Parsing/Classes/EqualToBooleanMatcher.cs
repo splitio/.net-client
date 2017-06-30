@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Splitio.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,11 @@ namespace Splitio.Services.Parsing.Classes
         }
 
         public bool Match(string key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
+        {
+            return false;
+        }
+
+        public bool Match(Key key, Dictionary<string, object> attributes = null, Client.Interfaces.ISplitClient splitClient = null)
         {
             return false;
         }

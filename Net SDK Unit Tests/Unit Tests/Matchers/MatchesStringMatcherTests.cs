@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Splitio.Domain;
 using Splitio.Services.Parsing;
 using Splitio.Services.Parsing.Classes;
 using System;
@@ -12,13 +13,26 @@ namespace Splitio_Tests.Unit_Tests
     public class MatchesStringMatcherTests
     {
         [TestMethod]
-        public void MatchShouldReturnTrueOnMatchingKey()
+        public void MatchShouldReturnTrueOnMatchingKeyString()
         {
             //Arrange
             var matcher = new MatchesStringMatcher("^a");
 
             //Act
             var result = matcher.Match("arrive");
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnTrueOnMatchingKey()
+        {
+            //Arrange
+            var matcher = new MatchesStringMatcher("^a");
+
+            //Act
+            var result = matcher.Match(new Key("arrive", "arrive"));
 
             //Assert
             Assert.IsTrue(result);
