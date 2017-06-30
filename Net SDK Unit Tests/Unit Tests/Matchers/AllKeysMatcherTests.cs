@@ -33,5 +33,31 @@ namespace Splitio_Tests.Unit_Tests
             //Assert
             Assert.IsFalse(result2);
         }
+
+        [TestMethod]
+        public void MatchShouldReturnTrueForAnyStringKey()
+        {
+            //Arrange
+            var matcher = new AllKeysMatcher();
+
+            //Act
+            var result = matcher.Match("test");
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfNullString()
+        {
+            //Arrange
+            var matcher = new AllKeysMatcher();
+
+            //Act
+            var result2 = matcher.Match((String)null);
+
+            //Assert
+            Assert.IsFalse(result2);
+        }
     }
 }

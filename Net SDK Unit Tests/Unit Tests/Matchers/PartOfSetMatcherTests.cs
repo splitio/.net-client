@@ -160,7 +160,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void MatchShouldReturnFalseIfMatchingString()
+        public void MatchShouldReturnFalseIfMatchingKey()
         {
             //Arrange
             var toCompare = new List<string>();
@@ -170,6 +170,22 @@ namespace Splitio_Tests.Unit_Tests
 
             //Act
             var result = matcher.Match(new Key("test", "test"));
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfMatchingString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new PartOfSetMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test");
 
             //Assert
             Assert.IsFalse(result);

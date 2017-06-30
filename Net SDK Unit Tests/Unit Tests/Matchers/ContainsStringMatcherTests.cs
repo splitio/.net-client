@@ -10,6 +10,102 @@ namespace Splitio_Tests.Unit_Tests
     public class ContainsStringMatcherTests
     {
         [TestMethod]
+        public void MatchShouldReturnTrueOnMatchingKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test1");
+
+            //Assert
+            Assert.IsTrue(result); //keys contains test1
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnTrueOnKeyContainingElementString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("abctest1abc");
+
+            //Assert
+            Assert.IsTrue(result); //keys contains test1
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseOnNonMatchingKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test3");
+
+            //Assert
+            Assert.IsFalse(result); //key not contains any element of whitelist
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfEmptyWhitelistString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test1");
+
+            //Assert
+            Assert.IsFalse(result); //Empty whitelist
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfNullKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            string key = null;
+            var result = matcher.Match(key);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfEmptyKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new ContainsStringMatcher(toCompare);
+
+            //Act
+            string key = "";
+            var result = matcher.Match(key);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
         public void MatchShouldReturnTrueOnMatchingKey()
         {
             //Arrange

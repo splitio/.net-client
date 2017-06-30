@@ -138,5 +138,86 @@ namespace Splitio_Tests.Unit_Tests
             //Assert
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void MatchShouldReturnTrueOnMatchingKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new StartsWithMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test1end");
+
+            //Assert
+            Assert.IsTrue(result); //test1end starts with test1
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseOnNonMatchingKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new StartsWithMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test3end");
+
+            //Assert
+            Assert.IsFalse(result); //key not starts with any element of whitelist
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfEmptyWhitelistString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            var matcher = new StartsWithMatcher(toCompare);
+
+            //Act
+            var result = matcher.Match("test1");
+
+            //Assert
+            Assert.IsFalse(result); //Empty whitelist
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfNullKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new StartsWithMatcher(toCompare);
+
+            //Act
+            string key = null;
+            var result = matcher.Match(key);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfEmptyKeyString()
+        {
+            //Arrange
+            var toCompare = new List<string>();
+            toCompare.Add("test1");
+            toCompare.Add("test2");
+            var matcher = new StartsWithMatcher(toCompare);
+
+            //Act
+            string key = "";
+            var result = matcher.Match(key);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
     }
 }
