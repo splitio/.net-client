@@ -27,7 +27,13 @@ namespace Splitio.Services.Client.Classes
 
         public void RegisterTreatments(Dictionary<string, string> treatments)
         {
-            _tests.Union(treatments);
+            foreach (var treatment in treatments)
+            {
+                if (!_tests.ContainsKey(treatment.Key))
+                {
+                    _tests.Add(treatment.Key, treatment.Value);
+                }
+            }
         }
 
         public void RegisterTreatment(string feature, string treatment)
