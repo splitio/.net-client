@@ -22,6 +22,7 @@ A best practice we have established for these types of transitions is to utilize
 
 Testing this logic in the old world would be very risky. Typically requiring careful monitoring of logs and dashboards, ramping and de-ramping of the relevant features, and additional deployments to fix bugs found along the way. Using the testing mode of our .Net client, we can add extensive unit tests to confirm all permutations of these features behave as expected.
 
+```cs
 public class Test 
 {
 	private SplitClientForTest splitClient = new SplitClientForTest();
@@ -71,11 +72,13 @@ public class Test
 		Assert.Equal(expected, result); 
 	}
 }
+```
 
 This system allows you to validate multiple feature release states in a single unit test file, both setting treatments at the class level in the setup function and at the test level. However, this model does result in a lot of repeated code. Certainly you could separate out the business logic of the test to a separate function, but here at Split we have a better way.
 
 Alongside the SplitClientForTest, we are also today releasing a suite of XUnit annotations to streamline testing of your application across a wide variety of configurations. By using this annotations in your tests and tagging your SplitClient in the file, you can run them with the features and treatments you wish and Split will do the rest.
 
+```cs
 public class Test 
 {
 	private SplitClientForTest splitClient;
@@ -93,11 +96,13 @@ public class Test
 		Assert.Equal(expected, result); 
 	}
 }
+```
 
 XUnit runner executes each SplitTest once for each treatment value, updating the SplitClient with the correct treatments before each run. Any unset features will return the "control" treatment, and anything treatments manually set elsewhere will be preserved unless specifically overwritten by the SplitTest annotation.
 
 In most cases, one is not limited to testing a single feature's roll out, but ideally you wish to test how a behavior might interact with a variety of other feature states. Therefore we have built the SplitScenario, which allows the developer to define a variety of feature states and the test will run across all possible permutations. In the case at hand, that would be testing both the read and write treatments simultaneously!
 
+```cs
 public class Test 
 {
 	private SplitClientForTest splitClient;
@@ -117,10 +122,14 @@ public class Test
 		Assert.Equal(expected, result); 
 	}
 }
+```
+
+
 Now in less code than before we are actually running the test 9 times! Our goal is to make it easier to test a wide variety of complex interactions than it would be to simply test two different feature states under other frameworks.
 
 In running this test for the first time, one may see certain failing scenarios. With writes disabled to the feature, total reads to that feature would likely start failing, and so would that run of the test. Now, the best practice I recommend is to identify these failure scenarios and defensively code against them - falling back to a sane default. These permutations are an excellent way to identify such cases. However, there could be scenarios where a bad combination of features may be inevitable, and we do support limiting your tests to only supported feature combinations with SplitSuites.
 
+```cs
 public class Test 
 {
 	private SplitClientForTest splitClient;
@@ -156,6 +165,8 @@ public class Test
 		Assert.Equal(expected, result); 
 	}
 }
+```
+
 In this way you can specifically test for different behavior with different combinations of features.
 
 Testing with high numbers of permutations can be done as part of integration or release testing so as to reduce the runtime of local tests. The .Net testing client and annotations suite is available now, and further documentation is available by reviewing the sample tests available in that repository.
