@@ -28,7 +28,8 @@ public class Test
 	private SplitClientForTest splitClient = new SplitClientForTest();
 
 	[Fact]
-	public void TestOriginalDatabase() {
+	public void TestOriginalDatabase() 
+	{
 		Controller controller = new Controller(splitClient);
 
 		// Create in Both Databases via Dual Writes
@@ -41,7 +42,8 @@ public class Test
 	}
 
 	[Fact]
-	public void TestDarkReads() {
+	public void TestDarkReads() 
+	{
 		// Turn on Writes
 		splitClient.SetTreatment("feature_reads", "dark");
 
@@ -57,7 +59,8 @@ public class Test
 	}
 
 	[Fact]
-	public void TestNewDatabase() {
+	public void TestNewDatabase() 
+	{
 		// Turn on Writes
 		splitClient.SetTreatment("feature_reads", "on");
 
