@@ -6,8 +6,8 @@ namespace Splitio
 <<<<<<< HEAD
         public static string SplitSdkVersion = "3.2.0";
 =======
-        public static string SplitSdkVersion = "3.3.0-rc238";
->>>>>>> Update version
+        public static string SplitSdkVersion = "3.3.0-rc306";
+>>>>>>> Update version for prerelease
         public static string SplitSpecVersion = "1.0";
     }
 }
