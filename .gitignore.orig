@@ -1,0 +1,31 @@
+NetSDK/obj/Debug/
+Split.io.v12.suo
+packages/
+Net SDK Unit Tests/bin/Debug/
+Net SDK Unit Tests/obj/Debug/
+NetSDK/bin/Debug/
+.sonar
+NetSDK/Splitio.csproj.orig
+TestResults/**
+.vs
+NetSDK/nuget.exe
+*.nupkg
+Net SDK Unit Tests/bin/
+Net SDK Unit Tests/obj/
+NetSDK/bin/
+NetSDK/obj/
+NetSDK/Splitio.0.0.4.2.nuspec
+NetSDK/lib/
+NetSDK/*.nuspec
+Net SDK Unit Tests/SplitioTests.csproj.user
+Microbenchmark/bin
+Microbenchmark/obj
+Microbenchmark160928.vspx
+Microbenchmark160929.vspx
+
+<<<<<<< HEAD
+Splitio.TestSupport/bin
+=======
+Splitio.TestSupport/bin/
+>>>>>>> Add BaseMatcher and fix issue with boolean matcher
+Splitio.TestSupport/obj
