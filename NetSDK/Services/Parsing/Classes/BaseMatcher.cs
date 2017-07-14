@@ -29,15 +29,7 @@ namespace Splitio.Services.Parsing
             }
             else if (value is string)
             {
-                bool boolValue;
-                if (bool.TryParse((string)value, out boolValue))
-                {
-                    return Match(boolValue, attributes, splitClient);
-                }
-                else
-                {
-                    return Match((string)value, attributes, splitClient);
-                }
+                return Match((string)value, attributes, splitClient);
             }
             else if (value is DateTime)
             {
