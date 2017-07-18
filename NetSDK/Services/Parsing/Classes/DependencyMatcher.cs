@@ -5,38 +5,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Splitio.Services.Parsing
+namespace Splitio.Services.Parsing.Classes
 {
-    public class EqualToSetMatcher : IMatcher
+    public class DependencyMatcher : IMatcher
     {
-        private HashSet<string> itemsToCompare = new HashSet<string>();
+        string split { get; set; }
+        List<string> treatments { get; set; }
 
-        public EqualToSetMatcher(List<string> compareTo)
+        public DependencyMatcher(string split, List<string> treatments)
         {
-            if (compareTo != null)
-            {
-                itemsToCompare.UnionWith(compareTo);
-            }
-        }
-
-        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
-        {
-            if (key == null)
-            {
-                return false;
-            }
-
-            return itemsToCompare.SetEquals(key);
+            this.split = split;
+            this.treatments = treatments;
         }
 
         public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
-        
+
         public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
-            return false;
+            if (splitClient == null)
+            {
+                return false;
+            }
+
+            string treatment = splitClient.GetTreatment(key, split, attributes, false, false); 
+            
+            return treatments.Contains(treatment);
         }
 
         public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
@@ -47,7 +43,12 @@ namespace Splitio.Services.Parsing
         public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
+
         }
 
+        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return false;
+        }
     }
 }

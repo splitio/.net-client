@@ -113,6 +113,7 @@
     <Compile Include="Domain\ConditionType.cs" />
     <Compile Include="Domain\ConditionWithLogic.cs" />
     <Compile Include="Domain\DataTypeEnum.cs" />
+    <Compile Include="Domain\DependencyData.cs" />
     <Compile Include="Domain\Key.cs" />
     <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Services\Parsing\Classes\CompareMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\ContainsAllOfSetMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\ContainsAnyOfSetMatcher.cs" />
+    <Compile Include="Services\Parsing\Classes\DependencyMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\EqualToMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\EqualToSetMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\GreaterOrEqualToMatcher.cs" />

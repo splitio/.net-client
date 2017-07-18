@@ -1,5 +1,8 @@
 NEWS
 
+3.2.0
+- Add support for new Dependency Matcher.
+
 3.1.2
 - New logging approach: Common.Logging
 

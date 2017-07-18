@@ -33,7 +33,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new BetweenMatcher(DataTypeEnum.NUMBER, 1000001, 10540001);
 
             //Act
-            var result = matcher.Match("1aaaaa0");
+            var result = matcher.Match(new Key("1aaaaa0", "1aaaaa0"));
 
             //Assert
             Assert.IsFalse(result);
@@ -89,7 +89,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new BetweenMatcher(DataTypeEnum.DATETIME, 1470960000000, 1480960000000);
 
             //Act
-            var result = matcher.Match("1aaa0000000");
+            var result = matcher.Match(new Key("1aaa0000000", "1aaa0000000"));
             
             //Assert
             Assert.IsFalse(result);
@@ -103,7 +103,7 @@ namespace Splitio_Tests.Unit_Tests
             var matcher = new BetweenMatcher(DataTypeEnum.STRING, 1470960000000, 1480960000000);
 
             //Act
-            var result = matcher.Match("abcd");
+            var result = matcher.Match(new Key("abcd", "abcd"));
 
             //Assert
             Assert.IsFalse(result);
@@ -111,6 +111,61 @@ namespace Splitio_Tests.Unit_Tests
 
         [TestMethod]
         public void MatchShouldReturnFalseIfNullOrEmpty()
+        {
+            //Arrange
+            var matcher = new BetweenMatcher(DataTypeEnum.DATETIME, 1470960000000, 1480960000000);
+
+            //Act
+            var result = matcher.Match(new Key("", ""));
+            var result2 = matcher.Match(new Key((String)null, null));
+
+            //Assert
+            Assert.IsFalse(result);
+            Assert.IsFalse(result2);
+        }
+
+        [TestMethod]
+        public void MatchNumberShouldReturnFalseOnInvalidNumberWithStringKey()
+        {
+            //Arrange
+            var matcher = new BetweenMatcher(DataTypeEnum.NUMBER, 1000001, 10540001);
+
+            //Act
+            var result = matcher.Match("1aaaaa0");
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchDateShouldReturnFalseOnInvalidDateWithStringKey()
+        {
+            //Arrange
+            var matcher = new BetweenMatcher(DataTypeEnum.DATETIME, 1470960000000, 1480960000000);
+
+            //Act
+            var result = matcher.Match("1aaa0000000");
+            
+            //Assert
+            Assert.IsFalse(result);
+
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseOnInvalidDataTypeWithStringKey()
+        {
+            //Arrange
+            var matcher = new BetweenMatcher(DataTypeEnum.STRING, 1470960000000, 1480960000000);
+
+            //Act
+            var result = matcher.Match("abcd");
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseIfNullOrEmptyWithStringKey()
         {
             //Arrange
             var matcher = new BetweenMatcher(DataTypeEnum.DATETIME, 1470960000000, 1480960000000);

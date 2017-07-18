@@ -118,6 +118,7 @@
     <Compile Include="Unit Tests\Matchers\ContainsAnyOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\SplitParserUnitTests.cs" />
     <Compile Include="Unit Tests\Matchers\ContainsAllOfSetMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\DependencyMatcherTests.cs" />
     <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
@@ -180,6 +181,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\splits_staging_5.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\splits_staging_6.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\test.splits">
