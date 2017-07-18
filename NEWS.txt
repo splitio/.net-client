@@ -1,9 +1,7 @@
 NEWS
 
-3.3.0
-- Add support for Boolean and Regex matchers.
-
 3.2.0
+- Add support for Boolean and Regex matchers.
 - Add support for new Dependency Matcher.
 - Add support for Client Destroy.
 
