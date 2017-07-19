@@ -153,9 +153,10 @@ namespace Splitio.Services.Client.Classes
 
         public void Stop()
         {
-            ((SelfRefreshingSplitFetcher)splitFetcher).Stop();
-            ((SelfRefreshingSegmentFetcher)selfRefreshingSegmentFetcher).Stop();
-            ((SelfUpdatingTreatmentLog)treatmentLog).Stop();
+            ((SelfRefreshingSplitFetcher)splitFetcher).Stop(); // Stop + Clear
+            ((SelfRefreshingSegmentFetcher)selfRefreshingSegmentFetcher).Stop(); // Stop + Clear
+            ((SelfUpdatingTreatmentLog)treatmentLog).Stop(); //Stop + SendBulk + Clear
+            metricsLog.Clear(); //Clear
         }
 
         private void BuildSplitter()
@@ -226,6 +227,11 @@ namespace Splitio.Services.Client.Classes
         private void BuildManager()
         {
             manager = new SplitManager(splitCache);
+        }
+
+        public override void Destroy()
+        {
+            this.Stop(); 
         }
     }
 }

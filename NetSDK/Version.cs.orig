@@ -1,0 +1,13 @@
+﻿
+namespace Splitio
+{
+    public static class Version
+    {
+<<<<<<< HEAD
+        public static string SplitSdkVersion = "3.2.0";
+=======
+        public static string SplitSdkVersion = "3.2.1-rc238";
+>>>>>>> Update version
+        public static string SplitSpecVersion = "1.0";
+    }
+}

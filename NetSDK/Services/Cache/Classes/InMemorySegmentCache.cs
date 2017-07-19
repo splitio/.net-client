@@ -72,5 +72,11 @@ namespace Splitio.Services.Cache.Classes
 
             return -1;
         }
+
+
+        public void Clear()
+        {
+            segments.Clear();
+        }
     }
 }

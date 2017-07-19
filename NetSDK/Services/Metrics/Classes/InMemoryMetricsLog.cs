@@ -192,5 +192,13 @@ namespace Splitio.Services.Metrics.Classes
                 return String.Empty;
             }
         }
+
+
+        public void Clear()
+        {
+            SendCountMetrics();
+            SendGaugeMetrics();
+            SendTimeMetrics();
+        }
     }
 }

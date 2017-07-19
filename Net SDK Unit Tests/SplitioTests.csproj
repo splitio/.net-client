@@ -91,6 +91,7 @@
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
     <Compile Include="Integration Tests\JSONFileClientTests.cs" />
+    <Compile Include="Integration Tests\SelfRefreshingSplitClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
