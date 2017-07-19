@@ -1,6 +1,7 @@
 ﻿using Common.Logging;
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
+using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -110,6 +111,10 @@ namespace Splitio.Services.Parsing
                         case MatcherTypeEnum.STARTS_WITH: matcher = GetStartsWithMatcher(matcherDefinition); break;
                         case MatcherTypeEnum.ENDS_WITH: matcher = GetEndsWithMatcher(matcherDefinition); break;
                         case MatcherTypeEnum.CONTAINS_STRING: matcher = GetContainsStringMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.IN_SPLIT_TREATMENT: matcher = GetDependencyMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.EQUAL_TO_BOOLEAN: matcher = GetEqualToBooleanMatcher(matcherDefinition); break;
+                        case MatcherTypeEnum.MATCHES_STRING: matcher = GetMatchesStringMatcher(matcherDefinition); break;
+
                     }
                 }
             }
@@ -135,6 +140,24 @@ namespace Splitio.Services.Parsing
             }
             
             return attributeMatcher;
+        }
+
+        private IMatcher GetMatchesStringMatcher(MatcherDefinition matcherDefinition)
+        {
+            var matcherData = matcherDefinition.stringMatcherData;
+            return new MatchesStringMatcher(matcherData);
+        }
+
+        private IMatcher GetEqualToBooleanMatcher(MatcherDefinition matcherDefinition)
+        {
+            var matcherData = matcherDefinition.booleanMatcherData;
+            return new EqualToBooleanMatcher(matcherData.Value);
+        }
+
+        private IMatcher GetDependencyMatcher(MatcherDefinition matcherDefinition)
+        {
+            var matcherData = matcherDefinition.dependencyMatcherData;
+            return new DependencyMatcher(matcherData.split, matcherData.treatments);
         }
 
         private IMatcher GetBetweenMatcher(MatcherDefinition matcherDefinition)

@@ -1,5 +1,10 @@
 NEWS
 
+3.2.0
+- Add support for Boolean and Regex matchers.
+- Add support for new Dependency Matcher.
+- Add support for Client Destroy.
+
 3.1.2
 - New logging approach: Common.Logging
 

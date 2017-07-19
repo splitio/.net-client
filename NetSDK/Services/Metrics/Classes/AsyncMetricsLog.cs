@@ -56,5 +56,11 @@ namespace Splitio.Services.Metrics.Classes
                 Logger.Error("Exception running gauge metrics task", e);
             }
         }
+
+
+        public void Clear()
+        {
+            worker.Clear();
+        }
     }
 }

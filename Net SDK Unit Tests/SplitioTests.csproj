@@ -91,6 +91,7 @@
     <Compile Include="Integration Tests\SdkApiClientTests.cs" />
     <Compile Include="Integration Tests\LocalhostClientTests.cs" />
     <Compile Include="Integration Tests\JSONFileClientTests.cs" />
+    <Compile Include="Integration Tests\SelfRefreshingSplitClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Tests\Cache\SplitCacheTests.cs" />
     <Compile Include="Unit Tests\Cache\SegmentCacheTests.cs" />
@@ -110,6 +111,8 @@
     <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\MatchesStringMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualToBooleanMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\PartOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\EqualsToSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\StartsWithMatcherTests.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="Unit Tests\Matchers\ContainsAnyOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\SplitParserUnitTests.cs" />
     <Compile Include="Unit Tests\Matchers\ContainsAllOfSetMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\DependencyMatcherTests.cs" />
     <Compile Include="Unit Tests\Metrics\RedisMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\InMemoryMetricsLogUnitTests.cs" />
     <Compile Include="Unit Tests\Metrics\AsyncMetricsLogUnitTests.cs" />
@@ -182,11 +186,18 @@
     <None Include="Resources\splits_staging_5.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\splits_staging_6.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\test.splits">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\regex.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
