@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Splitio.Services.Parsing
 {
-    public class UserDefinedSegmentMatcher: IMatcher
+    public class UserDefinedSegmentMatcher: BaseMatcher, IMatcher
     {
         private string segmentName;
         private ISegmentCache segmentsCache;
@@ -17,30 +17,34 @@ namespace Splitio.Services.Parsing
             this.segmentsCache = segmentsCache;
         }
 
-        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return segmentsCache.IsInSegment(segmentName, key);
         }
 
-        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return segmentsCache.IsInSegment(segmentName, key.matchingKey);
         }
 
-        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
+        public override bool Match(bool key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return false;
+        }
     }
 }

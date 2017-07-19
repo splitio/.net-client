@@ -7,6 +7,8 @@ namespace Splitio.Services.Parsing
 {
     public interface IMatcher
     {
+        bool Match(object value, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
+
         bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
         bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
@@ -16,5 +18,7 @@ namespace Splitio.Services.Parsing
         bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
 
         bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
+
+        bool Match(bool key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null);
     }
 }

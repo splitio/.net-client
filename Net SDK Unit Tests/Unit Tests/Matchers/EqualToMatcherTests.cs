@@ -141,13 +141,26 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void MatchShouldReturnFalseOnInvalidDataType()
+        public void MatchShouldReturnFalseOnInvalidDataTypeString()
         {
             //Arrange
             var matcher = new EqualToMatcher(DataTypeEnum.STRING, 1470960000000);
 
             //Act
             var result = matcher.Match("abcd");
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void MatchShouldReturnFalseOnBooleanParameter()
+        {
+            //Arrange
+            var matcher = new EqualToMatcher(DataTypeEnum.DATETIME, 1470960000000);
+
+            //Act
+            var result = matcher.Match(true);
 
             //Assert
             Assert.IsFalse(result);

@@ -111,6 +111,8 @@
     <Compile Include="Unit Tests\Impressions\RedisTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
+    <Compile Include="Unit Tests\Matchers\MatchesStringMatcherTests.cs" />
+    <Compile Include="Unit Tests\Matchers\EqualToBooleanMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\PartOfSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\EqualsToSetMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\StartsWithMatcherTests.cs" />
@@ -191,7 +193,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\regex.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

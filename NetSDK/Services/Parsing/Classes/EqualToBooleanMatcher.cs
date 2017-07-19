@@ -7,31 +7,31 @@ using System.Text;
 
 namespace Splitio.Services.Parsing
 {
-    public class ContainsAllOfSetMatcher : BaseMatcher, IMatcher
+    public class EqualToBooleanMatcher: BaseMatcher, IMatcher
     {
-        private HashSet<string> itemsToCompare = new HashSet<string>();
+        bool value;
 
-        public ContainsAllOfSetMatcher(List<string> compareTo)
+        public EqualToBooleanMatcher(bool value)
         {
-            if (compareTo != null)
-            {
-                itemsToCompare.UnionWith(compareTo);
-            }
+            this.value = value;
+        }
+
+        public override bool Match(bool key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return key.Equals(value);
         }
 
         public override bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
-            return false;
-        }
-
-        public override bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
-        {
-            if (key == null || itemsToCompare.Count == 0)
+            bool boolValue;
+            if (bool.TryParse(key, out boolValue))
+            {
+                return Match(boolValue, attributes, splitClient);
+            }
+            else
             {
                 return false;
             }
-            
-            return itemsToCompare.All(i => key.Contains(i));
         }
 
         public override bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
@@ -49,10 +49,12 @@ namespace Splitio.Services.Parsing
             return false;
         }
 
-
-        public override bool Match(bool key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
+
+
+        
     }
 }

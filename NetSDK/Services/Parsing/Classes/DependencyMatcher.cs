@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Splitio.Services.Parsing.Classes
 {
-    public class DependencyMatcher : IMatcher
+    public class DependencyMatcher : BaseMatcher, IMatcher
     {
         string split { get; set; }
         List<string> treatments { get; set; }
@@ -18,12 +18,12 @@ namespace Splitio.Services.Parsing.Classes
             this.treatments = treatments;
         }
 
-        public bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(string key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(Key key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             if (splitClient == null)
             {
@@ -35,18 +35,24 @@ namespace Splitio.Services.Parsing.Classes
             return treatments.Contains(treatment);
         }
 
-        public bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(DateTime key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
 
-        public bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(long key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
 
         }
 
-        public bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        public override bool Match(List<string> key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
+        {
+            return false;
+        }
+
+
+        public override bool Match(bool key, Dictionary<string, object> attributes = null, ISplitClient splitClient = null)
         {
             return false;
         }
