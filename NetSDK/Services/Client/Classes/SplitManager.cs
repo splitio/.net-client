@@ -30,7 +30,7 @@ namespace Splitio.Services.Client.Classes
                     name = x.name,
                     killed = x.killed,
                     changeNumber = x.changeNumber,
-                    treatments = x.conditions[0].partitions.Select(y => y.treatment).ToList(),
+                    treatments = (x.conditions.Where(z => z.conditionType == ConditionType.ROLLOUT).FirstOrDefault() ?? new ConditionWithLogic() { partitions = new List<PartitionDefinition>() }).partitions.Select(y => y.treatment).ToList(),
                     trafficType = x.trafficTypeName
                 });
 
