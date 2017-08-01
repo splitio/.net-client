@@ -29,7 +29,8 @@ namespace Splitio_Tests.Unit_Tests.Client
                 conditionType = ConditionType.ROLLOUT,
                 partitions  = new List<PartitionDefinition>()
                 {
-                    new PartitionDefinition(){size = 100, treatment = "on"}
+                    new PartitionDefinition(){size = 90, treatment = "on"},
+                    new PartitionDefinition(){size = 10, treatment = "off"}
                 }
             };
             conditionsWithLogic.Add(conditionWithLogic2);
@@ -54,9 +55,11 @@ namespace Splitio_Tests.Unit_Tests.Client
             Assert.AreEqual(firstResult.changeNumber, 10000);
             Assert.AreEqual(firstResult.killed, false);
             Assert.AreEqual(firstResult.trafficType, "user");
-            Assert.AreEqual(firstResult.treatments.Count, 1);
+            Assert.AreEqual(firstResult.treatments.Count, 2);
             var firstTreatment = firstResult.treatments[0];
             Assert.AreEqual(firstTreatment, "on");
+            var secondTreatment = firstResult.treatments[1];
+            Assert.AreEqual(secondTreatment, "off");
         }
 
         [TestMethod]
@@ -107,7 +110,8 @@ namespace Splitio_Tests.Unit_Tests.Client
                 conditionType = ConditionType.ROLLOUT,
                 partitions = new List<PartitionDefinition>()
                 {
-                    new PartitionDefinition(){size = 100, treatment = "on"}
+                    new PartitionDefinition(){size = 90, treatment = "on"},
+                    new PartitionDefinition(){size = 10, treatment = "off"}
                 }
             };
             conditionsWithLogic.Add(conditionWithLogic);
@@ -130,9 +134,11 @@ namespace Splitio_Tests.Unit_Tests.Client
             Assert.AreEqual(result.changeNumber, 10000);
             Assert.AreEqual(result.killed, false);
             Assert.AreEqual(result.trafficType, "user");
-            Assert.AreEqual(result.treatments.Count, 1);
+            Assert.AreEqual(result.treatments.Count, 2);
             var firstTreatment = result.treatments[0];
             Assert.AreEqual(firstTreatment, "on");
+            var secondTreatment = result.treatments[1];
+            Assert.AreEqual(secondTreatment, "off");
         }
 
         [TestMethod]
