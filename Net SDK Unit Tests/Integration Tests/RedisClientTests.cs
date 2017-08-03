@@ -6,6 +6,8 @@ using Splitio.Services.Client.Classes;
 using System.Collections.Generic;
 using Moq;
 using Splitio.Domain;
+using Splitio.Redis.Services.Client.Classes;
+using Splitio.Redis.Services.Cache.Classes;
 
 namespace Splitio_Tests.Integration_Tests
 {

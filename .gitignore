@@ -25,3 +25,5 @@ Microbenchmark160929.vspx
 
 Splitio.TestSupport/bin
 Splitio.TestSupport/obj
+Splitio.Redis/bin
+Splitio.Redis/obj

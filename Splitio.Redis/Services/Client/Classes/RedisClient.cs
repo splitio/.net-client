@@ -1,10 +1,12 @@
-﻿using Common.Logging;
-using Splitio.CommonLibraries;
+﻿using Splitio.CommonLibraries;
 using Splitio.Domain;
+using Splitio.Redis.Services.Cache.Classes;
+using Splitio.Redis.Services.Impressions.Classes;
+using Splitio.Redis.Services.Metrics.Classes;
 using Splitio.Services.Cache.Classes;
+using Splitio.Services.Client.Classes;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
-using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Parsing.Classes;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Splitio.Services.Client.Classes
+namespace Splitio.Redis.Services.Client.Classes
 {
     public class RedisClient : SplitClient
     {

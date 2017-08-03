@@ -6,6 +6,7 @@ using System.Linq;
 using Moq;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
+using Splitio.Redis.Services.Metrics.Classes;
 
 namespace Splitio_Tests.Unit_Tests.Metrics
 {

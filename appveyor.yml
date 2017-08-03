@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 3.2.1
+version: 3.3.0-rc{build}
 
 configuration: Release
 
@@ -11,6 +11,7 @@ before_build:
  
 after_build:
  - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%
+ - nuget pack NetSDK\Splitio.Redis.csproj -Version %appveyor_build_version%
 
 artifacts:
  - path: '**\Splitio.*.nupkg'
