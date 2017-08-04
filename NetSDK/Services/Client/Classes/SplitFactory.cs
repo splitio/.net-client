@@ -1,7 +1,10 @@
 ﻿using Common.Logging;
 using Splitio.Services.Client.Interfaces;
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Remoting;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -54,11 +57,19 @@ namespace Splitio.Services.Client.Classes
                 case Mode.Consumer:
                     if (options.CacheAdapterConfig != null && options.CacheAdapterConfig.Type == AdapterType.Redis)
                     {
-                        if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port))
+                        try
                         {
-                            throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
+                            if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port))
+                            {
+                                throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
+                            }
+                            var handle = Activator.CreateInstance("Splitio.Redis", "Splitio.Redis.Services.Client.Classes.RedisClient", false, default(BindingFlags), default(Binder), new Object[] { options }, default(CultureInfo), null);
+                            client = (ISplitClient)handle.Unwrap();
                         }
-                        client = new RedisClient(options);
+                        catch(Exception e)
+                        {
+                            throw new Exception("Splitio.Redis package should be added as reference, to build split client in Redis Consumer mode.", e);
+                        }
                     }
                     else
                     {
@@ -69,10 +80,7 @@ namespace Splitio.Services.Client.Classes
                     throw new Exception("Unsupported mode.");
                 default:
                     throw new Exception("Mode should be set to build split client.");
-            }
-            
-
-            
+            }       
         }
 
         public ISplitManager Manager()

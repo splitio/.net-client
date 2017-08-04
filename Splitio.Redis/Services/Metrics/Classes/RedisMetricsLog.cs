@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Splitio.Services.Metrics.Classes
+namespace Splitio.Redis.Services.Metrics.Classes
 {
     public class RedisMetricsLog : IMetricsLog
     {

@@ -6,6 +6,7 @@ using Moq;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Cache.Interfaces;
+using Splitio.Redis.Services.Impressions.Classes;
 
 namespace Splitio_Tests.Unit_Tests.Impressions
 {

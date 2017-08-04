@@ -40,28 +40,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-    </Reference>
     <Reference Include="MurmurHash">
       <HintPath>..\packages\murmurhash.1.0.0\lib\net40\MurmurHash.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="StackExchange.Redis, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\StackExchange.Redis.1.2.1\lib\net40\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -123,21 +107,13 @@
     <Compile Include="Services\Cache\Classes\InMemoryMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
-    <Compile Include="Services\Cache\Classes\RedisCacheBase.cs" />
     <Compile Include="Services\Cache\Interfaces\IReadinessGatesCache.cs" />
-    <Compile Include="Services\Cache\Classes\RedisAdapter.cs" />
-    <Compile Include="Services\Cache\Classes\RedisImpressionsCache.cs" />
-    <Compile Include="Services\Cache\Classes\RedisMetricsCache.cs" />
-    <Compile Include="Services\Cache\Classes\RedisSegmentCache.cs" />
-    <Compile Include="Services\Cache\Classes\RedisSplitCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IImpressionsCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IMetricsCache.cs" />
-    <Compile Include="Services\Cache\Interfaces\IRedisAdapter.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISplitCache.cs" />
     <Compile Include="Services\Client\Classes\AdapterType.cs" />
     <Compile Include="Services\Client\Classes\Mode.cs" />
-    <Compile Include="Services\Client\Classes\RedisClient.cs" />
     <Compile Include="Services\Client\Classes\CacheAdapterConfigurationOptions.cs" />
     <Compile Include="Services\Client\Classes\SplitFactory.cs" />
     <Compile Include="Services\Client\Classes\ConfigurationOptions.cs" />
@@ -145,7 +121,6 @@
     <Compile Include="Services\Client\Classes\LocalhostClient.cs" />
     <Compile Include="Services\Cache\Classes\InMemoryReadinessGatesCache.cs" />
     <Compile Include="Services\Client\Classes\SelfRefreshingClient.cs" />
-    <Compile Include="Services\Client\Classes\RedisSplitManager.cs" />
     <Compile Include="Services\Client\Classes\SplitManager.cs" />
     <Compile Include="Services\Client\Interfaces\ISplitClient.cs" />
     <Compile Include="Services\Client\Classes\SplitClient.cs" />
@@ -153,7 +128,6 @@
     <Compile Include="Services\EngineEvaluator\Splitter.cs" />
     <Compile Include="Services\Impressions\Classes\AsynchronousImpressionListener.cs" />
     <Compile Include="Services\Impressions\Classes\BlockingQueue.cs" />
-    <Compile Include="Services\Impressions\Classes\RedisTreatmentLog.cs" />
     <Compile Include="Services\Impressions\Classes\SelfUpdatingTreatmentLog.cs" />
     <Compile Include="Services\Impressions\Classes\TreatmentSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\IImpressionListener.cs" />
@@ -163,7 +137,6 @@
     <Compile Include="Services\Metrics\Classes\Counter.cs" />
     <Compile Include="Services\Metrics\Classes\InMemoryMetricsLog.cs" />
     <Compile Include="Services\Metrics\Classes\MetricsSdkApiClient.cs" />
-    <Compile Include="Services\Metrics\Classes\RedisMetricsLog.cs" />
     <Compile Include="Services\Metrics\Interfaces\ILatencyTracker.cs" />
     <Compile Include="Services\Metrics\Interfaces\IMetricsLog.cs" />
     <Compile Include="Services\Metrics\Interfaces\IMetricsSdkApiClient.cs" />
@@ -181,7 +154,6 @@
     <Compile Include="Services\Parsing\Classes\LessOrEqualToMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\MatchesStringMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\PartOfSetMatcher.cs" />
-    <Compile Include="Services\Parsing\Classes\RedisSplitParser.cs" />
     <Compile Include="Services\Parsing\Classes\EndsWithMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\ContainsStringMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\StartsWithMatcher.cs" />
