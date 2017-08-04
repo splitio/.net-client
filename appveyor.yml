@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 3.3.0-rc{build}
+version: 3.3.0
 
 configuration: Release
 
@@ -12,6 +12,7 @@ before_build:
 after_build:
  - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%
  - nuget pack Splitio.Redis\Splitio.Redis.csproj -Version %appveyor_build_version%
+ - nuget pack Splitio.TestSupport\Splitio.TestSupport.csproj -Version %appveyor_build_version%
 
 artifacts:
  - path: '**\Splitio.*.nupkg'
