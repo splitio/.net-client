@@ -1,10 +1,7 @@
-﻿using Splitio.Services.Cache.Interfaces;
+﻿using Splitio.Redis.Services.Cache.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Splitio.Services.Cache.Classes
+namespace Splitio.Redis.Services.Cache.Classes
 {
     public abstract class RedisCacheBase
     {

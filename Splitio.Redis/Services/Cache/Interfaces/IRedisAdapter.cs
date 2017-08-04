@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Splitio.Services.Cache.Interfaces
+namespace Splitio.Redis.Services.Cache.Interfaces
 {
     public interface IRedisAdapter
     {
