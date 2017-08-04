@@ -94,6 +94,7 @@
     <Compile Include="Services\Client\Classes\RedisSplitManager.cs" />
     <Compile Include="Services\Impressions\Classes\RedisTreatmentLog.cs" />
     <Compile Include="Services\Metrics\Classes\RedisMetricsLog.cs" />
+    <Compile Include="Services\Parsing\Classes\RedisSplitParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetSDK\Splitio.csproj">

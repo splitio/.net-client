@@ -154,7 +154,6 @@
     <Compile Include="Services\Parsing\Classes\LessOrEqualToMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\MatchesStringMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\PartOfSetMatcher.cs" />
-    <Compile Include="Services\Parsing\Classes\RedisSplitParser.cs" />
     <Compile Include="Services\Parsing\Classes\EndsWithMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\ContainsStringMatcher.cs" />
     <Compile Include="Services\Parsing\Classes\StartsWithMatcher.cs" />
