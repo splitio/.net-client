@@ -6,6 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio", "NetSDK\Splitio.csproj", "{357902E2-D685-4C14-8CCE-BD6CE7B22D36}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplitioTests", "Net SDK Unit Tests\SplitioTests.csproj", "{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448} = {92E2C8DB-9320-4045-8EAD-F0F32E3EA448}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio.Redis", "Splitio.Redis\Splitio.Redis.csproj", "{B8B39BEC-F178-4B1F-800C-9229E772126A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio.TestSupport", "Splitio.TestSupport\Splitio.TestSupport.csproj", "{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{757C576A-4166-47E0-B7DA-BB5EC7E3A721}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,9 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{757C57
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio.Redis", "Splitio.Redis\Splitio.Redis.csproj", "{B8B39BEC-F178-4B1F-800C-9229E772126A}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splitio.TestSupport", "Splitio.TestSupport\Splitio.TestSupport.csproj", "{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +35,14 @@ Global
 		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ABE2140-1FFF-4CC8-8E41-6A2B4FB71CE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8B39BEC-F178-4B1F-800C-9229E772126A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8B39BEC-F178-4B1F-800C-9229E772126A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B39BEC-F178-4B1F-800C-9229E772126A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B39BEC-F178-4B1F-800C-9229E772126A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E2C8DB-9320-4045-8EAD-F0F32E3EA448}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
