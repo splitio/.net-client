@@ -1,23 +1,22 @@
 ﻿using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
+using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Impressions.Classes;
 using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
+using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Net;
-using System.Threading.Tasks;
 using System.Linq;
-using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Parsing.Classes;
+using System.Net;
 using System.Net.Sockets;
-using Common.Logging;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -147,6 +146,8 @@ namespace Splitio.Services.Client.Classes
                             selfRefreshingSegmentFetcher.StartScheduler();
                             break;
                         }
+
+                        ThreadUtils.Delay(500).Wait();
                     }
                 });
         }
