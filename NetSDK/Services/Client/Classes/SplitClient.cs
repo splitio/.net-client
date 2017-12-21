@@ -14,14 +14,14 @@ using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
-    public abstract class SplitClient: ISplitClient
+    public abstract class SplitClient : ISplitClient
     {
         protected static readonly ILog Log = LogManager.GetLogger(typeof(SplitClient));
         protected const string Control = "control";
         protected const string SdkGetTreatment = "sdk.getTreatment";
         protected const string LabelKilled = "killed";
-        protected const string LabelNoConditionMatched = "no rule matched";
-        protected const string LabelSplitNotFound = "rules not found";
+        protected const string LabelDefaultRule = "default rule";
+        protected const string LabelSplitNotFound = "definition not found";
         protected const string LabelException = "exception";
         protected const string LabelTrafficAllocationFailed = "not in split";
 
@@ -57,14 +57,14 @@ namespace Splitio.Services.Client.Classes
             {
                 return treatmentCache[featureHash];
             }
-            
+
             var result = GetTreatmentForFeature(key, feature, attributes, logMetricsAndImpressions);
 
             if (multiple)
             {
                 treatmentCache.TryAdd(featureHash, result);
             }
-            
+
             return result;
         }
 
@@ -101,16 +101,16 @@ namespace Splitio.Services.Client.Classes
                 {
                     if (logMetricsAndImpressions)
                     {
-                        //if split definition was not found, impression label = "rules not found"
+                        //if split definition was not found, impression label = "definition not found"
                         RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
                     }
 
                     Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
                     return Control;
                 }
-                
+
                 var treatment = GetTreatment(key, split, attributes, start, clock, this, logMetricsAndImpressions);
-                
+
                 return treatment;
             }
             catch (Exception e)
@@ -136,7 +136,7 @@ namespace Splitio.Services.Client.Classes
                 {
                     if (!inRollout && condition.conditionType == ConditionType.ROLLOUT)
                     {
-                        if (split.trafficAllocation < 100) 
+                        if (split.trafficAllocation < 100)
                         {
                             // bucket ranges from 1-100.
                             int bucket = split.algo == AlgorithmEnum.LegacyHash ? splitter.LegacyBucket(key.bucketingKey, split.trafficAllocationSeed) : splitter.Bucket(key.bucketingKey, split.trafficAllocationSeed);
@@ -172,8 +172,8 @@ namespace Splitio.Services.Client.Classes
 
                 if (logMetricsAndImpressions)
                 {
-                    //If no condition matched, impression label = "no rule matched"
-                    RecordStats(key, split.name, split.changeNumber, LabelNoConditionMatched, start, split.defaultTreatment, SdkGetTreatment, clock);
+                    //If no condition matched, impression label = "default rule"
+                    RecordStats(key, split.name, split.changeNumber, LabelDefaultRule, start, split.defaultTreatment, SdkGetTreatment, clock);
                 }
                 return split.defaultTreatment;
             }
@@ -210,7 +210,7 @@ namespace Splitio.Services.Client.Classes
 
         private void ClearItemsAddedToTreatmentCache(string key)
         {
-            var temporaryTreatmentCache = new ConcurrentDictionary<string,string>(treatmentCache);
+            var temporaryTreatmentCache = new ConcurrentDictionary<string, string>(treatmentCache);
             foreach (var item in temporaryTreatmentCache.Keys.Where(x => x.StartsWith(key)))
             {
                 string result;

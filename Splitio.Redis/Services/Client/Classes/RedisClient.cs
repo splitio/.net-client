@@ -19,7 +19,7 @@ namespace Splitio.Redis.Services.Client.Classes
     public class RedisClient : SplitClient
     {
         private RedisSplitParser splitParser;
-        private RedisAdapter redisAdapter; 
+        private RedisAdapter redisAdapter;
 
         private static string SdkVersion;
         private static string SdkSpecVersion;
@@ -39,7 +39,7 @@ namespace Splitio.Redis.Services.Client.Classes
         {
             ReadConfig(config);
             BuildRedisCache();
-            BuildTreatmentLog(config); 
+            BuildTreatmentLog(config);
             BuildMetricsLog();
             BuildSplitter();
             BuildManager();
@@ -123,7 +123,7 @@ namespace Splitio.Redis.Services.Client.Classes
             splitParser = new RedisSplitParser(segmentCache);
         }
 
-        protected override string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes = null , bool logMetricsAndImpressions = true)
+        protected override string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
         {
             long start = CurrentTimeHelper.CurrentTimeMillis();
             var clock = new Stopwatch();
@@ -137,7 +137,7 @@ namespace Splitio.Redis.Services.Client.Classes
                 {
                     if (logMetricsAndImpressions)
                     {
-                        //if split definition was not found, impression label = "rules not found"
+                        //if split definition was not found, impression label = "definition not found"
                         RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
                     }
 
