@@ -1,13 +1,19 @@
 nuget:
   account_feed: true
 
-version: 3.3.1
+version: 3.3.3
 
+assembly_info:
+  patch: true
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+  
 configuration: Release
 
 before_build:
  - nuget restore
- - cmd: set BUILD_VERSION=%APPVEYOR_BUILD_NUMBER%
+ - cmd: set BUILD_VERSION=%appveyor_build_version%
  
 after_build:
  - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%

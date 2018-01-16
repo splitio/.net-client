@@ -22,7 +22,7 @@ namespace Splitio_Tests.Integration_Tests
             var client = new JSONFileClient("splits_staging_3.json", "");
 
             //Act           
-            var result = client.GetTreatment("test","fail", null);
+            var result = client.GetTreatment("test", "fail", null);
 
             //Assert
             Assert.IsNotNull(result);
@@ -249,7 +249,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = client.GetTreatment("test", "test_jw3", null);
 
             //Assert
-            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "test_jw3" && p.treatment == "off" && p.time > 0  && p.changeNumber == 1470947806420 && p.label == "killed" && p.bucketingKey == null)));
+            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "test_jw3" && p.treatment == "off" && p.time > 0 && p.changeNumber == 1470947806420 && p.label == "killed" && p.bucketingKey == null)));
         }
 
         [TestMethod]
@@ -264,7 +264,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = client.GetTreatment("test", "whitelisting_elements", null);
 
             //Assert
-            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "whitelisting_elements" && p.treatment == "off" && p.time > 0  && p.changeNumber == 1471368078203 && p.label == "no rule matched" && p.bucketingKey == null)));
+            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "whitelisting_elements" && p.treatment == "off" && p.time > 0 && p.changeNumber == 1471368078203 && p.label == "default rule" && p.bucketingKey == null)));
 
         }
 
@@ -281,7 +281,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = client.GetTreatment("test", "asd", null);
 
             //Assert
-            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "asd" && p.treatment == "control" && p.time > 0 && p.changeNumber == null && p.label == "rules not found" && p.bucketingKey == null)));
+            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "asd" && p.treatment == "control" && p.time > 0 && p.changeNumber == null && p.label == "definition not found" && p.bucketingKey == null)));
         }
 
         [TestMethod]
@@ -298,7 +298,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = client.GetTreatment("test", "asd", null);
 
             //Assert
-            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "asd" && p.treatment == "control" && p.time > 0  && p.changeNumber == null && p.label == "exception" && p.bucketingKey == null)));
+            treatmentLogMock.Verify(x => x.Log(It.Is<KeyImpression>(p => p.keyName == "test" && p.feature == "asd" && p.treatment == "control" && p.time > 0 && p.changeNumber == null && p.label == "exception" && p.bucketingKey == null)));
         }
 
         [TestMethod]
@@ -404,7 +404,7 @@ namespace Splitio_Tests.Integration_Tests
             var client = new JSONFileClient("splits_staging_5.json", "");
 
             var attributes = new Dictionary<string, object>();
-            attributes.Add("permissions", new List<string>(){ "create" });
+            attributes.Add("permissions", new List<string>() { "create" });
 
             //Act           
             var result = client.GetTreatment("test1", "UT_NOT_SET_MATCHER", attributes);
@@ -440,7 +440,7 @@ namespace Splitio_Tests.Integration_Tests
             var client = new JSONFileClient("splits_staging_5.json", "");
 
             var attributes = new Dictionary<string, object>();
-            attributes.Add("st",  "permission");
+            attributes.Add("st", "permission");
 
             //Act           
             var result = client.GetTreatment("test1", "string_matchers", attributes);
@@ -482,7 +482,7 @@ namespace Splitio_Tests.Integration_Tests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("on", result); 
+            Assert.AreEqual("on", result);
         }
 
         [TestMethod]
@@ -568,7 +568,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual(resultDestroy3.Count, 0);
             Assert.IsTrue(resultDestroy4 == null);
         }
-        
+
         [TestMethod]
         [DeploymentItem(@"Resources\splits_staging_6.json")]
         public void ExecuteGetTreatmentWithDependencyMatcherImpressionOnChild()
