@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
-using Splitio.Services.Cache.Classes;
-using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Impressions.Interfaces;
+using Splitio.Services.Shared.Classes;
+using Splitio.Services.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +13,18 @@ using System.Threading;
 
 namespace Splitio.Services.Impressions.Classes
 {
-    public class SelfUpdatingTreatmentLog: IImpressionListener
+    public class SelfUpdatingTreatmentLog: IListener<KeyImpression>
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;
-        private IImpressionsCache impressionsCache;
+        private ISimpleCache<KeyImpression> impressionsCache;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SelfUpdatingTreatmentLog));
 
-        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, IImpressionsCache impressionsCache, int maximumNumberOfKeysToCache = -1)
+        public SelfUpdatingTreatmentLog(ITreatmentSdkApiClient apiClient, int interval, ISimpleCache<KeyImpression> impressionsCache, int maximumNumberOfKeysToCache = -1)
         {
-            this.impressionsCache = impressionsCache ?? new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache));
+            this.impressionsCache = impressionsCache ?? new InMemorySimpleCache<KeyImpression>(new BlockingQueue<KeyImpression>(maximumNumberOfKeysToCache));
             this.apiClient = apiClient;
             this.interval = interval;
         }
@@ -43,7 +43,7 @@ namespace Splitio.Services.Impressions.Classes
 
         private void SendBulkImpressions()
         {
-            if(((InMemoryImpressionsCache)impressionsCache).HasReachedMaxSize())
+            if(((InMemorySimpleCache<KeyImpression>)impressionsCache).HasReachedMaxSize())
             {
                 Logger.Warn("Split SDK impressions queue is full. Impressions may have been dropped. Consider increasing capacity.");
             }
@@ -76,7 +76,7 @@ namespace Splitio.Services.Impressions.Classes
 
         public void Log(KeyImpression impression)
         {
-            impressionsCache.AddImpression(impression);
+            impressionsCache.AddItem(impression);
         }
     }
 }

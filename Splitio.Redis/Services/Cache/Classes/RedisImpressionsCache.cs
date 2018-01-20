@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Interfaces;
-using Splitio.Services.Cache.Interfaces;
+using Splitio.Services.Shared.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Splitio.Redis.Services.Cache.Classes
 {
-    public class RedisImpressionsCache : RedisCacheBase, IImpressionsCache
+    public class RedisImpressionsCache : RedisCacheBase, ISimpleCache<KeyImpression>
     {
         private const string impressionKeyPrefix = "impressions.";
 
@@ -15,10 +15,10 @@ namespace Splitio.Redis.Services.Cache.Classes
             : base(redisAdapter, machineIP, sdkVersion, userPrefix) 
         {}
 
-        public void AddImpression(KeyImpression impression)
+        public void AddItem(KeyImpression item)
         {
-            var key = redisKeyPrefix + impressionKeyPrefix + impression.feature;
-            var impressionJson = JsonConvert.SerializeObject(impression);
+            var key = redisKeyPrefix + impressionKeyPrefix + item.feature;
+            var impressionJson = JsonConvert.SerializeObject(item);
             redisAdapter.SAdd(key, impressionJson);
         }
 

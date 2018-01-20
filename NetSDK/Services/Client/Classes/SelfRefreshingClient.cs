@@ -9,6 +9,8 @@ using Splitio.Services.Metrics.Classes;
 using Splitio.Services.Metrics.Interfaces;
 using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.Shared.Classes;
+using Splitio.Services.Shared.Interfaces;
 using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
@@ -58,7 +60,7 @@ namespace Splitio.Services.Client.Classes
         private ITreatmentSdkApiClient treatmentSdkApiClient;
         private IMetricsSdkApiClient metricsSdkApiClient;
         private SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher;
-        private IImpressionListener treatmentLog;
+        private IListener<KeyImpression> treatmentLog;
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
         {
@@ -186,13 +188,13 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildTreatmentLog(ConfigurationOptions config)
         {
-            impressionsCache = new InMemoryImpressionsCache(new BlockingQueue<KeyImpression>(TreatmentLogSize));
+            impressionsCache = new InMemorySimpleCache<KeyImpression>(new BlockingQueue<KeyImpression>(TreatmentLogSize));
             treatmentLog = new SelfUpdatingTreatmentLog(treatmentSdkApiClient, TreatmentLogRefreshRate, impressionsCache);
-            impressionListener = new AsynchronousImpressionListener();
-            ((AsynchronousImpressionListener)impressionListener).AddListener(treatmentLog);
+            impressionListener = new AsynchronousListener<KeyImpression>();
+            ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(treatmentLog);
             if (config.ImpressionListener != null)
             {
-                ((AsynchronousImpressionListener)impressionListener).AddListener(config.ImpressionListener);
+                ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(config.ImpressionListener);
             }
         }
 

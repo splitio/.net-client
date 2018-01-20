@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Splitio.Services.Impressions.Classes;
-using Splitio.Domain;
-using System.Threading;
 using Moq;
-using Splitio.Services.Impressions.Interfaces;
-using Splitio.Services.Cache.Classes;
-using Splitio.Services.Cache.Interfaces;
+using Splitio.Domain;
 using Splitio.Redis.Services.Impressions.Classes;
+using Splitio.Services.Shared.Interfaces;
+using System.Threading;
 
 namespace Splitio_Tests.Unit_Tests.Impressions
 {
@@ -17,7 +14,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void LogSuccessfully()
         {
             //Arrange
-            var impressionsCache = new Mock<IImpressionsCache>();
+            var impressionsCache = new Mock<ISimpleCache<KeyImpression>>();
             var treatmentLog = new RedisTreatmentLog(impressionsCache.Object);
 
             //Act
@@ -26,14 +23,14 @@ namespace Splitio_Tests.Unit_Tests.Impressions
 
             //Assert
             Thread.Sleep(1000);
-            impressionsCache.Verify(mock => mock.AddImpression(It.IsAny<KeyImpression>()), Times.Once());
+            impressionsCache.Verify(mock => mock.AddItem(It.IsAny<KeyImpression>()), Times.Once());
         }
 
         [TestMethod]
         public void LogSuccessfullyUsingBucketingKey()
         {
             //Arrange
-            var impressionsCache = new Mock<IImpressionsCache>();
+            var impressionsCache = new Mock<ISimpleCache<KeyImpression>>();
             var treatmentLog = new RedisTreatmentLog(impressionsCache.Object);
 
             //Act
@@ -42,7 +39,7 @@ namespace Splitio_Tests.Unit_Tests.Impressions
             treatmentLog.Log(impression);
             //Assert
             Thread.Sleep(1000);
-            impressionsCache.Verify(mock => mock.AddImpression(It.Is<KeyImpression>(p => p.keyName == key.matchingKey &&  p.feature == "test" && p.treatment == "on" && p.time == 7000 && p.changeNumber == 1 && p.label == "test-label" && p.bucketingKey == key.bucketingKey)), Times.Once());
+            impressionsCache.Verify(mock => mock.AddItem(It.Is<KeyImpression>(p => p.keyName == key.matchingKey &&  p.feature == "test" && p.treatment == "on" && p.time == 7000 && p.changeNumber == 1 && p.label == "test-label" && p.bucketingKey == key.bucketingKey)), Times.Once());
         }    
     }
 }

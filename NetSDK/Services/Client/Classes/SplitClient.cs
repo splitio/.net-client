@@ -4,8 +4,8 @@ using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Client.Interfaces;
 using Splitio.Services.EngineEvaluator;
-using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Metrics.Interfaces;
+using Splitio.Services.Shared.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,11 +28,11 @@ namespace Splitio.Services.Client.Classes
         protected static bool LabelsEnabled;
 
         protected Splitter splitter;
-        protected IImpressionListener impressionListener;
+        protected IListener<KeyImpression> impressionListener;
         protected IMetricsLog metricsLog;
         protected ISplitManager manager;
         protected IMetricsCache metricsCache;
-        protected IImpressionsCache impressionsCache;
+        protected ISimpleCache<KeyImpression> impressionsCache;
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 

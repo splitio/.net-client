@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Splitio.Services.Impressions.Classes;
-using Splitio.Domain;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Splitio.Services.Cache.Classes;
-using Splitio.Services.Impressions.Interfaces;
+using Splitio.Domain;
+using Splitio.Services.Shared.Classes;
+using Splitio.Services.Shared.Interfaces;
+using System;
 using System.Threading;
 
 namespace Splitio_Tests.Unit_Tests.Impressions
@@ -16,8 +15,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddListenerAndPerformLogSuccessfully()
         {
             //Arrange
-            var asyncListener = new AsynchronousImpressionListener();
-            var listenerMock = new Mock<IImpressionListener>();
+            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var listenerMock = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listenerMock.Object);
 
             //Act
@@ -32,9 +31,9 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddTwoListenersAndPerformLogSuccessfully()
         {
             //Arrange
-            var asyncListener = new AsynchronousImpressionListener();
-            var listenerMock1 = new Mock<IImpressionListener>();
-            var listenerMock2 = new Mock<IImpressionListener>();
+            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var listenerMock1 = new Mock<IListener<KeyImpression>>();
+            var listenerMock2 = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listenerMock1.Object);
             asyncListener.AddListener(listenerMock2.Object);
 
@@ -52,10 +51,10 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddTwoListenersAndPerformLogSuccessfullyWhenOneListenerFails()
         {
             //Arrange
-            var asyncListener = new AsynchronousImpressionListener();
-            var listenerMock1 = new Mock<IImpressionListener>();
+            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var listenerMock1 = new Mock<IListener<KeyImpression>>();
             listenerMock1.Setup(x => x.Log(It.IsAny<KeyImpression>())).Throws(new Exception());
-            var listenerMock2 = new Mock<IImpressionListener>();
+            var listenerMock2 = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listenerMock1.Object);
             asyncListener.AddListener(listenerMock2.Object);
 
