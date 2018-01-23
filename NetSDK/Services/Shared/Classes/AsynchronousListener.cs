@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Splitio.Services.Shared.Classes
 {
-    public class AsynchronousListener<T> : IListener<T>
+    public class AsynchronousListener<T> : IAsynchronousListener<T>
     {
         protected readonly ILog _logger;
         private List<IListener<T>> workers = new List<IListener<T>>();
