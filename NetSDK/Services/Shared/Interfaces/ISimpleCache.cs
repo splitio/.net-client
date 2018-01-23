@@ -7,5 +7,7 @@ namespace Splitio.Services.Shared.Interfaces
         void AddItem(T item);
 
         List<T> FetchAllAndClear();
+
+        bool HasReachedMaxSize();
     }
 }

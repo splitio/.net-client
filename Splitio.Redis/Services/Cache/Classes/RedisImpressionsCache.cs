@@ -4,6 +4,7 @@ using Splitio.Redis.Services.Cache.Interfaces;
 using Splitio.Services.Shared.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Splitio.Redis.Services.Cache.Classes
 {
@@ -39,6 +40,11 @@ namespace Splitio.Redis.Services.Cache.Classes
                 redisAdapter.Del(impresionKey);
             }
             return impressions;
+        }
+
+        public bool HasReachedMaxSize()
+        {
+            return false;
         }
     }
 }

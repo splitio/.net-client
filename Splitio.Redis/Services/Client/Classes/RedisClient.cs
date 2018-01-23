@@ -1,4 +1,5 @@
-﻿using Splitio.CommonLibraries;
+﻿using Common.Logging;
+using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Classes;
 using Splitio.Redis.Services.Impressions.Classes;
@@ -95,7 +96,7 @@ namespace Splitio.Redis.Services.Client.Classes
         private void BuildTreatmentLog(ConfigurationOptions config)
         {
             var treatmentLog = new RedisTreatmentLog(impressionsCache);
-            impressionListener = new AsynchronousListener<KeyImpression>();
+            impressionListener = new AsynchronousListener<KeyImpression>(LogManager.GetLogger("AsynchronousImpressionListener"));
             ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(treatmentLog);
             if (config.ImpressionListener != null)
             {

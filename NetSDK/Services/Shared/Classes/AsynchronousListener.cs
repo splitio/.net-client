@@ -9,10 +9,15 @@ namespace Splitio.Services.Shared.Classes
 {
     public class AsynchronousListener<T> : IListener<T>
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(AsynchronousListener<T>));
+        protected readonly ILog _logger;
         private List<IListener<T>> workers = new List<IListener<T>>();
 
-        public void AddListener(IListener<T> worker)
+        public AsynchronousListener(ILog logger)
+        {
+            _logger = logger;
+        }
+
+    public void AddListener(IListener<T> worker)
         {
             workers.Add(worker);
         }
@@ -38,13 +43,13 @@ namespace Splitio.Services.Shared.Classes
                                                 var stopwatch = Stopwatch.StartNew();
                                                 worker.Log(item);
                                                 stopwatch.Stop();
-                                                Logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
+                                                _logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
                                             });
                                         logTask.Start();
                                     }
                                     catch (Exception e)
                                     {
-                                        Logger.Error("Exception performing Log with worker. ", e);
+                                        _logger.Error("Exception performing Log with worker. ", e);
                                     }
                                 }
                             });
@@ -52,7 +57,7 @@ namespace Splitio.Services.Shared.Classes
             }
             catch (Exception e)
             {
-                Logger.Error("Exception creating Log task. ", e);
+                _logger.Error("Exception creating Log task. ", e);
             }
         }
     }

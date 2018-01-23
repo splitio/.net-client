@@ -29,10 +29,12 @@ namespace Splitio.Services.Client.Classes
 
         protected Splitter splitter;
         protected IListener<KeyImpression> impressionListener;
+        protected IListener<Event> eventListener;
         protected IMetricsLog metricsLog;
         protected ISplitManager manager;
         protected IMetricsCache metricsCache;
         protected ISimpleCache<KeyImpression> impressionsCache;
+        protected ISimpleCache<Event> eventsCache;
         protected ISplitCache splitCache;
         protected ISegmentCache segmentCache;
 
@@ -206,6 +208,49 @@ namespace Splitio.Services.Client.Classes
 
             ClearItemsAddedToTreatmentCache(key.matchingKey);
             return treatmentsForFeatures;
+        }
+
+        public bool Track(string key, string trafficType, string eventType, double value)
+        {
+            try
+            {
+                eventListener.Log(new Event
+                {
+                    key = key,
+                    trafficTypeName = trafficType,
+                    eventTypeId = eventType,
+                    value = value,
+                    timestamp = CurrentTimeHelper.CurrentTimeMillis()
+                });
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception caught trying to track an event", e);
+                return false;
+            }
+        }
+
+        public bool Track(string key, string trafficType, string eventType)
+        {
+            try
+            {
+                eventListener.Log(new Event
+                {
+                    key = key,
+                    trafficTypeName = trafficType,
+                    eventTypeId = eventType,
+                    timestamp = CurrentTimeHelper.CurrentTimeMillis()
+                });
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception caught trying to track an event", e);
+                return false;
+            }
         }
 
         private void ClearItemsAddedToTreatmentCache(string key)

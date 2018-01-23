@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Common.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Splitio.Domain;
 using Splitio.Services.Shared.Classes;
@@ -15,7 +16,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddListenerAndPerformLogSuccessfully()
         {
             //Arrange
-            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var logger = new Mock<ILog>();
+            var asyncListener = new AsynchronousListener<KeyImpression>(logger.Object);
             var listenerMock = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listenerMock.Object);
 
@@ -31,7 +33,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddTwoListenersAndPerformLogSuccessfully()
         {
             //Arrange
-            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var logger = new Mock<ILog>();
+            var asyncListener = new AsynchronousListener<KeyImpression>(logger.Object);
             var listenerMock1 = new Mock<IListener<KeyImpression>>();
             var listenerMock2 = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listenerMock1.Object);
@@ -51,7 +54,8 @@ namespace Splitio_Tests.Unit_Tests.Impressions
         public void AddTwoListenersAndPerformLogSuccessfullyWhenOneListenerFails()
         {
             //Arrange
-            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var logger = new Mock<ILog>();
+            var asyncListener = new AsynchronousListener<KeyImpression>(logger.Object);
             var listenerMock1 = new Mock<IListener<KeyImpression>>();
             listenerMock1.Setup(x => x.Log(It.IsAny<KeyImpression>())).Throws(new Exception());
             var listenerMock2 = new Mock<IListener<KeyImpression>>();

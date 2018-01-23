@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Common.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Splitio.Domain;
 using Splitio.Services.Shared.Classes;
@@ -39,7 +40,8 @@ namespace Splitio_Tests.Integration_Tests
         public void AddTwoListenersAndPerformLogSuccessfully()
         {
             //Arrange
-            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var logger = new Mock<ILog>();
+            var asyncListener = new AsynchronousListener<KeyImpression>(logger.Object);
             var listener1 = new TestListener();
             var listenerMock2 = new Mock<IListener<KeyImpression>>();
             asyncListener.AddListener(listener1);
@@ -59,7 +61,8 @@ namespace Splitio_Tests.Integration_Tests
         public void AddTwoListenersAndPerformLogSuccessfullyWithOneLongRunningTask()
         {
             //Arrange
-            var asyncListener = new AsynchronousListener<KeyImpression>();
+            var logger = new Mock<ILog>();
+            var asyncListener = new AsynchronousListener<KeyImpression>(logger.Object);
             var listener1 = new TestListener2();
             var listener2 = new TestListener();
             asyncListener.AddListener(listener1);
