@@ -2,6 +2,7 @@
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Classes;
+using Splitio.Redis.Services.Events.Classes;
 using Splitio.Redis.Services.Impressions.Classes;
 using Splitio.Redis.Services.Metrics.Classes;
 using Splitio.Redis.Services.Parsing.Classes;
@@ -41,6 +42,7 @@ namespace Splitio.Redis.Services.Client.Classes
             ReadConfig(config);
             BuildRedisCache();
             BuildTreatmentLog(config);
+            BuildEventLog(config);
             BuildMetricsLog();
             BuildSplitter();
             BuildManager();
@@ -91,6 +93,7 @@ namespace Splitio.Redis.Services.Client.Classes
             segmentCache = new RedisSegmentCache(redisAdapter, RedisUserPrefix);
             metricsCache = new RedisMetricsCache(redisAdapter, SdkMachineIP, SdkVersion, RedisUserPrefix);
             impressionsCache = new RedisImpressionsCache(redisAdapter, SdkMachineIP, SdkVersion, RedisUserPrefix);
+            eventsCache = new RedisEventsCache(redisAdapter, SdkMachineIP, SdkVersion, RedisUserPrefix);
         }
 
         private void BuildTreatmentLog(ConfigurationOptions config)
@@ -101,6 +104,17 @@ namespace Splitio.Redis.Services.Client.Classes
             if (config.ImpressionListener != null)
             {
                 ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(config.ImpressionListener);
+            }
+        }
+
+        private void BuildEventLog(ConfigurationOptions config)
+        {
+            var eventLog = new RedisEventLog(eventsCache);
+            eventListener = new AsynchronousListener<Event>(LogManager.GetLogger("AsynchronousEventListener"));
+            ((AsynchronousListener<Event>)eventListener).AddListener(eventLog);
+            if (config.EventListener != null)
+            {
+                ((AsynchronousListener<Event>)eventListener).AddListener(config.EventListener);
             }
         }
 

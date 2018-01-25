@@ -194,6 +194,7 @@
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegment.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentFetcher.cs" />
     <Compile Include="Services\SegmentFetcher\Interfaces\ISegmentSdkApiClient.cs" />
+    <Compile Include="Services\Shared\Interfaces\ISimpleProducerCache.cs" />
     <Compile Include="Services\SplitFetcher\Classes\ApiSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\JSONFileSplitChangeFetcher.cs" />
     <Compile Include="Services\SplitFetcher\Classes\SelfRefreshingSplitFetcher.cs" />

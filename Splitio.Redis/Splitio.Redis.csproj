@@ -85,6 +85,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Cache\Classes\RedisAdapter.cs" />
     <Compile Include="Services\Cache\Classes\RedisCacheBase.cs" />
+    <Compile Include="Services\Cache\Classes\RedisEventsCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisImpressionsCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\RedisSegmentCache.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Services\Cache\Interfaces\IRedisAdapter.cs" />
     <Compile Include="Services\Client\Classes\RedisClient.cs" />
     <Compile Include="Services\Client\Classes\RedisSplitManager.cs" />
+    <Compile Include="Services\Events\Classes\RedisEventLog.cs" />
     <Compile Include="Services\Impressions\Classes\RedisTreatmentLog.cs" />
     <Compile Include="Services\Metrics\Classes\RedisMetricsLog.cs" />
     <Compile Include="Services\Parsing\Classes\RedisSplitParser.cs" />
