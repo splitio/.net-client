@@ -19,6 +19,13 @@ namespace Splitio.CommonLibraries
             {
                 return timestamp.ToDateTime();
             }
+
+            DateTime datetime;
+            if (DateTime.TryParse(timestampString, out datetime))
+            {
+                return datetime;
+            }
+
             return null;
         }
 
