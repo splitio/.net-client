@@ -77,5 +77,25 @@ namespace Splitio_Tests.Unit_Tests.CommonLibraries
             Assert.AreEqual(0, result.Second);
             Assert.AreEqual(0, result.Millisecond);
         }
+
+        [TestMethod]
+        public void ConvertStringToDateTimeWorks()
+        {
+            //Arrange
+            string value = "2016-04-21";
+
+            //Act
+            var result = value.ToDateTime();
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2016, result?.Year);
+            Assert.AreEqual(4, result?.Month);
+            Assert.AreEqual(21, result?.Day);
+            Assert.AreEqual(0, result?.Hour);
+            Assert.AreEqual(0, result?.Minute);
+            Assert.AreEqual(0, result?.Second);
+            Assert.AreEqual(0, result?.Millisecond);
+        }
     }
 }
