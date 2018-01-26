@@ -89,13 +89,13 @@ namespace Splitio_Tests.Unit_Tests.CommonLibraries
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(2016, result?.Year);
-            Assert.AreEqual(4, result?.Month);
-            Assert.AreEqual(21, result?.Day);
-            Assert.AreEqual(0, result?.Hour);
-            Assert.AreEqual(0, result?.Minute);
-            Assert.AreEqual(0, result?.Second);
-            Assert.AreEqual(0, result?.Millisecond);
+            Assert.AreEqual(2016, result.Value.Year);
+            Assert.AreEqual(4, result.Value.Month);
+            Assert.AreEqual(21, result.Value.Day);
+            Assert.AreEqual(0, result.Value.Hour);
+            Assert.AreEqual(0, result.Value.Minute);
+            Assert.AreEqual(0, result.Value.Second);
+            Assert.AreEqual(0, result.Value.Millisecond);
         }
     }
 }
