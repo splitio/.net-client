@@ -18,7 +18,7 @@ namespace Splitio.Services.Parsing
         {
             if (dataType == DataTypeEnum.DATETIME)
             {
-                return Match(value.ToDateTime(), attributes, splitClient);
+                return Match(key.ToDateTime(), attributes, splitClient);
             }
 
             return value == key;
