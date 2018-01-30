@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Newtonsoft.Json;
 using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Services.Events.Interfaces;
@@ -56,11 +55,7 @@ namespace Splitio.Services.Events.Classes
             {
                 try
                 {
-                    var eventsJson = JsonConvert.SerializeObject(events, new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
-                    apiClient.SendBulkEvents(eventsJson);
+                    apiClient.SendBulkEvents(events);
                 }
                 catch (Exception e)
                 {
