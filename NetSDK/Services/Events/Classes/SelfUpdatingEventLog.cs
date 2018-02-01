@@ -67,6 +67,11 @@ namespace Splitio.Services.Events.Classes
         public void Log(Event item)
         {
             eventsCache.AddItem(item);
+
+            if (eventsCache.HasReachedMaxSize())
+            {
+                SendBulkEvents();
+            }
         }
     }
 }

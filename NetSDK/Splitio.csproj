@@ -108,6 +108,7 @@
     <Compile Include="Services\Events\Classes\EventSdkApiClient.cs" />
     <Compile Include="Services\Events\Classes\SelfUpdatingEventLog.cs" />
     <Compile Include="Services\Events\Interfaces\IEventSdkApiClient.cs" />
+    <Compile Include="Services\Impressions\Interfaces\IImpressionListener.cs" />
     <Compile Include="Services\Shared\Classes\InMemorySimpleCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemoryMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
