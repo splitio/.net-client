@@ -1,27 +1,28 @@
-﻿using System;
+﻿using Common.Logging;
+using Splitio.Services.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Splitio.Services.Impressions.Interfaces;
-using Splitio.Domain;
-using System.Threading.Tasks;
-using Common.Logging;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
-
-namespace Splitio.Services.Impressions.Classes
+namespace Splitio.Services.Shared.Classes
 {
-    public class AsynchronousImpressionListener : IImpressionListener
+    public class AsynchronousListener<T> : IAsynchronousListener<T>
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(AsynchronousImpressionListener));
-        private List<IImpressionListener> workers = new List<IImpressionListener>();
+        protected readonly ILog _logger;
+        private List<IListener<T>> workers = new List<IListener<T>>();
 
-        public void AddListener(IImpressionListener worker)
+        public AsynchronousListener(ILog logger)
+        {
+            _logger = logger;
+        }
+
+    public void AddListener(IListener<T> worker)
         {
             workers.Add(worker);
         }
 
-        public void Log(KeyImpression impression)
+        public void Log(T item)
         {
             try
             {
@@ -30,7 +31,7 @@ namespace Splitio.Services.Impressions.Classes
                 var listenerTask =
                     new Task(() =>
                             {
-                                foreach (IImpressionListener worker in workers)
+                                foreach (IListener<T> worker in workers)
                                 {
                                     try
                                     {
@@ -40,15 +41,15 @@ namespace Splitio.Services.Impressions.Classes
                                             new Task(() =>
                                             {
                                                 var stopwatch = Stopwatch.StartNew();
-                                                worker.Log(impression);
+                                                worker.Log(item);
                                                 stopwatch.Stop();
-                                                Logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
+                                                _logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
                                             });
                                         logTask.Start();
                                     }
                                     catch (Exception e)
                                     {
-                                        Logger.Error("Exception performing Log with worker. ", e);
+                                        _logger.Error("Exception performing Log with worker. ", e);
                                     }
                                 }
                             });
@@ -56,7 +57,7 @@ namespace Splitio.Services.Impressions.Classes
             }
             catch (Exception e)
             {
-                Logger.Error("Exception creating Log task. ", e);
+                _logger.Error("Exception creating Log task. ", e);
             }
         }
     }
