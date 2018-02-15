@@ -35,5 +35,20 @@ namespace Splitio_Tests.Unit_Tests.Client
             //Assert
             Assert.AreEqual(key.bucketingKey, key.matchingKey);
         }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\test.splits")]
+        public void TrackShouldNotStoreEvents()
+        {
+            //Arrange
+            var splitClient = new LocalhostClientForTesting(@"test.splits");
+
+            //Act
+            var result = splitClient.Track("test", "test", "test");
+
+            //Assert
+            Assert.AreEqual(true, result);
+            Assert.IsNull(splitClient.GetEventListener());
+        }
     }
 }
