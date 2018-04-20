@@ -58,12 +58,10 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         public override void InitializeSegment(string name)
         {
-            SelfRefreshingSegment segment;
-            segments.TryGetValue(name, out segment);
-            if (segment == null)
+            var segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
+            if (segments.TryAdd(name, segment))
             {
-                segment = new SelfRefreshingSegment(name, segmentChangeFetcher, gates, segmentCache);
-                segments.TryAdd(name, segment);
+                segment.RegisterSegment();
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
                 Log.Info(String.Format("Segment queued: {0}", segment.name));
             }

@@ -31,7 +31,6 @@ namespace Splitio.Services.Client.Classes
         private static string BaseUrl;
         private static int SplitsRefreshRate;
         private static int SegmentRefreshRate;
-        private static string HttpEncoding;
         private static long HttpConnectionTimeout;
         private static long HttpReadTimeout;
         private static string SdkVersion;
@@ -95,7 +94,6 @@ namespace Splitio.Services.Client.Classes
             EventsBaseUrl = String.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
             SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
             SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
-            HttpEncoding = "gzip";
             HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
             HttpReadTimeout = config.ReadTimeout ?? 15000;
             SdkVersion = ".NET-" + Version.SplitSdkVersion;
@@ -236,7 +234,6 @@ namespace Splitio.Services.Client.Classes
         {
             var header = new HTTPHeader();
             header.authorizationApiKey = ApiKey;
-            header.encoding = HttpEncoding;
             header.splitSDKVersion = SdkVersion;
             header.splitSDKSpecVersion = SdkSpecVersion;
             header.splitSDKMachineName = SdkMachineName;

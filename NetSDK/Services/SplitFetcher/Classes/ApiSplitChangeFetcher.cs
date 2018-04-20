@@ -15,9 +15,10 @@ namespace Splitio.Services.SplitFetcher.Classes
 
         protected override SplitChangesResult FetchFromBackend(long since)
         {
-            var fetchResult = apiClient.FetchSplitChanges(since);
+            var fetchResultTask = apiClient.FetchSplitChanges(since);
+            fetchResultTask.Wait();
 
-            var splitChangesResult = JsonConvert.DeserializeObject<SplitChangesResult>(fetchResult);
+            var splitChangesResult = JsonConvert.DeserializeObject<SplitChangesResult>(fetchResultTask.Result);
             return splitChangesResult;
         }
     }
