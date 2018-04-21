@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Splitio.CommonLibraries
@@ -46,12 +47,12 @@ namespace Splitio.CommonLibraries
             this.metricsLog = metricsLog;
         }
 
-        public virtual async Task<HTTPResult> ExecuteGet(string requestUri)
+        public virtual async Task<HTTPResult> ExecuteGet(string requestUri, CancellationToken token = default(CancellationToken))
         {
             var result = new HTTPResult();
             try
             {
-                using (var response = await httpClient.GetAsync(requestUri))
+                using (var response = await httpClient.GetAsync(requestUri, token))
                 { 
                     result.statusCode = response.StatusCode;
                     result.content = response.Content.ReadAsStringAsync().Result;
@@ -64,12 +65,12 @@ namespace Splitio.CommonLibraries
             return result;
         }
 
-        public virtual async Task<HTTPResult> ExecutePost(string requestUri, string data)
+        public virtual async Task<HTTPResult> ExecutePost(string requestUri, string data, CancellationToken token = default(CancellationToken))
         {
             var result = new HTTPResult();
             try
             {
-                using (var response = await httpClient.PostAsync(requestUri, new StringContent(data, Encoding.UTF8, "application/json")))
+                using (var response = await httpClient.PostAsync(requestUri, new StringContent(data, Encoding.UTF8, "application/json"), token))
                 { 
                     result.statusCode = response.StatusCode;
                     result.content = response.Content.ReadAsStringAsync().Result;

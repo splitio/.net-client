@@ -5,6 +5,7 @@ using Splitio.Services.SplitFetcher.Interfaces;
 using Splitio.Services.SplitFetcher.Classes;
 using System.Linq;
 using Splitio.Domain;
+using System.Threading.Tasks;
 
 namespace Splitio_Tests.Unit_Tests
 {
@@ -19,7 +20,7 @@ namespace Splitio_Tests.Unit_Tests
             Mock<ISplitSdkApiClient> apiMock = new Mock<ISplitSdkApiClient>();
             apiMock
                 .Setup(x => x.FetchSplitChanges(-1))
-                .Returns("{\"splits\": [ { \"trafficType\": \"user\", \"name\": \"Reset_Seed_UI\", \"seed\": 1552577712, \"status\": \"ACTIVE\", \"defaultTreatment\": \"off\", \"changeNumber\": 1469827821322, \"conditions\": [ { \"matcherGroup\": { \"combiner\": \"AND\", \"matchers\": [ { \"keySelector\": { \"trafficType\": \"user\", \"attribute\": null }, \"matcherType\": \"ALL_KEYS\", \"negate\": false, \"userDefinedSegmentMatcherData\": null, \"whitelistMatcherData\": null, \"unaryNumericMatcherData\": null, \"betweenMatcherData\": null } ] }, \"partitions\": [ { \"treatment\": \"on\", \"size\": 100 }, { \"treatment\": \"off\", \"size\": 0, \"addedField\": \"test\"  } ] } ] } ], \"since\": 1469817846929, \"till\": 1469827821322 }\r\n");
+                .Returns(TaskEx.FromResult("{\"splits\": [ { \"trafficType\": \"user\", \"name\": \"Reset_Seed_UI\", \"seed\": 1552577712, \"status\": \"ACTIVE\", \"defaultTreatment\": \"off\", \"changeNumber\": 1469827821322, \"conditions\": [ { \"matcherGroup\": { \"combiner\": \"AND\", \"matchers\": [ { \"keySelector\": { \"trafficType\": \"user\", \"attribute\": null }, \"matcherType\": \"ALL_KEYS\", \"negate\": false, \"userDefinedSegmentMatcherData\": null, \"whitelistMatcherData\": null, \"unaryNumericMatcherData\": null, \"betweenMatcherData\": null } ] }, \"partitions\": [ { \"treatment\": \"on\", \"size\": 100 }, { \"treatment\": \"off\", \"size\": 0, \"addedField\": \"test\"  } ] } ] } ], \"since\": 1469817846929, \"till\": 1469827821322 }\r\n"));
 
             ApiSplitChangeFetcher apiSplitChangeFetcher = new ApiSplitChangeFetcher(apiMock.Object);
 
@@ -38,7 +39,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiClient = new Mock<ISplitSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSplitChanges(It.IsAny<long>()))
-            .Returns(@"{
+            .Returns(TaskEx.FromResult(@"{
                           'splits': [
                             {
                               'trafficTypeName': 'user',
@@ -83,7 +84,7 @@ namespace Splitio_Tests.Unit_Tests
                           ],
                           'since': -1,
                           'till': 1470855828956
-                        }");
+                        }"));
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
@@ -110,7 +111,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiClient = new Mock<ISplitSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSplitChanges(It.IsAny<long>()))
-            .Returns(@"{
+            .Returns(TaskEx.FromResult(@"{
                           'splits': [
                             {
                               'trafficTypeName': 'user',
@@ -156,7 +157,7 @@ namespace Splitio_Tests.Unit_Tests
                           ],
                           'since': -1,
                           'till': 1470855828956
-                        }");
+                        }"));
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
@@ -175,7 +176,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiClient = new Mock<ISplitSdkApiClient>();
             apiClient
             .Setup(x => x.FetchSplitChanges(It.IsAny<long>()))
-            .Returns(@"{
+            .Returns(TaskEx.FromResult(@"{
                           'splits': [
                             {
                               'trafficTypeName': 'user',
@@ -221,7 +222,7 @@ namespace Splitio_Tests.Unit_Tests
                           ],
                           'since': -1,
                           'till': 1470855828956
-                        }");
+                        }"));
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act

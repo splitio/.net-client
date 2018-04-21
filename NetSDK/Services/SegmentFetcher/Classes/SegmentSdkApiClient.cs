@@ -6,6 +6,7 @@ using Common.Logging;
 using Splitio.Services.Metrics.Interfaces;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -19,19 +20,16 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(SegmentSdkApiClient));
 
-        public SegmentSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null) : base(header, baseUrl, connectionTimeOut, readTimeout, metricsLog)
-        {
-            Log.Debug($"SegmentSdkApiClient created");
-        }
+        public SegmentSdkApiClient(HTTPHeader header, string baseUrl, long connectionTimeOut, long readTimeout, IMetricsLog metricsLog = null) : base(header, baseUrl, connectionTimeOut, readTimeout, metricsLog) { }
 
-        public async Task<string> FetchSegmentChanges(string name, long since)
+        public async Task<string> FetchSegmentChanges(string name, long since, CancellationToken token)
         {
             var clock = new Stopwatch();
             clock.Start();
             try
             {
                 var requestUri = GetRequestUri(name, since);
-                var response = await ExecuteGet(requestUri);
+                var response = await ExecuteGet(requestUri, token);
                 if (response.statusCode == HttpStatusCode.OK)
                 {
                     if (metricsLog != null)

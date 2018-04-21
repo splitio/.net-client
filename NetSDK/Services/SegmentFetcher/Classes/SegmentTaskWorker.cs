@@ -44,8 +44,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     {
                         Log.Info(String.Format("Segment dequeued: {0}", segment.name));
                         IncrementCounter();
-                        // TODO: use cancellation token
-                        segment.RefreshSegment().ContinueWith((x) => { DecrementCounter(); });
+                        segment.RefreshSegment(token).ContinueWith((x) => { DecrementCounter(); });
                     }
                 }
                 else
