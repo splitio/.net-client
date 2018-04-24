@@ -14,7 +14,7 @@ namespace Splitio_Tests.Unit_Tests
     {
         [TestMethod]
         [Description("Test a Json that changes its structure and is deserialized without exception. Contains: a field renamed, a field removed and a field added.")]
-        public void ExecuteJsonDeserializeSuccessfulWithChangeInJsonFormat()
+        public async void ExecuteJsonDeserializeSuccessfulWithChangeInJsonFormat()
         {
             //Arrange
             Mock<ISplitSdkApiClient> apiMock = new Mock<ISplitSdkApiClient>();
@@ -25,7 +25,7 @@ namespace Splitio_Tests.Unit_Tests
             ApiSplitChangeFetcher apiSplitChangeFetcher = new ApiSplitChangeFetcher(apiMock.Object);
 
             //Act
-            var result = apiSplitChangeFetcher.Fetch(-1);
+            var result = await apiSplitChangeFetcher.Fetch(-1);
 
             //Assert
             Assert.IsTrue(result != null);
@@ -33,7 +33,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void FetchSplitChangesSuccessfull()
+        public async void FetchSplitChangesSuccessfull()
         {
             //Arrange
             var apiClient = new Mock<ISplitSdkApiClient>();
@@ -88,7 +88,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
-            var result = apiFetcher.Fetch(-1);
+            var result = await apiFetcher.Fetch(-1);
 
             //Assert
             Assert.IsNotNull(result);
@@ -105,7 +105,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void FetchSplitChangesSuccessfullVerifyAlgorithmIsLegacy()
+        public async void FetchSplitChangesSuccessfullVerifyAlgorithmIsLegacy()
         {
             //Arrange
             var apiClient = new Mock<ISplitSdkApiClient>();
@@ -161,7 +161,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
-            var result = apiFetcher.Fetch(-1);
+            var result = await apiFetcher.Fetch(-1);
 
             //Assert
             Assert.IsNotNull(result);
@@ -170,7 +170,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void FetchSplitChangesSuccessfullVerifyAlgorithmIsMurmur()
+        public async void FetchSplitChangesSuccessfullVerifyAlgorithmIsMurmur()
         {
             //Arrange
             var apiClient = new Mock<ISplitSdkApiClient>();
@@ -226,7 +226,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
-            var result = apiFetcher.Fetch(-1);
+            var result = await apiFetcher.Fetch(-1);
 
             //Assert
             Assert.IsNotNull(result);
