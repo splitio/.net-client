@@ -235,7 +235,7 @@ namespace Splitio_Tests.Unit_Tests
         }
 
         [TestMethod]
-        public void FetchSplitChangesWithExcepionSouldReturnNull()
+        public async void FetchSplitChangesWithExcepionSouldReturnNull()
         {
             var apiClient = new Mock<ISplitSdkApiClient>();
             apiClient
@@ -244,7 +244,7 @@ namespace Splitio_Tests.Unit_Tests
             var apiFetcher = new ApiSplitChangeFetcher(apiClient.Object);
 
             //Act
-            var result = apiFetcher.Fetch(-1);
+            var result = await apiFetcher.Fetch(-1);
 
             //Assert
             Assert.IsNull(result);
