@@ -44,9 +44,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
                     {
                         Log.Info(String.Format("Segment dequeued: {0}", segment.name));
                         IncrementCounter();
-                        Task task = new Task(() => segment.RefreshSegment(), token);
-                        task.ContinueWith((x) => { DecrementCounter(); }); 
-                        task.Start();                   
+                        segment.RefreshSegment(token).ContinueWith((x) => { DecrementCounter(); });
                     }
                 }
                 else

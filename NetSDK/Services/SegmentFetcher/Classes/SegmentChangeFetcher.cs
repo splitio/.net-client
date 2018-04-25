@@ -2,6 +2,8 @@
 using Splitio.Domain;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -10,13 +12,13 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private SegmentChange segmentChange;
         private static readonly ILog Log = LogManager.GetLogger(typeof(SegmentChangeFetcher));
 
-        protected abstract SegmentChange FetchFromBackend(string name, long since);
+        protected abstract Task<SegmentChange> FetchFromBackend(string name, long since, CancellationToken token = default(CancellationToken));
 
-        public SegmentChange Fetch(string name, long since)
+        public async Task<SegmentChange> Fetch(string name, long since, CancellationToken token = default(CancellationToken))
         {
             try
             {
-                segmentChange = FetchFromBackend(name, since);
+                segmentChange = await FetchFromBackend(name, since, token);
             }
             catch(Exception e)
             {

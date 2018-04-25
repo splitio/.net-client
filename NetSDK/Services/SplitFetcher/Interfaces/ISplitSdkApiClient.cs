@@ -1,8 +1,10 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace Splitio.Services.SplitFetcher.Interfaces
 {
     public interface ISplitSdkApiClient
     {
-        string FetchSplitChanges(long since);
+        Task<string> FetchSplitChanges(long since);
     }
 }

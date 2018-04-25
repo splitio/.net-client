@@ -1,5 +1,8 @@
 CHANGES
 
+3.4.2
+- Improve async handling
+
 3.4.1
 - Fix track() bug on localhost mode
 

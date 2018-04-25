@@ -1,9 +1,10 @@
 ﻿using Common.Logging;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.SegmentFetcher.Classes
 {
@@ -22,10 +23,14 @@ namespace Splitio.Services.SegmentFetcher.Classes
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segmentCache = segmentCache;
             this.gates = gates;
+        }
+
+        public void RegisterSegment()
+        {
             gates.RegisterSegment(name);
         }
 
-        public void RefreshSegment()
+        public async Task RefreshSegment(CancellationToken token = default(CancellationToken))
         {        
             while (true)
             {
@@ -33,7 +38,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
                 try
                 {
-                    var response = segmentChangeFetcher.Fetch(name, changeNumber);
+                    var response = await segmentChangeFetcher.Fetch(name, changeNumber, token);
                     if (response == null)
                     {
                         break;

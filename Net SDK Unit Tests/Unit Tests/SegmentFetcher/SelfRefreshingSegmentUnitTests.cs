@@ -7,6 +7,8 @@ using Splitio.Services.Client.Classes;
 using Splitio.Services.Cache.Classes;
 using System.Collections.Concurrent;
 using Splitio.Domain;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Splitio_Tests.Unit_Tests.SegmentFetcher
 {
@@ -20,7 +22,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
             var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
-            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
+            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
             .Throws(new Exception());
             var apiFetcher = new ApiSegmentChangeFetcher(apiClient.Object);
             var segments  = new ConcurrentDictionary<string, Segment>();
@@ -41,8 +43,8 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
             var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
-            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
-            .Returns(@"{
+            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
+            .Returns(TaskEx.FromResult(@"{
                           'name': 'payed',
                           'added': [
                             'abcdz',
@@ -52,7 +54,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
                           'removed': [],
                           'since': -1,
                           'till': -1
-                        }");
+                        }"));
             var apiFetcher = new ApiSegmentChangeFetcher(apiClient.Object);
             var segments = new ConcurrentDictionary<string, Segment>();
             var cache = new InMemorySegmentCache(segments);
@@ -72,8 +74,8 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
             var gates = new InMemoryReadinessGatesCache();
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
-            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
-            .Returns(@"{
+            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
+            .Returns(TaskEx.FromResult(@"{
                           'name': 'payed',
                           'added': [
                             'abcdz',
@@ -83,7 +85,7 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
                           'removed': [],
                           'since': -1,
                           'till': 10001
-                        }");
+                        }"));
             var apiFetcher = new ApiSegmentChangeFetcher(apiClient.Object);
             var segments = new ConcurrentDictionary<string, Segment>();
             var cache = new InMemorySegmentCache(segments);
