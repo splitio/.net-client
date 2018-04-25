@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Services.SegmentFetcher.Classes;
 using Moq;
 using Splitio.Services.SplitFetcher.Interfaces;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Splitio_Tests.Unit_Tests.SegmentFetcher
 {
@@ -10,13 +12,13 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
     public class ApiSegmentChangeFetcherUnitTests
     {
         [TestMethod]
-        public void FetchSegmentChangesSuccessfull()
+        public async void FetchSegmentChangesSuccessfull()
         {
             //Arrange
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
-            .Setup(x=>x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
-            .Returns(@"{
+            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
+            .Returns(TaskEx.FromResult(@"{
                           'name': 'payed',
                           'added': [
                             'abcdz',
@@ -26,11 +28,11 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
                           'removed': [],
                           'since': -1,
                           'till': 1470947453877
-                        }");
+                        }"));
             var apiFetcher = new ApiSegmentChangeFetcher(apiClient.Object);
             
             //Act
-            var result = apiFetcher.Fetch("payed", -1);
+            var result = await apiFetcher.Fetch("payed", -1);
 
             //Assert
             Assert.IsNotNull(result);
@@ -42,16 +44,16 @@ namespace Splitio_Tests.Unit_Tests.SegmentFetcher
         }
 
         [TestMethod]
-        public void FetchSegmentChangesWithExcepionSouldReturnNull()
+        public async void FetchSegmentChangesWithExcepionSouldReturnNull()
         {
             var apiClient = new Mock<ISegmentSdkApiClient>();
             apiClient
-            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>()))
+            .Setup(x => x.FetchSegmentChanges(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<CancellationToken>()))
             .Throws(new Exception());
             var apiFetcher = new ApiSegmentChangeFetcher(apiClient.Object);
            
             //Act
-            var result = apiFetcher.Fetch("payed", -1);
+            var result = await apiFetcher.Fetch("payed", -1);
 
             //Assert
             Assert.IsNull(result);
