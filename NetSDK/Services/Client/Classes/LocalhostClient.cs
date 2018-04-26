@@ -6,12 +6,12 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace Splitio.Services.Client.Classes
 {
     public class LocalhostClient : SplitClient
     {
+        private const string DefaultSplitFileName = ".split";
         private static readonly ILog Log = LogManager.GetLogger(typeof(LocalhostClient));
 
         private FileSystemWatcher watcher;
@@ -52,7 +52,7 @@ namespace Splitio.Services.Client.Classes
             }
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            var fullPath = Path.Combine(home, filePath);
+            var fullPath = Path.Combine(home, filePath ?? DefaultSplitFileName);
             if (File.Exists(fullPath))
             {
                 return fullPath;
