@@ -57,11 +57,17 @@ namespace Splitio.Services.SegmentFetcher.Classes
 
                         if (response.added.Count() > 0)
                         {
-                            Log.Debug(String.Format("Segment {0} - Added : {1}", name, String.Join(" - ", response.added)));
+                            if (Log.IsDebugEnabled)
+                            {
+                                Log.Debug(String.Format("Segment {0} - Added : {1}", name, String.Join(" - ", response.added)));
+                            }
                         }
                         if (response.removed.Count() > 0)
                         {
-                            Log.Debug(String.Format("Segment {0} - Removed : {1}", name, String.Join(" - ", response.removed)));
+                            if (Log.IsDebugEnabled)
+                            {
+                                Log.Debug(String.Format("Segment {0} - Removed : {1}", name, String.Join(" - ", response.removed)));
+                            }
                         }
                     }
 
@@ -73,7 +79,10 @@ namespace Splitio.Services.SegmentFetcher.Classes
                 }
                 finally
                 {
-                    Log.Debug(String.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
+                    if (Log.IsDebugEnabled)
+                    {
+                        Log.Debug(String.Format("segment {0} fetch before: {1}, after: {2}", name, changeNumber, segmentCache.GetChangeNumber(name)));
+                    }
                 }
             }
         }
