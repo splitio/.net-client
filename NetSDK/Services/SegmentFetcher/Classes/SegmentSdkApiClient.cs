@@ -38,7 +38,11 @@ namespace Splitio.Services.SegmentFetcher.Classes
                         metricsLog.Count(String.Format(SegmentFetcherStatus, response.statusCode), 1);
                     }
 
-                    Log.Debug($"FetchSegmentChanges with name '{name}' took {clock.ElapsedMilliseconds} milliseconds using uri '{requestUri}'");
+                    if (Log.IsDebugEnabled)
+                    {
+                        Log.Debug($"FetchSegmentChanges with name '{name}' took {clock.ElapsedMilliseconds} milliseconds using uri '{requestUri}'");
+                    }
+
                     return response.content;
                 }
                 else

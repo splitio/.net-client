@@ -1,7 +1,6 @@
 ﻿using Common.Logging;
 using Splitio.CommonLibraries;
 using Splitio.Services.Cache.Interfaces;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -13,19 +12,19 @@ namespace Splitio.Services.SegmentFetcher.Classes
     public class SelfRefreshingSegmentFetcher : SegmentFetcher
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SelfRefreshingSegmentFetcher));
-        
-        private readonly ISegmentChangeFetcher segmentChangeFetcher;
-        private ConcurrentDictionary<string, SelfRefreshingSegment> segments;
-        private SegmentTaskWorker worker;
-        private IReadinessGatesCache gates;
-        private int interval;
-        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource(); 
 
-        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, IReadinessGatesCache gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments):base(segmentsCache)
+        private readonly ISegmentChangeFetcher segmentChangeFetcher;
+        private readonly ConcurrentDictionary<string, SelfRefreshingSegment> segments;
+        private readonly SegmentTaskWorker worker;
+        private readonly IReadinessGatesCache gates;
+        private readonly int interval;
+        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+
+        public SelfRefreshingSegmentFetcher(ISegmentChangeFetcher segmentChangeFetcher, IReadinessGatesCache gates, int interval, ISegmentCache segmentsCache, int numberOfParallelSegments) : base(segmentsCache)
         {
             this.segmentChangeFetcher = segmentChangeFetcher;
             this.segments = new ConcurrentDictionary<string, SelfRefreshingSegment>();
-            worker = new SegmentTaskWorker(numberOfParallelSegments); 
+            worker = new SegmentTaskWorker(numberOfParallelSegments);
             this.interval = interval;
             this.gates = gates;
             StartWorker();
@@ -42,7 +41,7 @@ namespace Splitio.Services.SegmentFetcher.Classes
         private void StartWorker()
         {
             Task workerTask = Task.Factory.StartNew(
-                () => worker.ExecuteTasks(cancelTokenSource.Token), 
+                () => worker.ExecuteTasks(cancelTokenSource.Token),
                 cancelTokenSource.Token);
         }
 
@@ -63,7 +62,13 @@ namespace Splitio.Services.SegmentFetcher.Classes
             {
                 segment.RegisterSegment();
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
-                Log.Info(String.Format("Segment queued: {0}", segment.name));
+                if (Log.IsDebugEnabled)
+                {
+                    if (Log.IsDebugEnabled)
+                    {
+                        Log.Debug(String.Format("Segment queued: {0}", segment.name));
+                    }
+                }
             }
         }
 
@@ -72,7 +77,13 @@ namespace Splitio.Services.SegmentFetcher.Classes
             foreach (SelfRefreshingSegment segment in segments.Values)
             {
                 SegmentTaskQueue.segmentsQueue.TryAdd(segment);
-                Log.Info(String.Format("Segment queued: {0}", segment.name));
+                if (Log.IsDebugEnabled)
+                {
+                    if (Log.IsDebugEnabled)
+                    {
+                        Log.Debug(String.Format("Segment queued: {0}", segment.name));
+                    }
+                }
             }
         }
     }
