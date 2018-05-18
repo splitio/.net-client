@@ -37,7 +37,7 @@ namespace Splitio.Redis.Services.Client.Classes
         private static string RedisUserPrefix;
 
 
-        public RedisClient(ConfigurationOptions config)
+        public RedisClient(ConfigurationOptions config, ILog log) : base(log)
         {
             ReadConfig(config);
             BuildRedisCache();
@@ -62,7 +62,7 @@ namespace Splitio.Redis.Services.Client.Classes
             catch (Exception e)
             {
                 SdkMachineName = "unknown";
-                Log.Warn("Exception retrieving machine name.", e);
+                _log.Warn("Exception retrieving machine name.", e);
             }
 
             try
@@ -72,7 +72,7 @@ namespace Splitio.Redis.Services.Client.Classes
             catch (Exception e)
             {
                 SdkMachineIP = "unknown";
-                Log.Warn("Exception retrieving machine IP.", e);
+                _log.Warn("Exception retrieving machine IP.", e);
             }
 
             RedisHost = config.CacheAdapterConfig.Host;
@@ -152,7 +152,7 @@ namespace Splitio.Redis.Services.Client.Classes
                         RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
                     }
 
-                    Log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
+                    _log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
                     return Control;
                 }
 
@@ -170,7 +170,7 @@ namespace Splitio.Redis.Services.Client.Classes
                     RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
                 }
 
-                Log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
+                _log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
                 return Control;
             }
         }

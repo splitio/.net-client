@@ -1,8 +1,6 @@
-﻿using Splitio.Domain;
-using System;
+﻿using Common.Logging;
+using Splitio.Domain;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -10,7 +8,7 @@ namespace Splitio.Services.Client.Classes
     {
         private Dictionary<string, string> _tests;
 
-        public SplitClientForTest()
+        public SplitClientForTest(ILog log) : base(log)
         {
             _tests = new Dictionary<string, string>();
         }
