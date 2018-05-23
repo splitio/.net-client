@@ -3,6 +3,8 @@ nuget:
 
 version: 3.4.3-rc{build}
 
+image: Visual Studio 2017
+
 assembly_info:
   patch: true
   assembly_version: '{version}'
