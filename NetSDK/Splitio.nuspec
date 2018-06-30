@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>Splitio</id>
     <version>$version$</version>
     <title>NetSDK</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <authors>Splitio</authors>
+    <owners>Splitio</owners>
     <licenseUrl>https://github.com/splitio/.net-client/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/splitio/.net-client</projectUrl>
     <iconUrl>https://www.split.io/wp-content/themes/split/assets/images/shared/footer/split-logo-glyph.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Split’s .NET SDK provides robust, scalable feature flag management in .NET, .NET Core and C#, giving any team the power to safely launch features and target them to users.</description>
     <copyright>Copyright 2018</copyright>
     <dependencies>
         <group>
