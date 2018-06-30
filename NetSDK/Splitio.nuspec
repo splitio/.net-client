@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>NetSDK</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/splitio/.net-client/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/splitio/.net-client</projectUrl>
+    <iconUrl>https://www.split.io/wp-content/themes/split/assets/images/shared/footer/split-logo-glyph.svg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2018</copyright>
+    <dependencies>
+        <group>
+            <dependency id="Common.Logging" version="3.3.1" />
+            <dependency id="murmurhash" version="1.0.0" />
+            <dependency id="Newtonsoft.Json" version="9.0.1" />
+        </group>
+        <group targetFramework="net40">
+            <dependency id="Microsoft.Bcl" version="1.1.10" />
+            <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+            <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+            <dependency id="Microsoft.Net.Http" version="2.2.29" />
+        </group>
+        <group targetFramework="net403">
+            <dependency id="Microsoft.Bcl" version="1.1.10" />
+            <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+            <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+            <dependency id="Microsoft.Net.Http" version="2.2.29" />
+        </group>
+    </dependencies>
+  </metadata>
+</package>
