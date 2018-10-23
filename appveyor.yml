@@ -16,9 +16,9 @@ before_build:
  - cmd: set BUILD_VERSION=%appveyor_build_version%
  
 after_build:
- - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version%
- - nuget pack Splitio.Redis\Splitio.Redis.csproj -Version %appveyor_build_version%
- - nuget pack Splitio.TestSupport\Splitio.TestSupport.csproj -Version %appveyor_build_version%
+ - nuget pack NetSDK\Splitio.csproj -Version %appveyor_build_version% -properties CustomAuthor="Split.IO"
+ - nuget pack Splitio.Redis\Splitio.Redis.csproj -Version %appveyor_build_version% -properties CustomAuthor="Split.IO"
+ - nuget pack Splitio.TestSupport\Splitio.TestSupport.csproj -Version %appveyor_build_version% -properties CustomAuthor="Split.IO"
 
 artifacts:
  - path: '**\Splitio.*.nupkg'
