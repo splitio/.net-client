@@ -2,9 +2,7 @@
 using Splitio.Services.Client.Interfaces;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -47,11 +45,11 @@ namespace Splitio.Services.Client.Classes
                     }
                     if (apiKey == "localhost")
                     {
-                        client = new LocalhostClient(options.LocalhostFilePath);
+                        client = new LocalhostClient(options.LocalhostFilePath, LogManager.GetLogger(typeof(SplitClient)));
                     }
                     else
                     {
-                        client = new SelfRefreshingClient(apiKey, options);
+                        client = new SelfRefreshingClient(apiKey, options, LogManager.GetLogger(typeof(SplitClient)));
                     }
                     break;
                 case Mode.Consumer:
@@ -63,7 +61,7 @@ namespace Splitio.Services.Client.Classes
                             {
                                 throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
                             }
-                            var handle = Activator.CreateInstance("Splitio.Redis", "Splitio.Redis.Services.Client.Classes.RedisClient", false, default(BindingFlags), default(Binder), new Object[] { options }, default(CultureInfo), null);
+                            var handle = Activator.CreateInstance("Splitio.Redis", "Splitio.Redis.Services.Client.Classes.RedisClient", false, default(BindingFlags), default(Binder), new Object[] { options, LogManager.GetLogger(typeof(SplitClient)) }, default(CultureInfo), null);
                             client = (ISplitClient)handle.Unwrap();
                         }
                         catch(Exception e)

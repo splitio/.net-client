@@ -1,7 +1,9 @@
 nuget:
   account_feed: true
 
-version: 3.4.3-rc3
+version: 3.4.3-rc{build}
+
+image: Visual Studio 2017
 
 assembly_info:
   patch: true
