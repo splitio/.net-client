@@ -69,7 +69,7 @@ namespace Splitio.Services.Client.Classes
         private IListener<KeyImpression> treatmentLog;
         private IListener<Event> eventLog;
 
-        public SelfRefreshingClient(string apiKey, ConfigurationOptions config)
+        public SelfRefreshingClient(string apiKey, ConfigurationOptions config, ILog log) : base(log)
         {
             ApiKey = apiKey;
             ReadConfig(config);
@@ -106,7 +106,7 @@ namespace Splitio.Services.Client.Classes
             catch (Exception e)
             {
                 SdkMachineName = "unknown";
-                Log.Warn("Exception retrieving machine name.", e);
+                _log.Warn("Exception retrieving machine name.", e);
             }
 
             try
@@ -116,7 +116,7 @@ namespace Splitio.Services.Client.Classes
             catch (Exception e)
             {
                 SdkMachineIP = "unknown";
-                Log.Warn("Exception retrieving machine IP.", e);
+                _log.Warn("Exception retrieving machine IP.", e);
             }
             
             RandomizeRefreshRates = config.RandomizeRefreshRates;

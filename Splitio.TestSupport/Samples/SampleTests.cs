@@ -1,9 +1,6 @@
-﻿using Splitio.Services.Client.Classes;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Common.Logging;
+using Moq;
+using Splitio.Services.Client.Classes;
 using Xunit;
 using Xunit.Extensions;
 
@@ -12,13 +9,14 @@ namespace Splitio.TestSupport
     public class SampleTest
     {
         private SplitClientForTest splitClient;
+        private Mock<ILog> _logMock = new Mock<ILog>();
 
         [Theory]
         [SplitTest(test: @"{ feature:'feature_reads', treatments:['on', 'dark', 'off'] }")]
         public void SampleTest1(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest();
+            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
             
             //Act
@@ -37,7 +35,7 @@ namespace Splitio.TestSupport
         public void SampleTest2(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest();
+            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
 
             //Act
@@ -61,7 +59,7 @@ namespace Splitio.TestSupport
         public void SampleTest3(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest();
+            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
 
             //Act

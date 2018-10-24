@@ -16,7 +16,6 @@ NetSDK/bin/
 NetSDK/obj/
 NetSDK/Splitio.0.0.4.2.nuspec
 NetSDK/lib/
-NetSDK/*.nuspec
 Net SDK Unit Tests/SplitioTests.csproj.user
 Microbenchmark/bin
 Microbenchmark/obj
