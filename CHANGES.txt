@@ -1,5 +1,11 @@
 CHANGES
 
+3.4.4
+- Fix authors and other package metadata
+
+3.4.3
+- Input validation
+
 3.4.2
 - Improve async handling
 
