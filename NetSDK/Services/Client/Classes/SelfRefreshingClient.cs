@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class SelfRefreshingClient: SplitClient
+    public class SelfRefreshingClient : SplitClient
     {
         private static string ApiKey;
         private static string BaseUrl;
