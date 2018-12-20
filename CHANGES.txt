@@ -1,9 +1,8 @@
 CHANGES
 
-3.4.4
+3.5.0
+- Sign the assembly.
 - Fix authors and other package metadata
-
-3.4.3
 - Input validation
 
 3.4.2
