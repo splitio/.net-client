@@ -5,5 +5,6 @@
         <version>$Version$</version>
         <description>SpliIO .Net SDK Redis support</description>
         <authors>Split.IO</authors>
+		<licenseUrl>https://github.com/splitio/.net-client/blob/master/LICENSE.txt</licenseUrl>
     </metadata>
 </package>

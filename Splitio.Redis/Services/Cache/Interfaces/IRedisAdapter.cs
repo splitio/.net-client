@@ -35,5 +35,7 @@ namespace Splitio.Redis.Services.Cache.Interfaces
         long IcrBy(string key, long delta);
 
         void Flush();
+
+        bool IsConnected();
     }
 }
