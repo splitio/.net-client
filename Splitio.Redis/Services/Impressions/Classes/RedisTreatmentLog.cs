@@ -12,9 +12,9 @@ namespace Splitio.Redis.Services.Impressions.Classes
             this.impressionsCache = impressionsCache;
         }
 
-        public void Log(KeyImpression item)
+        public void Log(KeyImpression items)
         {
-            impressionsCache.AddItem(item);
+            impressionsCache.AddItem(items);
         }
     }
 }

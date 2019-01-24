@@ -5,6 +5,7 @@ using Splitio.Services.Impressions.Interfaces;
 using Splitio.Services.Shared.Classes;
 using Splitio.Services.Shared.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 
@@ -60,9 +61,9 @@ namespace Splitio.Services.Impressions.Classes
             }
         }
 
-        public void Log(KeyImpression impression)
+        public void Log(KeyImpression item)
         {
-            impressionsCache.AddItem(impression);
+            impressionsCache.AddItem(item);
         }
     }
 }

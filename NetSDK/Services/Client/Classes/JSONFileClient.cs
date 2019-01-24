@@ -12,21 +12,34 @@ using System.Collections.Generic;
 
 namespace Splitio.Services.Client.Classes
 {
-    public class JSONFileClient:SplitClient
+    public class JSONFileClient : SplitClient
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(JSONFileClient));
-        public JSONFileClient(string splitsFilePath, string segmentsFilePath, ILog log, ISegmentCache segmentCacheInstance = null, ISplitCache splitCacheInstance = null, IListener<KeyImpression> treatmentLogInstance = null, bool isLabelsEnabled = true) : base(log)
+
+        public JSONFileClient(string splitsFilePath, 
+            string segmentsFilePath,
+            ILog log, 
+            ISegmentCache segmentCacheInstance = null, 
+            ISplitCache splitCacheInstance = null, 
+            IListener<KeyImpression> treatmentLogInstance = null, 
+            bool isLabelsEnabled = true)  : base(log)
         {
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
+
             var segmentFetcher = new JSONFileSegmentFetcher(segmentsFilePath, segmentCache);
             var splitParser = new InMemorySplitParser(segmentFetcher, segmentCache);
             var splitChangeFetcher = new JSONFileSplitChangeFetcher(splitsFilePath);
             var task = splitChangeFetcher.Fetch(-1);
             task.Wait();
+
             var splitChangesResult = task.Result;
             var parsedSplits = new ConcurrentDictionary<string, ParsedSplit>();
+
             foreach (Split split in splitChangesResult.splits)
-                parsedSplits.TryAdd(split.name, splitParser.Parse(split));         
+            {
+                parsedSplits.TryAdd(split.name, splitParser.Parse(split));
+            }
+
             splitCache = splitCacheInstance ?? new InMemorySplitCache(new ConcurrentDictionary<string, ParsedSplit>(parsedSplits));
             impressionListener = treatmentLogInstance;
             splitter = new Splitter();

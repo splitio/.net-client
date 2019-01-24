@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Splitio.CommonLibraries;
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Classes;
 using Splitio.Redis.Services.Events.Classes;
@@ -11,7 +10,6 @@ using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Shared.Classes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -107,6 +105,7 @@ namespace Splitio.Redis.Services.Client.Classes
             var treatmentLog = new RedisTreatmentLog(impressionsCache);
             impressionListener = new AsynchronousListener<KeyImpression>(LogManager.GetLogger("AsynchronousImpressionListener"));
             ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(treatmentLog);
+
             if (config.ImpressionListener != null)
             {
                 ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(config.ImpressionListener);
@@ -140,44 +139,29 @@ namespace Splitio.Redis.Services.Client.Classes
             splitParser = new RedisSplitParser(segmentCache);
         }
 
-        protected override string GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes = null, bool logMetricsAndImpressions = true)
+        protected override TreatmentResult GetTreatmentForFeature(Key key, string feature, Dictionary<string, object> attributes = null)
         {
-            long start = CurrentTimeHelper.CurrentTimeMillis();
-            var clock = new Stopwatch();
-            clock.Start();
-
             try
             {
                 var split = splitCache.GetSplit(feature);
 
                 if (split == null)
                 {
-                    if (logMetricsAndImpressions)
-                    {
-                        //if split definition was not found, impression label = "definition not found"
-                        RecordStats(key, feature, null, LabelSplitNotFound, start, Control, SdkGetTreatment, clock);
-                    }
 
-                    _log.Warn(String.Format("Unknown or invalid feature: {0}", feature));
-                    return Control;
+                    _log.Warn(string.Format("Unknown or invalid feature: {0}", feature));
+
+                    return new TreatmentResult(LabelSplitNotFound, Control, null);
                 }
 
                 ParsedSplit parsedSplit = splitParser.Parse((Split)split);
 
-                var treatment = GetTreatment(key, parsedSplit, attributes, start, clock, this, logMetricsAndImpressions);
-
-                return treatment;
+                return GetTreatment(key, parsedSplit, attributes, this);
             }
             catch (Exception e)
             {
-                if (logMetricsAndImpressions)
-                {
-                    //if there was an exception, impression label = "exception"
-                    RecordStats(key, feature, null, LabelException, start, Control, SdkGetTreatment, clock);
-                }
+                _log.Error(string.Format("Exception caught getting treatment for feature: {0}", feature), e);
 
-                _log.Error(String.Format("Exception caught getting treatment for feature: {0}", feature), e);
-                return Control;
+                return new TreatmentResult(LabelException, Control, null);
             }
         }
 

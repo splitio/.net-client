@@ -1,5 +1,4 @@
 ﻿using Splitio.Redis.Services.Cache.Interfaces;
-using System;
 
 namespace Splitio.Redis.Services.Cache.Classes
 {
@@ -9,25 +8,37 @@ namespace Splitio.Redis.Services.Cache.Classes
         protected IRedisAdapter redisAdapter;
         protected string redisKeyPrefix;
 
+        protected string UserPrefix;
+        protected string SdkVersion;
+        protected string MachineIp;
+
         public RedisCacheBase(IRedisAdapter redisAdapter, string userPrefix = null)
         {
+            UserPrefix = userPrefix;
             this.redisAdapter = redisAdapter;
-            this.redisKeyPrefix = "SPLITIO.";
+            redisKeyPrefix = "SPLITIO.";
 
-            if (!String.IsNullOrEmpty(userPrefix))
+            if (!string.IsNullOrEmpty(userPrefix))
             {
-                this.redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
+                redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
             }
         }
 
         public RedisCacheBase(IRedisAdapter redisAdapter, string machineIP, string sdkVersion, string userPrefix = null)
         {
+            UserPrefix = userPrefix;
+            MachineIp = machineIP;
+            SdkVersion = sdkVersion;
+
             this.redisAdapter = redisAdapter;
-            this.redisKeyPrefix = RedisKeyPrefixFormat.Replace("{sdk-language-version}", sdkVersion)
-                                                          .Replace("{instance-id}", machineIP);
-            if (!String.IsNullOrEmpty(userPrefix))
+
+            redisKeyPrefix = RedisKeyPrefixFormat
+                .Replace("{sdk-language-version}", sdkVersion)
+                .Replace("{instance-id}", machineIP);
+
+            if (!string.IsNullOrEmpty(userPrefix))
             {
-                this.redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
+                redisKeyPrefix = userPrefix + "." + redisKeyPrefix;
             }
         }
     }
