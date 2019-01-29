@@ -84,7 +84,7 @@ namespace Splitio.Services.Client.Classes
 
                 ImpressionsQueue.Add(BuildImpression(key.matchingKey, feature, result.Treatment, start, result.ChangeNumber, LabelsEnabled ? result.Label : null, key.bucketingKeyHadValue ? key.bucketingKey : null));
 
-                ImpressionLog(impressionListener, ImpressionsQueue.FirstOrDefault());
+                ImpressionLog(impressionListener, ImpressionsQueue);
             }
 
             return result.Treatment;
@@ -128,7 +128,7 @@ namespace Splitio.Services.Client.Classes
                     metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
                 }
 
-                ImpressionLog(impressionListener, ImpressionsQueue.FirstOrDefault());
+                ImpressionLog(impressionListener, ImpressionsQueue);
             }
 
             ClearItemsAddedToTreatmentCache(key.matchingKey);
@@ -136,11 +136,14 @@ namespace Splitio.Services.Client.Classes
             return treatmentsForFeatures;
         }
 
-        protected virtual void ImpressionLog<T>(IListener<T> listener, T impression)
+        protected virtual void ImpressionLog<T>(IListener<T> listener, IList<T> impressions)
         {
             if (listener != null)
             {
-                listener.Log(impression);
+                foreach (var imp in impressions)
+                {
+                    listener.Log(imp);
+                }
             }
         }
 
