@@ -40,7 +40,7 @@ namespace Splitio.Services.Client.Classes
 
         private ConcurrentDictionary<string, string> treatmentCache = new ConcurrentDictionary<string, string>();
 
-        private IList<KeyImpression> ImpressionsQueue;
+        protected IList<KeyImpression> ImpressionsQueue;
 
         public SplitClient(ILog log)
         {
@@ -82,13 +82,9 @@ namespace Splitio.Services.Client.Classes
                     metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
                 }
 
-                if (impressionListener != null)
-                {
-                    ImpressionsQueue.Add(BuildImpression(key.matchingKey, feature, result.Treatment, start, result.ChangeNumber, LabelsEnabled ? result.Label : null, key.bucketingKeyHadValue ? key.bucketingKey : null));
+                ImpressionsQueue.Add(BuildImpression(key.matchingKey, feature, result.Treatment, start, result.ChangeNumber, LabelsEnabled ? result.Label : null, key.bucketingKeyHadValue ? key.bucketingKey : null));
 
-                    // GUARDAR LA LISTA ACA, BORRAR EL FIRST OR DEFAULT
-                    impressionListener.Log(ImpressionsQueue.FirstOrDefault());
-                }
+                ImpressionLog(impressionListener, ImpressionsQueue.FirstOrDefault());
             }
 
             return result.Treatment;
@@ -132,16 +128,20 @@ namespace Splitio.Services.Client.Classes
                     metricsLog.Time(SdkGetTreatment, clock.ElapsedMilliseconds);
                 }
 
-                if (impressionListener != null)
-                {
-                    // GUARDAR LA LISTA ACA, BORRAR EL FIRST OR DEFAULT
-                    impressionListener.Log(ImpressionsQueue.FirstOrDefault());
-                }
+                ImpressionLog(impressionListener, ImpressionsQueue.FirstOrDefault());
             }
 
             ClearItemsAddedToTreatmentCache(key.matchingKey);
 
             return treatmentsForFeatures;
+        }
+
+        protected virtual void ImpressionLog<T>(IListener<T> listener, T impression)
+        {
+            if (listener != null)
+            {
+                listener.Log(impression);
+            }
         }
 
         public virtual bool Track(string key, string trafficType, string eventType, double? value = null)
