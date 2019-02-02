@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Splitio.Services.Impressions.Classes
 {
-    public class SelfUpdatingTreatmentLog: IListener<KeyImpression>
+    public class SelfUpdatingTreatmentLog : IListener<KeyImpression>
     {
         private ITreatmentSdkApiClient apiClient;
         private int interval;

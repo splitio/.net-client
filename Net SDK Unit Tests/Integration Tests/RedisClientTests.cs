@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 namespace Splitio_Tests.Integration_Tests
 {
-    [TestClass]
     [Ignore]
+    [TestClass]
     public class RedisClientTests
     {
         private ConfigurationOptions config;
@@ -28,6 +28,91 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
+        public void GetTreatment_WhenFeatureExists_ReturnsOn()
+        {
+            //Arrange
+            var client = new RedisClient(config, _logMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "always_on", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("on", result);
+        }
+
+        [TestMethod]
+        public void GetTreatment_WhenFeatureExists_ReturnsOff()
+        {
+            //Arrange
+            var client = new RedisClient(config, _logMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "always_off", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result);
+        }
+
+        [TestMethod]
+        public void GetTreatment_WhenFeatureDoenstExist_ReturnsControl()
+        {
+            //Arrange
+            var client = new RedisClient(config, _logMock.Object);
+
+            //Act           
+            var result = client.GetTreatment("test", "always_control", null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("control", result);
+        }
+
+        [TestMethod]
+        public void GetTreatments_WhenFeaturesExists_ReturnsOnOff()
+        {
+            //Arrange
+            var alwaysOn = "always_on";
+            var alwaysOff = "always_off";
+
+            var features = new List<string> { alwaysOn, alwaysOff };
+
+            var client = new RedisClient(config, _logMock.Object);
+
+            //Act           
+            var result = client.GetTreatments("test", features, null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result[alwaysOff]);
+            Assert.AreEqual("on", result[alwaysOn]);
+        }
+
+        [TestMethod]
+        public void GetTreatments_WhenOneFeatureDoenstExist_ReturnsOnOffControl()
+        {
+            //Arrange
+            var alwaysOn = "always_on";
+            var alwaysOff = "always_off";
+            var alwaysControl = "always_control";
+
+            var features = new List<string> { alwaysOn, alwaysOff, alwaysControl };
+
+            var client = new RedisClient(config, _logMock.Object);
+
+            //Act           
+            var result = client.GetTreatments("test", features, null);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("off", result[alwaysOff]);
+            Assert.AreEqual("on", result[alwaysOn]);
+            Assert.AreEqual("control", result[alwaysControl]);
+        }
+
+        [Ignore]
+        [TestMethod]
         public void ExecuteGetTreatmentOnInexistentSplitShouldReturnControl()
         {
             //Arrange
@@ -41,6 +126,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("control", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnSplitWithSegmentShouldReturnOnIfExistent()
         {
@@ -57,6 +143,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("on", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnSplitWithSegmentShouldReturnOffIfNotExistent()
         {
@@ -74,7 +161,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("off", result);
         }
 
-
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnKilledSplitReturnsDefaultTreatment()
         {
@@ -90,6 +177,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("off", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentAndUsingBucketingKeyForTreatment()
         {
@@ -105,6 +193,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("on", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentAndEmptyBucketingKeyShouldReturnControl()
         {
@@ -120,6 +209,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("control", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnRemovedUserFromSegmentShouldReturnOff()
         {
@@ -143,7 +233,7 @@ namespace Splitio_Tests.Integration_Tests
             cache = null;
         }
 
-
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnSplitWithDateMatcherReturnOn()
         {
@@ -160,6 +250,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("on", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnSplitWithDateMatcherReturnOff()
         {
@@ -176,6 +267,7 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("off", result);
         }
 
+        [Ignore]
         [TestMethod]
         public void ExecuteGetTreatmentOnSplitWithWhitelistMatcherReturnOn()
         {
