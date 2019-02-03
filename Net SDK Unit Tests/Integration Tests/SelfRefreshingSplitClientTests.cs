@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Splitio_Tests.Integration_Tests
 {
-    [Ignore]
     [TestClass]
     public class SelfRefreshingSplitClientTests
     {
