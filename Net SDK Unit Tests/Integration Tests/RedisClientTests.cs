@@ -3,28 +3,51 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Classes;
+using Splitio.Redis.Services.Cache.Interfaces;
 using Splitio.Redis.Services.Client.Classes;
 using Splitio.Services.Client.Classes;
+using Splitio_Tests.Resources;
 using System.Collections.Generic;
 
 namespace Splitio_Tests.Integration_Tests
 {
-    [Ignore]
     [TestClass]
     public class RedisClientTests
     {
+        private const string HOST = "localhost";
+        private const string PORT = "6379";
+        private const string PASSWORD = "";
+        private const int DB = 0;
+
         private ConfigurationOptions config;
         private Mock<ILog> _logMock = new Mock<ILog>();
+        private IRedisAdapter _redisAdapter;
 
         [TestInitialize]
         public void Initialization()
         {
+            var cacheAdapterConfig = new CacheAdapterConfigurationOptions
+            {
+                Host = HOST,
+                Port = PORT,
+                Password = PASSWORD,
+                Database = DB
+            };
+
             config = new ConfigurationOptions();
-            config.CacheAdapterConfig = new CacheAdapterConfigurationOptions();
-            config.CacheAdapterConfig.Host = "localhost";
-            config.CacheAdapterConfig.Port = "6379";
-            config.CacheAdapterConfig.Password = "";
+            config.CacheAdapterConfig = cacheAdapterConfig;
             config.SdkMachineIP = "192.168.0.1";
+
+            _redisAdapter = new RedisAdapter(HOST, PORT, PASSWORD, DB);
+            LoadSplits();
+        }
+
+        private void LoadSplits()
+        {
+            _redisAdapter.Flush();
+
+            _redisAdapter.Set("SPLITIO.split.always_on", SplitsHelper.AlwaysOn);
+            _redisAdapter.Set("SPLITIO.split.always_off", SplitsHelper.AlwaysOff);
         }
 
         [TestMethod]

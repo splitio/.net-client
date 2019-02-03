@@ -30,29 +30,29 @@ namespace Splitio.Services.Shared.Classes
                 //all worker's tasks in the main thread
                 var listenerTask =
                     new Task(() =>
+                    {
+                        foreach (IListener<T> worker in workers)
                         {
-                            foreach (IListener<T> worker in workers)
+                            try
                             {
-                                try
-                                {
-                                    //This task makes worker.Log() run independently 
-                                    //and avoid one worker to block another.
-                                    var logTask =
-                                        new Task(() =>
-                                        {
-                                            var stopwatch = Stopwatch.StartNew();
-                                            worker.Log(item);
-                                            stopwatch.Stop();
-                                            _logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
-                                        });
-                                    logTask.Start();
-                                }
-                                catch (Exception e)
-                                {
-                                    _logger.Error("Exception performing Log with worker. ", e);
-                                }
+                                //This task makes worker.Log() run independently 
+                                //and avoid one worker to block another.
+                                var logTask =
+                                    new Task(() =>
+                                    {
+                                        var stopwatch = Stopwatch.StartNew();
+                                        worker.Log(item);
+                                        stopwatch.Stop();
+                                        _logger.Info(worker.GetType() + " took " + stopwatch.ElapsedMilliseconds + " milliseconds");
+                                    });
+                                logTask.Start();
                             }
-                        });
+                            catch (Exception e)
+                            {
+                                _logger.Error("Exception performing Log with worker. ", e);
+                            }
+                        }
+                    });
 
                 listenerTask.Start();
             }
