@@ -111,7 +111,8 @@ namespace Splitio.Redis.Services.Client.Classes
 
             if (config.ImpressionListener != null)
             {
-                ((AsynchronousListener<KeyImpression>)impressionListenerRedis).AddListener(config.ImpressionListener);
+                impressionListener = new AsynchronousListener<KeyImpression>(LogManager.GetLogger("AsynchronousImpressionListener"));
+                ((AsynchronousListener<KeyImpression>)impressionListener).AddListener(config.ImpressionListener);
             }
         }
 
@@ -170,7 +171,14 @@ namespace Splitio.Redis.Services.Client.Classes
 
         protected override void ImpressionLog<T>(IListener<T> listener, IList<T> impressions)
         {
-            impressionListenerRedis.Log(ImpressionsQueue);
+            if (impressionListener != null)
+            {
+                base.ImpressionLog(impressionListener, ImpressionsQueue);
+            }
+            else if (impressionListenerRedis != null)
+            {
+                impressionListenerRedis.Log(ImpressionsQueue);
+            }
         }
 
         public override void Destroy()
