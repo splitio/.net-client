@@ -2,6 +2,7 @@
 using Splitio.Domain;
 using Splitio.Redis.Services.Cache.Interfaces;
 using Splitio.Services.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Splitio.Redis.Services.Cache.Classes
@@ -24,7 +25,7 @@ namespace Splitio.Redis.Services.Cache.Classes
             {
                 impressions.Add(new
                 {
-                    m = new { s = SdkVersion, i = MachineIp, n = "" },
+                    m = new { s = SdkVersion, i = MachineIp, n = Environment.MachineName },
                     i = new { k = item.keyName, b = item.bucketingKey, f = item.feature, t = item.treatment, r = item.label, c = item.changeNumber, m = item.time }
                 });
             }
