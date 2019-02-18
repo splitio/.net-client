@@ -9,12 +9,13 @@ namespace Splitio_Tests.Unit_Tests.Client
     public class SplitClientUnitTests
     {
         private SplitClientForTesting _splitClientForTesting;
-        private Mock<ILog> _logMock = new Mock<ILog>();
+        private Mock<ILog> _logMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            // Arrange
+            _logMock = new Mock<ILog>();
+
             _splitClientForTesting = new SplitClientForTesting(_logMock.Object);
         }
 
@@ -26,7 +27,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.AreEqual("control", result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -37,7 +38,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.AreEqual("control", result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -48,7 +49,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.AreEqual("control", result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -59,7 +60,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.IsFalse(result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(4));
         }
 
         [TestMethod]
@@ -70,7 +71,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.IsFalse(result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(4));
         }
 
         [TestMethod]
@@ -81,7 +82,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             // Assert
             Assert.IsFalse(result);
-            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Once());
+            _logMock.Verify(x => x.Error(It.IsAny<string>()), Times.Exactly(4));
         }
     }
 }

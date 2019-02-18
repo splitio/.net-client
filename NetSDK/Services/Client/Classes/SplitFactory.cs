@@ -1,5 +1,7 @@
 ﻿using Common.Logging;
 using Splitio.Services.Client.Interfaces;
+using Splitio.Services.InputValidation.Classes;
+using Splitio.Services.InputValidation.Interfaces;
 using System;
 using System.Globalization;
 using System.Reflection;
@@ -10,6 +12,8 @@ namespace Splitio.Services.Client.Classes
     {
         private ISplitClient client;
         private ISplitManager manager;
+        private readonly IApiKeyValidator _apiKeyValidator;
+        protected readonly ILog _log;
         private string apiKey;
         private ConfigurationOptions options;
 
@@ -17,8 +21,10 @@ namespace Splitio.Services.Client.Classes
         {
             this.apiKey = apiKey;
             this.options = options;
-        }
 
+            _log = LogManager.GetLogger(typeof(SplitClient));
+            _apiKeyValidator = new ApiKeyValidator(_log);
+        }
 
         public ISplitClient Client()
         {
@@ -26,20 +32,25 @@ namespace Splitio.Services.Client.Classes
             {
                 BuildSplitClient();
             }
+
             return client;
         }
 
         private void BuildSplitClient()
         {
-            if (options == null)
+            options = options == null ? new ConfigurationOptions() : options;
+            
+            if (!options.Ready.HasValue)
             {
-                options = new ConfigurationOptions();
+                _log.Warn("no ready parameter has been set - incorrect control treatments could be logged if no ready config has been set when building factory");
             }
 
-            switch(options.Mode)
+            _apiKeyValidator.Validate(apiKey);
+
+            switch (options.Mode)
             {
                 case Mode.Standalone:
-                    if (String.IsNullOrEmpty(apiKey))
+                    if (string.IsNullOrEmpty(apiKey))
                     {
                         throw new Exception("API Key should be set to initialize Split SDK.");
                     }
@@ -57,7 +68,7 @@ namespace Splitio.Services.Client.Classes
                     {
                         try
                         {
-                            if (String.IsNullOrEmpty(options.CacheAdapterConfig.Host) || String.IsNullOrEmpty(options.CacheAdapterConfig.Port))
+                            if (string.IsNullOrEmpty(options.CacheAdapterConfig.Host) || string.IsNullOrEmpty(options.CacheAdapterConfig.Port))
                             {
                                 throw new Exception("Redis Host and Port should be set to initialize Split SDK in Redis Mode.");
                             }

@@ -18,7 +18,6 @@ using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -87,6 +86,8 @@ namespace Splitio.Services.Client.Classes
                 BlockUntilReady(BlockMilisecondsUntilReady);
             }
             LaunchTaskSchedulerOnReady();
+
+            Destroyed = false;
         }
 
         private void ReadConfig(ConfigurationOptions config)
@@ -254,7 +255,8 @@ namespace Splitio.Services.Client.Classes
 
         public override void Destroy()
         {
-            this.Stop(); 
+            this.Stop();
+            Destroyed = true;
         }
     }
 }
