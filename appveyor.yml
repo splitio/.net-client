@@ -13,11 +13,6 @@ assembly_info:
   
 configuration: Release
 
-before_test:
-  - cmd: nuget install redis-64 -excludeversion 
-  - cmd: redis-64\redis-server.exe --service-install 
-  - cmd: redis-64\redis-server.exe --service-start 
-
 before_build:
  - nuget restore
  - cmd: set BUILD_VERSION=%appveyor_build_version%
