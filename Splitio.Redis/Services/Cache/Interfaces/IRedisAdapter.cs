@@ -1,8 +1,5 @@
 ﻿using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Splitio.Redis.Services.Cache.Interfaces
 {
@@ -28,6 +25,8 @@ namespace Splitio.Redis.Services.Cache.Interfaces
 
         long ListRightPush(string key, RedisValue value);
 
+        long ListRightPush(string key, RedisValue[] values);
+
         bool SIsMember(string key, string value);
 
         RedisValue[] SMembers(string key);
@@ -37,5 +36,7 @@ namespace Splitio.Redis.Services.Cache.Interfaces
         void Flush();
 
         bool IsConnected();
+
+        bool KeyExpire(string key, TimeSpan expiry);
     }
 }

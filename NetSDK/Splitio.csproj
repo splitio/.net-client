@@ -122,6 +122,7 @@
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
     <Compile Include="Domain\SplitBase.cs" />
+    <Compile Include="Domain\TreatmentResult.cs" />
     <Compile Include="Services\Events\Classes\EventSdkApiClient.cs" />
     <Compile Include="Services\Events\Classes\SelfUpdatingEventLog.cs" />
     <Compile Include="Services\Events\Interfaces\IEventSdkApiClient.cs" />

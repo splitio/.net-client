@@ -1,18 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.Redis.Services.Cache.Classes;
 using Splitio.Redis.Services.Cache.Interfaces;
-using Splitio.Services.Cache.Classes;
-using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Splitio_Tests.Integration_Tests
 {
     [TestClass]
-    [Ignore]
     public class RedisAdapterTests
     {
         IRedisAdapter adapter;
@@ -161,7 +156,6 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
-        [Ignore]
         public void ExecuteSetAndFlushSuccessful()
         {
             //Arrange
