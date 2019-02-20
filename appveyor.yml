@@ -13,11 +13,11 @@ assembly_info:
   
 configuration: Release
 
-install:
-  # Install the Redis for UTs
-  - nuget install redis-64 -excludeversion
-  - redis-64\tools\redis-server.exe --service-install
-  - redis-64\tools\redis-server.exe --service-start
+# install:
+#   # Install the Redis for UTs
+#   - nuget install redis-64 -excludeversion
+#   - redis-64\tools\redis-server.exe --service-install
+#   - redis-64\tools\redis-server.exe --service-start
 
 before_build:
  - nuget restore
