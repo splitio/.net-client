@@ -14,10 +14,10 @@ assembly_info:
 configuration: Release
 
 before_build:
+ - choco install redis-64
+ - redis-server --service-install
+ - redis-server --service-start
  - nuget restore
- - nuget install redis-64
- - redis-64\redis-server.exe --service-install 
- - redis-64\redis-server.exe --service-start 
  - cmd: set BUILD_VERSION=%appveyor_build_version%
  
 after_build:
