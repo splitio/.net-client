@@ -15,10 +15,9 @@ configuration: Release
 
 before_build:
  - nuget restore
- - nuget install redis-64 -excludeversion 
- - echo This is Batman
- - cmd: redis-64\redis-server.exe --service-install 
- - cmd: redis-64\redis-server.exe --service-start 
+ - nuget install redis-64
+ - redis-64\redis-server.exe --service-install 
+ - redis-64\redis-server.exe --service-start 
  - cmd: set BUILD_VERSION=%appveyor_build_version%
  
 after_build:
