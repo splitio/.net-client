@@ -122,7 +122,6 @@
     <Compile Include="Domain\KeySelector.cs" />
     <Compile Include="Domain\LightSplit.cs" />
     <Compile Include="Domain\SplitBase.cs" />
-    <Compile Include="Domain\SplitNameValidatorResult.cs" />
     <Compile Include="Domain\TreatmentResult.cs" />
     <Compile Include="Domain\ValidatorResult.cs" />
     <Compile Include="Services\Events\Classes\EventSdkApiClient.cs" />
