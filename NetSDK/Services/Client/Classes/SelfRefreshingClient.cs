@@ -94,7 +94,7 @@ namespace Splitio.Services.Client.Classes
         {
             BaseUrl = string.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
             EventsBaseUrl = string.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
-            SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
+            SplitsRefreshRate = config.FeaturesRefreshRate ?? 5;
             SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
             HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
             HttpReadTimeout = config.ReadTimeout ?? 15000;
