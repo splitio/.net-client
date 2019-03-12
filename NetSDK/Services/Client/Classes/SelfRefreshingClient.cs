@@ -18,7 +18,6 @@ using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Services.SplitFetcher.Interfaces;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -72,6 +71,8 @@ namespace Splitio.Services.Client.Classes
 
         public SelfRefreshingClient(string apiKey, ConfigurationOptions config, ILog log) : base(log)
         {
+            Destroyed = false;
+
             ApiKey = apiKey;
             ReadConfig(config);
             BuildSdkReadinessGates();
@@ -91,9 +92,9 @@ namespace Splitio.Services.Client.Classes
 
         private void ReadConfig(ConfigurationOptions config)
         {
-            BaseUrl = String.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
-            EventsBaseUrl = String.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
-            SplitsRefreshRate = config.FeaturesRefreshRate ?? 60;
+            BaseUrl = string.IsNullOrEmpty(config.Endpoint) ? "https://sdk.split.io" : config.Endpoint;
+            EventsBaseUrl = string.IsNullOrEmpty(config.EventsEndpoint) ? "https://events.split.io" : config.EventsEndpoint;
+            SplitsRefreshRate = config.FeaturesRefreshRate ?? 5;
             SegmentRefreshRate = config.SegmentsRefreshRate ?? 60;
             HttpConnectionTimeout = config.ConnectionTimeout ?? 15000;
             HttpReadTimeout = config.ReadTimeout ?? 15000;
@@ -138,7 +139,7 @@ namespace Splitio.Services.Client.Classes
         {
             if (!gates.IsSDKReady(BlockMilisecondsUntilReady))
             {
-                throw new TimeoutException(String.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
+                throw new TimeoutException(string.Format("SDK was not ready in {0} miliseconds", BlockMilisecondsUntilReady));
             }
         }
 
@@ -254,7 +255,8 @@ namespace Splitio.Services.Client.Classes
 
         public override void Destroy()
         {
-            this.Stop(); 
+            Stop();
+            Destroyed = true;
         }
     }
 }

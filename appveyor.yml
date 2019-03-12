@@ -1,7 +1,7 @@
 nuget:
   account_feed: true
 
-version: 3.5.0
+version: 4.0.0
 
 image: Visual Studio 2017
 
@@ -14,6 +14,9 @@ assembly_info:
 configuration: Release
 
 before_build:
+ - choco install redis-64
+ - redis-server --service-install
+ - redis-server --service-start
  - nuget restore
  - cmd: set BUILD_VERSION=%appveyor_build_version%
  
