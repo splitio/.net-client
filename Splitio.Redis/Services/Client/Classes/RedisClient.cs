@@ -169,19 +169,16 @@ namespace Splitio.Redis.Services.Client.Classes
             }
         }
 
-        protected override void ImpressionLog<T>(IListener<T> listener, IList<T> impressions)
+        protected override void ImpressionLog(List<KeyImpression> impressionsQueue)
         {
-            if (impressionListener != null)
-            {
-                base.ImpressionLog(impressionListener, ImpressionsQueue);
-            }
+            base.ImpressionLog(impressionsQueue);
 
             if (impressionListenerRedis != null)
             {
-                impressionListenerRedis.Log(ImpressionsQueue);
+                impressionListenerRedis.Log(impressionsQueue);
             }
         }
-
+        
         public override void Destroy()
         {
             Destroyed = true;
