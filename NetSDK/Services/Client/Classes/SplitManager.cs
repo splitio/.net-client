@@ -30,14 +30,15 @@ namespace Splitio.Services.Client.Classes
 
             var currentSplits = splitCache.GetAllSplits().Cast<ParsedSplit>();
 
-            var lightSplits = currentSplits.Select(x =>
-                new SplitView()
+            var lightSplits = currentSplits
+                .Select(x => new SplitView()
                 {
                     name = x.name,
                     killed = x.killed,
                     changeNumber = x.changeNumber,
                     treatments = (x.conditions.Where(z => z.conditionType == ConditionType.ROLLOUT).FirstOrDefault() ?? new ConditionWithLogic() { partitions = new List<PartitionDefinition>() }).partitions.Select(y => y.treatment).ToList(),
-                    trafficType = x.trafficTypeName
+                    trafficType = x.trafficTypeName,
+                    configs = x.configurations
                 });
 
             return lightSplits.ToList();
@@ -65,19 +66,19 @@ namespace Splitio.Services.Client.Classes
             var condition = split.conditions.Where(x => x.conditionType == ConditionType.ROLLOUT).FirstOrDefault();
 
             var treatments = condition != null ? condition.partitions.Select(y => y.treatment).ToList() : new List<string>();
-            
+
             var lightSplit = new SplitView()
-                {
-                    name = split.name,
-                    killed = split.killed,
-                    changeNumber = split.changeNumber,
-                    treatments = treatments,
-                    trafficType = split.trafficTypeName
-                };
+            {
+                name = split.name,
+                killed = split.killed,
+                changeNumber = split.changeNumber,
+                treatments = treatments,
+                trafficType = split.trafficTypeName,
+                configs = split.configurations
+            };
 
             return lightSplit;
         }
-
 
         public List<string> SplitNames()
         {
