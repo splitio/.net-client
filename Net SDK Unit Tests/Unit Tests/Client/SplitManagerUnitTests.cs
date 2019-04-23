@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using Splitio.Domain;
 using Splitio.Services.Cache.Classes;
 using Splitio.Services.Client.Classes;
@@ -372,7 +373,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void Splits_WithConfigs_ReturnSuccessfully()
         {
             //Arrange
-            var configurations = new { On = new { Name = "Test Config" } };
+            var configurations = JsonConvert.SerializeObject(new { On = new { Name = "Test Config" } });
             var conditionsWithLogic = new List<ConditionWithLogic>();
             var conditionWithLogic = new ConditionWithLogic()
             {
@@ -411,7 +412,7 @@ namespace Splitio_Tests.Unit_Tests.Client
         public void Split_WithConfigs_ReturnSuccessfully()
         {
             //Arrange
-            var configurations = new { On = new { Name = "Test Config" } };
+            var configurations = JsonConvert.SerializeObject(new { On = new { Name = "Test Config" } });
             var conditionsWithLogic = new List<ConditionWithLogic>();
             var conditionWithLogic = new ConditionWithLogic()
             {
