@@ -2,7 +2,6 @@
 using Splitio.Domain;
 using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.Parsing.Classes;
-using Splitio.Services.SegmentFetcher.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +35,8 @@ namespace Splitio.Services.Parsing
                     trafficTypeName = split.trafficTypeName,
                     algo = split.algo == 0 || split.algo == null ? AlgorithmEnum.LegacyHash : (AlgorithmEnum)split.algo,
                     trafficAllocation = split.trafficAllocation,
-                    trafficAllocationSeed = split.trafficAllocationSeed.HasValue ? split.trafficAllocationSeed.Value : 0
+                    trafficAllocationSeed = split.trafficAllocationSeed.HasValue ? split.trafficAllocationSeed.Value : 0,
+                    configurations = split.configurations
                 };
                 parsedSplit = ParseConditions(split, parsedSplit);
                 return parsedSplit;
