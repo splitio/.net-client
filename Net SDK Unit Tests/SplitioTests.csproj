@@ -206,6 +206,12 @@
     <None Include="Resources\segment_payed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\split.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\split.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\splits_staging_4.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
