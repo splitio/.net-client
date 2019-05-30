@@ -25,30 +25,32 @@ namespace Splitio.Services.SplitFetcher.Classes
         {
             var clock = new Stopwatch();
             clock.Start();
+
             try
             {
                 var requestUri = GetRequestUri(since);
                 var response = await ExecuteGet(requestUri);
-                if (response.statusCode == HttpStatusCode.OK)
+
+                if ((int)response.statusCode >= (int)HttpStatusCode.OK && (int)response.statusCode < (int)HttpStatusCode.Ambiguous)
                 {
                     if (metricsLog != null)
                     {
                         metricsLog.Time(SplitFetcherTime, clock.ElapsedMilliseconds);
-                        metricsLog.Count(String.Format(SplitFetcherStatus, response.statusCode), 1);
+                        metricsLog.Count(string.Format(SplitFetcherStatus, response.statusCode), 1);
                     }
 
                     return response.content;
                 }
                 else
                 {
-                    Log.Error(String.Format("Http status executing FetchSplitChanges: {0} - {1}", response.statusCode.ToString(), response.content));
+                    Log.Error(string.Format("Http status executing FetchSplitChanges: {0} - {1}", response.statusCode.ToString(), response.content));
 
                     if (metricsLog != null)
                     {
-                        metricsLog.Count(String.Format(SplitFetcherStatus, response.statusCode), 1);
+                        metricsLog.Count(string.Format(SplitFetcherStatus, response.statusCode), 1);
                     }
 
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
             catch (Exception e)
@@ -60,13 +62,13 @@ namespace Splitio.Services.SplitFetcher.Classes
                     metricsLog.Count(SplitFetcherException, 1);
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
         private string GetRequestUri(long since)
         {
-            return String.Concat(SplitChangesUrlTemplate, UrlParameterSince, Uri.EscapeDataString(since.ToString()));
+            return string.Concat(SplitChangesUrlTemplate, UrlParameterSince, Uri.EscapeDataString(since.ToString()));
         }
     }
 }
