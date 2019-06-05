@@ -6,6 +6,7 @@ using Splitio.Services.Shared.Classes;
 using Splitio.Services.Shared.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Splitio.Services.Client.Classes
@@ -39,7 +40,7 @@ namespace Splitio.Services.Client.Classes
 
             var directoryPath = Path.GetDirectoryName(FullPath);
 
-            _watcher = new FileSystemWatcher(directoryPath != String.Empty ? directoryPath : Directory.GetCurrentDirectory(), Path.GetFileName(FullPath));
+            _watcher = new FileSystemWatcher(directoryPath != string.Empty ? directoryPath : Directory.GetCurrentDirectory(), Path.GetFileName(FullPath));
             _watcher.NotifyFilter = NotifyFilters.LastWrite;
             _watcher.Changed += new FileSystemEventHandler(OnFileChanged);
             _watcher.EnableRaisingEvents = true;
@@ -52,7 +53,7 @@ namespace Splitio.Services.Client.Classes
             Destroyed = false;
         }
 
-        public override bool Track(string key, string trafficType, string eventType, double? value = default(double?))
+        public override bool Track(string key, string trafficType, string eventType, double? value = default(double?), Dictionary<string, object> properties = null)
         {
             return true;
         }
