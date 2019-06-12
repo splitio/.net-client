@@ -138,6 +138,7 @@
     <Compile Include="Unit Tests\Impressions\SelfUpdatingTreatmentLogUnitTests.cs" />
     <Compile Include="Unit Tests\Impressions\AsynchronousImpressionListenerTests.cs" />
     <Compile Include="Unit Tests\InputValidation\ApiKeyValidatorTests.cs" />
+    <Compile Include="Unit Tests\InputValidation\EventPropertiesValidatorTests.cs" />
     <Compile Include="Unit Tests\InputValidation\EventTypeValidatorTests.cs" />
     <Compile Include="Unit Tests\InputValidation\KeyValidatorTests.cs" />
     <Compile Include="Unit Tests\InputValidation\SplitNameValidatorTests.cs" />
