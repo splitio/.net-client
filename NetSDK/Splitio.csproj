@@ -96,6 +96,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.6.0.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonLibraries\CurrentTimeHelper.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Domain\DataTypeEnum.cs" />
     <Compile Include="Domain\DependencyData.cs" />
     <Compile Include="Domain\Event.cs" />
+    <Compile Include="Domain\EventValidatorResult.cs" />
     <Compile Include="Domain\Key.cs" />
     <Compile Include="Domain\KeyImpression.cs" />
     <Compile Include="Domain\KeySelector.cs" />
@@ -125,26 +129,33 @@
     <Compile Include="Domain\SplitResult.cs" />
     <Compile Include="Domain\TreatmentResult.cs" />
     <Compile Include="Domain\ValidatorResult.cs" />
+    <Compile Include="Domain\WrappedEvent.cs" />
     <Compile Include="Services\Events\Classes\EventSdkApiClient.cs" />
     <Compile Include="Services\Events\Classes\SelfUpdatingEventLog.cs" />
     <Compile Include="Services\Events\Interfaces\IEventSdkApiClient.cs" />
     <Compile Include="Services\Impressions\Interfaces\IImpressionListener.cs" />
     <Compile Include="Services\InputValidation\Classes\ApiKeyValidator.cs" />
+    <Compile Include="Services\InputValidation\Classes\EventPropertiesValidator.cs" />
     <Compile Include="Services\InputValidation\Classes\EventTypeValidator.cs" />
     <Compile Include="Services\InputValidation\Classes\KeyValidator.cs" />
     <Compile Include="Services\InputValidation\Classes\SplitNameValidator.cs" />
     <Compile Include="Services\InputValidation\Classes\TrafficTypeValidator.cs" />
     <Compile Include="Services\InputValidation\Interfaces\IApiKeyValidator.cs" />
+    <Compile Include="Services\InputValidation\Interfaces\IEventPropertiesValidator.cs" />
     <Compile Include="Services\InputValidation\Interfaces\IEventTypeValidator.cs" />
     <Compile Include="Services\InputValidation\Interfaces\IKeyValidator.cs" />
     <Compile Include="Services\InputValidation\Interfaces\ISplitNameValidator.cs" />
     <Compile Include="Services\InputValidation\Interfaces\ITrafficTypeValidator.cs" />
+    <Compile Include="Services\Shared\Classes\AbstractLocalhostFileService.cs" />
     <Compile Include="Services\Shared\Classes\InMemorySimpleCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemoryMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySplitCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IReadinessGatesCache.cs" />
+    <Compile Include="Services\Shared\Classes\LocalhostFileService.cs" />
+    <Compile Include="Services\Shared\Classes\YamlLocalhostFileService.cs" />
     <Compile Include="Services\Shared\Interfaces\IAsynchronousListener.cs" />
+    <Compile Include="Services\Shared\Interfaces\ILocalhostFileService.cs" />
     <Compile Include="Services\Shared\Interfaces\ISimpleCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IMetricsCache.cs" />
     <Compile Include="Services\Cache\Interfaces\ISegmentCache.cs" />
