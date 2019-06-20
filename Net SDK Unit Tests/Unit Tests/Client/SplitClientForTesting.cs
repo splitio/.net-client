@@ -9,18 +9,20 @@ namespace Splitio_Tests.Unit_Tests.Client
 {
     public class SplitClientForTesting : SplitClient
     {
-        public SplitClientForTesting(ILog log, ISplitCache _splitCache, Splitter _splitter, IListener<WrappedEvent> eventListener) 
+        public SplitClientForTesting(ILog log, 
+            ISplitCache _splitCache, 
+            Splitter _splitter, 
+            IListener<WrappedEvent> _eventListener,
+            ITrafficTypesCache _trafficTypesCache)
             : base(log)
         {
             splitCache = _splitCache;
             splitter = _splitter;
-            this.eventListener = eventListener;
+            trafficTypesCache = _trafficTypesCache;
+            eventListener = _eventListener;
         }
 
 
-        public override void Destroy()
-        {
-
-        }
+        public override void Destroy() {} 
     }
 }

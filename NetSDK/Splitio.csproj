@@ -130,6 +130,8 @@
     <Compile Include="Domain\TreatmentResult.cs" />
     <Compile Include="Domain\ValidatorResult.cs" />
     <Compile Include="Domain\WrappedEvent.cs" />
+    <Compile Include="Services\Cache\Classes\InMemoryTrafficTypesCache.cs" />
+    <Compile Include="Services\Cache\Interfaces\ITrafficTypesCache.cs" />
     <Compile Include="Services\Events\Classes\EventSdkApiClient.cs" />
     <Compile Include="Services\Events\Classes\SelfUpdatingEventLog.cs" />
     <Compile Include="Services\Events\Interfaces\IEventSdkApiClient.cs" />
