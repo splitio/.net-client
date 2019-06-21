@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Splitio.Domain;
-using Splitio.Redis.Services.Cache.Classes;
 using Splitio.Redis.Services.Cache.Interfaces;
 using Splitio.Services.Cache.Interfaces;
 using StackExchange.Redis;
@@ -15,19 +14,29 @@ namespace Splitio.Redis.Services.Cache.Classes
         private const string splitKeyPrefix = "split.";
         private const string splitsKeyPrefix = "splits.";
 
-        public RedisSplitCache(IRedisAdapter redisAdapter, string userPrefix = null) : base(redisAdapter, userPrefix) { }
+        public RedisSplitCache(IRedisAdapter redisAdapter, string userPrefix = null) 
+            : base(redisAdapter, userPrefix)
+        { }
         
         public void AddSplit(string splitName, SplitBase split)
         {
             var key = redisKeyPrefix + splitKeyPrefix + splitName;
             var splitJson = JsonConvert.SerializeObject(split);
+
             redisAdapter.Set(key, splitJson);
+
+            AddTrafficType(split);
         }
 
         public bool RemoveSplit(string splitName)
         {
             var key = redisKeyPrefix + splitKeyPrefix + splitName;
-            return redisAdapter.Del(key);
+            var split = GetSplit(splitName);
+            var removed = redisAdapter.Del(key);
+
+            RemoveTrafficType(removed, split);
+
+            return removed;
         }
 
         public void SetChangeNumber(long changeNumber)
@@ -39,9 +48,8 @@ namespace Splitio.Redis.Services.Cache.Classes
         public long GetChangeNumber()
         {
             var key = redisKeyPrefix + splitsKeyPrefix + "till";
-            string changeNumberString = redisAdapter.Get(key);
-            long changeNumberParsed;
-            var result = long.TryParse(changeNumberString, out changeNumberParsed);
+            var changeNumberString = redisAdapter.Get(key);
+            var result = long.TryParse(changeNumberString, out long changeNumberParsed);
             
             return result ? changeNumberParsed : -1;
         }
@@ -50,7 +58,8 @@ namespace Splitio.Redis.Services.Cache.Classes
         {
             var key = redisKeyPrefix + splitKeyPrefix + splitName;
             var splitJson = redisAdapter.Get(key);
-            return !String.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
+
+            return !string.IsNullOrEmpty(splitJson) ? JsonConvert.DeserializeObject<Split>(splitJson) : null;
         }
 
         public List<SplitBase> GetAllSplits()
@@ -58,15 +67,15 @@ namespace Splitio.Redis.Services.Cache.Classes
             var pattern = redisKeyPrefix + splitKeyPrefix + "*";
             var splitKeys = redisAdapter.Keys(pattern);
             var splitValues = redisAdapter.Get(splitKeys);
+
             if (splitValues != null && splitValues.Count() > 0)
             {
                 var splits = splitValues.Where(x => !x.IsNull).Select(x => JsonConvert.DeserializeObject<Split>(x));
+
                 return splits.Cast<SplitBase>().ToList();
             }
-            else
-            {
-                return new List<SplitBase>();
-            }          
+            
+            return new List<SplitBase>();                      
         }
 
         public List<string> GetKeys()
@@ -94,6 +103,66 @@ namespace Splitio.Redis.Services.Cache.Classes
         public void Clear()
         {
             return;
+        }
+
+        public bool TrafficTypeExists(string trafficType)
+        {
+            if (string.IsNullOrEmpty(trafficType)) return false;
+
+            var value = redisAdapter.Get(GetTrafficTypeKey(trafficType));
+
+            var quantity = value ?? "0";
+
+            int.TryParse(quantity, out int quantityInt);
+
+            return quantityInt > 0;
+        }
+
+        private string GetTrafficTypeKey(string type)
+        {
+            return $"{redisKeyPrefix}trafficType.{type}";
+        }
+
+        private void AddTrafficType(SplitBase splitBase)
+        {
+            if (splitBase == null) return;
+
+            var split = (Split)splitBase;
+
+            if (string.IsNullOrEmpty(split.trafficTypeName)) return;
+
+            var ttKey = GetTrafficTypeKey(split.trafficTypeName);
+
+            var value = redisAdapter.Get(ttKey);
+
+            if (string.IsNullOrEmpty(value)) value = "0";
+
+            int.TryParse(value, out int valueInt);
+
+            redisAdapter.Set(ttKey, (valueInt++).ToString());
+        }
+
+        private void RemoveTrafficType(bool removed, SplitBase splitBase)
+        {
+            if (!removed || splitBase == null) return;
+
+            var split = (Split)splitBase;
+
+            if (string.IsNullOrEmpty(split.trafficTypeName)) return;
+
+            var ttKey = GetTrafficTypeKey(split.trafficTypeName);
+            var value = redisAdapter.Get(ttKey);
+
+            int.TryParse(value, out int valueInt);
+
+            if (valueInt <= 0)
+            {
+                redisAdapter.Del(ttKey);
+            }
+            else
+            {
+                redisAdapter.Set(ttKey, (valueInt--).ToString());
+            }
         }
     }
 }
