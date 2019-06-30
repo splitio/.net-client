@@ -54,6 +54,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
+            client.BlockUntilReady();
 
             //Act           
             var result = client.GetTreatment("test", "always_on", null);
@@ -68,6 +69,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
+            client.BlockUntilReady();
 
             //Act           
             var result = client.GetTreatment("test", "always_off", null);
@@ -82,6 +84,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
+            client.BlockUntilReady();
 
             //Act           
             var result = client.GetTreatment("test", "always_control", null);
@@ -101,6 +104,7 @@ namespace Splitio_Tests.Integration_Tests
             var features = new List<string> { alwaysOn, alwaysOff };
 
             var client = new RedisClient(config, _logMock.Object);
+            client.BlockUntilReady();
 
             //Act           
             var result = client.GetTreatments("test", features, null);
@@ -122,6 +126,7 @@ namespace Splitio_Tests.Integration_Tests
             var features = new List<string> { alwaysOn, alwaysOff, alwaysControl };
 
             var client = new RedisClient(config, _logMock.Object);
+            client.BlockUntilReady();
 
             //Act           
             var result = client.GetTreatments("test", features, null);
@@ -131,6 +136,89 @@ namespace Splitio_Tests.Integration_Tests
             Assert.AreEqual("off", result[alwaysOff]);
             Assert.AreEqual("on", result[alwaysOn]);
             Assert.AreEqual("control", result[alwaysControl]);
+        }
+
+        [TestMethod]
+        public void GetTreatmentsWithConfig_WhenClientIsNotReady_ReturnsControl()
+        {
+            // Arrange.
+            var client = new RedisClient(config, _logMock.Object);
+
+            // Act.
+            var result = client.GetTreatmentsWithConfig("key", new List<string>());
+
+            // Assert.
+            foreach (var res in result)
+            {
+                Assert.AreEqual("control", res.Value.Treatment);
+                Assert.IsNull(res.Value.Config);
+
+                _logMock.Verify(mock => mock.Error($"GetTreatmentsWithConfig: the SDK is not ready, the operation cannot be executed."), Times.Once());
+            }
+        }
+
+        [TestMethod]
+        public void GetTreatmentWithConfig_WhenClientIsNotReady_ReturnsControl()
+        {
+            // Arrange.
+            var client = new RedisClient(config, _logMock.Object);
+
+            // Act.
+            var result = client.GetTreatmentWithConfig("key", string.Empty);
+
+            // Assert.
+            Assert.AreEqual("control", result.Treatment);
+            Assert.IsNull(result.Config);
+
+            _logMock.Verify(mock => mock.Error($"GetTreatmentWithConfig: the SDK is not ready, the operation cannot be executed."), Times.Once());
+        }
+
+        [TestMethod]
+        public void GetTreatment_WhenClientIsNotReady_ReturnsControl()
+        {
+            // Arrange.
+            var client = new RedisClient(config, _logMock.Object);
+
+            // Act.
+            var result = client.GetTreatment("key", string.Empty);
+
+            // Assert.
+            Assert.AreEqual("control", result);
+
+            _logMock.Verify(mock => mock.Error($"GetTreatment: the SDK is not ready, the operation cannot be executed."), Times.Once());
+        }
+
+        [TestMethod]
+        public void GetTreatments_WhenClientIsNotReady_ReturnsControl()
+        {
+            // Arrange.
+            var client = new RedisClient(config, _logMock.Object);
+
+            // Act.
+            var result = client.GetTreatments("key", new List<string>());
+
+            // Assert.
+            foreach (var res in result)
+            {
+                Assert.AreEqual("control", res.Value);
+            }
+
+            _logMock.Verify(mock => mock.Error($"GetTreatments: the SDK is not ready, the operation cannot be executed."), Times.Once());
+        }
+
+        [TestMethod]
+        public void Track_WhenClientIsNotReady_ReturnsFalse()
+        {
+            // Arrange.
+            var client = new RedisClient(config, _logMock.Object);
+
+            // Act.
+            var result = client.Track("key", "traffic_type", "event_type");
+
+            // Assert.
+            Assert.IsFalse(result);
+
+            _logMock.Verify(mock => mock.Error($"Track: the SDK is not ready, the operation cannot be executed."), Times.Once());
         }
     }
 }

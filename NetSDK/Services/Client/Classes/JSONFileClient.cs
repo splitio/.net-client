@@ -5,6 +5,7 @@ using Splitio.Services.Cache.Interfaces;
 using Splitio.Services.EngineEvaluator;
 using Splitio.Services.Parsing.Classes;
 using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.Shared.Classes;
 using Splitio.Services.Shared.Interfaces;
 using Splitio.Services.SplitFetcher.Classes;
 using System.Collections.Concurrent;
@@ -44,7 +45,9 @@ namespace Splitio.Services.Client.Classes
             impressionListener = treatmentLogInstance;
             splitter = new Splitter();
             LabelsEnabled = isLabelsEnabled;
-            manager = new SplitManager(splitCache, log);
+
+            _blockUntilReadyService = new BlockUntilReadyService();
+            manager = new SplitManager(splitCache, _blockUntilReadyService, log);
         }
 
         public void RemoveSplitFromCache(string splitName)
@@ -62,6 +65,11 @@ namespace Splitio.Services.Client.Classes
             splitCache.Clear();
             segmentCache.Clear();
             Destroyed = true;
+        }
+
+        public override void BlockUntilReady()
+        {
+            _blockUntilReadyService.BlockUntilReady();
         }
     }
 }

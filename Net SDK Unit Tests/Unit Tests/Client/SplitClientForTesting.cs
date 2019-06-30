@@ -14,17 +14,20 @@ namespace Splitio_Tests.Unit_Tests.Client
             ISplitCache _splitCache,
             Splitter _splitter,
             IListener<WrappedEvent> _eventListener,
-            IListener<KeyImpression> _impressionListener)
+            IListener<KeyImpression> _impressionListener,
+            IBlockUntilReadyService blockUntilReadyService)
             : base(_log)
         {
             splitCache = _splitCache;
             splitter = _splitter;
             eventListener = _eventListener;
             impressionListener = _impressionListener;
-
+            _blockUntilReadyService = blockUntilReadyService;
             _trafficTypeValidator = new TrafficTypeValidator(_log, _splitCache);
         }
 
         public override void Destroy() { }
+
+        public override void BlockUntilReady() { }
     }
 }

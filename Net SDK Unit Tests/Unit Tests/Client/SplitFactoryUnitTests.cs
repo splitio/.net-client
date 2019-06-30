@@ -20,6 +20,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             //Act         
             var client = factory.Client();
+            client.BlockUntilReady();
         }
 
         [TestMethod]
@@ -31,6 +32,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             //Act         
             var client = factory.Client();
+            client.BlockUntilReady();
         }
 
         [TestMethod]
@@ -146,6 +148,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             var factory = new SplitFactory("localhost", configurationOptions);
             var manager = factory.Manager();
+            manager.BlockUntilReady();
 
             // Act.
             var splitsResult = manager.Splits();
@@ -184,6 +187,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             var factory = new SplitFactory("localhost", configurationOptions);
             var manager = factory.Manager();
+            manager.BlockUntilReady();
 
             // Act.
             var splitsResult = manager.Splits();
