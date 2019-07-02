@@ -3,13 +3,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Splitio.Domain;
 using Splitio.Services.Client.Classes;
+using Splitio.Services.Shared.Classes;
+using Splitio.Services.Shared.Interfaces;
 
 namespace Splitio_Tests.Unit_Tests.Client
 {
     [TestClass]
     public class LocalhostClientUnitTests
     {
-        private Mock<ILog> _logMock = new Mock<ILog>();
+        private readonly Mock<ILog> _logMock;
+
+        public LocalhostClientUnitTests()
+        {
+            _logMock = new Mock<ILog>();
+        }
 
         [TestMethod]
         [DeploymentItem(@"Resources\test.splits")]
@@ -52,6 +59,20 @@ namespace Splitio_Tests.Unit_Tests.Client
             //Assert
             Assert.AreEqual(true, result);
             Assert.IsNull(splitClient.GetEventListener());
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Resources\test.splits")]
+        public void Destroy()
+        {
+            //Arrange
+            var splitClient = new LocalhostClientForTesting("test.splits", _logMock.Object);
+
+            //Act
+            splitClient.Destroy();
+
+            //Assert
+            Assert.IsTrue(splitClient.IsDestroyed());
         }
     }
 }

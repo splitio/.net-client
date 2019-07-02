@@ -106,8 +106,11 @@ namespace Splitio.Services.Client.Classes
 
         public override void Destroy()
         {
-            Stop();
-            Destroyed = true;
+            if (!Destroyed)
+            {
+                Stop();
+                base.Destroy();
+            }
         }
 
         public override void BlockUntilReady(int blockMilisecondsUntilReady)
@@ -243,7 +246,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildBlockUntilReadyService()
         {
-            _blockUntilReadyService = new SelfRefreshingBlockUntilReadyService(gates, splitFetcher, selfRefreshingSegmentFetcher, treatmentLog, eventLog);
+            _blockUntilReadyService = new SelfRefreshingBlockUntilReadyService(gates, splitFetcher, selfRefreshingSegmentFetcher, treatmentLog, eventLog, _log);
         }
         #endregion
     }

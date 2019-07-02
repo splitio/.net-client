@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Splitio.Services.Client.Classes;
+using Splitio.Services.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
