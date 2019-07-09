@@ -115,9 +115,9 @@ namespace Splitio.Services.Client.Classes
             return true;
         }
 
-        public void BlockUntilReady()
+        public void BlockUntilReady(int blockMilisecondsUntilReady)
         {
-            _blockUntilReadyService.BlockUntilReady();
+            _blockUntilReadyService.BlockUntilReady(blockMilisecondsUntilReady);
         }
     }
 }

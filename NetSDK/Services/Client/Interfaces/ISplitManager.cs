@@ -8,6 +8,6 @@ namespace Splitio.Services.Client.Interfaces
         List<SplitView> Splits();
         List<string> SplitNames();
         SplitView Split(string featureName);
-        void BlockUntilReady();
+        void BlockUntilReady(int blockMilisecondsUntilReady);
     }
 }

@@ -54,7 +54,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
-            client.BlockUntilReady();
+            client.BlockUntilReady(1000);
 
             //Act           
             var result = client.GetTreatment("test", "always_on", null);
@@ -69,7 +69,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
-            client.BlockUntilReady();
+            client.BlockUntilReady(1000);
 
             //Act           
             var result = client.GetTreatment("test", "always_off", null);
@@ -84,7 +84,7 @@ namespace Splitio_Tests.Integration_Tests
         {
             //Arrange
             var client = new RedisClient(config, _logMock.Object);
-            client.BlockUntilReady();
+            client.BlockUntilReady(1000);
 
             //Act           
             var result = client.GetTreatment("test", "always_control", null);
@@ -104,7 +104,7 @@ namespace Splitio_Tests.Integration_Tests
             var features = new List<string> { alwaysOn, alwaysOff };
 
             var client = new RedisClient(config, _logMock.Object);
-            client.BlockUntilReady();
+            client.BlockUntilReady(1000);
 
             //Act           
             var result = client.GetTreatments("test", features, null);
@@ -126,7 +126,7 @@ namespace Splitio_Tests.Integration_Tests
             var features = new List<string> { alwaysOn, alwaysOff, alwaysControl };
 
             var client = new RedisClient(config, _logMock.Object);
-            client.BlockUntilReady();
+            client.BlockUntilReady(1000);
 
             //Act           
             var result = client.GetTreatments("test", features, null);

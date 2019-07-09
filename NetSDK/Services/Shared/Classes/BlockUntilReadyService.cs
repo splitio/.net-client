@@ -6,7 +6,7 @@ namespace Splitio.Services.Shared.Classes
     {
         public bool Ready { get; set; }
 
-        public void BlockUntilReady()
+        public void BlockUntilReady(int blockMilisecondsUntilReady)
         {
             Ready = true;
         }

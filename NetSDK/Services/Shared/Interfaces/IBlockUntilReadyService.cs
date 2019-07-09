@@ -2,7 +2,7 @@
 {
     public interface IBlockUntilReadyService
     {
-        void BlockUntilReady();
+        void BlockUntilReady(int blockMilisecondsUntilReady);
         bool IsSdkReady();
     }
 }

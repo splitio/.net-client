@@ -54,9 +54,9 @@ namespace Splitio.Services.Client.Classes
             return _tests.ContainsKey(feature) ? _tests[feature] : "control";
         }
 
-        public override void BlockUntilReady()
+        public override void BlockUntilReady(int blockMilisecondsUntilReady)
         {
-            _blockUntilReadyService.BlockUntilReady();
+            _blockUntilReadyService.BlockUntilReady(blockMilisecondsUntilReady);
         }
     }
 }

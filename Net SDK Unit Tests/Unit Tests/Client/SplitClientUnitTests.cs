@@ -36,7 +36,7 @@ namespace Splitio_Tests.Unit_Tests.Client
 
             _splitClientForTesting = new SplitClientForTesting(_logMock.Object, _splitCacheMock.Object, _splitterMock.Object, _eventListenerMock.Object, _impressionListenerMock.Object, _blockUntilReadyService.Object);
 
-            _splitClientForTesting.BlockUntilReady();
+            _splitClientForTesting.BlockUntilReady(1000);
         }
 
         #region GetTreatment

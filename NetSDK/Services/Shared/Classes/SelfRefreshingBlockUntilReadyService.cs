@@ -13,7 +13,6 @@ namespace Splitio.Services.Shared.Classes
 {
     public class SelfRefreshingBlockUntilReadyService : IBlockUntilReadyService
     {
-        public int BlockMilisecondsUntilReady { get; set; }
         public bool Ready { get; set; }
 
         private SelfRefreshingSplitFetcher _splitFetcher;
@@ -26,29 +25,26 @@ namespace Splitio.Services.Shared.Classes
             SelfRefreshingSplitFetcher splitFetcher,
             SelfRefreshingSegmentFetcher selfRefreshingSegmentFetcher,
             IListener<KeyImpression> treatmentLog,
-            IListener<WrappedEvent> eventLog,
-            int blockMilisecondsUntilReady)
+            IListener<WrappedEvent> eventLog)
         {
             _gates = gates;
             _splitFetcher = splitFetcher;
             _selfRefreshingSegmentFetcher = selfRefreshingSegmentFetcher;
             _treatmentLog = treatmentLog;
             _eventLog = eventLog;
-
-            BlockMilisecondsUntilReady = blockMilisecondsUntilReady;
         }
 
-        public void BlockUntilReady()
+        public void BlockUntilReady(int blockMilisecondsUntilReady)
         {
             if (!Ready)
             {
                 Start();
 
-                Ready = _gates.IsSDKReady(BlockMilisecondsUntilReady);
+                Ready = _gates.IsSDKReady(blockMilisecondsUntilReady);
 
                 if (!Ready)
                 {
-                    throw new TimeoutException(string.Format($"SDK was not ready in {BlockMilisecondsUntilReady} miliseconds"));
+                    throw new TimeoutException(string.Format($"SDK was not ready in {blockMilisecondsUntilReady} miliseconds"));
                 }
 
                 LaunchTaskSchedulerOnReady();

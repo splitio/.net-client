@@ -110,9 +110,9 @@ namespace Splitio.Services.Client.Classes
             Destroyed = true;
         }
 
-        public override void BlockUntilReady()
+        public override void BlockUntilReady(int blockMilisecondsUntilReady)
         {
-            _blockUntilReadyService.BlockUntilReady();
+            _blockUntilReadyService.BlockUntilReady(blockMilisecondsUntilReady);
         }
         #endregion
 
@@ -243,7 +243,7 @@ namespace Splitio.Services.Client.Classes
 
         private void BuildBlockUntilReadyService()
         {
-            _blockUntilReadyService = new SelfRefreshingBlockUntilReadyService(gates, splitFetcher, selfRefreshingSegmentFetcher, treatmentLog, eventLog, BlockMilisecondsUntilReady);
+            _blockUntilReadyService = new SelfRefreshingBlockUntilReadyService(gates, splitFetcher, selfRefreshingSegmentFetcher, treatmentLog, eventLog);
         }
         #endregion
     }

@@ -28,6 +28,6 @@ namespace Splitio_Tests.Unit_Tests.Client
 
         public override void Destroy() { }
 
-        public override void BlockUntilReady() { }
+        public override void BlockUntilReady(int blockMilisecondsUntilReady) { }
     }
 }

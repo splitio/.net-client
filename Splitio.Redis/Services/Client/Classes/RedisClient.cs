@@ -59,9 +59,9 @@ namespace Splitio.Redis.Services.Client.Classes
             return;
         }
 
-        public override void BlockUntilReady()
+        public override void BlockUntilReady(int blockMilisecondsUntilReady)
         {
-            _blockUntilReadyService.BlockUntilReady();
+            _blockUntilReadyService.BlockUntilReady(blockMilisecondsUntilReady);
         }
         #endregion
 

@@ -179,7 +179,7 @@ namespace Splitio.Services.Client.Classes
 
         public abstract void Destroy();
 
-        public abstract void BlockUntilReady();
+        public abstract void BlockUntilReady(int blockMilisecondsUntilReady);
         #endregion
 
         #region Protected Methods
