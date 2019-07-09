@@ -23,7 +23,8 @@ namespace Splitio.Services.Client.Classes
             ISegmentCache segmentCacheInstance = null, 
             ISplitCache splitCacheInstance = null, 
             IListener<KeyImpression> treatmentLogInstance = null, 
-            bool isLabelsEnabled = true)  : base(log)
+            bool isLabelsEnabled = true,
+            IListener<WrappedEvent> _eventListener = null)  : base(log)
         {
             segmentCache = segmentCacheInstance ?? new InMemorySegmentCache(new ConcurrentDictionary<string, Segment>());
 
@@ -45,6 +46,8 @@ namespace Splitio.Services.Client.Classes
             impressionListener = treatmentLogInstance;
             splitter = new Splitter();
             LabelsEnabled = isLabelsEnabled;
+
+            eventListener = _eventListener;
 
             _blockUntilReadyService = new BlockUntilReadyService();
             manager = new SplitManager(splitCache, _blockUntilReadyService, log);

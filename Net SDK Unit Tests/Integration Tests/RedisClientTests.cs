@@ -207,7 +207,7 @@ namespace Splitio_Tests.Integration_Tests
         }
 
         [TestMethod]
-        public void Track_WhenClientIsNotReady_ReturnsFalse()
+        public void Track_WhenClientIsNotReady_ReturnsTrue()
         {
             // Arrange.
             var client = new RedisClient(config, _logMock.Object);
@@ -216,9 +216,7 @@ namespace Splitio_Tests.Integration_Tests
             var result = client.Track("key", "traffic_type", "event_type");
 
             // Assert.
-            Assert.IsFalse(result);
-
-            _logMock.Verify(mock => mock.Error($"Track: the SDK is not ready, the operation cannot be executed."), Times.Once());
+            Assert.IsTrue(result);
         }
     }
 }

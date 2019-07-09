@@ -36,7 +36,7 @@ namespace Splitio.Services.Client.Classes
         protected const string LabelClientNotReady = "not ready";
 
         protected static bool LabelsEnabled;
-        protected static bool Destroyed;
+        protected bool Destroyed;
 
         protected Splitter splitter;
         protected IListener<KeyImpression> impressionListener;
@@ -128,12 +128,19 @@ namespace Splitio.Services.Client.Classes
 
         public virtual bool Track(string key, string trafficType, string eventType, double? value = null, Dictionary<string, object> properties = null)
         {
-            if (!IsClientReady(nameof(Track))) return false;
+            if (Destroyed)
+            {
+                _log.Error("Client has already been destroyed - No calls possible");
+                return false;
+            }
 
             var keyResult = _keyValidator.IsValid(new Key(key, null), nameof(Track));
-            var trafficTypeResult = _trafficTypeValidator.IsValid(trafficType, nameof(trafficType));
             var eventTypeResult = _eventTypeValidator.IsValid(eventType, nameof(eventType));
             var eventPropertiesResult = _eventPropertiesValidator.IsValid(properties);
+
+            var trafficTypeResult = _blockUntilReadyService.IsSdkReady()
+                ? _trafficTypeValidator.IsValid(trafficType, nameof(trafficType))
+                : new ValidatorResult { Success = true };
 
             if (!keyResult || !trafficTypeResult.Success || !eventTypeResult || !eventPropertiesResult.Success)
                 return false;

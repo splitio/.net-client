@@ -858,19 +858,18 @@ namespace Splitio_Tests.Integration_Tests
 
         [DeploymentItem(@"Resources\splits_staging_3.json")]
         [TestMethod]
-        public void Track_WhenClientIsNotReady_ReturnsFalse()
+        public void Track_WhenClientIsNotReady_ReturnsTrue()
         {
             // Arrange.
             var treatmentLogMock = new Mock<IListener<KeyImpression>>();
-            var client = new JSONFileClient("splits_staging_3.json", "", _logMock.Object, null, null, treatmentLogMock.Object);
+            var eventListenerMock = new Mock<IListener<WrappedEvent>>();
+            var client = new JSONFileClient("splits_staging_3.json", "", _logMock.Object, null, null, treatmentLogMock.Object, _eventListener: eventListenerMock.Object);
 
             // Act.
             var result = client.Track("key", "traffic_type", "event_type");
 
             // Assert.
-            Assert.IsFalse(result);
-
-            _logMock.Verify(mock => mock.Error($"Track: the SDK is not ready, the operation cannot be executed."), Times.Once());
+            Assert.IsTrue(result);
         }
     }
 }

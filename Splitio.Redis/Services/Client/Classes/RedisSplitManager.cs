@@ -29,7 +29,7 @@ namespace Splitio.Redis.Services.Client.Classes
 
         public List<SplitView> Splits()
         {
-            if (!_blockUntilReadyService.IsSdkReady() || _splitCache == null)
+            if (!IsSdkReady(nameof(Splits)) || _splitCache == null)
             {
                 return null;
             }
@@ -53,7 +53,7 @@ namespace Splitio.Redis.Services.Client.Classes
 
         public SplitView Split(string featureName)
         {
-            if (!_blockUntilReadyService.IsSdkReady() || _splitCache == null)
+            if (!IsSdkReady(nameof(Split)) || _splitCache == null)
             {
                 return null;
             }
@@ -94,7 +94,7 @@ namespace Splitio.Redis.Services.Client.Classes
 
         public List<string> SplitNames()
         {
-            if (!_blockUntilReadyService.IsSdkReady() || _splitCache == null)
+            if (!IsSdkReady(nameof(SplitNames)) || _splitCache == null)
             {
                 return null;
             }
