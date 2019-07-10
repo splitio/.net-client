@@ -286,12 +286,18 @@ namespace Splitio.Services.Client.Classes
         #region Private Methods
         private Dictionary<string, TreatmentResult> GetTreatmentsResult(Key key, List<string> features, string operation, string method, Dictionary<string, object> attributes = null)
         {
+            var treatmentsForFeatures = new Dictionary<string, TreatmentResult>();
+
             if (!IsClientReady(method))
             {
-                return new Dictionary<string, TreatmentResult> { { string.Empty, new TreatmentResult(LabelClientNotReady, Control, null) } };
-            }
+                foreach (var feature in features)
+                {
+                    treatmentsForFeatures.Add(feature, new TreatmentResult(LabelClientNotReady, Control, null));
+                }
 
-            var treatmentsForFeatures = new Dictionary<string, TreatmentResult>();
+                return treatmentsForFeatures;
+            }
+                        
             var ImpressionsQueue = new List<KeyImpression>();
 
             if (_keyValidator.IsValid(key, method))
@@ -323,7 +329,10 @@ namespace Splitio.Services.Client.Classes
             }
             else
             {
-                treatmentsForFeatures.Add(features.First(), new TreatmentResult(LabelSplitNotFound, Control, null));
+                foreach (var feature in features)
+                {
+                    treatmentsForFeatures.Add(feature, new TreatmentResult(LabelSplitNotFound, Control, null));
+                }
             }
 
             ClearItemsAddedToTreatmentCache(key?.matchingKey);
