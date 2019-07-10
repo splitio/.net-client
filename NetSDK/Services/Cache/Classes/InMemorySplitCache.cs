@@ -34,15 +34,15 @@ namespace Splitio.Services.Cache.Classes
         }
 
         public bool AddOrUpdate(string splitName, SplitBase split)
-        {
-            var parsedSplit = (ParsedSplit)split;
-
+        {            
             var exists = _splits.TryGetValue(splitName, out ParsedSplit oldSplit);
 
             if (exists)
             {
                 DecreaseTrafficTypeCount(oldSplit);
             }
+
+            var parsedSplit = (ParsedSplit)split;
 
             _splits.AddOrUpdate(splitName, parsedSplit, (key, oldValue) => parsedSplit);
 

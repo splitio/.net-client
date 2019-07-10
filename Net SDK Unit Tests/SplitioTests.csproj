@@ -160,6 +160,7 @@
     <Compile Include="Unit Tests\SegmentFetcher\ApiSegmentChangeFetcherUnitTests.cs" />
     <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentUnitTests.cs" />
     <Compile Include="Unit Tests\SegmentFetcher\SelfRefreshingSegmentFetcherUnitTests.cs" />
+    <Compile Include="Unit Tests\Shared\FactoryInstantiationsServiceTests.cs" />
     <Compile Include="Unit Tests\SplitFetcher\ApiSplitChangeFetcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AllKeysMatcherTests.cs" />
     <Compile Include="Unit Tests\Matchers\AttributeMatcherTests.cs" />

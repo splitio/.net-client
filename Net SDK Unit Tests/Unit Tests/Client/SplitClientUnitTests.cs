@@ -745,6 +745,18 @@ namespace Splitio_Tests.Unit_Tests.Client
         }
         #endregion
 
+        #region Destroy
+        [TestMethod]
+        public void Destroy_ShouldsDecreaseFactoryInstatiation()
+        {
+            // Act
+            _splitClientForTesting.Destroy();
+
+            // Assert
+            Assert.IsTrue(_splitClientForTesting.IsDestroyed());
+        }
+        #endregion
+
         #region Private Methods
         private ParsedSplit GetParsedSplit(string name, string defaultTreatment, bool killed = false, Dictionary<string, string> configurations = null, List<ConditionWithLogic> conditions = null, int? trafficAllocation = null, int? seed = null)
         {

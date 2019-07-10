@@ -148,6 +148,7 @@
     <Compile Include="Services\InputValidation\Interfaces\ITrafficTypeValidator.cs" />
     <Compile Include="Services\Shared\Classes\AbstractLocalhostFileService.cs" />
     <Compile Include="Services\Shared\Classes\BlockUntilReadyService.cs" />
+    <Compile Include="Services\Shared\Classes\FactoryInstantiationsService.cs" />
     <Compile Include="Services\Shared\Classes\InMemorySimpleCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemoryMetricsCache.cs" />
     <Compile Include="Services\Cache\Classes\InMemorySegmentCache.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Services\Shared\Classes\YamlLocalhostFileService.cs" />
     <Compile Include="Services\Shared\Interfaces\IAsynchronousListener.cs" />
     <Compile Include="Services\Shared\Interfaces\IBlockUntilReadyService.cs" />
+    <Compile Include="Services\Shared\Interfaces\IFactoryInstantiationsService.cs" />
     <Compile Include="Services\Shared\Interfaces\ILocalhostFileService.cs" />
     <Compile Include="Services\Shared\Interfaces\ISimpleCache.cs" />
     <Compile Include="Services\Cache\Interfaces\IMetricsCache.cs" />
