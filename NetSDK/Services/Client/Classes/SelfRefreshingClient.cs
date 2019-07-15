@@ -22,6 +22,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Splitio.Services.Client.Classes
 {
@@ -85,6 +86,9 @@ namespace Splitio.Services.Client.Classes
             BuildSplitter();
             BuildBlockUntilReadyService();
             BuildManager();
+
+            Start();
+            LaunchTaskSchedulerOnReady();
         }
 
         #region Public Methods
@@ -247,6 +251,23 @@ namespace Splitio.Services.Client.Classes
         private void BuildBlockUntilReadyService()
         {
             _blockUntilReadyService = new SelfRefreshingBlockUntilReadyService(gates, splitFetcher, selfRefreshingSegmentFetcher, treatmentLog, eventLog, _log);
+        }
+
+        private void LaunchTaskSchedulerOnReady()
+        {
+            Task workerTask = Task.Factory.StartNew(
+                () => {
+                    while (true)
+                    {
+                        if (gates.IsSDKReady(0))
+                        {
+                            selfRefreshingSegmentFetcher.StartScheduler();
+                            break;
+                        }
+
+                        ThreadUtils.Delay(500).Wait();
+                    }
+                });
         }
         #endregion
     }
