@@ -202,7 +202,7 @@ namespace Splitio.Redis.Services.Client.Classes
 
         private void BuildBlockUntilReadyService()
         {
-            _blockUntilReadyService = new BlockUntilReadyService();
+            _blockUntilReadyService = new NoopBlockUntilReadyService();
         }
         #endregion
     }
