@@ -1,13 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Splitio.CommonLibraries;
-using Splitio.Services.SplitFetcher.Classes;
 using Splitio.Domain;
-using Splitio.Services.Parsing;
-using Splitio.Services.SegmentFetcher.Classes;
-using Splitio.Services.Client.Classes;
 using Splitio.Services.Cache.Classes;
-using System.Collections.Concurrent;
+using Splitio.Services.Client.Classes;
 using Splitio.Services.Parsing.Classes;
+using Splitio.Services.SegmentFetcher.Classes;
+using Splitio.Services.SplitFetcher.Classes;
+using System.Collections.Concurrent;
 
 namespace Splitio_Tests.Integration_Tests
 {

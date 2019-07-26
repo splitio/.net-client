@@ -8,15 +8,23 @@ namespace Splitio.TestSupport
 {
     public class SampleTest
     {
+        private readonly Mock<ILog> _logMock;
+
         private SplitClientForTest splitClient;
-        private Mock<ILog> _logMock = new Mock<ILog>();
+
+        public SampleTest()
+        {
+            _logMock = new Mock<ILog>();
+
+            splitClient = new SplitClientForTest(_logMock.Object);
+        }
+
 
         [Theory]
         [SplitTest(test: @"{ feature:'feature_reads', treatments:['on', 'dark', 'off'] }")]
         public void SampleTest1(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
             
             //Act
@@ -35,7 +43,6 @@ namespace Splitio.TestSupport
         public void SampleTest2(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
 
             //Act
@@ -59,7 +66,6 @@ namespace Splitio.TestSupport
         public void SampleTest3(string feature, string treatment)
         {
             //Arrange
-            splitClient = new SplitClientForTest(_logMock.Object);
             splitClient.RegisterTreatment(feature, treatment);
 
             //Act
