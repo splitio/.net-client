@@ -1,4 +1,4 @@
-> :warning: **WARNING**: This repository is depecrated. The last release was 5.0.0. For next releases visit and use this [Repo](https://github.com/splitio/.net-core-client).
+> :warning: **WARNING**: This repository is deprecated since we unified the source code for both .NET and .NET-Core clients. The last release done here was 5.0.0 and it will no longer be maintained. For future releases, see [Repo](https://github.com/splitio/.net-core-client).
 
 # Split .NET SDK
 
