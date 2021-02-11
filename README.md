@@ -1,4 +1,6 @@
-> :warning: **WARNING**: This repository is deprecated since we unified the source code for both .NET and .NET-Core clients. The last release done here was 5.0.0 and it will no longer be maintained. For future releases, see [Repo](https://github.com/splitio/.net-core-client).
+> :warning: This repository has been archived since we unified the source code for both .NET and .NET-Core clients a while back. The last release done here was 5.0.0 and this repo won't receive any further maintenance as the source code for the client current versions is not kept here anymore.  
+If you're looking for historical data, we've had performed some releases for this client from the now also archived [.net-core-client repository](https://github.com/splitio/.net-core-client).  
+For current and future releases, reporting issues or submitting any PRs, please see our unified and final [dotnet-client repository](https://github.com/splitio/dotnet-client).
 
 # Split .NET SDK
 
